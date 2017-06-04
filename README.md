@@ -1,2 +1,2 @@
 # misc
-various stuff
+This is various stuff.

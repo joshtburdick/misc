@@ -1,0 +1,145 @@
+# A wheel with holes in it, and a spiral.
+# Runs under FreeCAD 0.15
+
+from FreeCAD import Base
+import Mesh
+import Part
+
+import math
+
+import polarMesh
+
+numDivs = 120
+
+# radius of wheel, overall
+r1 = 74.999
+
+# half of inside distance between planes
+g = (0.6 * 25.4) / 2
+
+# that, plus the width of the spokes
+h = g + 2.5
+
+# not sure plain h will be used
+h1 = h + 2
+
+# base width for structural elements
+w = 2.01
+
+# A cylinder, centered along the z-axis.
+def zCylinder(r, z0, z1):
+	a = Part.makeCylinder(r, z1-z0)
+	a.translate(Base.Vector(0,0,z0))
+	return a
+
+# A ring, centered around the z-axis.
+def ring(r0, r1, z0, z1):
+	a = zCylinder(r1, z0, z1)
+	a = a.cut(zCylinder(r0, z0, z1))
+	return a
+
+# A "spoke".
+def spoke(r0, r1, z0, z1, w, th):
+	a = Part.makeBox(r1-r0, w, z1-z0)
+	a.translate(Base.Vector(r0, -w/2.0, z0))
+	a.rotate(Base.Vector(0,0,0), Base.Vector(0,0,1),
+		th * (180 / math.pi))
+	return a
+
+# A cylinder, located using polar coordinates.
+# Suitable for "drilling" (using subtraction)
+# Args:
+#	radius - radius of cylinder
+#	r, th - polar coordinates of hole (along z-axis)
+#	z0, z1 - z coordinates of cylinder
+# Returns: a, with a hole cut in it
+def offsetCylinder(radius, r, th, z0, z1):
+	c = Part.makeCylinder(radius, z1-z0)
+ 	c.translate(Base.Vector(r*math.cos(th), r*math.sin(th),z0))
+	return c
+
+# Function defining how radius changes with angle.
+def f(th):
+	r0a = 22
+	r1a = r1 - 14   # outer ending radius is a bit smaller
+	a = (th / (2 * math.pi))
+	return r0a + (r1a - r0a) * a
+
+# hub, with space for bearings
+a = ring(10, 14, -h1, h1)
+a = a.cut(zCylinder(11, -h1, -(h1-9)))
+a = a.cut(zCylinder(11, h1-9, h1))
+
+# outer rings
+a = a.fuse(ring(r1-10, r1, -h, -g))
+a = a.fuse(ring(r1-10, r1, g, h))
+# additinal ring on the outside
+a = a.fuse(ring(r1-w, r1, -h1, -(g)))
+a = a.fuse(ring(r1-w, r1, (g), h1))
+
+# spokes, going up to the cam surface
+for i in xrange(0,11):
+	th = 2 * math.pi * (i/10.0)
+	a = a.fuse(spoke(13, f(th)-w/2.0, -g, g, w, th))
+	a = a.fuse(spoke(13, r1-1, -h, -g, 1*w, th))
+	a = a.fuse(spoke(13, r1-1, g, h, 1*w, th))
+
+# the spiral
+s = []
+for i in xrange(0, numDivs):
+	th0 = 2 * math.pi * (float(i) / numDivs)
+	th1 = 2 * math.pi * (float(i+1) / numDivs)
+	# outside edge
+	p = polarMesh.quadFacePolar([
+			[th0, f(th0), -g], [th0, f(th0), g],
+			[th1, f(th1), g], [th1, f(th1), -g]])
+	s.extend(p)
+	# inside edge
+	p = polarMesh.quadFacePolar([
+			[th0, f(th0)-w, g],	[th0, f(th0)-w, -g],
+			[th1, f(th1)-w, -g],	 [th1, f(th1)-w, g]])
+	s.extend(p)
+	# sides
+	p = polarMesh.quadFacePolar([
+		[th0, f(th0), -g], [th0, f(th0)-w, -g],
+		[th1, f(th1)-w, -g], [th1, f(th1), -g]])
+	s.extend(p)
+	p = polarMesh.quadFacePolar([
+		[th0, f(th0), g], [th0, f(th0)-w, g],
+		[th1, f(th1)-w, g], [th1, f(th1), g]])
+	s.extend(p)
+	# end caps
+	if i == 0:
+		p = polarMesh.quadFacePolar([
+			[th0, f(th0), g], [th0, f(th0)-w, g],
+			[th0, f(th0)-w, -g], [th0, f(th0), -g]])
+		s.extend(p)
+	if i == (numDivs - 1):
+		p = polarMesh.quadFacePolar([
+			[th1, f(th1), g], [th1, f(th1)-w, g],
+			[th1, f(th1)-w, -g], [th1, f(th1), -g]])
+		s.extend(p)
+
+spiralShape = polarMesh.mesh2shape(Mesh.Mesh(s))
+
+# finicky bit to avoid sharp edges at the end of the spiral
+a = a.fuse(offsetCylinder(w / 2, f(2 * math.pi) - w / 2, 0, -g, g))
+
+# mounting holes
+for i in xrange(0, 5):
+	th = 2 * math.pi * (2*i+1) / 10.0
+	a = a.fuse(offsetCylinder(9.9, 65, th, -(h+7), -g))
+	a = a.cut(offsetCylinder(4, 65, th, -(h+7), -(g-5)))
+	a = a.cut(offsetCylinder(8, 65, th, -(g+4), -(g-5)))
+	a = a.fuse(offsetCylinder(9.9, 65, th, g, h+7))
+	a = a.cut(offsetCylinder(4, 65, th, g-5, h+7))
+	a = a.cut(offsetCylinder(8, 65, th, g-5, g+4))
+
+a = a.fuse(spiralShape)
+
+# drill a hole for putative cord
+b = Part.makeBox(5,5,5)
+b.translate(Base.Vector(23,-2.5,-2.5))
+a = a.cut(b)
+
+Part.show(a)

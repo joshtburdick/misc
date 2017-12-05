@@ -69,28 +69,15 @@ a = ring(10, 14, -h1, h1)
 a = a.cut(zCylinder(11, -h1, -(h1-9)))
 a = a.cut(zCylinder(11, h1-9, h1))
 
-# outer rings
-a = a.fuse(ring(r1-10, r1, -h, -g))
-a = a.fuse(ring(r1-10, r1, g, h))
-# additinal ring on the outside
-a = a.fuse(ring(r1-w, r1, -h1, -(g)))
-a = a.fuse(ring(r1-w, r1, (g), h1))
-
-# spokes, going up to the cam surface
-for i in xrange(0,1):
-	th = 2 * math.pi * (i/10.0)
-	a = a.fuse(spoke(13, f(th)-w/2.0, -g, g, w, th))
-	a = a.fuse(spoke(13, r1-1, -h, -g, 1*w, th))
-	a = a.fuse(spoke(13, r1-1, g, h, 1*w, th))
-
 # mounting holes
+r2 = 22.1
 for i in xrange(0, 1):
 	th = 2 * math.pi * (2*i+1) / 10.0
-	a = a.fuse(offsetCylinder(9.9, 65, th, -(h+7), -g))
-	a = a.cut(offsetCylinder(4, 65, th, -(h+7), -(g-5)))
-	a = a.cut(offsetCylinder(8, 65, th, -(g+4), -(g-5)))
-	a = a.fuse(offsetCylinder(9.9, 65, th, g, h+7))
-	a = a.cut(offsetCylinder(4, 65, th, g-5, h+7))
-	a = a.cut(offsetCylinder(8, 65, th, g-5, g+4))
+	a = a.fuse(offsetCylinder(9.9, r2, th, -(h+7), -g))
+	a = a.cut(offsetCylinder(4, r2, th, -(h+7), -(g-5)))
+	a = a.cut(offsetCylinder(8, r2, th, -(g+4), -(g-5)))
+	a = a.fuse(offsetCylinder(9.9, r2, th, g, h+7))
+	a = a.cut(offsetCylinder(4, r2, th, g-5, h+7))
+	a = a.cut(offsetCylinder(8, r2, th, g-5, g+4))
 
 Part.show(a)

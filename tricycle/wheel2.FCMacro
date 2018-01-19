@@ -9,7 +9,7 @@ import math
 
 import polarMesh
 
-numDivs = 120
+numDivs = 7  # 120
 
 # radius of wheel, overall
 r1 = 74.999
@@ -89,46 +89,46 @@ for i in xrange(0,11):
 #   e1, e2: amount to add to each edge
 #   (e1 corresponds to coordinates with -g, while e2 corresponds
 #   to g, for the outside edges at least)
-def spiral(e1,e2):
+def spiral(e1,e2,z1,z2):
 	s = []
 	for i in xrange(0, numDivs):
 		th0 = 2 * math.pi * (float(i) / numDivs)
 		th1 = 2 * math.pi * (float(i+1) / numDivs)
 		# outside edge
 		p = polarMesh.quadFacePolar([
-				[th0, f(th0)+e1, -g], [th0, f(th0)+e2, g],
-				[th1, f(th1)+e2, g], [th1, f(th1)+e1, -g]])
+				[th0, f(th0)+e1, z1], [th0, f(th0)+e2, z2],
+				[th1, f(th1)+e2, z2], [th1, f(th1)+e1, z1]])
 		s.extend(p)
 		# inside edge
 		p = polarMesh.quadFacePolar([
-				[th0, f(th0)-w, g],	[th0, f(th0)-w, -g],
-				[th1, f(th1)-w, -g], [th1, f(th1)-w, g]])
+				[th0, f(th0)-w, z2], [th0, f(th0)-w, z1],
+				[th1, f(th1)-w, z1], [th1, f(th1)-w, z2]])
 		s.extend(p)
 		# sides
 		p = polarMesh.quadFacePolar([
-			[th0, f(th0)+e1, -g], [th0, f(th0)-w, -g],
-			[th1, f(th1)-w, -g], [th1, f(th1)+e1, -g]])
+			[th0, f(th0)+e1, z1], [th0, f(th0)-w, z1],
+			[th1, f(th1)-w, z1], [th1, f(th1)+e1, z1]])
 		s.extend(p)
 		p = polarMesh.quadFacePolar([
-			[th0, f(th0)+e2, g], [th0, f(th0)-w, g],
-			[th1, f(th1)-w, g], [th1, f(th1)+e2, g]])
+			[th0, f(th0)+e2, z2], [th0, f(th0)-w, z2],
+			[th1, f(th1)-w, z2], [th1, f(th1)+e2, z2]])
 		s.extend(p)
 		# end caps
 		if i == 0:
 			p = polarMesh.quadFacePolar([
-				[th0, f(th0)+e2, g], [th0, f(th0)-w, g],
-				[th0, f(th0)-w, -g], [th0, f(th0)+e1, -g]])
+				[th0, f(th0)+e2, z2], [th0, f(th0)-w, z2],
+				[th0, f(th0)-w, z1], [th0, f(th0)+e1, z1]])
 			s.extend(p)
 		if i == (numDivs - 1):
 			p = polarMesh.quadFacePolar([
-				[th1, f(th1)+e2, g], [th1, f(th1)-w, g],
-				[th1, f(th1)-w, -g], [th1, f(th1)+e1, -g]])
+				[th1, f(th1)+e2, z2], [th1, f(th1)-w, z2],
+				[th1, f(th1)-w, z1], [th1, f(th1)+e1, z1]])
 			s.extend(p)
 	return(polarMesh.mesh2shape(Mesh.Mesh(s)))
 
-spiralShape = spiral(2,-1.9)
-spiralShape = spiralShape.fuse(spiral(-1.9, 2))
-spiralShape = spiralShape.fuse(spiral(1,1))
+spiralShape = spiral(2,-1.9, -g, g)
+# spiralShape = spiralShape.fuse(spiral(-1.9, 2))
+# spiralShape = spiralShape.fuse(spiral(1,1))
 
 # finicky bit to avoid sharp edges at the end of the spiral
 # a = a.fuse(offsetCylinder(w / 2, f(2 * math.pi) - w / 2, 0, -g, g))

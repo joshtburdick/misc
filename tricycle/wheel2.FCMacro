@@ -9,13 +9,13 @@ import math
 
 import polarMesh
 
-numDivs = 7  # 120
+numDivs = 120
 
 # radius of wheel, overall
 r1 = 74.999
 
 # half of inside distance between planes
-g = (0.6 * 25.4) / 2
+g = (0.4 * 25.4) / 2
 
 # that, plus the width of the spokes
 h = g + 2.5
@@ -132,7 +132,7 @@ spiralShape = spiralShape.fuse(spiral(0, 0, -2, 2))
 spiralShape = spiralShape.fuse(spiral(0, 2, 2, g))
 
 # finicky bit to avoid sharp edges at the end of the spiral
-# a = a.fuse(offsetCylinder(w / 2, f(2 * math.pi) - w / 2, 0, -g, g))
+a = a.fuse(offsetCylinder(w / 2 + 2, f(2 * math.pi) - w / 2, 0, -g, g))
 
 # mounting holes
 for i in xrange(0, 5):
@@ -144,12 +144,12 @@ for i in xrange(0, 5):
 	a = a.cut(offsetCylinder(4, 65, th, g-5, h+7))
 	a = a.cut(offsetCylinder(8, 65, th, g-5, g+4))
 
-# a = a.fuse(spiralShape)
-a = spiralShape   # XXX testing
+a = a.fuse(spiralShape)
+# a = spiralShape   # XXX testing
 
 # drill a hole for putative cord
 # FIXME this isn't working
-if False:
+if True:
 	b = Part.makeBox(5,5,5)
 	b.translate(Base.Vector(23,-2.5,-2.5))
 	a = a.cut(b)

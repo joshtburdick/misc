@@ -67,8 +67,8 @@ def f(th):
 
 # hub, with space for bearings
 a = ring(10, 14, -h1, h1)
-a = a.cut(zCylinder(11, -h1, -(h1-9)))
-a = a.cut(zCylinder(11, h1-9, h1))
+a = a.cut(zCylinder(11.025, -h1, -(h1-9)))
+a = a.cut(zCylinder(11.025, h1-9, h1))
 
 # outer rings
 a = a.fuse(ring(r1-10, r1, -h, -g))
@@ -85,42 +85,44 @@ for i in xrange(0,11):
 	a = a.fuse(spoke(13, r1-1, g, h, 1*w, th))
 
 # the spiral
-s = []
-for i in xrange(0, numDivs):
-	th0 = 2 * math.pi * (float(i) / numDivs)
-	th1 = 2 * math.pi * (float(i+1) / numDivs)
-	# outside edge
-	p = polarMesh.quadFacePolar([
-			[th0, f(th0), -g], [th0, f(th0), g],
-			[th1, f(th1), g], [th1, f(th1), -g]])
-	s.extend(p)
-	# inside edge
-	p = polarMesh.quadFacePolar([
-			[th0, f(th0)-w, g],	[th0, f(th0)-w, -g],
-			[th1, f(th1)-w, -g],	 [th1, f(th1)-w, g]])
-	s.extend(p)
-	# sides
-	p = polarMesh.quadFacePolar([
-		[th0, f(th0), -g], [th0, f(th0)-w, -g],
-		[th1, f(th1)-w, -g], [th1, f(th1), -g]])
-	s.extend(p)
-	p = polarMesh.quadFacePolar([
-		[th0, f(th0), g], [th0, f(th0)-w, g],
-		[th1, f(th1)-w, g], [th1, f(th1), g]])
-	s.extend(p)
-	# end caps
-	if i == 0:
+def spiral():
+	s = []
+	for i in xrange(0, numDivs):
+		th0 = 2 * math.pi * (float(i) / numDivs)
+		th1 = 2 * math.pi * (float(i+1) / numDivs)
+		# outside edge
 		p = polarMesh.quadFacePolar([
-			[th0, f(th0), g], [th0, f(th0)-w, g],
-			[th0, f(th0)-w, -g], [th0, f(th0), -g]])
+				[th0, f(th0), -g], [th0, f(th0), g],
+				[th1, f(th1), g], [th1, f(th1), -g]])
 		s.extend(p)
-	if i == (numDivs - 1):
+		# inside edge
 		p = polarMesh.quadFacePolar([
-			[th1, f(th1), g], [th1, f(th1)-w, g],
+				[th0, f(th0)-w, g],	[th0, f(th0)-w, -g],
+				[th1, f(th1)-w, -g],	 [th1, f(th1)-w, g]])
+		s.extend(p)
+		# sides
+		p = polarMesh.quadFacePolar([
+			[th0, f(th0), -g], [th0, f(th0)-w, -g],
 			[th1, f(th1)-w, -g], [th1, f(th1), -g]])
 		s.extend(p)
+		p = polarMesh.quadFacePolar([
+			[th0, f(th0), g], [th0, f(th0)-w, g],
+			[th1, f(th1)-w, g], [th1, f(th1), g]])
+		s.extend(p)
+		# end caps
+		if i == 0:
+			p = polarMesh.quadFacePolar([
+				[th0, f(th0), g], [th0, f(th0)-w, g],
+				[th0, f(th0)-w, -g], [th0, f(th0), -g]])
+			s.extend(p)
+		if i == (numDivs - 1):
+			p = polarMesh.quadFacePolar([
+				[th1, f(th1), g], [th1, f(th1)-w, g],
+				[th1, f(th1)-w, -g], [th1, f(th1), -g]])
+			s.extend(p)
+	return(polarMesh.mesh2shape(Mesh.Mesh(s)))
 
-spiralShape = polarMesh.mesh2shape(Mesh.Mesh(s))
+spiralShape = spiral()   #  polarMesh.mesh2shape(Mesh.Mesh(s))
 
 # finicky bit to avoid sharp edges at the end of the spiral
 a = a.fuse(offsetCylinder(w / 2, f(2 * math.pi) - w / 2, 0, -g, g))

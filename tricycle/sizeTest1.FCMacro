@@ -66,18 +66,22 @@ def f(th):
 
 # hub, with space for bearings
 a = ring(10, 14, -h1, h1)
-a = a.cut(zCylinder(11, -h1, -(h1-9)))
-a = a.cut(zCylinder(11, h1-9, h1))
+# adding a tiny bit to these
+a = a.cut(zCylinder(11.025, -h1, -(h1-9)))
+a = a.cut(zCylinder(11.05, h1-9, h1))
 
 # mounting holes
 r2 = 22.1
 for i in xrange(0, 1):
 	th = 2 * math.pi * (2*i+1) / 10.0
-	a = a.fuse(offsetCylinder(9.9, r2, th, -(h+7), -g))
-	a = a.cut(offsetCylinder(4, r2, th, -(h+7), -(g-5)))
-	a = a.cut(offsetCylinder(8, r2, th, -(g+4), -(g-5)))
+#	a = a.fuse(offsetCylinder(9.9, r2, th, -(h+7), -g))
+#	a = a.cut(offsetCylinder(4, r2, th, -(h+7), -(g-5)))
+#	a = a.cut(offsetCylinder(8, r2, th, -(g+4), -(g-5)))
+	# only showing the + side hole (so as to distinguish
+	# sides, since bearing holes are different sizes)
 	a = a.fuse(offsetCylinder(9.9, r2, th, g, h+7))
-	a = a.cut(offsetCylinder(4, r2, th, g-5, h+7))
+	# also making mounting hole slightly bigger
+	a = a.cut(offsetCylinder(4.05, r2, th, g-5, h+7))
 	a = a.cut(offsetCylinder(8, r2, th, g-5, g+4))
 
 Part.show(a)

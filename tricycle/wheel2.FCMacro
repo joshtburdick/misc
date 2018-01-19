@@ -87,8 +87,9 @@ for i in xrange(0,11):
 # The spiral.
 # Including a hack to make this shaped somewhat.
 #   e1, e2: amount to add to each edge
-#   (e1 corresponds to coordinates with -g, while e2 corresponds
-#   to g, for the outside edges at least)
+#   	(e1 corresponds to coordinates with -g, while e2
+#		corresponds to g, for the outside edges at least)
+#	z1, z2: z coordinates of edges
 def spiral(e1,e2,z1,z2):
 	s = []
 	for i in xrange(0, numDivs):
@@ -126,9 +127,9 @@ def spiral(e1,e2,z1,z2):
 			s.extend(p)
 	return(polarMesh.mesh2shape(Mesh.Mesh(s)))
 
-spiralShape = spiral(2,-1.9, -g, g)
-# spiralShape = spiralShape.fuse(spiral(-1.9, 2))
-# spiralShape = spiralShape.fuse(spiral(1,1))
+spiralShape = spiral(2, 0, -g, -2)
+spiralShape = spiralShape.fuse(spiral(0, 0, -2, 2))
+spiralShape = spiralShape.fuse(spiral(0, 2, 2, g))
 
 # finicky bit to avoid sharp edges at the end of the spiral
 # a = a.fuse(offsetCylinder(w / 2, f(2 * math.pi) - w / 2, 0, -g, g))

@@ -84,45 +84,49 @@ for i in xrange(0,11):
 	a = a.fuse(spoke(13, r1-1, -h, -g, 1*w, th))
 	a = a.fuse(spoke(13, r1-1, g, h, 1*w, th))
 
-# the spiral
-def spiral():
+# The spiral.
+# Including a hack to make this shaped somewhat.
+#   e1, e2: amount to add to each edge
+#   (e1 corresponds to coordinates with -g, while e2 corresponds
+#   to g, for the outside edges at least)
+def spiral(e1,e2):
 	s = []
 	for i in xrange(0, numDivs):
 		th0 = 2 * math.pi * (float(i) / numDivs)
 		th1 = 2 * math.pi * (float(i+1) / numDivs)
 		# outside edge
 		p = polarMesh.quadFacePolar([
-				[th0, f(th0), -g], [th0, f(th0), g],
-				[th1, f(th1), g], [th1, f(th1), -g]])
+				[th0, f(th0)+e1, -g], [th0, f(th0)+e2, g],
+				[th1, f(th1)+e2, g], [th1, f(th1)+e1, -g]])
 		s.extend(p)
 		# inside edge
 		p = polarMesh.quadFacePolar([
 				[th0, f(th0)-w, g],	[th0, f(th0)-w, -g],
-				[th1, f(th1)-w, -g],	 [th1, f(th1)-w, g]])
+				[th1, f(th1)-w, -g], [th1, f(th1)-w, g]])
 		s.extend(p)
 		# sides
 		p = polarMesh.quadFacePolar([
-			[th0, f(th0), -g], [th0, f(th0)-w, -g],
-			[th1, f(th1)-w, -g], [th1, f(th1), -g]])
+			[th0, f(th0)+e1, -g], [th0, f(th0)-w, -g],
+			[th1, f(th1)-w, -g], [th1, f(th1)+e1, -g]])
 		s.extend(p)
 		p = polarMesh.quadFacePolar([
-			[th0, f(th0), g], [th0, f(th0)-w, g],
-			[th1, f(th1)-w, g], [th1, f(th1), g]])
+			[th0, f(th0)+e2, g], [th0, f(th0)-w, g],
+			[th1, f(th1)-w, g], [th1, f(th1)+e2, g]])
 		s.extend(p)
 		# end caps
 		if i == 0:
 			p = polarMesh.quadFacePolar([
-				[th0, f(th0), g], [th0, f(th0)-w, g],
-				[th0, f(th0)-w, -g], [th0, f(th0), -g]])
+				[th0, f(th0)+e2, g], [th0, f(th0)-w, g],
+				[th0, f(th0)-w, -g], [th0, f(th0)+e1, -g]])
 			s.extend(p)
 		if i == (numDivs - 1):
 			p = polarMesh.quadFacePolar([
-				[th1, f(th1), g], [th1, f(th1)-w, g],
-				[th1, f(th1)-w, -g], [th1, f(th1), -g]])
+				[th1, f(th1)+e2, g], [th1, f(th1)-w, g],
+				[th1, f(th1)-w, -g], [th1, f(th1)+e1, -g]])
 			s.extend(p)
 	return(polarMesh.mesh2shape(Mesh.Mesh(s)))
 
-spiralShape = spiral()   #  polarMesh.mesh2shape(Mesh.Mesh(s))
+spiralShape = spiral(2,-1.9)   #  polarMesh.mesh2shape(Mesh.Mesh(s))
 
 # finicky bit to avoid sharp edges at the end of the spiral
 a = a.fuse(offsetCylinder(w / 2, f(2 * math.pi) - w / 2, 0, -g, g))
@@ -137,7 +141,8 @@ for i in xrange(0, 5):
 	a = a.cut(offsetCylinder(4, 65, th, g-5, h+7))
 	a = a.cut(offsetCylinder(8, 65, th, g-5, g+4))
 
-a = a.fuse(spiralShape)
+# a = a.fuse(spiralShape)
+a = spiralShape   # XXX testing
 
 # drill a hole for putative cord
 b = Part.makeBox(5,5,5)

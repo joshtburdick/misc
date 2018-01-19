@@ -84,6 +84,13 @@ for i in xrange(0,11):
 	a = a.fuse(spoke(13, r1-1, -h, -g, 1*w, th))
 	a = a.fuse(spoke(13, r1-1, g, h, 1*w, th))
 
+# drill a hole for putative cord
+# FIXME this isn't working
+if True:
+	b = Part.makeBox(4.9,4.9,4.9)
+	b.translate(Base.Vector(23,-2.5,-2.5))
+	a = a.cut(b)
+
 # The spiral.
 # Including a hack to make this shaped somewhat.
 #   e1, e2: amount to add to each edge
@@ -146,12 +153,5 @@ for i in xrange(0, 5):
 
 a = a.fuse(spiralShape)
 # a = spiralShape   # XXX testing
-
-# drill a hole for putative cord
-# FIXME this isn't working
-if True:
-	b = Part.makeBox(5,5,5)
-	b.translate(Base.Vector(23,-2.5,-2.5))
-	a = a.cut(b)
 
 Part.show(a)

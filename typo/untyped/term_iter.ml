@@ -119,7 +119,7 @@ let _ =
   let x2 = ref "x2" in
   let y2 = ref "y2" in 
   let a = Abstr (x1, Abstr (y1, Var y1)) in
-  let b = Abstr (x2, Abstr (y2, Var y2)) in
+  let b = Abstr (x2, Abstr (y2, Var x2)) in
   let r = alpha_equiv a b in
   print_string (if r then "true\n" else "false\n")
 *)
@@ -129,5 +129,13 @@ let _ =
 (* let _ = term_iter (fun x -> print_term x; print_string "\n") 5 *)
 
 (* print terms, and reduce them *)
-let _ = term_iter (fun x -> reduce_and_print 10 x; print_string "\n" ) 6
+(* let _ = term_iter (fun x -> reduce_and_print 10 x; print_string "\n" ) 6 *)
+
+let read_term _ =
+  let lexbuf = Lexing.from_channel stdin in
+  Parser.main Lexer.token lexbuf
+
+let _ =
+  let a = read_term() in
+  reduce_and_print 100 a
 

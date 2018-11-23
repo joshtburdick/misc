@@ -22,9 +22,17 @@ let rec subst x s t =
       App (subst x s rator, subst x s rand)
     | Abstr (v, body) -> Abstr (v, subst x s body)
 
+(* Create numbered variables, starting with "a","b","c"..."z",
+  then switching to "x0", "x1", "x2", "x3"... *)
+let number_to_var i =
+  (* ??? why does numbering start at 1? *)
+  if i <= 26
+  then String.make 1 (char_of_int (i + 96))
+  else "x" ^ (string_of_int (i-26))
+
 (* Utility to rename all variables in a term to "fresh
-  variable names" (which are numbered). Akin to Prolog's
-  copy_term/2. Kind of inefficient. *)
+  variable names". Akin to Prolog's copy_term/2.
+  Kind of inefficient. *)
 let copy_term a = 
 let var_count = ref 0 in
 let rec copy_term_1 a =
@@ -33,7 +41,7 @@ let rec copy_term_1 a =
   | App (r, s) -> App (copy_term_1 r, copy_term_1 s)
   | Abstr (x, s) ->
     var_count := !var_count + 1;
-    let x1 = ref ("x" ^ (string_of_int !var_count)) in
+    let x1 = ref (number_to_var !var_count) in
     Abstr (x1, subst x (Var x1) (copy_term_1 s))
 in copy_term_1 a
 

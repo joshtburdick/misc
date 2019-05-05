@@ -9,24 +9,41 @@
 \newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
 \newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
 \begin{document}
-\title{Finding a non-constructively defined set of 6-cliques in an
-$n$-vertex graph requires $\Omega(n^3)$ NAND gates}
+\title{A lower bound for clique detection, by combining
+Shannon's counting argument with clique covers of random hypergraphs}
 
 \author{Josh Burdick ({\tt josh.t.burdick@gmail.com})}
 \maketitle
+\begin{abstract}
+Shannon's function-counting argument
+\cite{shannon_synthesis_1949} showed that some Boolean functions have
+exponential circuit complexity, but doesn't provide a specific example
+of such a hard-to-compute function. A simple modification of that argument
+shows that detecting a randomly-chosen subset of the $k$-vertex cliques in an
+$n$-vertex graph, on average, requires $\Omega(n^{k/2})$ NAND gates.
+This doesn't directly bound the complexity of clique detection.
+However, we can view a random subset of cliques as a randomly-chosen
+$k$-regular on $n$ vertices.
+If we can cover such a hypergraph with large enough cliques,
+then if we could detect cliques with few enough gates, we would contradict
+the average-case counting bound described above.
+This provides a strategy for lower-bounding clique detection.
+We numerically evaluate this bound for small graphs, and discuss prospects
+for writing it in closed form.
+\end{abstract}
 
-I am writing this up on the assumption that it's not new.
-However, I'm hopeful that either it is new, or that it has useful bits,
+I am writing this up on the assumption that the modification
+to Shannon's counting argument (section \ref{countingBound})
+is not new. I haven't seen the rest before, but obviously it makes some
+strong claims.
+I'm hopeful that it is correct and/or, or that it has useful bits,
 or that someone can point me
-to similar lower-bound attempts. (Or if it's wrong, that 
-someone can point out the flaw in the argument).
-
-It's basically a function-counting argument; such arguments have been known for
-a long time \cite{shannon_synthesis_1949}.
+to similar lower-bound attempts; or, if it's wrong, that 
+someone can point out the flaw(s).
 
 \tableofcontents
 
-\section{A counting bound}
+\section{A counting bound} \label{countingBound}
 
 The first argument is basically a function-counting argument.
 
@@ -88,7 +105,7 @@ g & = & -b \pm \sqrt{ b^2 + 2w} \\
 Thus, given a set of functions, we know that at least one of them requires
 some number of gates.
 
-\subsection*{Bounding the average number of gates}
+\subsection{Bounding the average number of gates}
 
 We can also count the total number of functions from $m$ input bits to one
 output bit, using up to $g$ NAND gates, as
@@ -114,20 +131,21 @@ We consider the set of ``buggy'' 6-clique finders.
 Maybe the circuit correctly
 finds all the cliques. Or maybe it finds all of the cliques except $K_{1..6}$,
 or it misses half the cliques, or finds none (and always outputs 0), or maybe
-it only successfully finds $K_{1,3,4,5,7,8}$, or whatever. More formally,
+it only successfully finds $K_{1,3,4,5,7,8}$, or whatever. More formally
+(and generally),
 we define a set of functions ({\em not} circuits)
 
 \begin{defn}
-\label{BUGGY-6-CLIQUE}
-${\rm BUGGY-6-CLIQUE}(n)$ is the set of functions which recognize any set
-of $K_6$s. That is, for each set $A$ of $K_6$s, ${\rm BUGGY-6-CLIQUE}(n)$
+\label{BUGGY-k-CLIQUE}
+BUGGY-$k$-CLIQUE$(n)$ is the set of functions which recognize any set
+of $K_k$s. That is, for each set $A$ of $K_k$s, BUGGY-$k$-CLIQUE$(n)$
 contains a function which is 1 if the input contains any $K_6 \in A$,
 and 0 otherwise.
 \end{defn}
 
-This clearly includes HAS-6-CLIQUE (which finds all the cliques).
+This clearly includes HAS-$k$-CLIQUE (which finds all the cliques).
 
-These functions are all distinct. If $f_1, f_2 \in {\rm BUGGY-6-CLIQUE}(n)$,
+These functions are all distinct. If $f_1, f_2 \in $BUGGY-$k$-CLIQUE$(n)$,
 then there's some $K_6$ such that if $y$ is the graph with {\em only}
 1's in that $K_6$ (and 0's elsewhere), $f_1(y) = 0$ and $f_2(y) = 1$.
 
@@ -136,67 +154,57 @@ output a 1 when you feed in all 1's). However, they're all slightly different.
 
 \begin{thm}
 \label{buggyDistinct}
-${\rm BUGGY-6-CLIQUE}(n)$ contains $2^{n \choose 6}$ distinct functions.
+BUGGY-$k$-CLIQUE$(n)$ contains $2^{n \choose k}$ distinct functions.
 \end{thm}
 \begin{proof}
-That's how many subsets of the $K_6$s there are.
+That's how many subsets of the $K_k$s there are.
 \end{proof}
 
-Although $2^{n \choose 6}$ is a fairly large number,
+Although $2^{n \choose k}$ is a fairly large number,
 it's still comfortably less than $2^{2^{n \choose 2}}$, the number of boolean
-functions on the ${n \choose 2}$ input wires to the circuit (there's one input
-per edge in the input graph).
+functions on the ${n \choose 2}$ input wires (one per edge).
 
 \subsubsection{But {\em which} function requires many gates?}
 
-So, there are $2^{n \choose 6}$ different functions. 
+So, there are $2^{n \choose k}$ different functions. 
 How many NAND gates do these take?
 (We onsider NAND gate circuits (with any fan-in) which find $k$-cliques in $n$-vertex
 graphs, as a circuit with $n \choose 2$ inputs)
 
 Applying Theorem
 \ref{boundFromCounting}, we know that at least one of the circuits requires
-${\sqrt {2 {n \choose 6} + b^2}} - b = \Omega(n^3)$ 
-NAND gates (where $b = {6 \choose 2} - 0.5$).
+${\sqrt {2 {n \choose {k/2}} + b^2}} - b = \Omega(n^{k/2})$ 
+NAND gates (where $b = {k \choose 2} - 0.5$).
 
-Why doesn't this bound CLIQUE?
-Because we don't know that the circuit which actually,
-correctly, finds all of the
-$K_6$s, is one of these larger circuits. As far as what I've
-shown thus far goes, it could be harder to find some weird subset of the $K_6$s...
+Why doesn't this bound HAS-$k$-CLIQUE?
+Because we don't know that the circuit which finds {\em all} of the
+$K_k$s, is one of these larger circuits. As far as what I've
+shown thus far goes, it could be harder to find some weird subset of the $K_k$s.
 
 Indeed, as far as what I've formally shown goes, the problem which needs
-the most NAND gates could be finding a single $K_6$! That's easily ruled out
+the most NAND gates could be finding a single $K_k$! That's easily ruled out
 (because that only needs one NAND gate, plus the output gate.)
-
-\section{Other things about the counting bound}
-
-These are some other thoughts about the counting bound, which didn't
-seem to get me anywhere.
 
 \subsection{Which sets of cliques are hard to find?}
 
-We can also consider various subsets of the cliques. For instance,
-most of the functions in BUGGY-k-clique find exactly
-$0.5 {n \choose k }$ cliques. This means that, on average, these
-require $\Omega(n ^ (k/2)$ gates to compute.
-
-However, the hardness of these functions depends somewhat
-on exactly how the cliques they find are laid out.
-For instance, here are two sets of 20 triangles (that is, ``$K_3$s''),
-arranged in different ways:
+The hardness of these functions depends
+on how the cliques they find are laid out.
+For instance, here are two sets of 20 triangles (``$K_3$s''),
+arranged in different ways. Although we only show 20 triangles here,
+we can imagine similarly-structured graphs with more triangles.
 
 \includegraphics[width=0.9\textwidth]{R/tri1.pdf}
 
-There are fast algorithms known for
-detecting triangles using matrix multiplication
- \cite{itai_finding_1977} \cite{williams_multiplying_2012}, so
-something like what's on the left can be done (for large enough
-$n$) using fewer than ${n \choose 3}$ gates.
+Triangles can be detected using matrix multiplication \cite{itai_finding_1977},
+and there are fast algorithms known for matrix multiplication
+\cite{strassen_gaussian_1969}
+\cite{williams_multiplying_2012}, so
+the triangles on the left can be detected
+using fewer than one NAND gate per triangle (for large enough input graphs).
 
-On the other hand, if the gates overlap less (as on the right),
-then we will definitely need at least ${n \choose 3}$ NAND gates
-(which is to say, more NAND gates).
+On the other hand, if the triangles overlap less (as on the right),
+then to detect all the triangles, we will definitely need at least one
+gate per triangle.
 To see this, note that if we feed in a 0 to the input for one
 of the edges unique to some triangle, then any gate connected to
 that edge will only output a 1. We can repeat this for each of the
@@ -204,21 +212,22 @@ triangles, constructing a series of strictly smaller circuits
 (this is essentially what I think is called
 the ``method of restrictions'' FIXME CITE).
 
+It seems intuitive that, in some sense, finding more cliques should
+be harder.
 Indeed, since we're using NAND gates, we know that finding any non-empty
 subset of cliques is strictly harder than finding {\em some} other 
 smaller set of cliques (namely, the set you get after feeding in 0's to
 all the edges connected to some vertex).
 Unfortunately, this doesn't help much
 in the case of CLIQUE.  If we have a circuit which
-finds $k$-cliques on 100 vertices, and feed in 0's to all edges connected to
+finds 6-cliques on 100 vertices, and feed in 0's to all edges connected to
 one vertex, we
-end up with... a strictly smaller circuit which finds $k$-cliques on
+end up with a strictly smaller circuit which finds 6-cliques on
 99 vertices! We still haven't connected the complexity of CLIQUE with
 the complexity of all those ``buggy'' circuits which find exactly half
 the cliques.
 
-
-\subsection{Slightly larger sets of functions}
+\subsection{Counting slightly larger sets of functions}
 
 We can also construct somewhat larger sets of functions. For instance,
 suppose that, rather than detecting or ignoring each clique, we assign
@@ -226,11 +235,11 @@ to each edge either 1, 0, or X, with this interpretation:
 
 \begin{itemize}
 
-\item 1: ``this clique must be present''
+\item 1: ``If any of these cliques is present, then output 1...''
 
-\item 0: ``this clique must NOT be present''
+\item 0: ``...unless one of these cliques is present, in which case output 0.''
 
-\item X: ``I'm ignoring this clique''
+\item X: ``(Ignore whether this clique is present).''
 
 \end{itemize}
 
@@ -251,28 +260,27 @@ then feed in 0's or 1's to the remaining edges:
 However, it seems hard to push this to arbitrary functions of ``which cliques are
 present'', because they start to overlap.
 
-\section{Decomposing graphs into hypercliques}
+\section{Bounds based on covering hypergraphs with cliques}
 
 Suppose we consider all $2^{n \choose k}$ functions which find some subset
 of $k$-cliques in an $n$-vertex graph, and for each, find the circuit with
 the fewest NAND gates which computes it. If we add up the total number of
 gates in all of these circuits,
 it's a lot. Since they're all distinct functions, the
-function-counting bound should
-allow us to lower-bound the total number of gates used (as from the
+function-counting bound gives a lower-bound the total number of gates used (as from the
 above, we know how many functions from $m$ inputs to one output
 we can implement using $g$ NAND gates).
 
 Note that, for a given set of $k$-cliques $S$, if $S = A \cup B$, and we
 have circuits to find the $k$-cliques in $A$ and $B$, then by ORing them
-together, we obtain a circuit for $S$. (With NAND gates, you actually
+together, we obtain a circuit for $S$. (If we use NAND gates, we
 save a gate. Given circuits for $A$ and $B$, to construct a circuit
-for $A \cup B$, you just disconnect the wires from $B$'s last gate, and
+for $A \cup B$, we can disconnect the wires from $B$'s last gate, and
 connect them to $A$'s last gate. $A$'s output now computes $A \cup B$,
-and $B$'s last gate is no longer needed).
+and $B$'s last gate is no longer needed). (FIXME add a figure?)
 
 Suppose we had small circuits for detecting all of the $k$-cliques
-in an $m$-vertex graph, for $k \le m \le n$.
+in an $r$-vertex graph, for $k \le r \le n$.
 Then, one way to generate a circuit which finds an arbitrary subset
 of $k$-cliques would be to decompose it into a set of
 cliques (of size between $k$ and $n$), and OR them all together.
@@ -287,52 +295,10 @@ Broadly speaking, the idea of using an upper bound to prove a lower bound
 is not new. Aaronson describes this as ``ironic complexity theory''
 \cite{aaronson_pnp}, and mentions several recent applications of it.
 
-\subsubsection{Anecdotal rephrasing}
-
-(I include the following hypothetical anecdotal explanation,
-partly because I think it's slightly funny, but also because I think it may
-provide at least some intuition).
-
-In some alternate reality, it is the dawn of the era of 
-TTL integrated circuits.
-Yoyodyne Corporation has developed a line of integrated circuits to detect
-any possible set of $K_4$s in a graph with nine vertices.
-These chips, the 74LSC series,
-are available in a convenient 40-pin DIP package, and are
-fabulously successful. (I have no idea why there would be huge demand for
-these, but let's say that there is). The only problem is that Yoyodyne's 
-chip factories are having trouble producing enough chips.
-
-Management contemplates how to re-envision productivity and enable
-synergy. (They are, after all, producing $2^{9 \choose 4} = 2^{126}$
-different sorts of chips).
-They decide that they need to stop producing so many kinds of chips.
-After great deliberation, they decide to cut production to {\em just} the
-chips which find all possible
-$K_4$'s on graphs with between four and nine vertices (namely, the 74LSC4
-through 74LSC9). In order to meet the bizarre but humongous
-demand for finding arbitrary sets of $K_4$s, they will develop a
-line of tiny circuit boards,
-each containing several clique detectors, ORed together.
-
-There is still the problem of designing these circuit boards. However,
-they only have to do this once for each possible set of $K_4$s. They hire
-a large team of software engineers and graph theorists. By renting
-many years of CPU time from AltaVista and MySpace, they are able to design the
-optimal circuit boards.
-
-Note that, originally, Yoyodyne was using some number of NAND gates to
-cover all the $2^{9 \choose 4} = 2^{126}$ possible sets of $K_4$s.
-The Shannon counting
-argument gives a lower bound on how many NAND gates were used in all of
-these chips. (Specifically, it says that at least four NAND gates
-were used for at least one graph, since $36+37+38+39 = 150 \ge 126$).
-
-After the redesign, if 
-we count up the number of 74LSC4 through 74LSC9 gates which were used,
-and consider the number of NAND gates in each
-of these, the total had better {\em also} be larger than the bound from
-the Shannon counting argument.
+Also, probabilistic graph theory has often been used in
+lower bounds and algorithms. A well-known example is Razborov's lower
+bound on the complexity of detecting cliques using monotone circuits
+\cite{Razborov85lowerbounds}.
 
 \subsubsection{Getting a bound from covering all the hypercliques}
 
@@ -719,10 +685,20 @@ However, using one (relatively simple) strategy for doing this covering,
 the bound was, like, less than one. Possibly improving the covering
 strategy would help, but I'm not convinced it would help much.
 
-(If it's the case that any function in BQP can be represented
+This lower-bound strategy also seems relevant to quantum computing,
+as it makes few restrictions on the sort of gates used.
+If it's the case that any function in BQP can be represented
 as a circuit made of discrete quantum gates, which can be
-ORed together, then this also
-would imply that BQP doesn't contain NP).
+ORed together, then clique detection isn't in BQP.
+However, I'm not sure what sort of quantum gates would be
+appropriate.
+
+\section{Acknowledgements}
+
+The author would like to thank
+
+
+
 
 \bibliography{references}
 \bibliographystyle{abbrv}

@@ -46,6 +46,8 @@ or that someone can point me
 to similar lower-bound attempts; or, if it's wrong, that 
 someone can point out the flaw(s).
 
+\newpage
+
 \tableofcontents
 
 \section{A counting bound} \label{countingBound}
@@ -188,7 +190,7 @@ shown thus far goes, it could be harder to find some weird subset of the $K_k$s.
 
 Indeed, as far as what I've formally shown goes, the problem which needs
 the most NAND gates could be finding a single $K_k$! That's easily ruled out
-(because that only needs one NAND gate, plus the output gate.)
+(because that only needs one NAND gate, plus the output gate).
 
 \subsection{Which sets of cliques are hard to find?}
 
@@ -301,23 +303,27 @@ To be more concrete: suppose we
 devise a way of covering all the $k$-cliques in an $n$-vertex
 graph. Instead of counting across all possible sets of cliques, we will
 consider the average, for a set of cliques chosen uniformly at random.
-Choose some coverage strategy, and let:
+Let $k$ be the size of cliques we're bounding the complexity of finding,
+choose some covering strategy, and let:
+
+FIXME the subscripts are all off here...
 
 \begin{itemize}
 
-\item $A_{ij}$ = the average number of $i$-vertex cliques in a $j$-vertex graph
+\item $A_{rn}$ = the average number of $r$-vertex hypercliques (``$K^r_k$''s)
+in an $n$-vertex graph
 
-\item $b_i$ = the Shannon bound on the number of
+\item $X_{r}$ = the number of gates needed to find $k$-cliques on $n$ vertices.
+
+\item $B_{rk}$ = the Shannon bound on the number of
 gates needed to find $k$-cliques on $n$ vertices.
-
-\item $x_j$ = the number of gates needed to find $k$-cliques on $j$ vertices.
 
 \end{itemize}
 
 We have
 
 \[
-Ax \ge b
+AX \ge B
 \]
 
 This gives a lower bound on $x$ (the number of gates needed to find
@@ -342,10 +348,11 @@ covering. However, we do need to know how many hypercliques of various sizes are
 needed.
 
 Here, we describe covering strategies of increasing simplicity. We then
-try to apply the simplest strategy in section FIXME.
+try to apply the simplest strategy in section \ref{oneCliqueSize}.
 
-(I will often omit the ``hyper'' from
-``hypergraph'', ``hyperedge'', etc.)
+(FIXME It's tempting to omit the ``hyper'' from
+``hypergraph'', ``hyperedge'', etc. However, it might be good to include,
+to distinguish from the original clique-detecting problem).
 
 \subsection{Using the set-cover greedy algorithm}
 
@@ -426,7 +433,7 @@ For instance, in this toy example in which we're covering edges
 are three maximal $K_3$s, but we could get by with two $K_3$s and
 a $K_2$. Presumably similar things happen with hypergraphs.
 
-\includegraphics[width=0.7\textwidth]{R/maximal.pdf}
+\includegraphics[width=0.5\textwidth]{R/maximal.pdf}
 
 One model of random graphs
 includes each edge with some fixed probability. Using this model,
@@ -477,7 +484,7 @@ hypercliques we need to cover). That fraction is
 
 These predictions made me slightly wary, as the events they were counting
 aren't independent.
-To check them (at least for {\em small} graphs, we used brute force.
+To check them (at least for {\em small} graphs), we used brute force.
 Suppose $n, k$ are small enough that we can 
 store the adjacency matrix of a $k$-regular graph as a bitvector, and precompute
 all possible hypercliques
@@ -551,7 +558,7 @@ $x$ (a lower bound on the
 number of gates needed) using a linear program solver.
 I haven't done this so far.
 
-\subsection{Using just one size of hyperclique}
+\subsection{Using just one size of hyperclique} \label{oneCliqueSize}
 
 As that expression is complicated, we seek a simpler (but
 presumably weaker) bound.
@@ -570,7 +577,6 @@ and only use clique-finding for that size problems. For smaller problems,
 just use one NAND gate per hyperedge (clique).
 This ``RISC-like'' \cite{hennessy2011computer} strategy
 presumably is less efficient, but seems easier to analyze.
-
 
 Suppose that we pick $r$ such that $k < r < n$; in the given hypergraph,
 we will cover every $K_r^k$ with some circuit; all remaining hyperedges
@@ -619,7 +625,7 @@ hypercliques).
 One problem that arises is numerical: we are multiplying huge numbers
 (the number of possible hypercliques) by infinitesimal numbers
 (the probability of an edge being present). Initially, I used R, and
-then using Julia's arbitrary-precision arithmetic.
+then used Julia's arbitrary-precision arithmetic.
 
 When I attempted to optimize this for a tiny case, $k=5$ and $r=6$,
 searching for $n$ up to 500,
@@ -629,12 +635,16 @@ The maximum was when $n=420$, at which point the bound was
 Since there must be an integral number of NAND gates, we can then round up
 to ``at least one NAND gate.''
 (This is reminiscent of the ``chipmunks in trees''
-problem (\cite{ross2006first}, p. 344).
+problem described in \cite{ross2006first}, p. 344).
 That bound is uninspiring, but that was for a tiny case, which might be
 expected to be difficult to find a large lower bound for.
 
-When I tried maximizing for larger problems, I started using up my laptop's
-memory (all 8 Gb of it). Also, the bound was fairly slow. I assume that the
+\subsubsection{Dealing with numerical issues}
+
+When I tried maximizing for larger (presumably harder)
+problems, I started using up my laptop's
+memory (all 8 Gb of it). Also, computing the bound
+was fairly slow. I assume that the
 issue was that Julia's {\tt Rational} type was spending much time reducing
 fractions to simplest form.
 
@@ -642,7 +652,7 @@ In order to work around this, I rewrote parts of the code,
 based on an approximation based on the fact that
 
 \[
-lim_n (1 - n^{-1})^{a} = e^{-n}
+lim_{n\to\infty} (1 - n^{-1})^{n} = e^{-1}
 \]
 
 FIXME

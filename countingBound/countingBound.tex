@@ -33,14 +33,13 @@ allow bounding the number of cliques needed to
 cover a random hypergraph.
 This provides a strategy for lower-bounding clique detection.
 We suggest several possible ways of covering hypergraphs with cliques,
-and numerically evaluate this bound for small graphs. We then
-discuss prospects for finding a bound in closed form.
+and numerically evaluate this bound for small graphs, finding that
+it barely gives a positive bound.
 \end{abstract}
 
 I am writing this up on the assumption that the modification
 to Shannon's counting argument (section \ref{countingBound})
-is not new. I haven't seen the rest before, but obviously it makes some
-strong claims.
+is not new. It doesn't seem to give a very large bound.
 I'm hopeful that it is correct and/or that it has useful bits,
 or that someone can point me
 to similar lower-bound attempts; or, if it's wrong, that 
@@ -615,7 +614,7 @@ the summation above).
 
 \subsubsection{Optimizing the bound}
 
-We now try to see what, if anything, this bound implies. Note again that
+We now try to see what, if anything, this bound implies. Note again
 (somewhat confusingly) that in terms of the original clique-finding problem,
 this is bounding the number of NAND gates needed to find $k$-cliques in an
 $r$-vertex (non-hyper)-graph. We will be choosing $n$ to be some much larger
@@ -649,13 +648,27 @@ issue was that Julia's {\tt Rational} type was spending much time reducing
 fractions to simplest form.
 
 In order to work around this, I rewrote parts of the code,
-based on an approximation based on the fact that
+approximating based on the fact that
 
 \[
-lim_{n\to\infty} (1 - n^{-1})^{n} = e^{-1}
+\lim_{a\to\infty} (1 - a^{-1})^{a} = e^{-1}
 \]
 
-FIXME
+The probability of a hyperedge not being covered by an $r$-hyperclique is
+
+\[
+p = [1 - 2 ^ {1-{r \choose k}}] ^ {n-k \choose r-k}
+\]
+
+Letting $a = 2^{{r \choose k}-1}$, we get
+
+\[
+\log p \approx - {{n-k \choose r-k} \over 2^{[{r \choose k}-1]}}
+\]
+
+%% \log p \approx -\frac{n-k \choose r-k}{ 2^{({r \choose k}-1)} }
+
+
 
 
 \section{Related work}

@@ -9,7 +9,7 @@
 \newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
 \newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
 \begin{document}
-\title{A lower bound for clique detection, by combining
+\title{A strategy for lower-bounding clique detection, combining
 Shannon's counting argument with clique covers of random hypergraphs}
 
 \author{Josh Burdick ({\tt josh.t.burdick@gmail.com})}
@@ -20,23 +20,28 @@ Shannon's function-counting argument
 exponential circuit complexity, but doesn't provide a specific example
 of such a hard-to-compute function. A simple modification of that argument
 shows that detecting a randomly-chosen subset of the $k$-vertex cliques in an
-$n$-vertex graph, on average, requires $\Omega(n^{k/2})$ NAND gates.
-This doesn't directly bound the complexity of clique detection.
+$n$-vertex graph requires, on average, $\Omega(n^{k/2})$ NAND gates.
+This doesn't directly bound the complexity of detecting {\em all} of the cliques.
 However, we can view a random subset of cliques as a randomly-chosen
-$k$-regular on $n$ vertices.
+$k$-regular hypergraph on $n$ vertices.
 If we can cover such a hypergraph with large enough cliques,
-then if we could detect cliques with few enough gates, we would contradict
+and we could detect cliques with few enough gates, we would contradict
 the average-case counting bound described above.
+Probablistic graph theory arguments
+\cite{bollobas1976cliques} similar to \cite{bollobas1993clique}
+allow bounding the number of cliques needed to
+cover a random hypergraph.
 This provides a strategy for lower-bounding clique detection.
-We numerically evaluate this bound for small graphs, and discuss prospects
-for writing it in closed form.
+We suggest several possible ways of covering hypergraphs with cliques,
+and numerically evaluate this bound for small graphs. We then
+discuss prospects for finding a bound in closed form.
 \end{abstract}
 
 I am writing this up on the assumption that the modification
 to Shannon's counting argument (section \ref{countingBound})
 is not new. I haven't seen the rest before, but obviously it makes some
 strong claims.
-I'm hopeful that it is correct and/or, or that it has useful bits,
+I'm hopeful that it is correct and/or that it has useful bits,
 or that someone can point me
 to similar lower-bound attempts; or, if it's wrong, that 
 someone can point out the flaw(s).
@@ -133,7 +138,7 @@ finds all the cliques. Or maybe it finds all of the cliques except $K_{1..6}$,
 or it misses half the cliques, or finds none (and always outputs 0), or maybe
 it only successfully finds $K_{1,3,4,5,7,8}$, or whatever. More formally
 (and generally),
-we define a set of functions ({\em not} circuits)
+we define a set of functions ({\em not} circuits):
 
 \begin{defn}
 \label{BUGGY-k-CLIQUE}
@@ -145,9 +150,9 @@ and 0 otherwise.
 
 This clearly includes HAS-$k$-CLIQUE (which finds all the cliques).
 
-These functions are all distinct. If $f_1, f_2 \in $BUGGY-$k$-CLIQUE$(n)$,
-then there's some $K_6$ such that if $y$ is the graph with {\em only}
-1's in that $K_6$ (and 0's elsewhere), $f_1(y) = 0$ and $f_2(y) = 1$.
+These functions are all distinct. If $f_1,f_2\in $BUGGY-$k$-CLIQUE$(n)$,
+then there's some $K_k$ such that if $y$ is the graph with {\em only}
+1's in that $K_k$ (and 0's elsewhere), $f_1(y) = 0$ and $f_2(y) = 1$.
 
 Of course, many of these functions are quite similar (e.g. all but one of them
 output a 1 when you feed in all 1's). However, they're all slightly different.
@@ -203,7 +208,7 @@ the triangles on the left can be detected
 using fewer than one NAND gate per triangle (for large enough input graphs).
 
 On the other hand, if the triangles overlap less (as on the right),
-then to detect all the triangles, we will definitely need at least one
+then to detect all of the triangles, we will definitely need at least one
 gate per triangle.
 To see this, note that if we feed in a 0 to the input for one
 of the edges unique to some triangle, then any gate connected to
@@ -267,7 +272,8 @@ of $k$-cliques in an $n$-vertex graph, and for each, find the circuit with
 the fewest NAND gates which computes it. If we add up the total number of
 gates in all of these circuits,
 it's a lot. Since they're all distinct functions, the
-function-counting bound gives a lower-bound the total number of gates used (as from the
+function-counting bound gives a lower-bound on
+the total number of gates used (as from the
 above, we know how many functions from $m$ inputs to one output
 we can implement using $g$ NAND gates).
 
@@ -291,60 +297,62 @@ size that we've used, and total up how many NAND gates are in each of these.
 We had better have used at least as many NAND gates as the Shannon counting
 bound says we needed, to implement all of those functions.
 
-Broadly speaking, the idea of using an upper bound to prove a lower bound
-is not new. Aaronson describes this as ``ironic complexity theory''
-\cite{aaronson_pnp}, and mentions several recent applications of it.
+To be more concrete: suppose we
+devise a way of covering all the $k$-cliques in an $n$-vertex
+graph. Instead of counting across all possible sets of cliques, we will
+consider the average, for a set of cliques chosen uniformly at random.
+Choose some coverage strategy, and let:
 
-Also, probabilistic graph theory has often been used in
-lower bounds and algorithms. A well-known example is Razborov's lower
-bound on the complexity of detecting cliques using monotone circuits
-\cite{Razborov85lowerbounds}.
+\begin{itemize}
 
-\subsubsection{Getting a bound from covering all the hypercliques}
+\item $A_{ij}$ = the average number of $i$-vertex cliques in a $j$-vertex graph
 
-Suppose we devise a way of covering all the $k$-cliques in an $n$-vertex
-graph. Let
-
-$A_{ij}$ = the average number of $i$-vertex cliques in a $j$-vertex graph
-
-$b_i$ = the Shannon bound on the number of
+\item $b_i$ = the Shannon bound on the number of
 gates needed to find $k$-cliques on $n$ vertices.
 
-$x_j$ = the number of gates needed to find $k$-cliques on $j$ vertices.
+\item $x_j$ = the number of gates needed to find $k$-cliques on $j$ vertices.
 
-If we have a covering strategy, and $A$ is the number of each size of
-clique needed, then by the above argument, we have a bound $Ax >= b$.
-This would give a lower bound on $x$ (the number of gates needed to find
-$k$-cliques in $j$-vertex graphs.
+\end{itemize}
 
-(Note that I'm not necessarily saying the bound on $x$ is even positive...)
+We have
+
+\[
+Ax \ge b
+\]
+
+This gives a lower bound on $x$ (the number of gates needed to find
+$k$-cliques in $j$-vertex graphs). The bound depends
+crucially on how efficiently
+we can cover the hyperedges with hypercliques -- in order for $x$ to
+be large, we need entries of $A$ to be as small as we can manage.
+(Presumably, we need as many of
+the cliques as possible to be large, and to not overlap much).
+It's not obvious that this even bounds $x$ to be positive.
 
 \subsection{How do we cover the graphs?}
 
 Thus, we are faced with the problem of covering all possible $2^{n \choose k}$
 sets of cliques with a small number of large cliques.
 We can think of a set of possible $k$-cliques as
-a $k$-regular hypergraph on $n$ vertices. The {\em density}
-of such a graph is defined the fraction of possible edges which it contains,
-$|E| / {n \choose k}$ \cite{keevash2011hypergraph}.
+a $k$-regular hypergraph on $n$ vertices. Clique cover (for non-hypergraphs)
+is a well-known NP-complete problems \cite{karp1972reducibility}.
+In our case, we are covering hypergraphs with hypercliques. Also,
+we aren't concerned with the complexity of finding the
+covering. However, we do need to know how many hypercliques of various sizes are
+needed.
+
+Here, we describe covering strategies of increasing simplicity. We then
+try to apply the simplest strategy in section FIXME.
+
 (I will often omit the ``hyper'' from
 ``hypergraph'', ``hyperedge'', etc.)
 
-We have unlimited computational resources to cover the
-graph with clique detectors of various sizes. However,
-at the end of the day, we need to know (as precisely as possible)
-how many clique detectors of each
-size we're using (not just how many clique detectors were used).
-For this to be efficient, we presumably need as many of
-the cliques as possible to be large, and to not overlap much.
-
-\subsubsection{Using the set-cover greedy algorithm}
+\subsection{Using the set-cover greedy algorithm}
 
 Suppose we're given a $k$-regular (hyper)graph, and are trying to cover it
 with a small number of (hyper)cliques. This is reminiscent of the
 set cover problem, in which we are trying to cover some elements with
-a small number of sets.
-There is a greedy
+a small number of sets.  There is a greedy
 strategy for set-cover, which consists
 of simply picking the set which covers the most elements, removing those
 elements, and repeating \cite{chvatal1979greedy}.
@@ -352,14 +360,13 @@ This has a guaranteed approximation ratio.
 
 This suggests the following strategy. Pick the largest clique, remove it, and
 repeat. If we do this, then each time we remove a clique, we know exactly
-how much the density of the graph is reduced. If we known that a
+how much the density of the graph is reduced. If we know that a
 sufficiently-dense graph has a fairly large clique, then we should be able
 to bound how many cliques of each size we decomposed the original graph into.
 
 It's known that if a conventional graph (that is, a graph
 in which each edge has two vertices, or ``2-regular graph'')
-has many edges, then it must contain
-a clique of a certain size.
+has many edges, then it must contain a clique of a certain size.
 Finding the densest graphs which lack some size of clique was an
 early problem in extremal graph theory. Since these maximally dense graphs
 (the Tur\'an graphs) have a known structure, the size of the clique is
@@ -369,36 +376,23 @@ Generalizing this to hypergraphs seems like a natural question.
 Based on the neatness of the solution for 2-regular graphs,
 we might guess that, if we know that a $k$-regular hypergraph is dense,
 then it must contain a fairly large clique, with a closed-form size.
-
 Unfortunately, for hypergraphs, there doesn't seem to be as neat
 an answer as there was for 2-regular graphs. 
-There is a large gap in the density of graph having some size
-of clique
-\cite{keevash2011hypergraph}. That survey (p. 23-26)
-describes the ``Tur\'an density'' $\pi(K^r_k)$,
-which is $1 - t(k,r)$. The bounds on $t$ given there are
-
-\[
-{{k-1} \choose {r-1}}^{-1} \le t(k,r) \le \big(\frac{r-1}{ k-1 }\big)^{r-1}
-\]
-
-Given these bounds, in our running example of finding $K_6$s, at what density
-of 6-regular graph are we guaranteed to find a $K^6_7$ -- that is, seven
-vertices such that all possible edges of size 6 are included?
-(The nomenclature here is different from what I've been using, which is
-unfortunate.) It looks like, plugging in $k=7, r=6$, the bound doesn't
-essentially
-guarantee that there will be a $K^6_7$ until the density is
-$1 - {6 \choose 5}^{-1} = 5/6$. Larger hypercliques will require even
-higher densities.
-
 If we choose a $k$-regular hypergraph uniformly at random,
-``most'' of the subsets of cliques have density near 0.5. But at that density,
+``most'' of the subsets of cliques will have about half the
+possible number of hyperedges. But at that density,
 the known
 bounds can't guarantee that there will be many cliques for us to cover.
-Thus, it seems unlikely that
-we can use this strategy to (non-constructively) cover the graph with
-cliques. However, it is funny to consider that if we {\em could} find a
+There is a large gap in the density of graph having some size
+of clique
+\cite{keevash2011hypergraph}. We omit the details of this, but
+roughly speaking,
+the largest graph in a random hypergraph doesn't seem likely to be
+guaranteed to be ``very large''.
+
+This strategy may be workable, but seems complicated, and we don't pursue
+it further here.
+However, it is funny to consider that if we {\em could} find a
 bound for $k$-regular graphs with $k \ge 3$
 (for which Erd\"os offered \$1,000 \cite{keevash2011hypergraph}),
 {\em and} it turned
@@ -406,23 +400,7 @@ out that the bound implied that sufficiently dense hypergraphs always had
 ``large'' hypercliques, then we also {\em might} have a
 lower bound on CLIQUE.
 
-\subsubsection{Using ``brute force'' to count large cliques / coverings}
-
-It seems like, for {\em small} graphs, some of these questions could be
-addressed (although not answered)
- using brute force. Suppose $n, k$ are small enough that we can 
-store the adjacency matrix of a $k$-regular graph as a bitvector, and precompute
-all possible hypercliques
-(with up to $n$ vertices) as bitvectors. Then we can easily generate
-random graphs (as bitvectors), count the cliques, and compare that to the graph
-density. (Or possibly use the greedy set-cover strategy, and see how
-many cliques are need, for random graphs).
-
-I implemented this, and found that there was usually at least one small
-hyperclique, basically in line with the predictions in \cite{bollobas1976cliques}
-(data not shown).
-
-\section{Non-constructively covering random hypergraphs}
+\subsection{Non-constructively covering random hypergraphs}
 
 The lack of large hypergraph Tur\'an bounds was initially discouraging.
 However, that problem (which possibly founded extremal graph theory?) is
@@ -437,8 +415,6 @@ described in \cite{bollobas1976cliques}, which suggests that most of
 the cliques in a random graph have a somewhat narrow range of sizes.
 This suggests that even if there isn't definitely a huge hyperclique,
 there may at least be many smallish hypercliques.
-Indeed, \cite{bollobas1993clique} discusses covering graphs (not hypergraphs)
-with many cliques of the same size.
 
 Thus, we try to use random graph theory to upper-bound how many
 $r$-vertex clique detecters (on average, or total). We will actually
@@ -451,9 +427,6 @@ are three maximal $K_3$s, but we could get by with two $K_3$s and
 a $K_2$. Presumably similar things happen with hypergraphs.
 
 \includegraphics[width=0.7\textwidth]{R/maximal.pdf}
-
-
-\subsubsection{How many hypercliques in a random hypergraph?}
 
 One model of random graphs
 includes each edge with some fixed probability. Using this model,
@@ -499,31 +472,44 @@ hypercliques we need to cover). That fraction is
 \Big[1 - 2^{-{r \choose {k-1}}}\Big]^{n - r}
 \]
 
-In concrete terms, if we consider when $k=6$, suppose that hyperedge
-1..6 is present.
-The odds of a given vertex ``extending'' that hyperedge to a 7-vertex
-hyperclique are $2^{-{6 \choose 5}} = 2^{-6} = 0.015625$, since all
-64 other hyperedges need to be present. If the total number of vertices $n=7$,
-then there's about a 98\% chance of {\em not} extending
-this to a larger hyperclique. However, as $n$ gets large, there's more chance
-of a larger hyperclique
-happening. When $n=1000$, most hyperedges will be part of a larger
-hyperclique. Even if you're batting .015, in 1,000 at-bats, you're apt to
-get a hit...
 
-However, when we consider larger $r$-vertex hypercliques, with $r > k$,
-the odds of the hyperclique being covered by a larger hyperclique decrease
-really fast. Then again, when $r = n/2$, there are lots of hypercliques...
+\subsubsection{Checking the clique count estimates}
 
-Thus, it's not obvious (to me)
-how these two opposing trends will play out. However, these
-expressions do at least seem to give a bound on the total number of
-hypercliques needed.
+These predictions made me slightly wary, as the events they were counting
+aren't independent.
+To check them (at least for {\em small} graphs, we used brute force.
+Suppose $n, k$ are small enough that we can 
+store the adjacency matrix of a $k$-regular graph as a bitvector, and precompute
+all possible hypercliques
+(with up to $n$ vertices) as bitvectors. Then we can easily generate
+random graphs (as bitvectors), count the cliques, and compare that to the graph
+density. (Or possibly use the greedy set-cover strategy, and see how
+many cliques are need, for random graphs).
+We can then compare statistics about the cliques with predictions,
+based on \cite{bollobas1976cliques}.
+(In the following graphs, the dotted line is the prediction, and
+the solid line is the average of samples).
 
-\subsection{A bound based on covering hypergraphs with cliques}
+\includegraphics[width=1\textwidth]{cliqueCounter/R/numCliques.png}
 
-To conclude this section, here is a bound based on covering hypergraphs
-with hypercliques.
+We can also count the number of edges covered for different sizes
+of edge:
+
+\includegraphics[width=1\textwidth]{cliqueCounter/R/edgesCovered.png}
+
+More relevant to this problem, is the fraction of edges covered
+by one of the r-cliques:
+
+\includegraphics[width=1\textwidth]{cliqueCounter/R/fracCovered.png}
+
+All of these
+estimates appear more accurate for larger edge sizes and graphs, which
+makes sense to me, because of the Central Limit Theorem.
+
+\subsubsection{The bound implied by this covering}
+
+We now combine the Shannon bound, together with the estimates of how many
+hypercliques are needed for an average random hypergraph.
 If we know the average number of gates needed to find many sets of cliques, and
 can do that efficiently using a ``small'' number of clique detectors,
 then we hopefully get a bound on the number of gates in each clique detector.
@@ -552,7 +538,9 @@ of covering that many $r$-vertex hypergraphs in a larger $n$-vertex graph.
 \]
 
 We then hope that if we set $h$ to, say, a small enough
-function, we'll get a contradiction.
+function, we'll get a contradiction. Note that to bound $h(r)$, we need
+$n$ to be much larger (so that much of the graph is covered with $r$-vertex
+hypercliques).
 
 I tried to simplify this formula (e.g. by trying to change it into an
 integral), without much luck.
@@ -566,41 +554,29 @@ I haven't done this so far.
 \subsection{Using just one size of hyperclique}
 
 As that expression is complicated, we seek a simpler (but
-presumably slacker) bound.
-
+presumably weaker) bound.
 As noted earlier, there is a strong incentive to use the largest
 hypercliques possible, as our assumption is that this will be less
-expensive. However, we don't expect large hypercliques to be frequent.
-Still, 
-\cite{bollobas1993clique} covers random graphs with cliques of just
-one size.
+expensive. In theory, it seems useful to cover a graph with a variety
+of sizes of clique.
 
+However, we don't expect large hypercliques to be frequent.
+Indeed, \cite{bollobas1993clique} covers random (non-hyper)-graphs
+with cliques of just
+one size.
 This suggests the simpler strategy of picking one intermediate
 size of hyperclique,
 and only use clique-finding for that size problems. For smaller problems,
 just use one NAND gate per hyperedge (clique).
-This presumably is less efficient, but might be easier to analyze.
+This ``RISC-like'' \cite{hennessy2011computer} strategy
+presumably is less efficient, but seems easier to analyze.
 
-Furthermore, I only belatedly realized that the above bound is about
-finding $k$-cliques in $r$-vertex graphs; $n$ can be chosen to optimize the
-bound.
-
-In terms of the previous metaphor, perhaps Yoyodyne has abandoned trying to
-create a custom chip for every possible hypergraph. Instead, they have
-developed a CISC chip
-with a CLQ instruction, which checks for a clique
-of any given size. But then, a contingent of chip architects, fresh from
-reading \cite{hennessy2011computer}, argue that they're better off building
-a chip with a CLQ instruction which only works for a fixed size of graph.
-Maybe this simplifies pipelining the clique detector...
-
-\subsubsection{Measuring the cost}
 
 Suppose that we pick $r$ such that $k < r < n$; in the given hypergraph,
 we will cover every $K_r^k$ with some circuit; all remaining hyperedges
 (cliques) will simply be detected with one NAND gate each.
-
-The left-hand side is the Shannon bound on the average number
+In the bound below,
+the LHS is the Shannon bound on the average number
 of gates.
 
 Assume that this subcircuit, for finding $k$-cliques in an $r$-vertex graph,
@@ -608,7 +584,7 @@ requires $h(r)$ NAND gates, for some
 function $h$. Then,
 the cost to cover all edges in a $K_r^k$ is simply $h(r)$ times the
 expected number of $K_r^k$s (as estimated in \cite{bollobas1976cliques}).
-This is the first term below.
+This is the second term in the RHS, below.
 
 How many edges are left over? These are ``expensive'', as we're
 paying one gate for each. How likely is an edge to be ``missed''
@@ -617,11 +593,11 @@ the larger clique, we need to pick $r-k$ additional vertices from
 the $n-k$ vertices not in the edge. Given that edge is chosen, there
 are another ${r \choose k} - 1$ edges which all have to be included,
 each with probability $1/2$.
-This is the second term below.
+This is the first term in the RHS, below.
 
 \[
 \underbrace{\sqrt{n \choose k} - {n \choose 2}}_\text{Shannon bound}
-\ge
+\le
 \underbrace{\frac{1}{2} {n \choose r} (1 - 2^{1-{r \choose k}}) ^ {n-k \choose r-k}}
 _\text{Gates for edges not covered by a clique}
    + \underbrace{h(r) \cdot {n \choose r} 2^{-{r \choose k}}}
@@ -631,42 +607,60 @@ _\text{Gates for edges covered by a clique}
 The nice thing about this sum is that it's only two terms (rather than
 the summation above).
 
-\subsubsection{Checking the amount of coverage}
+\subsubsection{Optimizing the bound}
 
-These predictions made me slightly wary, as the events they were counting
-aren't independent.
-We can numerically check the predicted number of cliques
-of various sizes from \cite{bollobas1976cliques}.
-(In the following graphs, the dotted line is the prediction, and
-the solid line is the average of samples).
+We now try to see what, if anything, this bound implies. Note again that
+(somewhat confusingly) that in terms of the original clique-finding problem,
+this is bounding the number of NAND gates needed to find $k$-cliques in an
+$r$-vertex (non-hyper)-graph. We will be choosing $n$ to be some much larger
+number (large enough to guarantee that many hyperedges are covered by
+hypercliques).
 
-\includegraphics[width=1\textwidth]{cliqueCounter/R/numCliques.png}
+One problem that arises is numerical: we are multiplying huge numbers
+(the number of possible hypercliques) by infinitesimal numbers
+(the probability of an edge being present). Initially, I used R, and
+then using Julia's arbitrary-precision arithmetic.
 
-We can also count the number of edges covered for different sizes
-of edge:
-
-\includegraphics[width=1\textwidth]{cliqueCounter/R/edgesCovered.png}
-
-More relevant to this problem, is the fraction of edges covered
-by one of the r-cliques:
-
-\includegraphics[width=1\textwidth]{cliqueCounter/R/fracCovered.png}
-
-All of these
-estimates appear more accurate for larger edge sizes and graphs, which
-makes sense to me, because of the Central Limit Theorem.
-
-I then attempted to maximize this for a tiny case, $k=5$ and $r=6$.
-(Initially in R, and then using Julia's arbitrary-precision arithmetic,
-in an attempt to deal with the large numbers). Searching for $n$ up to 500,
+When I attempted to optimize this for a tiny case, $k=5$ and $r=6$,
+searching for $n$ up to 500,
 this did eventually get above zero.
 The maximum was when $n=420$, at which point the bound was
 ... $3.1355 \cdot 10^{-6}$.
-
 Since there must be an integral number of NAND gates, we can then round up
 to ``at least one NAND gate.''
 (This is reminiscent of the ``chipmunks in trees''
-problem (\cite{ross2006first}, p. 344). However, this doesn't help much.
+problem (\cite{ross2006first}, p. 344).
+That bound is uninspiring, but that was for a tiny case, which might be
+expected to be difficult to find a large lower bound for.
+
+When I tried maximizing for larger problems, I started using up my laptop's
+memory (all 8 Gb of it). Also, the bound was fairly slow. I assume that the
+issue was that Julia's {\tt Rational} type was spending much time reducing
+fractions to simplest form.
+
+In order to work around this, I rewrote parts of the code,
+based on an approximation based on the fact that
+
+\[
+lim_n (1 - n^{-1})^{a} = e^{-n}
+\]
+
+FIXME
+
+
+\section{Related work}
+
+This bound relies heavily on a modification of Shannon's original
+function-counting argument \cite{shannon_synthesis_1949}.
+
+Broadly speaking, the idea of using an upper bound to prove a lower bound
+is not new. Aaronson describes this as ``ironic complexity theory''
+\cite{aaronson_pnp}, and mentions several recent applications of it.
+
+Probabilistic graph theory has often been used in
+lower bounds and algorithms. A well-known example is Razborov's lower
+bound on the complexity of detecting cliques using monotone circuits
+\cite{Razborov85lowerbounds}.
 
 \section{Conclusion}
 
@@ -685,8 +679,9 @@ However, using one (relatively simple) strategy for doing this covering,
 the bound was, like, less than one. Possibly improving the covering
 strategy would help, but I'm not convinced it would help much.
 
-This lower-bound strategy also seems relevant to quantum computing,
-as it makes few restrictions on the sort of gates used.
+This lower-bound strategy also seems potentially
+relevant to quantum computing,
+as the argument makes few restrictions on the sort of gates used.
 If it's the case that any function in BQP can be represented
 as a circuit made of discrete quantum gates, which can be
 ORed together, then clique detection isn't in BQP.
@@ -695,10 +690,9 @@ appropriate.
 
 \section{Acknowledgements}
 
-The author would like to thank
-
-
-
+The author would like to thank William Gasarch for introducing him
+to lower bound strategies. He would also like to thank
+... for maintaining interesting relevant blogs.
 
 \bibliography{references}
 \bibliographystyle{abbrv}

@@ -334,6 +334,53 @@ be large, we need entries of $A$ to be as small as we can manage.
 the cliques as possible to be large, and to not overlap much).
 It's not obvious that this even bounds $x$ to be positive.
 
+\subsection{Anecdotal rephrasing}
+
+(I include the following hypothetical anecdotal explanation,
+partly because I think it's slightly funny, but also because I think it may
+provide at least some intuition).
+
+In some alternate reality, it is the dawn of the era of 
+TTL integrated circuits.
+Yoyodyne Corporation has developed a line of integrated circuits to detect
+any possible set of $K_4$s in a graph with nine vertices.
+These chips, the 74LSC series,
+are available in a convenient 40-pin DIP package, and are
+fabulously successful. (I have no idea why there would be huge demand for
+these, but let's say that there is). The only problem is that Yoyodyne's 
+chip factories are having trouble producing enough chips.
+
+Management contemplates how to re-envision productivity and enable
+synergy. (They are, after all, producing $2^{9 \choose 4} = 2^{126}$
+different sorts of chips).
+They decide that they need to stop producing so many kinds of chips.
+After great deliberation, they decide to cut production to {\em just} the
+chips which find all possible
+$K_4$'s on graphs with between four and nine vertices (namely, the 74LSC4
+through 74LSC9). In order to meet the bizarre but humongous
+demand for finding arbitrary sets of $K_4$s, they will develop a
+line of tiny circuit boards,
+each containing several clique detectors, ORed together.
+
+There is still the problem of designing these circuit boards. However,
+they only have to do this once for each possible set of $K_4$s. They hire
+a large team of software engineers and graph theorists. By renting
+many years of CPU time from AltaVista and MySpace, they are able to design the
+optimal circuit boards.
+
+Note that, originally, Yoyodyne was using some number of NAND gates to
+cover all the $2^{9 \choose 4} = 2^{126}$ possible sets of $K_4$s.
+The Shannon counting
+argument gives a lower bound on how many NAND gates were used in all of
+these chips. (Specifically, it says that at least four NAND gates
+were used for at least one graph, since $36+37+38+39 = 150 \ge 126$).
+
+After the redesign, if 
+we count up the number of 74LSC4 through 74LSC9 gates which were used,
+and consider the number of NAND gates in each
+of these, the total had better {\em also} be larger than the bound from
+the Shannon counting argument.
+
 \subsection{How do we cover the graphs?}
 
 Thus, we are faced with the problem of covering all possible $2^{n \choose k}$
@@ -551,9 +598,10 @@ hypercliques).
 I tried to simplify this formula (e.g. by trying to change it into an
 integral), without much luck.
 However, even
-without simplifying this formula more, we could imagine computing $A$ and
-$b$ for a range of $n$ and $k$, and solving for the minimum values of
-$x$ (a lower bound on the
+without simplifying this formula more, we could computing
+the number of graphs covering for a variety of
+ $n$ and $k$, and solving for the minimum values of
+$h(r)$ (a lower bound on the
 number of gates needed) using a linear program solver.
 I haven't done this so far.
 
@@ -574,8 +622,17 @@ This suggests the simpler strategy of picking one intermediate
 size of hyperclique,
 and only use clique-finding for that size problems. For smaller problems,
 just use one NAND gate per hyperedge (clique).
-This ``RISC-like'' \cite{hennessy2011computer} strategy
+This strategy
 presumably is less efficient, but seems easier to analyze.
+
+(In terms of the previous metaphor, perhaps Yoyodyne has abandoned trying to
+create a custom chip for every possible hypergraph. Instead, they have
+developed a CISC chip
+with a CLQ instruction, which checks for a clique
+of any given size. But then, a contingent of chip architects, fresh from
+reading \cite{hennessy2011computer}, argue that they're better off building
+a chip with a CLQ instruction which only works for a fixed size of graph.
+Maybe this simplifies pipelining the clique detector...)
 
 Suppose that we pick $r$ such that $k < r < n$; in the given hypergraph,
 we will cover every $K_r^k$ with some circuit; all remaining hyperedges
@@ -714,8 +771,13 @@ appropriate.
 \section{Acknowledgements}
 
 The author would like to thank William Gasarch for introducing him
-to lower bound strategies. He would also like to thank
-... for maintaining interesting relevant blogs.
+to lower bound strategies. He would also like to thank FIXME
+Scott Aaronson, 
+
+Richard Lipton,
+
+
+... for maintaining entertaining and relevant blogs.
 
 \bibliography{references}
 \bibliographystyle{abbrv}

@@ -305,33 +305,34 @@ consider the average, for a set of cliques chosen uniformly at random.
 Let $k$ be the size of cliques we're bounding the complexity of finding,
 choose some covering strategy, and let:
 
-FIXME the subscripts are all off here...
-
 \begin{itemize}
 
-\item $A_{rn}$ = the average number of $r$-vertex hypercliques (``$K^r_k$''s)
-in an $n$-vertex graph
+\item $A_{ij}$ = the average number of $j$-vertex hypercliques (``$K^j_k$''s)
+in an $i$-vertex graph
 
-\item $X_{r}$ = the number of gates needed to find $k$-cliques on $n$ vertices.
+\item $x_{j}$ = the number of gates needed to find $k$-cliques on $j$ vertices
 
-\item $B_{rk}$ = the Shannon bound on the number of
-gates needed to find $k$-cliques on $n$ vertices.
+\item $b_{i}$ = the Shannon bound on the number of
+gates needed (on average) to find any set of $k$-cliques on $i$ vertices
 
 \end{itemize}
 
 We have
 
 \[
-AX \ge B
+Ax \ge b
 \]
 
-This gives a lower bound on $x$ (the number of gates needed to find
-$k$-cliques in $j$-vertex graphs). The bound depends
+This gives a lower bound on $x$. The bound depends
 crucially on how efficiently
 we can cover the hyperedges with hypercliques -- in order for $x$ to
-be large, we need entries of $A$ to be as small as we can manage.
+be large, we need the entries of $A$ to be as small as we can manage.
 (Presumably, we need as many of
 the cliques as possible to be large, and to not overlap much).
+We can choose as many different rows of this as we like.
+However,
+adjacent rows will presumably give very similar bounds, so it may be
+simpler to only use a subset of rows.
 It's not obvious that this even bounds $x$ to be positive.
 
 \subsection{Anecdotal rephrasing}
@@ -755,7 +756,7 @@ It seems that if an arbitrary hypergraph can be covered with
 then this would give a lower bound on the NAND gates required to
 detect cliques.
 
-However, using one (relatively simple) strategy for doing this covering,
+Unfortunately, using one (relatively simple) strategy for doing this covering,
 the bound was, like, less than one. Possibly improving the covering
 strategy would help, but I'm not convinced it would help much.
 
@@ -771,13 +772,12 @@ appropriate.
 \section{Acknowledgements}
 
 The author would like to thank William Gasarch for introducing him
-to lower bound strategies. He would also like to thank FIXME
-Scott Aaronson, 
-
-Richard Lipton,
-
-
-... for maintaining entertaining and relevant blogs.
+to circuit complexity and lower bound strategies.
+He would also like to thank the maintainers of
+several entertaining and relevant blogs: the Computational Complexity blog
+(Lance Fortnow and William Gasarch), 
+G\"odel's Lost Letter (Richard Lipton and Ken Regan),
+and Shtetl-Optimized (Scott Aaronson). 
 
 \bibliography{references}
 \bibliographystyle{abbrv}

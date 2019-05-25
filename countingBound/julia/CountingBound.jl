@@ -12,7 +12,6 @@ Counting bound, based on Shannon's argument.
   Returns: average number of NAND gates (with unbounded fan-in)
     required to compute any of those functions.
     (This may not be an integer).
-  ??? check this? (e.g. countingBound(3,9) should be 1, I think...
 """
 function countingBound(m, w)
   b = m - 0.5

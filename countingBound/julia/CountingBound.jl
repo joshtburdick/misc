@@ -49,7 +49,8 @@ function approxNumMaximalCliques1(k, r, n)
   # numRCliques = Rational(binomial(n, r), two ^ binomial(r, k))
   # # result is number of cliques, * prob. they're maximal
   # numRCliques * (pNumerator / pDenominator)
-  r = (pNumerator * binomial(n, r)) / (pDenominator << binomial(r, k))
+  r = (pNumerator * binomial(n, r)) /
+    (two * pDenominator * (one << binomial(r, k)))
 
 end
 

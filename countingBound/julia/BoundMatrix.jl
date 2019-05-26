@@ -5,9 +5,8 @@ push!(LOAD_PATH, ".")
 
 using CountingBound
 
-print(countingBound(3,18))
 
 # smoke test
-# print(approxNumMaximalCliques1(3,4,5))
-
+print(approxNumMaximalCliques1(6,12,10000000))
+print("\n")
 

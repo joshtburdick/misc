@@ -2,7 +2,7 @@
 
 module CountingBound
 
-export countingBound, approxNumMaximalCliques1
+export countingBound, approxNumMaximalCliques1, writeCounts
 
 """
 Counting bound, based on Shannon's argument.
@@ -51,10 +51,31 @@ function approxNumMaximalCliques1(k, r, n)
   # numRCliques * (pNumerator / pDenominator)
   r = (pNumerator * binomial(n, r)) /
     (two * pDenominator * (one << binomial(r, k)))
-
+  r
 end
 
+"""
+  Writes counts for some values of k, r, and n
+  k: the value of k
+  maxN: the maximum value of n
+  outputDir: directory in which to write output files
+  Side effects: writes files A and b
+"""
+function writeCounts(k, maxN, outputDir)
+  # FIXME should create output directory
+  # first, write the bound b
+  of = open(outputDir * "/b_k=" * string(k) * "_maxN=" * string(maxN) * ".csv", "w")
+  write(of, "k,n,bound\n")
+  for n = k:maxN
+    bound = countingBound(binomial(k, 2), binomial(n, k))
+    write(of, string(k) * "," * string(n) * "," * string(bound) * "\n")
+  end
+  close(of)
 
+  # then, write the coefficients
+  # FIXME
+
+end
 
 end
 

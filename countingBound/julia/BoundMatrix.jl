@@ -5,8 +5,7 @@ push!(LOAD_PATH, ".")
 
 using CountingBound
 
-
 # smoke test
-print(approxNumMaximalCliques1(6,12,10000000))
-print("\n")
+writeCounts(6, 100, "coef1")
+
 

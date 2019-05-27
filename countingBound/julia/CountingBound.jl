@@ -50,7 +50,8 @@ function approxNumMaximalCliques1(k, r, n)
   # # result is number of cliques, * prob. they're maximal
   # numRCliques * (pNumerator / pDenominator)
   r = (pNumerator * binomial(n, r)) /
-    (two * pDenominator * (one << binomial(r, k)))
+    (pDenominator * (one << binomial(r, k)))
+  # ??? is this off by two?
   r
 end
 

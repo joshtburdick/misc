@@ -59,7 +59,8 @@ end
   k: the value of k
   maxN: the maximum value of n
   outputDir: directory in which to write output files
-  Side effects: writes files A and b
+  Side effects: writes files A and b.
+    (The choices of r are a bit arbitrary).
 """
 function writeCounts(k, maxN, outputDir)
   # FIXME should create output directory
@@ -73,7 +74,16 @@ function writeCounts(k, maxN, outputDir)
   close(of)
 
   # then, write the coefficients
-  # FIXME
+  of = open(outputDir * "/A_k=" * string(k) * "_maxN=" * string(maxN) * ".csv", "w")
+  write(of, "k,r,n,A\n")
+  for n = k:maxN
+    for r = k:min(n, 2*k)
+      bound = countingBound(binomial(k, 2), binomial(n, k))
+      A = approxNumMaximalCliques1(k, r, n)
+      write(of, string(k) * "," * string(r) * "," * string(n) * "," * string(A) * "\n")
+    end
+  end
+  close(of)
 
 end
 

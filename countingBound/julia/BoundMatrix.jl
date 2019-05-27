@@ -6,6 +6,6 @@ push!(LOAD_PATH, ".")
 using CountingBound
 
 # smoke test
-writeCounts(6, 100, "coef1")
+writeCounts(2, 20, "coef1")
 
 

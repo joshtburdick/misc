@@ -70,15 +70,15 @@ dev.off()
 
 # example of distinction between maximal and optimal coverings
 pdf("maximal.pdf", width=5, height=2)
-par(mfrow=c(1,2), mar=c(0,0,0,0), bty="n")
+par(mfrow=c(1,2), mar=c(0,0,0,0)+0.2, bty="n")
 x = cbind(c(-2:2,0), c(1,0,1,0,1,-1)*sqrt(3)) / 2
 x = rbind(x, x+0.04)  # points, slightly offset
 # first, plot all three triangles
-plot(0,0, xlim=c(-2.2,2.2), ylim=c(-1,2), type="n", xaxt="n", yaxt="n")
+plot(0,0, xlim=range(x[,1]), ylim=range(x[,2]), type="n", xaxt="n", yaxt="n")
 draw.triangles(x, rbind(c(1,2,3), c(2,4,6), c(3,4,5), c(8,9,10)),
   c(0,1,2,4)/6, c(0.5,0.5,0.5,0.8))
 # then, omit the triangle in the center
-plot(0,0, xlim=c(-2.2,2.2), ylim=c(-1,2), type="n", xaxt="n", yaxt="n")
+plot(0,0, xlim=range(x[,1]), ylim=range(x[,2]), type="n", xaxt="n", yaxt="n")
 draw.triangles(x, rbind(c(1,2,3), c(2,4,6), c(3,4,5)),
   c(0,1,2,4)/6, c(0.5,0.5,0.5,0.4))
 

@@ -39,11 +39,11 @@ function approxNumMaximalCliques1(k, r, n)
 
   # probability that one of those is not covered by a larger clique
   a = one << binomial(r, k-one)
-  print("computed a\n")
+  # print("computed a\n")
   pNumerator = (a-one) ^ (n-r)
-  print("computed numerator\n")
+  # print("computed numerator\n")
   pDenominator = a ^ (n-r)
-  print("computed denominator\n")
+  # print("computed denominator\n")
 
   # expected number of r-cliques should be equivalent to:
   # numRCliques = Rational(binomial(n, r), two ^ binomial(r, k))
@@ -78,7 +78,9 @@ function writeCounts(k, maxN, outputDir)
   of = open(outputDir * "/A_k=" * string(k) * "_maxN=" * string(maxN) * ".csv", "w")
   write(of, "k,r,n,A\n")
   for n = k:maxN
-    for r = k:min(n, 2*k)
+    # FIXME what should the bound on r be?
+    for r = k:min(n, 4*k)
+      print("k=" * string(k) * " r=" * string(r) * " n=" * string(n) * "\n")
       bound = countingBound(binomial(k, 2), binomial(n, k))
       A = approxNumMaximalCliques1(k, r, n)
       write(of, string(k) * "," * string(r) * "," * string(n) * "," * string(A) * "\n")

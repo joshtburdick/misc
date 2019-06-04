@@ -64,11 +64,16 @@ end
     (The choices of r are a bit arbitrary).
 """
 function writeCounts(k, maxN, outputDir)
+  # values of n to use, from k to maxN
+  # (for now, spaced at powers of 2)
+  nList = [Integer(2^i) for i in 1:trunc(log(2,maxN))]
+#  nList = [n for n in nList if n>=k and n<=maxN]
+
   # FIXME should create output directory
   # first, write the bound b
   of = open(outputDir * "/b_k=" * string(k) * "_maxN=" * string(maxN) * ".csv", "w")
   write(of, "k,n,bound\n")
-  for n = k:maxN
+  for n in nList
     bound = countingBound(binomial(k, 2), binomial(n, k))
     write(of, string(k) * "," * string(n) * "," * string(bound) * "\n")
   end
@@ -77,7 +82,7 @@ function writeCounts(k, maxN, outputDir)
   # then, write the coefficients
   of = open(outputDir * "/A_k=" * string(k) * "_maxN=" * string(maxN) * ".csv", "w")
   write(of, "k,r,n,A\n")
-  for n = k:maxN
+  for n = nList
     # FIXME what should the bound on r be?
     for r = k:min(n, 4*k)
       print("k=" * string(k) * " r=" * string(r) * " n=" * string(n) * "\n")

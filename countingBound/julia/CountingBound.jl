@@ -14,6 +14,8 @@ Counting bound, based on Shannon's argument.
     (This may not be an integer).
 """
 function countingBound(m, w)
+  m = BigFloat(m)
+  w = BigFloat(w)
   b = m - 0.5
   # the "-1" here is because this is the average, not the max.
   sqrt(2*w + b*b) - b - 1
@@ -39,11 +41,11 @@ function approxNumMaximalCliques1(k, r, n)
 
   # probability that one of those is not covered by a larger clique
   a = one << binomial(r, k-one)
-  # print("computed a\n")
+  print("computed a\n")
   pNumerator = (a-one) ^ (n-r)
-  # print("computed numerator\n")
+  print("computed numerator\n")
   pDenominator = a ^ (n-r)
-  # print("computed denominator\n")
+  print("computed denominator\n")
 
   # expected number of r-cliques should be equivalent to:
   # numRCliques = Rational(binomial(n, r), two ^ binomial(r, k))
@@ -66,8 +68,11 @@ end
 function writeCounts(k, maxN, outputDir)
   # values of n to use, from k to maxN
   # (for now, spaced at powers of 2)
-  nList = [Integer(2^i) for i in 1:trunc(log(2,maxN))]
-#  nList = [n for n in nList if n>=k and n<=maxN]
+  nList = [BigInt(2^i) for i in 1:trunc(log(2,maxN))]
+  print(nList)
+  print("\n")
+  # XXX this isn't working as I'd hoped
+  nList = [n for n in nList]   # if (n>=k && n<=maxN)]
 
   # FIXME should create output directory
   # first, write the bound b
@@ -85,10 +90,10 @@ function writeCounts(k, maxN, outputDir)
   for n = nList
     # FIXME what should the bound on r be?
     for r = k:min(n, 4*k)
-      print("k=" * string(k) * " r=" * string(r) * " n=" * string(n) * "\n")
-      bound = countingBound(binomial(k, 2), binomial(n, k))
-      A = approxNumMaximalCliques1(k, r, n)
-      write(of, string(k) * "," * string(r) * "," * string(n) * "," * string(A) * "\n")
+      # print("k=" * string(k) * " r=" * string(r) * " n=" * string(n) * "\n")
+      # bound = countingBound(binomial(k, 2), binomial(n, k))
+      # A = approxNumMaximalCliques1(k, r, n)
+      # write(of, string(k) * "," * string(r) * "," * string(n) * "," * string(A) * "\n")
     end
   end
   close(of)

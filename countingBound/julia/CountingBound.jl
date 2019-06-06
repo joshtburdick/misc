@@ -71,8 +71,12 @@ function writeCounts(k, maxN, outputDir)
   nList = [BigInt(2^i) for i in 1:trunc(log(2,maxN))]
   print(nList)
   print("\n")
-  # XXX this isn't working as I'd hoped
-  nList = [n for n in nList]   # if (n>=k && n<=maxN)]
+  print(typeof(nList[1]))
+  print("\n")
+  # ??? for some reason, this was giving a syntax error
+  # nList = [n for n in nList if n>=k && n<=maxN]
+  # therefore, using filter()...
+  nList = filter(n -> n>=k && n<=maxN, nList)
 
   # FIXME should create output directory
   # first, write the bound b
@@ -89,11 +93,11 @@ function writeCounts(k, maxN, outputDir)
   write(of, "k,r,n,A\n")
   for n = nList
     # FIXME what should the bound on r be?
-    for r = k:min(n, 4*k)
-      # print("k=" * string(k) * " r=" * string(r) * " n=" * string(n) * "\n")
-      # bound = countingBound(binomial(k, 2), binomial(n, k))
-      # A = approxNumMaximalCliques1(k, r, n)
-      # write(of, string(k) * "," * string(r) * "," * string(n) * "," * string(A) * "\n")
+    for r = k:min(n, 2*k)
+      print("k=" * string(k) * " r=" * string(r) * " n=" * string(n) * "\n")
+      bound = countingBound(binomial(k, 2), binomial(n, k))
+      A = approxNumMaximalCliques1(k, r, n)
+      write(of, string(k) * "," * string(r) * "," * string(n) * "," * string(A) * "\n")
     end
   end
   close(of)

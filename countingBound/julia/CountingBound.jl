@@ -58,6 +58,36 @@ function approxNumMaximalCliques1(k, r, n)
 end
 
 """
+  Log of the approximate number of maximal hypercliques of some size.
+  Note that k < r < n .
+  Also, the precision of what's returned can be set by setprecision().
+  k: number of vertices per hyperedge
+  r: number of vertices in the clique
+  n: vertices in the larger graph
+  Returns: (natural log of) the number of maximal hypercliques. This is
+    approximate, because it's the expected number, and it uses an
+    approximation for (1 - 1/a)^b. (Again, presumably it's more
+    accurate for larger numbers).
+"""
+function logApproxNumMaximalCliques1(k, r, n)
+  k = BigInt(k)
+  r = BigInt(r)
+  n = BigInt(n)
+  one = BigInt(1)
+  two = BigInt(2)
+
+  # probability that one of those is not covered by a larger clique
+  a = log(2) * binomial(r, k-1)
+  logP = a / (n-r)
+
+  logR = (log(binomial(n, r))  # number of possible cliques
+    - log(2) * binomial(r, k)  # P(clique is present) ...
+    + logp                     # P(and not part of a larger clique)
+  logR 
+end
+
+
+"""
   Writes counts for some values of k, r, and n
   k: the value of k
   maxN: the maximum value of n

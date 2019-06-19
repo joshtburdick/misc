@@ -2,6 +2,7 @@
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage{fullpage}
 \usepackage{graphicx}
+\usepackage{hyperref}
 \newtheorem{thm}{Theorem}[section]
 
 \theoremstyle{definition}
@@ -201,12 +202,18 @@ we can imagine similarly-structured graphs with more triangles.
 
 \includegraphics[width=0.9\textwidth]{R/tri1.pdf}
 
+
+
 Triangles can be detected using matrix multiplication \cite{itai_finding_1977},
 and there are fast algorithms known for matrix multiplication
 \cite{strassen_gaussian_1969}
 \cite{williams_multiplying_2012}, so
 the triangles on the left can be detected
 using fewer than one NAND gate per triangle (for large enough input graphs).
+\footnote{For smaller graphs, such as this with six vertices,
+it appears that 21 NAND gates are required
+\cite{burdick_triangles_6_vertex},
+although this proof hasn't been published or rigorously checked.}
 
 On the other hand, if the triangles overlap less (as on the right),
 then to detect all of the triangles, we will definitely need at least one
@@ -722,7 +729,7 @@ p = [1 - 2 ^ {1-{r \choose k}}] ^ {n-k \choose r-k}
 Letting $a = 2^{{r \choose k}-1}$, we get
 
 \[
-\log p \approx - {{n-k \choose r-k} \over 2^{[{r \choose k}-1]}}
+\log p \approx - \frac{{n-k \choose r-k}} {2^{[{r \choose k}-1]}}
 \]
 
 %% \log p \approx -\frac{n-k \choose r-k}{ 2^{({r \choose k}-1)} }
@@ -773,7 +780,7 @@ appropriate.
 \section{Acknowledgements}
 
 The author would like to thank William Gasarch for introducing him
-to circuit complexity and lower bound strategies.
+to circuit complexity, probabilistic graph proofs, and lower bound strategies.
 He would also like to thank the maintainers of
 several entertaining and relevant blogs: the Computational Complexity blog
 (Lance Fortnow and William Gasarch), 

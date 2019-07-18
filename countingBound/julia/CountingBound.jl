@@ -80,9 +80,10 @@ function logApproxNumMaximalCliques1(k, r, n)
   a = log(2) * binomial(r, k-1)
   logP = a / (n-r)
 
-  logR = (log(binomial(n, r))  # number of possible cliques
-    - log(2) * binomial(r, k)  # P(clique is present) ...
-    + logp                     # P(and not part of a larger clique)
+#  logR = (log(binomial(n, r)   # number of possible cliques
+#    - log(2) * binomial(r, k)  # P(clique is present) ...
+#    + logp)                    # P(and not part of a larger clique)
+  logR = 5  # XXX test
   logR 
 end
 
@@ -111,23 +112,27 @@ function writeCounts(k, maxN, outputDir)
   # FIXME should create output directory
   # first, write the bound b
   of = open(outputDir * "/b_k=" * string(k) * "_maxN=" * string(maxN) * ".csv", "w")
-  write(of, "k,n,bound\n")
+  write(of, "k,n,bound,logBound\n")
   for n in nList
     bound = countingBound(binomial(k, 2), binomial(n, k))
-    write(of, string(k) * "," * string(n) * "," * string(bound) * "\n")
+    write(of, string(k) * "," * string(n) * "," * string(bound) * ","
+      * string(log(bound)) * "\n")
   end
   close(of)
 
   # then, write the coefficients
   of = open(outputDir * "/A_k=" * string(k) * "_maxN=" * string(maxN) * ".csv", "w")
-  write(of, "k,r,n,A\n")
+  write(of, "k,r,n,A,logA\n")
   for n = nList
     # FIXME what should the bound on r be?
     for r = k:min(n, 2*k)
       print("k=" * string(k) * " r=" * string(r) * " n=" * string(n) * "\n")
       bound = countingBound(binomial(k, 2), binomial(n, k))
       A = approxNumMaximalCliques1(k, r, n)
-      write(of, string(k) * "," * string(r) * "," * string(n) * "," * string(A) * "\n")
+      logA = logApproxNumMaximalCliques1(k, r, n)
+      write(of, string(k) * "," * string(r) * "," * string(n)
+        * "," * string(A)
+        * "," * string(logA) * "\n")
     end
   end
   close(of)

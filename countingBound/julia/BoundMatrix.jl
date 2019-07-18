@@ -1,4 +1,4 @@
-#!/usr/bin/julia
+#!/home/jburdick/bin/julia
 # writes out the coefficients of the bound matrix.
 
 push!(LOAD_PATH, ".")

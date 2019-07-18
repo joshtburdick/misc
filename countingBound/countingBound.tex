@@ -720,13 +720,22 @@ approximating based on the fact that
 \lim_{a\to\infty} (1 - a^{-1})^{a} = e^{-1}
 \]
 
+(In fact, $e^{-1}$ is an upper bound). This implies
+
+\[
+\lim_{a\to\infty} (1 - a^{-1})^{b} = e^{-\frac{b}{a}}
+\]
+
+(Although now I'm wondering if it's a problem if $b$ is {\em also}
+big).
+
 The probability of a hyperedge not being covered by an $r$-hyperclique is
 
 \[
 p = [1 - 2 ^ {1-{r \choose k}}] ^ {n-k \choose r-k}
 \]
 
-Letting $a = 2^{{r \choose k}-1}$, we get
+Letting $a = 2^{{r \choose k}-1}$ and $b = {n-k \choose r-k}$, we get
 
 \[
 \log p \approx - \frac{{n-k \choose r-k}} {2^{[{r \choose k}-1]}}
@@ -780,7 +789,8 @@ appropriate.
 \section{Acknowledgements}
 
 The author would like to thank William Gasarch for introducing him
-to circuit complexity, probabilistic graph proofs, and lower bound strategies.
+to circuit complexity, probabilistic proofs about graphs,
+and lower bound strategies.
 He would also like to thank the maintainers of
 several entertaining and relevant blogs: the Computational Complexity blog
 (Lance Fortnow and William Gasarch), 

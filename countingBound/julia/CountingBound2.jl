@@ -4,6 +4,7 @@
 # It also uses several approximations:
 # - various approximations of binomial coefficients
 # - approximates (1-a)^b
+# The bound, again, seems to asymptote at a small positive number.
 
 module CountingBound2
 

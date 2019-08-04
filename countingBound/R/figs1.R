@@ -81,6 +81,15 @@ draw.triangles(x, rbind(c(1,2,3), c(2,4,6), c(3,4,5), c(8,9,10)),
 plot(0,0, xlim=range(x[,1]), ylim=range(x[,2]), type="n", xaxt="n", yaxt="n")
 draw.triangles(x, rbind(c(1,2,3), c(2,4,6), c(3,4,5)),
   c(0,1,2,4)/6, c(0.5,0.5,0.5,0.4))
+dev.off()
 
+# example of the aforementioned bound
+pdf("mesh2D.pdf", width=5, height=5)
+par(mar=c(1,1,1,1))
+plot(0,0, xlim=c(0,10), ylim=c(0,10), type="n",	xaxt="n", yaxt="n")
+for (i in 1:10)
+	lines(c(i,0), c(0,11-i))
+abline(0,1, col="red")
+# FIXME shade the feasible regions?
 dev.off()
 

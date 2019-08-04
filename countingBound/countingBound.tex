@@ -193,6 +193,7 @@ the most NAND gates could be finding a single $K_k$! That's easily ruled out
 (because that only needs one NAND gate, plus the output gate).
 
 \subsection{Which sets of cliques are hard to find?}
+\label{sec:whichCliques}
 
 The hardness of these functions depends
 on how the cliques they find are laid out.
@@ -274,6 +275,7 @@ However, it seems hard to push this to arbitrary functions of ``which cliques ar
 present'', because they start to overlap.
 
 \section{Bounds based on covering hypergraphs with cliques}
+\label{sec:linearInequality}
 
 Suppose we consider all $2^{n \choose k}$ functions which find some subset
 of $k$-cliques in an $n$-vertex graph, and for each, find the circuit with
@@ -743,8 +745,52 @@ Letting $a = 2^{{r \choose k}-1}$ and $b = {n-k \choose r-k}$, we get
 
 %% \log p \approx -\frac{n-k \choose r-k}{ 2^{({r \choose k}-1)} }
 
+... In any case, even after these numerical approximations, and
+looking at less trivial cases (e.g. finding cliques of size $n/2$ in
+$n$-vertex graphs), I wasn't able to get a bound above a tiny
+positive number.
 
+FIXME write this up...
 
+\subsection{Covering with multiple sizes of hyperclique}
+
+The previous failure suggests that covering
+with one size of hyperclique is too inefficient. The previous
+argument supposes that, for example, finding 6-vertex cliques
+in 10-vertex graphs requires some startlingly-small number $g$ of
+gates. However, finding that size of cliques in 11-vertex graphs
+would require $11g$ gates, and in general, in $n$-vertex graphs,
+you'd need ${n \choose 10}g$ gates.
+This isn't that startling an assumption.
+
+Put another way, it would possibly be surprising if $k$-vertex
+cliques could be found with a small number of gates, for some particular
+size of input graph, but things didn't get much easier for
+larger sizes of input graph.
+A stronger (and more surprising) assumption would be that the
+number of gates needed to find $k$-vertex cliques grows {\em much} more
+slowly than the number of cliques, no matter how much $n$ increases.
+
+Therefore, after all, we attempt to use the inequality in
+section~\ref{sec:linearInequality}.
+
+This system is overdetermined, in the sense that we can use as
+many rows of $A$ as we like. It seems, intuitively,
+that there will be a variety of feasible solutions in a convex space.
+It's not obvious which of these to focus on.
+
+We have another constraint: the number of gates to find $k$-cliques
+in $n+1$-vertex graphs is strictly larger than the number of gates
+needed in $n$-vertex graphs (as described in section 
+\ref{sec:whichCliques}). In symbols, $x_{i+1} > x_i$.
+The picture, intuitively, is vaguely reminscent of this (FIXME add
+3-D variant?): 
+
+\includegraphics[width=0.4\textwidth]{R/mesh2D.pdf}
+
+Therefore, we focus on minimizing $\sum_i x_i$. I think that this
+only gives a bound for the largest values of $n$. (FIXME 
+make this qualification more accurate).
 
 \section{Related work}
 
@@ -792,7 +838,8 @@ The author would like to thank William Gasarch for introducing him
 to circuit complexity, probabilistic proofs about graphs,
 and lower bound strategies.
 He would also like to thank the maintainers of
-several entertaining and relevant blogs: the Computational Complexity blog
+several entertaining and relevant blogs, including but
+not limited to: the Computational Complexity blog
 (Lance Fortnow and William Gasarch), 
 G\"odel's Lost Letter (Richard Lipton and Ken Regan),
 and Shtetl-Optimized (Scott Aaronson). 

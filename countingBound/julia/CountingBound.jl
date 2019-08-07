@@ -77,19 +77,19 @@ function logApproxNumMaximalCliques1(k, r, n)
   two = BigInt(2)
 
   # probability that one of those is not covered by a larger clique
+	# (approximation)
   a = log(2) * binomial(r, k-1)
   logP = a / (n-r)
 
-#  logR = (log(binomial(n, r)   # number of possible cliques
-#    - log(2) * binomial(r, k)  # P(clique is present) ...
-#    + logp)                    # P(and not part of a larger clique)
-  logR = 5  # XXX test
+  logR = (log(binomial(n, r)   # number of possible cliques
+    - log(2) * binomial(r, k)  # P(clique is present) ...
+    + logP))                   # P(and not part of a larger clique)
+#  logR = 5  # XXX test
   logR 
 end
 
-
 """
-  Writes counts for some values of k, r, and n
+  Writes counts for some values of k, r, and n.
   k: the value of k
   maxN: the maximum value of n
   outputDir: directory in which to write output files

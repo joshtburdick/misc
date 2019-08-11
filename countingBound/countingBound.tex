@@ -806,6 +806,41 @@ lower bounds and algorithms. A well-known example is Razborov's lower
 bound on the complexity of detecting cliques using monotone circuits
 \cite{Razborov85lowerbounds}.
 
+
+
+\section{Future work}
+
+
+\subsection{Related questions}
+
+Under the theory that this bound strategy works, what else does
+it apply to? (One small consequence would be
+[FIXME is this right] that it ``constructivizes''
+the Time Hierarchy theorem FIXME CITE, in that it shows that
+a natural problem, HAS-$k$-CLIQUE, requires increasing amounts of
+time to compute, for increasing values of $k$).
+
+\subsubsection{The complement of NP: co-NP}
+
+
+
+
+\subsubsection{Quantum computation: BQP}
+
+This lower-bound strategy also seems potentially
+relevant to quantum computing,
+as the argument makes few restrictions on the sort of gates used.
+If it's the case that any function in BQP can be represented
+as a circuit made of discrete quantum gates, which can be
+ORed together, then clique detection isn't in BQP.
+However, I'm not sure what sort of quantum gates would be
+appropriate.
+
+\subsubsection{Counting solutions to NP-complete problems: \#P}
+
+
+
+
 \section{Conclusion}
 
 We first give a lower bound on finding {\em some} set of cliques.
@@ -822,15 +857,6 @@ detect cliques.
 Unfortunately, using one (relatively simple) strategy for doing this covering,
 the bound was, like, less than one. Possibly improving the covering
 strategy would help, but I'm not convinced it would help much.
-
-This lower-bound strategy also seems potentially
-relevant to quantum computing,
-as the argument makes few restrictions on the sort of gates used.
-If it's the case that any function in BQP can be represented
-as a circuit made of discrete quantum gates, which can be
-ORed together, then clique detection isn't in BQP.
-However, I'm not sure what sort of quantum gates would be
-appropriate.
 
 \section{Acknowledgements}
 

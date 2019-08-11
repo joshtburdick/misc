@@ -57,6 +57,54 @@ function approxNumMaximalCliques1(k, r, n)
   r
 end
 
+
+"""
+  Approximate number of maximal hypercliques of some size
+(alternate take).
+  Note that k < r < n .
+  Also, the precision of what's returned can be set by setprecision().
+  k: number of vertices per hyperedge
+  r: number of vertices in the clique
+  n: vertices in the larger graph
+  Returns: number of maximal hypercliques. This is approximate, because
+    it's the expected number. (Presumably it's more accurate for larger
+    numbers).
+"""
+function approxNumMaximalCliques2(k, r, n)
+  k = BigInt(k)
+  r = BigInt(r)
+  n = BigInt(n)
+  one = BigInt(1)
+  two = BigInt(2)
+
+  # probability that one of those is not covered by a larger clique
+  a = one << binomial(r, k-one)
+  print("computed a\n")
+  pNumerator = (a-one) ^ (n-r)
+	# ??? how is this implemented for BigInts?
+	# also, if a = 1111111... in binary, is there a cheaper way to
+	# compute this?
+  print("computed numerator\n")
+  pDenominator = a ^ (n-r)
+	# FIXME is denominator all powers of two? If so, presumably could
+	# replace the division with a bit shift
+  print("computed denominator\n")
+
+  # expected number of r-cliques should be equivalent to:
+  # numRCliques = Rational(binomial(n, r), two ^ binomial(r, k))
+  # # result is number of cliques, * prob. they're maximal
+  # numRCliques * (pNumerator / pDenominator)
+  r = (pNumerator * binomial(n, r)) /
+    (pDenominator * (one << binomial(r, k)))
+
+  # ??? is this off by two? (doesn't seem to be, for small k, r, n)
+  r
+end
+
+
+
+
+
 """
   Log of the approximate number of maximal hypercliques of some size.
   Note that k < r < n .

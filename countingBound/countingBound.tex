@@ -50,7 +50,8 @@ someone can point out the flaw(s).
 
 \tableofcontents
 
-\section{A counting bound} \label{countingBound}
+\section{A counting bound}
+\label{countingBound}
 
 The first argument is basically a function-counting argument.
 
@@ -202,8 +203,6 @@ arranged in different ways. Although we only show 20 triangles here,
 we can imagine similarly-structured graphs with more triangles.
 
 \includegraphics[width=0.9\textwidth]{R/tri1.pdf}
-
-
 
 Triangles can be detected using matrix multiplication \cite{itai_finding_1977},
 and there are fast algorithms known for matrix multiplication
@@ -464,6 +463,7 @@ out that the bound implied that sufficiently dense hypergraphs always had
 lower bound on CLIQUE.
 
 \subsection{Non-constructively covering random hypergraphs}
+\label{sec:maximalHypercliques}
 
 The lack of large hypergraph Tur\'an bounds was initially discouraging.
 However, that problem (which possibly founded extremal graph theory?) is
@@ -807,23 +807,34 @@ bound on the complexity of detecting cliques using monotone circuits
 \cite{Razborov85lowerbounds}.
 
 
-
 \section{Future work}
 
+\subsection{Improving the covering}
+
+We focused on using coverings based on maximal hypercliques, on
+the theory that it would simplify the accounting of the cost of
+the covering.
+However, as noted in section~\ref{sec:maximalHypercliques}, this
+may not be the cheapest strategy to cover the hypergraph.
 
 \subsection{Related questions}
 
 Under the theory that this bound strategy works, what else does
 it apply to? (One small consequence would be
-[FIXME is this right] that it ``constructivizes''
+[FIXME is this right?] that it ``constructivizes''
 the Time Hierarchy theorem FIXME CITE, in that it shows that
 a natural problem, HAS-$k$-CLIQUE, requires increasing amounts of
 time to compute, for increasing values of $k$).
 
 \subsubsection{The complement of NP: co-NP}
 
-
-
+Although there's no obvious reduction from co-NP to NP, essentially
+the same argument seems to work. Suppose some family of circuits
+checks that there {\em isn't} any $K-k$ in an $n$-vertex graph.
+Then we can check that an arbitrary graph is free of $K_k$s by
+ANDing together circuits which check that subsets of vertices are
+clear of $K_k$s. (ANDing them all together can be done with
+two additional NAND gates; there may be a cheaper way).
 
 \subsubsection{Quantum computation: BQP}
 
@@ -836,10 +847,30 @@ ORed together, then clique detection isn't in BQP.
 However, I'm not sure what sort of quantum gates would be
 appropriate.
 
-\subsubsection{Counting solutions to NP-complete problems: \#P}
+\subsubsection{Counting the number of solutions to problems in NP: \#P}
 
+Could we modify the counting argument to address the complexity 
+of \#P? (Or at least counting cliques, which I'm not sure is even
+\#P-complete).
 
+Suppose we have a family of circuits which count how
+many $K_k$s are in an $n$-vertex graph $G$; call this number
+$k(G)$. Then could we apply the
+previous hypergraph-covering strategy to count a subset of the
+cliques? In this case, if hypergraphs A and B don't overlap, then
+$k(A \cup B) = k(A)+k(B)$. 
+But also, if $A \subset B$, then $k(B - A) = k(B)-k(A)$. 
+This extra flexibility presumably means that fewer subcircuits are
+needed to cover an input graph, presumably leading to a sharper bound.
 
+One question is how the function-counting argument changes.
+Also, I don't know how well-studied
+covering hypergraphs with unions and intersections of
+hypercliques is.
+(There's also the relatively minor problem of accounting for
+the bitwise complexity of doing arithmetic on counts of cliques,
+rather than just ORing sub-results
+together).
 
 \section{Conclusion}
 

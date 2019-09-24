@@ -5,6 +5,8 @@
 # - various approximations of binomial coefficients
 # - approximates (1-a)^b
 # The bound, again, seems to asymptote at a small positive number.
+# Possibly deprecated; I may be moving to only computing
+# log-transformed coefficients.
 
 module CountingBound2
 

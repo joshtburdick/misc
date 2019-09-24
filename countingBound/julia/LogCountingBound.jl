@@ -8,7 +8,7 @@ module LogCountingBound
 export countingBound, approxNumMaximalCliques1, writeCounts
 
 """
-Approximate log of binomaial(n, k), when n >> k.
+Approximate log of binomial(n, k), when n >> k.
 Based on Wikipedia.
 """
 function approxLogNChooseK(n, k)
@@ -61,7 +61,7 @@ function approxNumMaximalCliques1(k, r, n)
 
   # expected number of r-cliques should be equivalent to:
   # numRCliques = Rational(binomial(n, r), two ^ binomial(r, k))
-  # # result is number of cliques, * prob. they're maximal
+  # result is number of cliques, * prob. they're maximal
   # numRCliques * (pNumerator / pDenominator)
   r = (pNumerator * binomial(n, r)) /
     (pDenominator * (one << binomial(r, k)))
@@ -93,6 +93,7 @@ function logApproxNumMaximalCliques1(k, r, n)
 
   # probability that one of those is not covered by a larger clique
   a = log(2) * binomial(r, k-1)
+	# FIXME this appears quite wrong
   logP = a / (n-r)
 
 	logR = approxLogNChooseK(n, r) # number of possible cliques

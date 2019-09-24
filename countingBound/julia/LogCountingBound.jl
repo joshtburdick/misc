@@ -1,8 +1,19 @@
 # Functions related to the counting bound.
+# This version uses analytic approximations from Wikipedia,
+# and works with log-transformed numbers.
+# (All logs are natural, unless otherwise noted).
 
-module CountingBound
+module LogCountingBound
 
 export countingBound, approxNumMaximalCliques1, writeCounts
+
+"""
+Approximate log of binomaial(n, k), when n >> k.
+Based on Wikipedia.
+"""
+function approxLogNChooseK(n, k)
+  k * log(n/k - 0.5) + k - 0.5 * log(2 * pi * k)
+end
 
 """
 Counting bound, based on Shannon's argument.
@@ -12,6 +23,7 @@ Counting bound, based on Shannon's argument.
   Returns: average number of NAND gates (with unbounded fan-in)
     required to compute any of those functions.
     (This may not be an integer).
+??? compute this log-transformed?
 """
 function countingBound(m, w)
   m = BigFloat(m)
@@ -28,8 +40,8 @@ end
   k: number of vertices per hyperedge
   r: number of vertices in the clique
   n: vertices in the larger graph
-  Returns: expected number of maximal hypercliques. (This is
-		approximate, but presumably it's more accurate for larger
+  Returns: number of maximal hypercliques. This is approximate, because
+    it's the expected number. (Presumably it's more accurate for larger
     numbers).
 """
 function approxNumMaximalCliques1(k, r, n)
@@ -58,60 +70,19 @@ function approxNumMaximalCliques1(k, r, n)
 end
 
 """
-  Approximate number of maximal hypercliques of some size
-(alternate take).
-  Note that k < r < n .
-  Also, the precision of what's returned can be set by setprecision().
-  k: number of vertices per hyperedge
-  r: number of vertices in the clique
-  n: vertices in the larger graph
-  Returns: number of maximal hypercliques. This is approximate, because
-    it's the expected number. (Presumably it's more accurate for larger
-    numbers).
-"""
-function approxNumMaximalCliques2(k, r, n)
-  k = BigInt(k)
-  r = BigInt(r)
-  n = BigInt(n)
-  one = BigInt(1)
-  two = BigInt(2)
-
-  # probability that one of those is not covered by a larger clique
-  a = one << binomial(r, k-one)
-  print("computed a\n")
-  pNumerator = (a-one) ^ (n-r)
-	# ??? how is this implemented for BigInts?
-	# also, if a = 1111111... in binary, is there a cheaper way to
-	# compute this?
-  print("computed numerator\n")
-  pDenominator = a ^ (n-r)
-	# FIXME is denominator all powers of two? If so, presumably could
-	# replace the division with a bit shift
-  print("computed denominator\n")
-
-  # expected number of r-cliques should be equivalent to:
-  # numRCliques = Rational(binomial(n, r), two ^ binomial(r, k))
-  # # result is number of cliques, * prob. they're maximal
-  # numRCliques * (pNumerator / pDenominator)
-  r = (pNumerator * binomial(n, r)) /
-    (pDenominator * (one << binomial(r, k)))
-
-  # ??? is this off by two? (doesn't seem to be, for small k, r, n)
-  r
-end
-
-
-"""
   Log of the approximate number of maximal hypercliques of some size.
   Note that k < r < n .
   Also, the precision of what's returned can be set by setprecision().
   k: number of vertices per hyperedge
   r: number of vertices in the clique
   n: vertices in the larger graph
-  Returns: (natural log of) the number of maximal hypercliques. This is
-    approximate, because it's the expected number, and it uses an
+  Returns: (natural log of) the number of maximal hypercliques. This
+    is approximate, because it's the expected number, and it uses an
     approximation for (1 - 1/a)^b. (Again, presumably it's more
     accurate for larger numbers).
+  We assume that binomial(r, k-1) and binomial(r, k) are
+		computable exactly, but that n may be much larger, and so
+		'n choose r' or 'n choose k' require approximation.
 """
 function logApproxNumMaximalCliques1(k, r, n)
   k = BigInt(k)
@@ -121,19 +92,18 @@ function logApproxNumMaximalCliques1(k, r, n)
   two = BigInt(2)
 
   # probability that one of those is not covered by a larger clique
-	# (approximation)
   a = log(2) * binomial(r, k-1)
   logP = a / (n-r)
 
-  logR = (log(binomial(n, r)   # number of possible cliques
-    - log(2) * binomial(r, k)  # P(clique is present) ...
-    + logP))                   # P(and not part of a larger clique)
-#  logR = 5  # XXX test
+	logR = approxLogNChooseK(n, r) # number of possible cliques
+		- log(2) * binomial(r, k)    # P(clique is present) ...
+    + logP                       # P(and not part of a larger clique)
+
   logR 
 end
 
 """
-  Writes counts for some values of k, r, and n.
+  Writes counts for some values of k, r, and n
   k: the value of k
   maxN: the maximum value of n
   outputDir: directory in which to write output files

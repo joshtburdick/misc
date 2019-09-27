@@ -26,7 +26,7 @@ a and b are large.
   Returns: log of the above expression
 """
 function boundAlmostOneExp(logA, logB)
-  - logA * exp( logB - logA )
+  - exp( logB - logA )
 end
 
 """

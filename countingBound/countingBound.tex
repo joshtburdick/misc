@@ -722,14 +722,15 @@ approximating based on the fact that
 \lim_{a\to\infty} (1 - a^{-1})^{a} = e^{-1}
 \]
 
-(In fact, $e^{-1}$ is an upper bound). This implies
+(In fact, $e^{-1}$ is an upper bound). This implies that
 
-\[
+\begin{eqnarray*}
+\lim_{a\to\infty} [(1 - a^{-1})^{a}]^\frac{1}{a} = e^{-\frac{1}{a}} \\
 \lim_{a\to\infty} (1 - a^{-1})^{b} = e^{-\frac{b}{a}}
-\]
+\end{eqnarray*}
 
-(Although now I'm wondering if it's a problem if $b$ is {\em also}
-big).
+In the actual code, we adapt this to work with log-transformed numbers. Presumably this bound will be looser if $a > b$, and
+will be a better bound if $b > a$.
 
 The probability of a hyperedge not being covered by an $r$-hyperclique is
 
@@ -850,8 +851,8 @@ appropriate.
 \subsubsection{Counting the number of solutions to problems in NP: \#P}
 
 Could we modify the counting argument to address the complexity 
-of \#P? (Or at least counting cliques, which I'm not sure is even
-\#P-complete).
+of \#P? (I'm not even sure that counting cliques is
+\#P-complete FIXME check this?).
 
 Suppose we have a family of circuits which count how
 many $K_k$s are in an $n$-vertex graph $G$; call this number

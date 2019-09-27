@@ -5,8 +5,9 @@ push!(LOAD_PATH, ".")
 
 using CountingBound
 
-# smoke test
+# smoke tests
 writeCounts(2, 200, "coef1")
+writeCounts(3, 200, "coef1")
 # almost a smoke test
 # writeCounts(4, 100, "coef1")
 # writeCounts(6, 5000000, "coef1")

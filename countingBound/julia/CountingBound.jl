@@ -53,7 +53,7 @@ function approxNumMaximalCliques1(k, r, n)
   # numRCliques * (pNumerator / pDenominator)
   r = (pNumerator * binomial(n, r)) /
     (pDenominator * (one << binomial(r, k)))
-  # ??? is this off by two?
+  # ??? is this off by two? I don't think so.
   r
 end
 

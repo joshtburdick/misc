@@ -16,6 +16,20 @@ function approxLogNChooseK(n, k)
 end
 
 """
+Upper-bound on
+
+log( (1 - 1/a)^b )
+
+given the log of a and b. This is more accurate when
+a and b are large.
+  logA, logB: log of a and b, respectively
+  Returns: log of the above expression
+"""
+function boundAlmostOneExp(logA, logB)
+  - logA * exp( logB - logA )
+end
+
+"""
 Counting bound, based on Shannon's argument.
   m: number of edges
   w: number of 'wires' -- that is, log2(number of functions),

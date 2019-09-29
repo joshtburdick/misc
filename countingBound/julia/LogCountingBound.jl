@@ -5,7 +5,7 @@
 
 module LogCountingBound
 
-export countingBound, approxNumMaximalCliques1, writeCounts
+export logCountingBound, logApproxNumMaximalCliques
 
 """
 Approximate log of binomial(n, k), when n >> k.
@@ -25,7 +25,7 @@ a and b are large.
   logA, logB: log of a and b, respectively
   Returns: log of the above expression
 """
-function boundAlmostOneExp(logA, logB)
+function approxBoundAlmostOneExp(logA, logB)
   - exp( logB - logA )
 end
 
@@ -39,15 +39,17 @@ Counting bound, based on Shannon's argument.
     (This may not be an integer).
 ??? compute this log-transformed?
 """
-function countingBound(m, w)
+function logCountingBound(m, w)
   m = BigFloat(m)
   w = BigFloat(w)
   b = m - 0.5
   # the "-1" here is because this is the average, not the max.
-  sqrt(2*w + b*b) - b - 1
+	# FIXME use an approximation here (in case m is humungous) ?
+  log( sqrt(2*w + b*b) - b - 1 )
 end
 
 """
+Deprecated; don't know how this got duplicated.
   Approximate number of maximal hypercliques of some size.
   Note that k < r < n .
   Also, the precision of what's returned can be set by setprecision().
@@ -58,7 +60,7 @@ end
     it's the expected number. (Presumably it's more accurate for larger
     numbers).
 """
-function approxNumMaximalCliques1(k, r, n)
+function approxNumMaximalCliquesDeprecated(k, r, n)
   k = BigInt(k)
   r = BigInt(r)
   n = BigInt(n)
@@ -67,11 +69,11 @@ function approxNumMaximalCliques1(k, r, n)
 
   # probability that one of those is not covered by a larger clique
   a = one << binomial(r, k-one)
-  print("computed a\n")
+  # print("computed a\n")
   pNumerator = (a-one) ^ (n-r)
-  print("computed numerator\n")
+  # print("computed numerator\n")
   pDenominator = a ^ (n-r)
-  print("computed denominator\n")
+  # print("computed denominator\n")
 
   # expected number of r-cliques should be equivalent to:
   # numRCliques = Rational(binomial(n, r), two ^ binomial(r, k))
@@ -79,7 +81,6 @@ function approxNumMaximalCliques1(k, r, n)
   # numRCliques * (pNumerator / pDenominator)
   r = (pNumerator * binomial(n, r)) /
     (pDenominator * (one << binomial(r, k)))
-  # ??? is this off by two?
   r
 end
 
@@ -98,23 +99,25 @@ end
 		computable exactly, but that n may be much larger, and so
 		'n choose r' or 'n choose k' require approximation.
 """
-function logApproxNumMaximalCliques1(k, r, n)
+function logApproxNumMaximalCliques(k, r, n)
   k = BigInt(k)
   r = BigInt(r)
   n = BigInt(n)
-  one = BigInt(1)
-  two = BigInt(2)
 
-  # probability that one of those is not covered by a larger clique
-  a = log(2) * binomial(r, k-1)
-	# FIXME this appears quite wrong
-  logP = a / (n-r)
+  # log of probability that one of those is
+	# not covered by a larger clique
+  a = log(BigInt(2)) * binomial(r, k-1)
+	logP = approxBoundAlmostOneExp(a, log(n-r))
 
-	logR = approxLogNChooseK(n, r) # number of possible cliques
-		- log(2) * binomial(r, k)    # P(clique is present) ...
-    + logP                       # P(and not part of a larger clique)
+	logNumMaximalCliques =
+    # number of possible cliques of this size
+		approxLogNChooseK(n, r)
+    # P(clique is present ...)
+		+ (- log(BigInt(2)) * binomial(r, k))
+    # P( ... and not covered by a larger clique)
+    + logP 
 
-  logR 
+  logNumMaximalCliques
 end
 
 """

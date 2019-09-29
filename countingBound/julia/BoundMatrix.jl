@@ -32,9 +32,11 @@ function writeCounts(k, maxN, outputDir)
   of = open(outputDir * "/b_k=" * string(k) * "_maxN=" * string(maxN) * ".csv", "w")
   write(of, "k,n,bound,logBound\n")
   for n in nList
-    bound = countingBound(binomial(k, 2), binomial(n, k))
+    bound = countingBound(binomial(n, 2), binomial(n, k))
     write(of, string(k) * "," * string(n) * "," * string(bound) * ","
-      * string(log(bound)) * "\n")
+       * ",\n")
+#      * string(log(bound)) * "\n")
+# ??? this was giving a runtime error about log(-) ... why?
   end
   close(of)
 
@@ -45,7 +47,6 @@ function writeCounts(k, maxN, outputDir)
     # FIXME what should the bound on r be?
     for r = k:min(n, 2*k)
       print("k=" * string(k) * " r=" * string(r) * " n=" * string(n) * "\n")
-      bound = countingBound(binomial(k, 2), binomial(n, k))
       A = approxNumMaximalCliques1(k, r, n)
       logA = logApproxNumMaximalCliques(k, r, n)
       write(of, string(k) * "," * string(r) * "," * string(n)

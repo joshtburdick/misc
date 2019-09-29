@@ -67,5 +67,3 @@ writeCounts(8, 1000, "coef1")
 writeCounts(10, 2000, "coef1")
 writeCounts(12, 4000, "coef1")
 
-
-

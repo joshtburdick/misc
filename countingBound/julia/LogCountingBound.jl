@@ -45,43 +45,12 @@ function logCountingBound(m, w)
   b = m - 0.5
   # the "-1" here is because this is the average, not the max.
 	# FIXME use an approximation here (in case m is humungous) ?
-  log( sqrt(2*w + b*b) - b - 1 )
-end
-
-"""
-Deprecated; don't know how this got duplicated.
-  Approximate number of maximal hypercliques of some size.
-  Note that k < r < n .
-  Also, the precision of what's returned can be set by setprecision().
-  k: number of vertices per hyperedge
-  r: number of vertices in the clique
-  n: vertices in the larger graph
-  Returns: number of maximal hypercliques. This is approximate, because
-    it's the expected number. (Presumably it's more accurate for larger
-    numbers).
-"""
-function approxNumMaximalCliquesDeprecated(k, r, n)
-  k = BigInt(k)
-  r = BigInt(r)
-  n = BigInt(n)
-  one = BigInt(1)
-  two = BigInt(2)
-
-  # probability that one of those is not covered by a larger clique
-  a = one << binomial(r, k-one)
-  # print("computed a\n")
-  pNumerator = (a-one) ^ (n-r)
-  # print("computed numerator\n")
-  pDenominator = a ^ (n-r)
-  # print("computed denominator\n")
-
-  # expected number of r-cliques should be equivalent to:
-  # numRCliques = Rational(binomial(n, r), two ^ binomial(r, k))
-  # result is number of cliques, * prob. they're maximal
-  # numRCliques * (pNumerator / pDenominator)
-  r = (pNumerator * binomial(n, r)) /
-    (pDenominator * (one << binomial(r, k)))
-  r
+  bound = sqrt(2*w + b*b) - b - 1
+	if bound >= 1
+		return(log(bound))
+	else
+		return(0)
+	end
 end
 
 """
@@ -118,57 +87,6 @@ function logApproxNumMaximalCliques(k, r, n)
     + logP 
 
   logNumMaximalCliques
-end
-
-"""
-  Writes counts for some values of k, r, and n
-  k: the value of k
-  maxN: the maximum value of n
-  outputDir: directory in which to write output files
-  Side effects: writes files A and b.
-    (The choices of r are a bit arbitrary).
-"""
-function writeCounts(k, maxN, outputDir)
-  # values of n to use, from k to maxN
-  # (for now, spaced at powers of 2)
-  nList = [BigInt(2^i) for i in 1:trunc(log(2,maxN))]
-  print(nList)
-  print("\n")
-  print(typeof(nList[1]))
-  print("\n")
-  # ??? for some reason, this was giving a syntax error
-  # nList = [n for n in nList if n>=k && n<=maxN]
-  # therefore, using filter()...
-  nList = filter(n -> n>=k && n<=maxN, nList)
-
-  # FIXME should create output directory
-  # first, write the bound b
-  of = open(outputDir * "/b_k=" * string(k) * "_maxN=" * string(maxN) * ".csv", "w")
-  write(of, "k,n,bound,logBound\n")
-  for n in nList
-    bound = countingBound(binomial(k, 2), binomial(n, k))
-    write(of, string(k) * "," * string(n) * "," * string(bound) * ","
-      * string(log(bound)) * "\n")
-  end
-  close(of)
-
-  # then, write the coefficients
-  of = open(outputDir * "/A_k=" * string(k) * "_maxN=" * string(maxN) * ".csv", "w")
-  write(of, "k,r,n,A,logA\n")
-  for n = nList
-    # FIXME what should the bound on r be?
-    for r = k:min(n, 2*k)
-      print("k=" * string(k) * " r=" * string(r) * " n=" * string(n) * "\n")
-      bound = countingBound(binomial(k, 2), binomial(n, k))
-      A = approxNumMaximalCliques1(k, r, n)
-      logA = logApproxNumMaximalCliques1(k, r, n)
-      write(of, string(k) * "," * string(r) * "," * string(n)
-        * "," * string(A)
-        * "," * string(logA) * "\n")
-    end
-  end
-  close(of)
-
 end
 
 end

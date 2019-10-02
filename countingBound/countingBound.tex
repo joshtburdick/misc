@@ -729,8 +729,9 @@ approximating based on the fact that
 \lim_{a\to\infty} (1 - a^{-1})^{b} = e^{-\frac{b}{a}}
 \end{eqnarray*}
 
-In the actual code, we adapt this to work with log-transformed numbers. Presumably this bound will be looser if $a > b$, and
-will be a better bound if $b > a$.
+In the actual code, we adapt this to work with log-transformed numbers.
+This bound seems closest when $a$ is large, and $b$ is not too large
+(data not shown).
 
 The probability of a hyperedge not being covered by an $r$-hyperclique is
 
@@ -831,7 +832,7 @@ time to compute, for increasing values of $k$).
 
 Although there's no obvious reduction from co-NP to NP, essentially
 the same argument seems to work. Suppose some family of circuits
-checks that there {\em isn't} any $K-k$ in an $n$-vertex graph.
+checks that there {\em isn't} any $K_k$ in an $n$-vertex graph.
 Then we can check that an arbitrary graph is free of $K_k$s by
 ANDing together circuits which check that subsets of vertices are
 clear of $K_k$s. (ANDing them all together can be done with

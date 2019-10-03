@@ -5,7 +5,8 @@
 
 module LogCountingBound
 
-export logCountingBound, logApproxNumMaximalCliques
+export logCountingBound, logApproxNumMaximalCliques,
+  approxLogNChooseK
 
 """
 Approximate log of binomial(n, k), when n >> k.
@@ -21,7 +22,7 @@ Upper-bound on
 log( (1 - 1/a)^b )
 
 given the log of a and b. This is more accurate when
-a and b are large.
+a is large, and b is small.
   logA, logB: log of a and b, respectively
   Returns: log of the above expression
 """
@@ -75,16 +76,16 @@ function logApproxNumMaximalCliques(k, r, n)
 
   # log of probability that one of those is
 	# not covered by a larger clique
-  a = log(BigInt(2)) * binomial(r, k-1)
-	logP = approxBoundAlmostOneExp(a, log(n-r))
+  logA = log(BigInt(2)) * binomial(r, k-1)
+	logP = approxBoundAlmostOneExp(logA, log(n-r))
 
-	logNumMaximalCliques =
+	logNumMaximalCliques = (
     # number of possible cliques of this size
 		approxLogNChooseK(n, r)
     # P(clique is present ...)
 		+ (- log(BigInt(2)) * binomial(r, k))
     # P( ... and not covered by a larger clique)
-    + logP 
+    + logP)
 
   logNumMaximalCliques
 end

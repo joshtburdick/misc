@@ -33,31 +33,34 @@ function approxBoundAlmostOneExp(logA, logB)
 end
 
 """
-Given log(a) and log(b), computes log(b - a).
-
-	logA, logB: log-transformed numbers, with logB > logA
-	Returns: log(b-a) (computed using techniques adapted
+Given log(a) and b, computes log( a +/- b ).
+	logA: a log-transformed number
+	b: a (non-log-transformed) number, smaller than e^a
+	plus: if true, add b; if false, subtract b
+	Returns: log(a +/- b) (computed using techniques adapted
 from those used to deal with log-likelihoods e.g. in NLP).
 """
-function logDiff(logB, logA)
-	# difference, with logB subtracted from both; in other words,
-	# diff = exp( logB - logB ) - exp( logA - logB )
-	diff = 1 - exp( logA - logB )
-	# return log of that, scaled to original scale
-	log( diff ) + logB
+function logPlusMinus(logA, b, plus)
+	# compute b, as a fraction of a
+	bScaled = exp( log(b) - log(a) )
+	# add or subtract that from a
+	diff = if plus; 1 + bScaled; else 1 - bScaled; end
+	# return log of that, back on original scale
+	logA + log( diff )
 end
 
 """
 Counting bound, based on Shannon's argument.
   m: number of edges
-  w: number of 'wires' -- that is, log2(number of functions),
-    which is the number of bits needed to specify a function
-  Returns: average number of NAND gates (with unbounded fan-in)
-    required to compute any of those functions.
+  logW: log of number of 'wires' -- that is,
+		log(log2(number of functions)), where
+		'log2(number of functions)' is the number of bits
+		needed to specify a function
+  Returns: log of average number of NAND gates (with unbounded
+		fan-in) required to compute any of those functions.
     (This may not be an integer).
-??? compute this log-transformed?
 """
-function logCountingBound(m, w)
+function logCountingBound(m, logW)
   m = BigFloat(m)
   w = BigFloat(w)
   b = m - 0.5

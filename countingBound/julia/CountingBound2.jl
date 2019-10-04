@@ -13,7 +13,7 @@ module CountingBound2
 export countingBound, approxNumMaximalCliques1, writeCounts
 
 """
-Approximation of binomaial(n, k), when n >> k.
+Approximation of binomial(n, k), when n >> k.
 From Wikipedia.
 """
 function approxNChooseK(n, k)

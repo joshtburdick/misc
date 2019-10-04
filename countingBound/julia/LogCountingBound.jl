@@ -6,11 +6,13 @@
 module LogCountingBound
 
 export logCountingBound, logApproxNumMaximalCliques,
-  approxLogNChooseK
+	# these are exported for testing
+  approxLogNChooseK, approxBoundAlmostOneExp, logDiff
 
 """
 Approximate log of binomial(n, k), when n >> k.
 Based on Wikipedia.
+FIXME use better approximation from Wikipedia?
 """
 function approxLogNChooseK(n, k)
   k * log(n/k - 0.5) + k - 0.5 * log(2 * pi * k)
@@ -28,6 +30,21 @@ a is large, and b is small.
 """
 function approxBoundAlmostOneExp(logA, logB)
   - exp( logB - logA )
+end
+
+"""
+Given log(a) and log(b), computes log(b - a).
+
+	logA, logB: log-transformed numbers, with logB > logA
+	Returns: log(b-a) (computed using techniques adapted
+from those used to deal with log-likelihoods e.g. in NLP).
+"""
+function logDiff(logB, logA)
+	# difference, with logB subtracted from both; in other words,
+	# diff = exp( logB - logB ) - exp( logA - logB )
+	diff = 1 - exp( logA - logB )
+	# return log of that, scaled to original scale
+	log( diff ) + logB
 end
 
 """

@@ -42,7 +42,7 @@ function writeCounts(k, maxN, outputDir)
 
   # then, write the coefficients
   of = open(outputDir * "/A_k=" * string(k) * "_maxN=" * string(maxN) * ".csv", "w")
-  write(of, "k,r,n,A,logA\n")
+  write(of, "k,r,n,A,exp(approxLogA),approxLogA\n")
   for n = nList
     # FIXME what should the bound on r be?
     for r = k:min(n, 2*k)
@@ -51,6 +51,7 @@ function writeCounts(k, maxN, outputDir)
       logA = logApproxNumMaximalCliques(k, r, n)
       write(of, string(k) * "," * string(r) * "," * string(n)
         * "," * string(A)
+	* "," * string(exp(logA))
         * "," * string(logA) * "\n")
     end
   end

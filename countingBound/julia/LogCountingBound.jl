@@ -43,6 +43,10 @@ from those used to deal with log-likelihoods e.g. in NLP).
 function logPlusMinus(logA, b, plus)
 	# compute b, as a fraction of a
 	bScaled = exp( log(b) - log(a) )
+	# if subtraction would go negative, return NaN
+	if (bScaled > 1) & (!plus)
+		return NaN
+	end
 	# add or subtract that from a
 	diff = if plus; 1 + bScaled; else 1 - bScaled; end
 	# return log of that, back on original scale
@@ -62,16 +66,15 @@ Counting bound, based on Shannon's argument.
 """
 function logCountingBound(m, logW)
   m = BigFloat(m)
-  w = BigFloat(w)
+  logW = BigFloat(logW)
   b = m - 0.5
+	# this presumably should be this:
   # the "-1" here is because this is the average, not the max.
-	# FIXME use an approximation here (in case m is humungous) ?
-  bound = sqrt(2*w + b*b) - b - 1
-	if bound >= 1
-		return(log(bound))
-	else
-		return(0)
-	end
+  # bound = sqrt(2*w + b*b) - (b - 1)
+	# but we use log-transformed numbers in several places
+	x = logPlusMinus(log(2) + logW, b*b, true) / 2
+	bound = logPlusMinus(x, b - 1, false)
+	bound
 end
 
 """

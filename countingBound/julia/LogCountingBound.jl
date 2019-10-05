@@ -6,8 +6,8 @@
 module LogCountingBound
 
 export logCountingBound, logApproxNumMaximalCliques,
-	# these are exported for testing
   approxLogNChooseK, approxBoundAlmostOneExp, logDiff
+	# ??? export fewer of these?
 
 """
 Approximate log of binomial(n, k), when n >> k.
@@ -37,20 +37,23 @@ Given log(a) and b, computes log( a +/- b ).
 	logA: a log-transformed number
 	b: a (non-log-transformed) number, smaller than e^a
 	plus: if true, add b; if false, subtract b
-	Returns: log(a +/- b) (computed using techniques adapted
-from those used to deal with log-likelihoods e.g. in NLP).
+	Returns: log(a +/- b), or NaN if something goes negative.
+(This is computed using techniques adapted from those used
+to deal with log-likelihoods e.g. in NLP).
 """
 function logPlusMinus(logA, b, plus)
-	# compute b, as a fraction of a
-	bScaled = exp( log(b) - log(a) )
-	# if subtraction would go negative, return NaN
-	if (bScaled > 1) & (!plus)
+	if b <= 0
 		return NaN
 	end
+	# compute b, as a fraction of a
+	bScaled = exp( log(b) - logA )
 	# add or subtract that from a
 	diff = if plus; 1 + bScaled; else 1 - bScaled; end
+	if diff <= 0
+		return NaN
+	end
 	# return log of that, back on original scale
-	logA + log( diff )
+	log( diff ) + logA
 end
 
 """

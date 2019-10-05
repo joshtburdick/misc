@@ -1,5 +1,7 @@
 #!/home/jburdick/bin/julia
-# writes out the coefficients of the bound matrix.
+# Writes out the coefficients of the bound matrix, both
+# using exact binomials, and using various approximations
+# (and log-transformed numbers), as a check of the math.
 
 push!(LOAD_PATH, ".")
 
@@ -33,6 +35,8 @@ function writeCounts(k, maxN, outputDir)
   write(of, "k,n,bound,logBound\n")
   for n in nList
     bound = countingBound(binomial(n, 2), binomial(n, k))
+		logW = approxLogNChooseK(n, k)
+		logBound = logCountingBound(binomial(n, 2), logW)
     write(of, string(k) * "," * string(n) * "," * string(bound) * ","
        * ",\n")
 #      * string(log(bound)) * "\n")

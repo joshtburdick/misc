@@ -32,14 +32,14 @@ function writeCounts(k, maxN, outputDir)
   # FIXME should create output directory
   # first, write the bound b
   of = open(outputDir * "/b_k=" * string(k) * "_maxN=" * string(maxN) * ".csv", "w")
-  write(of, "k,n,bound,logBound\n")
+  write(of, "k,n,bound,exp(approxLogBound),approxLogBound\n")
   for n in nList
     bound = countingBound(binomial(n, 2), binomial(n, k))
 		logW = approxLogNChooseK(n, k)
 		logBound = logCountingBound(binomial(n, 2), logW)
     write(of, string(k) * "," * string(n) * "," * string(bound) * ","
-       * ",\n")
-#      * string(log(bound)) * "\n")
+			* string(exp(logBound)) * ","
+      * string(logBound) * "\n")
 # ??? this was giving a runtime error about log(-) ... why?
   end
   close(of)

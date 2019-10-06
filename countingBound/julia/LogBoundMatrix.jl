@@ -61,7 +61,7 @@ function writeCounts(k, maxN, logADropOff, outputDir)
 				maxLogA = logA
 			end
 			# if we've fallen far enough below the maximum, stop the loop
-			if maxLogA <= maxLogA - logADropOff
+			if logA <= maxLogA - logADropOff
 				break
 			end
     end
@@ -70,7 +70,7 @@ function writeCounts(k, maxN, logADropOff, outputDir)
 
 end
 
-logADropOff = 1000.0
+logADropOff = 100 * log(10)
 
 outputDir = "logCoef1"
 mkpath(outputDir)

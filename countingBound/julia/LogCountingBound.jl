@@ -11,11 +11,20 @@ export logCountingBound, logApproxNumMaximalCliques,
 
 """
 Approximate log of binomial(n, k), when n >> k.
-Based on Wikipedia.
-FIXME use better approximation from Wikipedia?
+From Wikipedia.
+"""
+function approxLogNChooseK1(n, k)
+  k * log(n/k - 0.5) + k - 0.5 * log(2 * pi * k)
+end
+
+"""
+Better approximation of log(binomial(n, k)) when n >> k.
+Also from Wikipedia.
 """
 function approxLogNChooseK(n, k)
-  k * log(n/k - 0.5) + k - 0.5 * log(2 * pi * k)
+	((n + 0.5) * log((n + 0.5) / (n + 0.5 - k))
+		+ k * log((n + 0.5 - k) / k)
+		- 0.5 * log(2 * pi * k))
 end
 
 """

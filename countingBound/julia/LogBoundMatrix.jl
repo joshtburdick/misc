@@ -10,12 +10,15 @@ using LogCountingBound
 """
   Writes counts for some values of k, r, and n.
   k: the value of k
-  maxN: the maximum value of n
+  maxN: the maximum value of n (this will use
+		powers of two	<= maxN)
+	logADropOff: this will start r at k, and continue as the log bound
+		increases, until the bound drops below (max - logADropOff)
   outputDir: directory in which to write output files
   Side effects: writes files A and b.
     (The choices of r are a bit arbitrary).
 """
-function writeCounts(k, maxN, outputDir)
+function writeCounts(k, maxN, logADropOff, outputDir)
   # values of n to use, from k to maxN
   # (for now, spaced at powers of 2)
   nList = [BigInt(2^i) for i in 1:trunc(log(2,maxN))]
@@ -44,33 +47,44 @@ function writeCounts(k, maxN, outputDir)
   of = open(outputDir * "/A_k=" * string(k) * "_maxN=" * string(maxN) * ".csv", "w")
   write(of, "k,r,n,approxLogA\n")
   for n = nList
-    # FIXME what should the bound on r be?
-    for r = k:min(n, 2*k)
+		# tracks the maximum (initially undefined)
+		maxLogA = NaN
+		# loop through possible values of r (this will usually stop early)
+    for r = k:n
       print("k=" * string(k) * " r=" * string(r) * " n=" * string(n) * "\n")
+			# compute approximation, and print it
       logA = logApproxNumMaximalCliques(k, r, n)
       write(of, string(k) * "," * string(r) * "," * string(n)
         * "," * string(logA) * "\n")
+			# keep track of maximum
+			if isnan(maxLogA) || logA > maxLogA
+				maxLogA = logA
+			end
+			# if we've fallen far enough below the maximum, stop the loop
+			if maxLogA <= maxLogA - logADropOff
+				break
+			end
     end
   end
   close(of)
 
 end
 
+logADropOff = 1000.0
+
 outputDir = "logCoef1"
 mkpath(outputDir)
 # smoke tests
-writeCounts(2, 200, outputDir)
-writeCounts(3, 200, outputDir)
-writeCounts(8, 1000, outputDir)
-writeCounts(10, 1e8, outputDir)
-writeCounts(12, 1e8, outputDir)
-writeCounts(20, 1e8, outputDir)
-writeCounts(100, 1e8, outputDir)
-writeCounts(100, 1e8, outputDir)
+writeCounts(2, 200, logADropOff, outputDir)
+writeCounts(3, 200, logADropOff, outputDir)
+writeCounts(8, 1000, logADropOff, outputDir)
+writeCounts(10, 1e8, logADropOff, outputDir)
+writeCounts(12, 1e8, logADropOff, outputDir)
+writeCounts(20, 1e8, logADropOff, outputDir)
+writeCounts(100, 1e8, logADropOff, outputDir)
+writeCounts(100, 1e8, logADropOff, outputDir)
 
-writeCounts(1000, 1e10, outputDir)
+writeCounts(1000, 1e10, logADropOff, outputDir)
 
-writeCounts(10000, 1e20, outputDir)
-
-
+writeCounts(10000, 1e20, logADropOff, outputDir)
 

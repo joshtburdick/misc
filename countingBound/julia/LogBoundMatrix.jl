@@ -74,17 +74,16 @@ logADropOff = 100 * log(10)
 
 outputDir = "logCoef1"
 mkpath(outputDir)
-# smoke tests
-writeCounts(2, 200, logADropOff, outputDir)
-writeCounts(3, 200, logADropOff, outputDir)
-writeCounts(8, 1000, logADropOff, outputDir)
-writeCounts(10, 1e8, logADropOff, outputDir)
-writeCounts(12, 1e8, logADropOff, outputDir)
-writeCounts(20, 1e8, logADropOff, outputDir)
-writeCounts(100, 1e8, logADropOff, outputDir)
-writeCounts(100, 1e8, logADropOff, outputDir)
 
-writeCounts(1000, 1e10, logADropOff, outputDir)
+writeCounts(6, 1e100, logADropOff, outputDir)
+writeCounts(8, 1e100, logADropOff, outputDir)
+writeCounts(10, 1e100, logADropOff, outputDir)
+writeCounts(12, 1e100, logADropOff, outputDir)
+writeCounts(20, 1e100, logADropOff, outputDir)
+writeCounts(30, 1e100, logADropOff, outputDir)
+writeCounts(100, 1e100, logADropOff, outputDir)
 
-writeCounts(10000, 1e20, logADropOff, outputDir)
+writeCounts(1000, 1e100, logADropOff, outputDir)
+
+writeCounts(10000, 1e100, logADropOff, outputDir)
 

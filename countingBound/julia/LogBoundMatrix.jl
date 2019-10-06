@@ -62,6 +62,15 @@ mkpath(outputDir)
 writeCounts(2, 200, outputDir)
 writeCounts(3, 200, outputDir)
 writeCounts(8, 1000, outputDir)
-writeCounts(10, 2000, outputDir)
-writeCounts(12, 4000, outputDir)
+writeCounts(10, 1e8, outputDir)
+writeCounts(12, 1e8, outputDir)
+writeCounts(20, 1e8, outputDir)
+writeCounts(100, 1e8, outputDir)
+writeCounts(100, 1e8, outputDir)
+
+writeCounts(1000, 1e10, outputDir)
+
+writeCounts(10000, 1e20, outputDir)
+
+
 

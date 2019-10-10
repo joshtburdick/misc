@@ -5,7 +5,7 @@
 
 module LogCountingBound
 
-export logApproxNumMaximalCliques
+export logNumMaximalCliques
 
 """
   Log of the approximate number of maximal hypercliques of some size.
@@ -29,15 +29,12 @@ function logNumMaximalCliques(k, r, n)
 	# ??? will this have enough significant figures?
 	logP = (log(a-1) - log(a)) * (n - r)
 
-	logNumMaximalCliques = (
     # number of possible cliques of this size
-		log(binomial(n, r))
+		(log(binomial(n, r))
     # P(clique is present ...)
 		+ (- log(BigInt(2)) * binomial(r, k))
     # P( ... and not covered by a larger clique)
     + logP)
-
-  logNumMaximalCliques
 end
 
 end

@@ -41,11 +41,11 @@ function approxNumMaximalCliques1(k, r, n)
 
   # probability that one of those is not covered by a larger clique
   a = one << binomial(r, k-one)
-  print("computed a\n")
+  # print("computed a\n")
   pNumerator = (a-one) ^ (n-r)
-  print("computed numerator\n")
+  # print("computed numerator\n")
   pDenominator = a ^ (n-r)
-  print("computed denominator\n")
+  # print("computed denominator\n")
 
   # expected number of r-cliques should be equivalent to:
   # numRCliques = Rational(binomial(n, r), two ^ binomial(r, k))

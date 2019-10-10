@@ -64,6 +64,8 @@ function writeCounts(k, maxN, logADropOff, outputDir)
 			if logA <= maxLogA - logADropOff
 				break
 			end
+			# ??? sometimes this seems to stop after one number,
+			# when r is very large
     end
   end
   close(of)

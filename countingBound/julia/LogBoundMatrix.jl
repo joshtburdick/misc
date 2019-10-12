@@ -5,7 +5,7 @@
 
 push!(LOAD_PATH, ".")
 
-using LogCountingBound
+using CountingBound, LogCountingBound
 
 """
   Writes counts for some values of k, r, and n.
@@ -22,10 +22,10 @@ function writeCounts(k, maxN, logADropOff, outputDir)
   # values of n to use, from k to maxN
   # (for now, spaced at powers of 2)
   nList = [BigInt(2^i) for i in 1:trunc(log(2,maxN))]
-  print(nList)
-  print("\n")
-  print(typeof(nList[1]))
-  print("\n")
+  # print(nList)
+  # print("\n")
+  # print(typeof(nList[1]))
+  # print("\n")
   # ??? for some reason, this was giving a syntax error
   # nList = [n for n in nList if n>=k && n<=maxN]
   # therefore, using filter()...
@@ -34,10 +34,13 @@ function writeCounts(k, maxN, logADropOff, outputDir)
   # FIXME should create output directory
   # first, write the bound b
   of = open(outputDir * "/b_k=" * string(k) * "_maxN=" * string(maxN) * ".csv", "w")
-  write(of, "k,n,approxLogBound\n")
+  write(of, "k,n,logBound\n")
   for n in nList
-		logW = approxLogNChooseK(n, k)
-		logBound = logCountingBound(binomial(n, 2), logW)
+    bound = countingBound(binomial(n, 2), binomial(n, k))
+		logBound = NaN
+		if bound > 0
+			logBound = log(bound)
+		end
     write(of, string(k) * "," * string(n) * ","
       * string(logBound) * "\n")
   end
@@ -45,15 +48,15 @@ function writeCounts(k, maxN, logADropOff, outputDir)
 
   # then, write the coefficients
   of = open(outputDir * "/A_k=" * string(k) * "_maxN=" * string(maxN) * ".csv", "w")
-  write(of, "k,r,n,approxLogA\n")
+  write(of, "k,r,n,logA\n")
   for n = nList
 		# tracks the maximum (initially undefined)
 		maxLogA = NaN
 		# loop through possible values of r (this will usually stop early)
     for r = k:n
       print("k=" * string(k) * " r=" * string(r) * " n=" * string(n) * "\n")
-			# compute approximation, and print it
-      logA = logApproxNumMaximalCliques(k, r, n)
+			# compute log of number of cliques, and print it
+      logA = logNumMaximalCliques(k, r, n)
       write(of, string(k) * "," * string(r) * "," * string(n)
         * "," * string(logA) * "\n")
 			# keep track of maximum
@@ -64,28 +67,16 @@ function writeCounts(k, maxN, logADropOff, outputDir)
 			if logA <= maxLogA - logADropOff
 				break
 			end
-			# ??? sometimes this seems to stop after one number,
-			# when r is very large
     end
   end
   close(of)
 
 end
 
-logADropOff = 100 * log(10)
-
 outputDir = "logCoef1"
 mkpath(outputDir)
 
-writeCounts(6, 1e100, logADropOff, outputDir)
-writeCounts(8, 1e100, logADropOff, outputDir)
-writeCounts(10, 1e100, logADropOff, outputDir)
-writeCounts(12, 1e100, logADropOff, outputDir)
-writeCounts(20, 1e100, logADropOff, outputDir)
-writeCounts(30, 1e100, logADropOff, outputDir)
-writeCounts(100, 1e100, logADropOff, outputDir)
-
-writeCounts(1000, 1e100, logADropOff, outputDir)
-
-writeCounts(10000, 1e100, logADropOff, outputDir)
+for k in [6,8,10,12,14,16,18,20,50,100,200,500,1000]
+	writeCounts(k, 1e20, 100 * log(10), outputDir)
+end
 

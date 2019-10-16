@@ -10,8 +10,8 @@
 \newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
 \newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
 \begin{document}
-\title{A strategy for lower-bounding clique detection, combining
-Shannon's counting argument with clique covers of random hypergraphs}
+\title{An attempt at lower-bounding clique detection, combining
+Shannon's counting argument with random graph theory}
 
 \author{Josh Burdick ({\tt josh.t.burdick@gmail.com})}
 \maketitle
@@ -716,46 +716,38 @@ was fairly slow. I assume that the
 issue was that Julia's {\tt Rational} type was spending much time reducing
 fractions to simplest form.
 
-In order to work around this, I rewrote parts of the code,
-approximating based on the fact that
+After trying various approximations, I switched to using
+logarithms, replacing multiplying/dividing
+huge numbers with adding/subtracting much smaller numbers.
+This is somewhat approximate, but is faster.
 
-\[
-\lim_{a\to\infty} (1 - a^{-1})^{a} = e^{-1}
-\]
+I then tried computing the matrix, again for small cliques.
+For instance, counting $K_6^r$s in graphs with
+$2^66$ vertices, the log-transformed $A$ numbers start out:
 
-(In fact, $e^{-1}$ is an upper bound). This implies that
+\begin{verbatim}
+6,-1.162e+18
+7,-3.518e+13
+8,-688.031
+9,340.703
+10,296.811
+11,165.488
+12,-111.482
+\end{verbatim}
 
-\begin{eqnarray*}
-\lim_{a\to\infty} [(1 - a^{-1})^{a}]^\frac{1}{a} = e^{-\frac{1}{a}} \\
-\lim_{a\to\infty} (1 - a^{-1})^{b} = e^{-\frac{b}{a}}
-\end{eqnarray*}
+According to this calculation, the most frequently-occurring
+maximal clique has nine vertices, and there are
+approximately $e^{340.703}$ of them. Smaller cliques are
+vastly less frequent, and larger cliques occur, but their
+frequency falls off fairly quickly.
 
-In the actual code, we adapt this to work with log-transformed numbers.
-This bound seems closest when $a$ is large, and $b$ is not too large
-(data not shown).
-
-The probability of a hyperedge not being covered by an $r$-hyperclique is
-
-\[
-p = [1 - 2 ^ {1-{r \choose k}}] ^ {n-k \choose r-k}
-\]
-
-Letting $a = 2^{{r \choose k}-1}$ and $b = {n-k \choose r-k}$, we get
-
-\[
-\log p \approx - \frac{{n-k \choose r-k}} {2^{[{r \choose k}-1]}}
-\]
-
-%% \log p \approx -\frac{n-k \choose r-k}{ 2^{({r \choose k}-1)} }
-
-... In any case, even after these numerical approximations, and
-looking at less trivial cases (e.g. finding cliques of size $n/2$ in
-$n$-vertex graphs), I wasn't able to get a bound above a tiny
-positive number.
-
-FIXME write this up...
+Unfortunately, the Shannon bound at that point (for
+finding $K_6$s in a graph with $2^66$ vertices)
+is only $e^{134.3}$ NAND gates. Thus, 
 
 \subsection{Covering with multiple sizes of hyperclique}
+
+FIXME this is not in the right section...
 
 The previous failure suggests that covering
 with one size of hyperclique is too inefficient. The previous
@@ -782,22 +774,11 @@ many rows of $A$ as we like. It seems, intuitively,
 that there will be a variety of feasible solutions in a convex space.
 It's not obvious which of these to focus on.
 
-We have another constraint: the number of gates to find $k$-cliques
-in $n+1$-vertex graphs is strictly larger than the number of gates
-needed in $n$-vertex graphs (as described in section 
-\ref{sec:whichCliques}). In symbols, $x_{i+1} > x_i$.
-The picture, intuitively, is vaguely reminscent of this (FIXME add
-3-D variant?): 
 
-\includegraphics[width=0.4\textwidth]{R/mesh2D.pdf}
-
-Therefore, we focus on minimizing $\sum_i x_i$. I think that this
-only gives a bound for the largest values of $n$. (FIXME 
-make this qualification more accurate).
 
 \section{Related work}
 
-This bound relies heavily on a modification of Shannon's original
+This strategy relies heavily on a modification of Shannon's original
 function-counting argument \cite{shannon_synthesis_1949}.
 
 Broadly speaking, the idea of using an upper bound to prove a lower bound
@@ -809,7 +790,6 @@ lower bounds and algorithms. A well-known example is Razborov's lower
 bound on the complexity of detecting cliques using monotone circuits
 \cite{Razborov85lowerbounds}.
 
-
 \section{Future work}
 
 \subsection{Improving the covering}
@@ -820,14 +800,9 @@ the covering.
 However, as noted in section~\ref{sec:maximalHypercliques}, this
 may not be the cheapest strategy to cover the hypergraph.
 
-\subsection{Related questions}
+\subsection{If this worked, what else would it apply to?}
 
-Under the theory that this bound strategy works, what else does
-it apply to? (One small consequence would be
-[FIXME is this right?] that it ``constructivizes''
-the Time Hierarchy theorem FIXME CITE, in that it shows that
-a natural problem, HAS-$k$-CLIQUE, requires increasing amounts of
-time to compute, for increasing values of $k$).
+A
 
 \subsubsection{The complement of NP: co-NP}
 
@@ -888,8 +863,8 @@ It seems that if an arbitrary hypergraph can be covered with
 then this would give a lower bound on the NAND gates required to
 detect cliques.
 
-Unfortunately, using one (relatively simple) strategy for doing this covering,
-the bound was, like, less than one. Possibly improving the covering
+Unfortunately, using several strategies for doing this covering,
+the bound was less than one. Possibly improving the covering
 strategy would help, but I'm not convinced it would help much.
 
 \section{Acknowledgements}

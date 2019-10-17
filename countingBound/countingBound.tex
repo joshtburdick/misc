@@ -10,8 +10,9 @@
 \newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
 \newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
 \begin{document}
-\title{An attempt at lower-bounding clique detection, combining
-Shannon's counting argument with random graph theory}
+\title{
+Small hyperclique covers would allow Shannon's
+counting argument to lower-bound clique detection}
 
 \author{Josh Burdick ({\tt josh.t.burdick@gmail.com})}
 \maketitle
@@ -25,18 +26,19 @@ $n$-vertex graph requires, on average, $\Omega(n^{k/2})$ NAND gates.
 This doesn't directly bound the complexity of detecting {\em all} of the cliques.
 However, we can view a random subset of cliques as a randomly-chosen
 $k$-regular hypergraph on $n$ vertices.
-If we can cover such a hypergraph with large enough cliques,
+If we could cover such a hypergraph with a small number of large hypercliques,
 and we could detect cliques with few enough gates, we would contradict
 the average-case counting bound described above.
-Probablistic graph theory arguments
-\cite{bollobas1976cliques} similar to \cite{bollobas1993clique}
-allow bounding the number of cliques needed to
-cover a random hypergraph.
-This provides a strategy for lower-bounding clique detection.
-We suggest several possible ways of covering hypergraphs with cliques,
-and numerically evaluate this bound for small graphs, finding that
-it barely gives a positive bound.
+This might provide a strategy for lower-bounding clique detection,
+but it depends on the size of the hyperclique covering.
+We present some strategies for hyperclique covering, based on
+probablistic graph theory arguments
+\cite{bollobas1976cliques} \cite{bollobas1993clique}.
+Unfortunately, these hyperclique coverings don't give a usable
+lower bound on clique detection.
 \end{abstract}
+
+Or:
 
 I am writing this up on the assumption that the modification
 to Shannon's counting argument (section \ref{countingBound})
@@ -53,11 +55,12 @@ someone can point out the flaw(s).
 \section{A counting bound}
 \label{countingBound}
 
-The first argument is basically a function-counting argument.
+The first component we use is basically Shannon's function-counting argument
+\cite{shannon_synthesis_1949}.
 
 \subsection{Background: lower bounds from function counting}
 
-It's long been known that computing {\em some} function of a bit-string
+It has long been known that computing {\em some} function of a bit-string
 requires exponentially large circuits \cite{shannon_synthesis_1949}.
 If there are $m$ inputs to a circuit,
 then there are $2^{2^m}$ possible functions from the $m$-input bitstring to
@@ -864,7 +867,14 @@ then this would give a lower bound on the NAND gates required to
 detect cliques.
 
 Unfortunately, using several strategies for doing this covering,
-the bound was less than one. Possibly improving the covering
+the bound was far less than one. If we could prove that
+smaller hyperclique coverings of random hypergraphs exist,
+this approach should yield a bound on clique detection.
+
+Unfortunately, it's not obvious that smaller hyperclique
+coverings do in fact exist.
+
+ Possibly improving the covering
 strategy would help, but I'm not convinced it would help much.
 
 \section{Acknowledgements}

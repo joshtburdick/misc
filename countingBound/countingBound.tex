@@ -11,8 +11,8 @@
 \newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
 \begin{document}
 \title{
-Small hyperclique covers would allow Shannon's
-counting argument to lower-bound clique detection}
+Small hyperclique covers would connect Shannon's
+circuit counting bound to clique detection}
 
 \author{Josh Burdick ({\tt josh.t.burdick@gmail.com})}
 \maketitle
@@ -38,11 +38,8 @@ Unfortunately, these hyperclique coverings don't give a usable
 lower bound on clique detection.
 \end{abstract}
 
-Or:
-
-I am writing this up on the assumption that the modification
-to Shannon's counting argument (section \ref{countingBound})
-is not new. It doesn't seem to give a bound larger than 1.
+I am writing this up, although
+it doesn't seem to give a bound larger than 1.
 I'm hopeful that it is correct and/or that it has useful bits,
 or that someone can point me
 to similar lower-bound attempts; or, if it's wrong, that 
@@ -55,7 +52,8 @@ someone can point out the flaw(s).
 \section{A counting bound}
 \label{countingBound}
 
-The first component we use is basically Shannon's function-counting argument
+The first component we use is a slight modification
+of Shannon's function-counting argument
 \cite{shannon_synthesis_1949}.
 
 \subsection{Background: lower bounds from function counting}
@@ -168,7 +166,7 @@ output a 1 when you feed in all 1's). However, they're all slightly different.
 BUGGY-$k$-CLIQUE$(n)$ contains $2^{n \choose k}$ distinct functions.
 \end{thm}
 \begin{proof}
-That's how many subsets of the $K_k$s there are.
+That is how many subsets of the $K_k$s there are.
 \end{proof}
 
 Although $2^{n \choose k}$ is a fairly large number,
@@ -177,9 +175,9 @@ functions on the ${n \choose 2}$ input wires (one per edge).
 
 \subsubsection{But {\em which} function requires many gates?}
 
-So, there are $2^{n \choose k}$ different functions. 
+Thus, there are $2^{n \choose k}$ different functions. 
 How many NAND gates do these take?
-(We onsider NAND gate circuits (with any fan-in) which find $k$-cliques in $n$-vertex
+(We consider NAND gate circuits (with any fan-in) which find $k$-cliques in $n$-vertex
 graphs, as a circuit with $n \choose 2$ inputs)
 
 Applying Theorem

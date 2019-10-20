@@ -77,6 +77,6 @@ outputDir = "logCoef1"
 mkpath(outputDir)
 
 for k in [6,8,10,12,14,16,18,20,50,100,200,500,1000]
-	writeCounts(k, 1e20, 100 * log(10), outputDir)
+	writeCounts(k, 1e60, 100 * log(10), outputDir)
 end
 

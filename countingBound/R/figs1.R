@@ -93,3 +93,6 @@ abline(0,1, col="red")
 # FIXME shade the feasible regions?
 dev.off()
 
+# also add Hasse diagram?
+# source("Hasse.R")
+

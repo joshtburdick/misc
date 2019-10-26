@@ -6,7 +6,7 @@
 vertex.6 = t(combn(6,3))
 
 x1 = dnorm(0:20, mean=10, sd=5)
-x1 = x1 / max(x1)
+x1 = (x1 - min(x1)) / max(x1)
 
 # Transforms from 3-D to screen coordinates.
 # x: the user coordinates, as a three-row matrix
@@ -14,32 +14,32 @@ x1 = x1 / max(x1)
 #   x: in [-1,1]
 #     FIXME: scale to Hasse diagram width?
 #   y: in [0,20], as it's the number of triangles present
-#   z: in [0,10]: this is arbitrarily heights (for illustration;
+#   z: in [0,10]: this is arbitrary heights (for illustration;
 #     they're presumably inaccurate)
 p = function(x) {
-	A = rbind(c(7, 0.3, 0), c(0, 0.2, 1))
-#	A = rbind(c(1, 0, 0), c(0,0,1))
+	A = rbind(c(9, 0.3, 0), c(0, 0.2, 1))
 	A %*% x
 }
 
 # Plots counts, sort of.
 plot.counts = function() {
-	b = rbind(x1, 0:20, 0)	
-	p1 = t(p(b))
-	lines(p1)
-
-	b = rbind(-x1, 0:20, 0)	
-	p1 = t(p(b))
-	lines(p1)
+	b1 = rbind(x1, 0:20, 0)	
+	p1 = t(p(b1))
+	lines(p1, col="#00000040")
+	b2 = rbind(-x1, 0:20, 0)	
+	p2 = t(p(b2))
+	lines(p2, col="#00000040")
+	for(i in 1:21)
+		lines(rbind(p1[i,], p2[i,]), col="#00000040")
 }
 
 # Plots a subset of triangles.
 #   center: center of where to draw the triangles
 #   i: row indices to include
-#		label: label for the set
 #   r: radius of circle on which to put the points
+#		label: label for the set
 #   Side effects: draws a subset of triangles
-plot.tri.subset = function(center, i, label, r=1) {
+plot.tri.subset = function(center, i, r=0.8, label="") {
 	n = 6
   circle.points = r * cbind(cos(2*pi*(1:n)/n), sin(2*pi*(1:n)/n))
 #  print(circle.points)
@@ -47,6 +47,7 @@ plot.tri.subset = function(center, i, label, r=1) {
   draw.triangles(p,
 		vertex.6[i,,drop=FALSE],
     tri.colors$h[i], tri.colors$v[i])
+	text(center[1]-r, center[2]+r, label)
 }
 
 # Wrapper for the above which:
@@ -54,33 +55,36 @@ plot.tri.subset = function(center, i, label, r=1) {
 #   - draws a line down to the "ground"
 #   x, z: coordinates for the set
 #   i: the set (which will determine the y coordinate)
-plot.tri.subset.3d = function(x, z, i) {
+#   label: the label for the set
+plot.tri.subset.3d = function(x, z, i, label="") {
 	# create the coordinates
 	y = length(unique(i))
 	p0 = as.vector(p(t(t(c(x, y, 0)))))
 	p1 = as.vector(p(t(t(c(x, y, z)))))
 	lines(rbind(p0, p1), col="#00000040", lwd=3)
 	# for cheap perspective, make distant sets a bit smaller
-	plot.tri.subset(p1, i, r=1)  # -z/50)
+	plot.tri.subset(p1, i, r=1-y/70, label=label)
 }
 
-pdf("Hasse.pdf")
-# par(mar=c(0,0,0,0))
+pdf("Hasse.pdf", width=7, height=5)
+par(mar=c(0,0,0,0))
 world.bounds = cbind(c(-1,0,0), c(1,20,10))
-screen.bounds = range(p(world.bounds))
+# screen.bounds = range(p(world.bounds))
 
 plot(0,0,
 #	xlim=range(screen.bounds[1,]), ylim=range(screen.bounds[2,]),
-	xlim = screen.bounds, ylim = screen.bounds,
-	type="n")   #, xaxt="n", yaxt="n",xlab="", ylab="", bty="n")
+#	xlim = screen.bounds, ylim = screen.bounds,
+  xlim=c(-6,11), ylim=c(-0.2,12.2),
+	type="n", xaxt="n", yaxt="n",xlab="", ylab="", bty="n")
 
 plot.counts()
 
-plot.tri.subset.3d(0, 1, c(1))
-# plot.tri.subset.3d(0, 3, c(1,2))
-plot.tri.subset.3d(0, 3, c(1,2,5,11))
+plot.tri.subset.3d(0, 0.6, c(2), "a)")
+plot.tri.subset.3d(0, 2, c(1,2,5,11), "b)")
 v = which(apply(vertex.6, 1, function(a) all(a!=6)))
-plot.tri.subset.3d(0, 5, v)
-plot.tri.subset.3d(0, 7, c(1:20))
+plot.tri.subset.3d(0, 4.5, v, "c)")
+plot.tri.subset.3d(0, 7, c(1:20), "d)")
+plot.tri.subset.3d(-0.4, 3.1, c(1,2,5,11,3), "e)")
+plot.tri.subset.3d(0.36, 3.4, c(1,2,3,4), "f)")
 dev.off()
 

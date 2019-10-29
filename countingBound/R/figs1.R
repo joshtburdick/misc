@@ -1,6 +1,6 @@
 # Draws some figures.
 
-# colors
+# default triangle colors
 set.seed(1)
 tri.colors = data.frame(h=runif(20), v=runif(20, min=0.6,1))
 
@@ -93,6 +93,6 @@ abline(0,1, col="red")
 # FIXME shade the feasible regions?
 dev.off()
 
-# also add Hasse diagram?
-# source("Hasse.R")
+# various Hasse diagrams
+source("Hasse.R")
 

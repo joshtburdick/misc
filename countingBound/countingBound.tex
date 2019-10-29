@@ -26,21 +26,8 @@ $n$-vertex graph requires, on average, $\Omega(n^{k/2})$ NAND gates.
 Unfortunately,
 this doesn't directly bound the complexity of detecting {\em all} of the cliques.
 However, it seems like a possibly-related fact.
-Here, we explore some consequences of this idea, and attempt to
-use hyperclique coverings of random hypergraphs.
+Here, we explore some consequences of this idea.
 
-However, we can view a random subset of cliques as a randomly-chosen
-$k$-regular hypergraph on $n$ vertices.
-If we could cover such a hypergraph with a small number of large hypercliques,
-and we could detect cliques with few enough gates, we would contradict
-the average-case counting bound described above.
-This might provide a strategy for lower-bounding clique detection,
-but it depends on the size of the hyperclique covering.
-We present some strategies for hyperclique covering, based on
-probablistic graph theory arguments
-\cite{bollobas1976cliques} \cite{bollobas1993clique}.
-Unfortunately, these hyperclique coverings don't give a usable
-lower bound on clique detection.
 \end{abstract}
 
 \newpage
@@ -196,11 +183,32 @@ the most NAND gates could be finding a single $K_k$! That's easily ruled out
 
 The hardness of these functions depends
 on how the cliques they find are laid out.
-For instance, here are two sets of 20 triangles (``$K_3$s''),
-arranged in different ways. Although we only show 20 triangles here,
-we can imagine similarly-structured graphs with more triangles.
+
+Cliques are arguably difficult to draw in a two-dimensional space.
+As an approximate diagram reflecting what we know,
+we sketch a Hasse of possible subsets of cliques. Although
+we only draw a few subsets of three-vertex cliques
+on six vertices, hopefully
+many of the intuitions apply more generally.
 
 \includegraphics[width=1\textwidth]{R/Hasse.pdf}
+
+
+
+\begin{thm}
+\label{edgeZonking}
+Suppose a circuit finds 
+\end{thm}
+\begin{proof}
+Suppose we feed in
+\end{proof}
+
+This shows that finding many subsets of cliques is harder than
+many smaller subsets of cliques. This suggests that in general,
+finding more cliques requires more gates, but doesn't prove it.
+
+
+
 
 Triangles can be detected using matrix multiplication \cite{itai_finding_1977},
 and there are fast algorithms known for matrix multiplication
@@ -208,10 +216,6 @@ and there are fast algorithms known for matrix multiplication
 \cite{williams_multiplying_2012}, so
 the triangles on the left can be detected
 using fewer than one NAND gate per triangle (for large enough input graphs).
-\footnote{For smaller graphs, such as this with six vertices,
-it appears that 21 NAND gates are required
-\cite{burdick_triangles_6_vertex},
-although this proof hasn't been published or rigorously checked.}
 
 On the other hand, if the triangles overlap less (as on the right),
 then to detect all of the triangles, we will definitely need at least one
@@ -238,7 +242,32 @@ end up with a strictly smaller circuit which finds 6-cliques on
 the complexity of all those ``buggy'' circuits which find exactly half
 the cliques.
 
+
 \subsection{Counting slightly larger sets of functions}
+
+We construct somewhat larger sets of functions, based on
+which cliques they recognize. For instance, we can define the
+function PICKY-CLIQUE.
+
+
+\theoremstyle{definition}
+\begin{definition}{pickyClique}
+Let $A$ be a set of cliques, and $B \subset A$.
+Define PICKY-CLIQUE(A, B) to be the function which is 1 iff
+
+\begin{itemize}
+
+\item any clique in $A-B$ is present, {\em and}
+
+\item no clique in $B$ is present
+
+\end{itemize}
+Cliques outside of $A$ are ignored.
+
+\end{definition}
+
+
+
 
 We can also construct somewhat larger sets of functions. For instance,
 suppose that, rather than detecting or ignoring each clique, we assign
@@ -270,6 +299,9 @@ then feeding in 0's or 1's to the remaining edges:
 
 However, it seems hard to push this to arbitrary functions of ``which cliques are
 present'', because they start to overlap.
+
+
+
 
 
 \section{Related work}

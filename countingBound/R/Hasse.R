@@ -38,8 +38,10 @@ plot.counts = function() {
 #   i: row indices to include
 #   r: radius of circle on which to put the points
 #		label: label for the set
+#   tri.colors: colors for the triangles (
 #   Side effects: draws a subset of triangles
-plot.tri.subset = function(center, i, r=0.8, label="") {
+plot.tri.subset = function(center, i, r=0.8, label="",
+		tri.colors=tri.colors) {
 	n = 6
   circle.points = r * cbind(cos(2*pi*(1:n)/n), sin(2*pi*(1:n)/n))
 #  print(circle.points)
@@ -63,9 +65,33 @@ plot.tri.subset.3d = function(x, z, i, label="") {
 	p1 = as.vector(p(t(t(c(x, y, z)))))
 	lines(rbind(p0, p1), col="#00000040", lwd=3)
 	# for cheap perspective, make distant sets a bit smaller
-	plot.tri.subset(p1, i, r=1-y/70, label=label)
+	plot.tri.subset(p1, i, r=1-y/70, label=label,
+		tri.colors=tri.colors)
 }
 
+# Similar to plot.tri.subset.3d(), but plots triangles in
+# some hue, with some of them greyed out
+#   x, z: coordinates for the set
+#   hue: the hue for the set
+#   i: the larger set (as a vector of numbers)
+#   j: the greyed-out subset (as a vector of numbers)
+#     this will determine the y coordinate)
+#   label: the label for the set
+plot.tri.subset.3d.grey = function(x, z, hue, i, j, label="") {
+	# create the coordinates
+	y = length(unique(i))
+	p0 = as.vector(p(t(t(c(x, y, 0)))))
+	p1 = as.vector(p(t(t(c(x, y, z)))))
+	lines(rbind(p0, p1), col="#00000040", lwd=3)
+	# set up colors
+	colors1 = 
+
+	# for cheap perspective, make distant sets a bit smaller
+	plot.tri.subset(p1, i, r=1-y/70, label=label,
+		tri.colors=colors1)
+}
+
+# Hasse diagram, of some color-coded subsets.
 pdf("Hasse.pdf", width=7, height=5)
 par(mar=c(0,0,0,0))
 world.bounds = cbind(c(-1,0,0), c(1,20,10))
@@ -74,6 +100,26 @@ world.bounds = cbind(c(-1,0,0), c(1,20,10))
 plot(0,0,
 #	xlim=range(screen.bounds[1,]), ylim=range(screen.bounds[2,]),
 #	xlim = screen.bounds, ylim = screen.bounds,
+  xlim=c(-6,11), ylim=c(-0.2,12.2),
+	type="n", xaxt="n", yaxt="n",xlab="", ylab="", bty="n")
+
+plot.counts()
+
+plot.tri.subset.3d(0, 0.6, c(2), "a)")
+plot.tri.subset.3d(0, 2, c(1,2,5,11), "b)")
+v = which(apply(vertex.6, 1, function(a) all(a!=6)))
+plot.tri.subset.3d(0, 4.5, v, "c)")
+plot.tri.subset.3d(0, 7, c(1:20), "d)")
+plot.tri.subset.3d(-0.4, 2.7, c(1,2,5,11,3), "e)")
+plot.tri.subset.3d(0.35, 2.9, c(1,2,3,4), "f)")
+dev.off()
+
+# Hasse diagram, showing omitting edges.
+pdf("HasseWithOmissions.pdf", width=7, height=5)
+par(mar=c(0,0,0,0))
+world.bounds = cbind(c(-1,0,0), c(1,20,10))
+
+plot(0,0,
   xlim=c(-6,11), ylim=c(-0.2,12.2),
 	type="n", xaxt="n", yaxt="n",xlab="", ylab="", bty="n")
 

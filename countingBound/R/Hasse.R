@@ -78,6 +78,9 @@ plot.tri.subset.3d = function(x, z, i, label="") {
 #     this will determine the y coordinate)
 #   label: the label for the set
 plot.tri.subset.3d.grey = function(x, z, hue, i, j, label="") {
+	# make sure triangle indices in j are a subset of those
+	# in i (if they aren't already)
+	i = setdiff(i, j)
 	# create the coordinates
 	y = length(unique(i))
 	p0 = as.vector(p(t(t(c(x, y, 0)))))
@@ -88,10 +91,12 @@ plot.tri.subset.3d.grey = function(x, z, hue, i, j, label="") {
 	# for cheap perspective, make distant sets a bit smaller
 	plot.tri.subset(p1, i, r=1-y/70, label=label,
 		tri.colors=colors1)
-	# then, the grey sets
-	colors2 = data.frame(h=rep(0,20), v=rep(0,20))
-	plot.tri.subset(p1, j, r=1-y/70, label=label,
-		tri.colors=colors2)
+	# then, the grey sets (if any)
+	if (length(j) > 0) {
+		colors2 = data.frame(h=rep(0,20), v=rep(0,20))
+		plot.tri.subset(p1, j, r=1-y/70, label=label,
+			tri.colors=colors2)
+	}
 }
 
 # Hasse diagram, of some color-coded subsets.
@@ -125,6 +130,12 @@ plot(0,0,
   xlim=c(-6,11), ylim=c(-0.2,12.2),
 	type="n", xaxt="n", yaxt="n",xlab="", ylab="", bty="n")
 plot.counts()
-plot.tri.subset.3d.grey(0, 3, 0.5, c(1,2), c(3,4), "Z)")
+
+plot.tri.subset.3d.grey(0, 3, 2/3, c(1,2,3), c(), "Z)")
+plot.tri.subset.3d.grey(-0.1, 4, 2/3, c(1,2,3), c(1), "Z)")
+plot.tri.subset.3d.grey(0.1, 5, 2/3, c(1,2,3), c(1,2), "Z)")
+
+plot.tri.subset.3d.grey(0.3, 3, 0, c(1:20), c(1), "Z)")
+
 dev.off()
 

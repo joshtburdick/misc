@@ -83,12 +83,15 @@ plot.tri.subset.3d.grey = function(x, z, hue, i, j, label="") {
 	p0 = as.vector(p(t(t(c(x, y, 0)))))
 	p1 = as.vector(p(t(t(c(x, y, z)))))
 	lines(rbind(p0, p1), col="#00000040", lwd=3)
-	# set up colors
-	colors1 = 
-
+	# first, the sets of whatever color
+	colors1 = data.frame(h=rep(hue,20), v=rep(0.7,20))
 	# for cheap perspective, make distant sets a bit smaller
 	plot.tri.subset(p1, i, r=1-y/70, label=label,
 		tri.colors=colors1)
+	# then, the grey sets
+	colors2 = data.frame(h=rep(0,20), v=rep(0,20))
+	plot.tri.subset(p1, j, r=1-y/70, label=label,
+		tri.colors=colors2)
 }
 
 # Hasse diagram, of some color-coded subsets.
@@ -118,19 +121,10 @@ dev.off()
 pdf("HasseWithOmissions.pdf", width=7, height=5)
 par(mar=c(0,0,0,0))
 world.bounds = cbind(c(-1,0,0), c(1,20,10))
-
 plot(0,0,
   xlim=c(-6,11), ylim=c(-0.2,12.2),
 	type="n", xaxt="n", yaxt="n",xlab="", ylab="", bty="n")
-
 plot.counts()
-
-plot.tri.subset.3d(0, 0.6, c(2), "a)")
-plot.tri.subset.3d(0, 2, c(1,2,5,11), "b)")
-v = which(apply(vertex.6, 1, function(a) all(a!=6)))
-plot.tri.subset.3d(0, 4.5, v, "c)")
-plot.tri.subset.3d(0, 7, c(1:20), "d)")
-plot.tri.subset.3d(-0.4, 2.7, c(1,2,5,11,3), "e)")
-plot.tri.subset.3d(0.35, 2.9, c(1,2,3,4), "f)")
+plot.tri.subset.3d.grey(0, 3, 0.5, c(1,2), c(3,4), "Z)")
 dev.off()
 

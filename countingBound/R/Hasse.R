@@ -82,15 +82,17 @@ plot.tri.subset.3d.grey = function(x, z, hue, i, j, label="") {
 	# in i (if they aren't already)
 	i = setdiff(i, j)
 	# create the coordinates
-	y = length(unique(i))
+	y = length(unique(j))
 	p0 = as.vector(p(t(t(c(x, y, 0)))))
 	p1 = as.vector(p(t(t(c(x, y, z)))))
 	lines(rbind(p0, p1), col="#00000040", lwd=3)
-	# first, the sets of whatever color
-	colors1 = data.frame(h=rep(hue,20), v=rep(0.7,20))
-	# for cheap perspective, make distant sets a bit smaller
-	plot.tri.subset(p1, i, r=1-y/70, label=label,
-		tri.colors=colors1)
+	# first, the sets of whatever color (if any)
+	if (length(i) > 0) {
+		colors1 = data.frame(h=rep(hue,20), v=rep(0.7,20))
+		# for cheap perspective, make distant sets a bit smaller
+		plot.tri.subset(p1, i, r=1-y/70, label=label,
+			tri.colors=colors1)
+	}
 	# then, the grey sets (if any)
 	if (length(j) > 0) {
 		colors2 = data.frame(h=rep(0,20), v=rep(0,20))
@@ -135,7 +137,10 @@ plot.tri.subset.3d.grey(0, 3, 2/3, c(1,2,3), c(), "Z)")
 plot.tri.subset.3d.grey(-0.1, 4, 2/3, c(1,2,3), c(1), "Z)")
 plot.tri.subset.3d.grey(0.1, 5, 2/3, c(1,2,3), c(1,2), "Z)")
 
-plot.tri.subset.3d.grey(0.3, 3, 0, c(1:20), c(1), "Z)")
-
+plot.tri.subset.3d.grey(0, 3, 0, c(1:20), c(), "Z)")
+plot.tri.subset.3d.grey(-0.1, 3, 0, c(1:20), c(1), "Z)")
+plot.tri.subset.3d.grey(-0.2, 3, 0, c(1:20),
+	c(1,3,5,7,9,11,13,15,17), "Z)")
+plot.tri.subset.3d.grey(0, 3, 0, c(1:20), c(1:20), "Z)")
 dev.off()
 

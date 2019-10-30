@@ -10,7 +10,7 @@ tri.colors = data.frame(h=runif(20), v=runif(20, min=0.6,1))
 #     indices into x)
 #   h, v: hue and value of colors to use
 draw.triangles = function(x, corners, h, v) {
-  border = hsv(h, 1, v, 0.6)
+  border = hsv(h, 1, v, 0.7)
   fill = hsv(h, 0.5, v, 0.2)
   for(i in 1:nrow(corners)) {
     polygon(x[ corners[i,] , ], border = border[i], col = fill[i], lwd=2)  

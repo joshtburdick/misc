@@ -133,20 +133,39 @@ plot(0,0,
 	type="n", xaxt="n", yaxt="n",xlab="", ylab="", bty="n")
 plot.counts()
 
-plot.tri.subset.3d.grey(0, 0, 3, 2/3, c(1,2,3), c(), "a)")
+# at level 0
+plot.tri.subset.3d.grey(0, -0.5, 3,
+	0, c(1:20), c(), "a)")
+plot.tri.subset.3d.grey(0, -0.2, 2.5,
+	1/3, c(1:10), c(), "")
+plot.tri.subset.3d.grey(0, 0.3, 0.8,
+	2/3, c(1:3), c(), "")
 
-plot.tri.subset.3d.grey(-0.2, -0.4,
-  4, 0, c(1:20), c(1,2), "b)")
-plot.tri.subset.3d.grey(0.2, 0.4,
-  4, 2/3, c(1,2,3), c(1,2), "")
+# at level 2
+plot.tri.subset.3d.grey(0, -0.6, 5.5,
+  0, c(1:20), c(1,2), "b)")
+plot.tri.subset.3d.grey(0, 0, 2.5,
+  1/3, c(1:10), c(1,2), "")
+plot.tri.subset.3d.grey(0, 0.6, 0.8,
+  2/3, c(1:3), c(1,2), "")
+
+# at level 9
+plot.tri.subset.3d.grey(-0.1, -0.2, 5,
+	0, c(1:20), c(1:9), "c)")
+plot.tri.subset.3d.grey(0.1, 0.1, 2.5,
+	1/3, c(1:10), c(1:9), "")
+
+# at level 19
+plot.tri.subset.3d.grey(0, 0, 5,
+	0, c(1:20), c(1:19), "d)")
 
 # plot.tri.subset.3d.grey(0.1, 5, 2/3, c(1,2,3), c(1,2), "Z)")
 
 # plot.tri.subset.3d.grey(0, 3, 0, c(1:20), c(), "Z)")
 # plot.tri.subset.3d.grey(-0.1, 3, 0, c(1:20), c(1), "Z)")
 # plot.tri.subset.3d.grey(-0.2, 3, 0, c(1:20),
-#	c(1,3,5,7,9,11,13,15,17), "Z)")
+#  	c(1,3,5,7,9,11,13,15,17), "Z)")
 
-plot.tri.subset.3d.grey(0, 0, 3, 0, c(1:20), c(20), "Z)")
+# plot.tri.subset.3d.grey(0, 0, 3, 0, c(1:20), c(20), "Z)")
 dev.off()
 

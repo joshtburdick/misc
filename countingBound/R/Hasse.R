@@ -58,45 +58,45 @@ plot.tri.subset = function(center, i, r=0.8, label="",
 #   x, z: coordinates for the set
 #   i: the set (which will determine the y coordinate)
 #   label: the label for the set
-plot.tri.subset.3d = function(x, z, i, label="") {
+plot.tri.subset.3d = function(x, z, i, label="", r=0.8) {
 	# create the coordinates
 	y = length(unique(i))
 	p0 = as.vector(p(t(t(c(x, y, 0)))))
 	p1 = as.vector(p(t(t(c(x, y, z)))))
 	lines(rbind(p0, p1), col="#00000040", lwd=3)
 	# for cheap perspective, make distant sets a bit smaller
-	plot.tri.subset(p1, i, r=1-y/70, label=label,
+	plot.tri.subset(p1, i, r=r*(1-y/70), label=label,
 		tri.colors=tri.colors)
 }
 
 # Similar to plot.tri.subset.3d(), but plots triangles in
 # some hue, with some of them greyed out
-#   x, z: coordinates for the set
+#   x0, x1, z: coordinates for the set
 #   hue: the hue for the set
 #   i: the larger set (as a vector of numbers)
 #   j: the greyed-out subset (as a vector of numbers)
 #     this will determine the y coordinate)
 #   label: the label for the set
-plot.tri.subset.3d.grey = function(x, z, hue, i, j, label="") {
+plot.tri.subset.3d.grey = function(x0, x1, z, hue, i, j, label="", r=0.8) {
 	# make sure triangle indices in j are a subset of those
 	# in i (if they aren't already)
 	i = setdiff(i, j)
 	# create the coordinates
 	y = length(unique(j))
-	p0 = as.vector(p(t(t(c(x, y, 0)))))
-	p1 = as.vector(p(t(t(c(x, y, z)))))
+	p0 = as.vector(p(t(t(c(x0, y, 0)))))
+	p1 = as.vector(p(t(t(c(x1, y, z)))))
 	lines(rbind(p0, p1), col="#00000040", lwd=3)
 	# first, the sets of whatever color (if any)
 	if (length(i) > 0) {
 		colors1 = data.frame(h=rep(hue,20), v=rep(0.7,20))
 		# for cheap perspective, make distant sets a bit smaller
-		plot.tri.subset(p1, i, r=1-y/70, label=label,
+		plot.tri.subset(p1, i, r=r*(1-y/70), label=label,
 			tri.colors=colors1)
 	}
 	# then, the grey sets (if any)
 	if (length(j) > 0) {
 		colors2 = data.frame(h=rep(0,20), v=rep(0,20))
-		plot.tri.subset(p1, j, r=1-y/70, label=label,
+		plot.tri.subset(p1, j, r=r*(1-y/70), label=label,
 			tri.colors=colors2)
 	}
 }
@@ -133,14 +133,20 @@ plot(0,0,
 	type="n", xaxt="n", yaxt="n",xlab="", ylab="", bty="n")
 plot.counts()
 
-plot.tri.subset.3d.grey(0, 3, 2/3, c(1,2,3), c(), "Z)")
-plot.tri.subset.3d.grey(-0.1, 4, 2/3, c(1,2,3), c(1), "Z)")
-plot.tri.subset.3d.grey(0.1, 5, 2/3, c(1,2,3), c(1,2), "Z)")
+plot.tri.subset.3d.grey(0, 0, 3, 2/3, c(1,2,3), c(), "a)")
 
-plot.tri.subset.3d.grey(0, 3, 0, c(1:20), c(), "Z)")
-plot.tri.subset.3d.grey(-0.1, 3, 0, c(1:20), c(1), "Z)")
-plot.tri.subset.3d.grey(-0.2, 3, 0, c(1:20),
-	c(1,3,5,7,9,11,13,15,17), "Z)")
-plot.tri.subset.3d.grey(0, 3, 0, c(1:20), c(1:20), "Z)")
+plot.tri.subset.3d.grey(-0.2, -0.4,
+  4, 0, c(1:20), c(1,2), "b)")
+plot.tri.subset.3d.grey(0.2, 0.4,
+  4, 2/3, c(1,2,3), c(1,2), "")
+
+# plot.tri.subset.3d.grey(0.1, 5, 2/3, c(1,2,3), c(1,2), "Z)")
+
+# plot.tri.subset.3d.grey(0, 3, 0, c(1:20), c(), "Z)")
+# plot.tri.subset.3d.grey(-0.1, 3, 0, c(1:20), c(1), "Z)")
+# plot.tri.subset.3d.grey(-0.2, 3, 0, c(1:20),
+#	c(1,3,5,7,9,11,13,15,17), "Z)")
+
+plot.tri.subset.3d.grey(0, 0, 3, 0, c(1:20), c(20), "Z)")
 dev.off()
 

@@ -274,40 +274,25 @@ Cliques outside of $A$ are ignored.
 
 \end{defn}
 
+Note that when B is almost as large as A,
+this almost corresponds to the complement of
+$k$-CLIQUE (that is, detecting whether a graph
+{\em doesn't} contain a clique; not to be
+confused with the independent set problem).
 
 
+We can represent this using something akin
+to figure \ref{fig:Hasse}. In this case, however, we
+draw functions at the level of how many
+cliques force the output to be 0 (that is,
+the cliques in $B$).
 
-We can also construct somewhat larger sets of functions. For instance,
-suppose that, rather than detecting or ignoring each clique, we assign
-to each clique either 1, 0, or X, with this interpretation:
-
-\begin{itemize}
-
-\item 1: ``If any of these cliques is present, then output 1...''
-
-\item 0: ``...unless one of these cliques is present, in which case output 0.''
-
-\item X: ``(Ignore whether this clique is present).''
-
-\end{itemize}
-
-There are $3^{n \choose k}$ such strings. However, those consisting only of
-0's and X's always output 0, and so are indistinguishable, so there are
-only $3^{n \choose k} - 2^{n \choose k}$ distinct functions.
-
-The lower bound on the average hardness of computing these functions is
-slightly higher. However, this doesn't seem to help that much.
-
-Note that distinguishing the functions requires that we be able to have at
-least two distinct cliques either be present or absent. With two cliques,
-we can do this by feeding in 1's to any edges shared by the cliques, and
-then feeding in 0's or 1's to the remaining edges:
-
-\includegraphics[width=0.7\textwidth]{R/overlapping.pdf}
-
-However, it seems hard to push this to arbitrary functions of ``which cliques are
-present'', because they start to overlap.
-
+One notable feature of this is that when $A$ is
+larger, PICKY-$k$-CLIQUE includes functions
+throughout the Hasse diagram. This means that,
+intuitively, the average-case complexity of
+PICKY-$k$-CLIQUE is weighted towards cases
+in which $A$ is larger.
 
 
 

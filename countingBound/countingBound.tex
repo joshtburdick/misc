@@ -56,12 +56,15 @@ then there are $2^{2^m}$ possible functions from the $m$-input bitstring to
 a one-bit output. Each of these functions, being different, must have a
 different circuit.
 
+Let $f: \{0,1\}^m \rightarrow \{0,1\}$ be a function from bitvectors to bits.
 Let $\bigC(f)$ be the circuit
 with the fewest unbounded fan-in NAND
 gates computing $f$ (with ties broken
-arbitrarily). 
+arbitrarily), and let $|\bigC(f)| = g$ be the number of gates in
+said circuit. (This is standard notation, except for the use
+of NAND gates as a basis). 
 
-If we assume the circuit is made of NAND gates, and has $g$ gates, then the
+The
 circuit could have at most $gm$ wires from inputs to gates, and ${g \choose 2}$
 wires from gates to gates. We can view the possible circuits as a bitmask,
 containing a 1 everywhere a gate is connected to an input (or another gate),
@@ -127,6 +130,9 @@ gate adds many potential wires). Because of this, I think that the
 average case bound is just one fewer gates than the worst-case bound.
 
 \subsection{Counting CLIQUE-like functions}
+
+
+
 
 We now consider ``buggy'' NAND gate circuits (with any fan-in) which find some of the possible $k$-cliques in $n$-vertex
 graphs.

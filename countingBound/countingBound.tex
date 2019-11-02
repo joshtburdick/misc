@@ -3,19 +3,24 @@
 \usepackage{fullpage}
 \usepackage{graphicx}
 \usepackage{hyperref}
-\newtheorem{thm}{Theorem}[section]
 
 \theoremstyle{definition}
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{lem}[thm]{Lemma}
 \newtheorem{defn}{Definition}[section]
 \newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
 \newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
+\newcommand{\bigC}[0]{\mathcal{C}}
 \begin{document}
 \title{
 An attempt to connect Shannon's
 circuit counting bound with clique detection}
 
-\author{Josh Burdick ({\tt josh.t.burdick@gmail.com})}
+\author{Josh Burdick \\
+Howard Hughes Medical Institute \\
+{\tt josh.t.burdick@gmail.com}}
 \maketitle
+
 \begin{abstract}
 Shannon's function-counting argument
 \cite{shannon_synthesis_1949} showed that some Boolean functions have
@@ -24,10 +29,11 @@ of such a hard-to-compute function. A simple modification of that argument
 shows that detecting a randomly-chosen subset of the $k$-vertex cliques in an
 $n$-vertex graph requires, on average, $\Omega(n^{k/2})$ NAND gates.
 Unfortunately,
-this doesn't directly bound the complexity of detecting {\em all} of the cliques.
-However, it seems like a possibly-related fact.
-Here, we explore some consequences of this idea.
-
+this doesn't directly bound the complexity of detecting {\em all} of the cliques; however, it seems like a
+possibly related problem.
+Here, we attempt to connect this
+average-case bound on detecting some
+cliques, with the problem of detecting all of them.
 \end{abstract}
 
 \newpage
@@ -49,6 +55,11 @@ If there are $m$ inputs to a circuit,
 then there are $2^{2^m}$ possible functions from the $m$-input bitstring to
 a one-bit output. Each of these functions, being different, must have a
 different circuit.
+
+Let $\bigC(f)$ be the circuit
+with the fewest unbounded fan-in NAND
+gates computing $f$ (with ties broken
+arbitrarily). 
 
 If we assume the circuit is made of NAND gates, and has $g$ gates, then the
 circuit could have at most $gm$ wires from inputs to gates, and ${g \choose 2}$
@@ -117,16 +128,17 @@ average case bound is just one fewer gates than the worst-case bound.
 
 \subsection{Counting CLIQUE-like functions}
 
-We now consider NAND gate circuits (with any fan-in) which find $k$-cliques in $n$-vertex
+We now consider ``buggy'' NAND gate circuits (with any fan-in) which find some of the possible $k$-cliques in $n$-vertex
 graphs.
-
-We consider a set of ``buggy'' 6-clique finders. 
+For concreteness,
+consider a set of ``buggy'' 6-clique finders. 
 Maybe the circuit correctly
 finds all the cliques. Or maybe it finds all of the cliques except $K_{1..6}$,
 or it misses half the cliques, or finds none (and always outputs 0), or maybe
 it only successfully finds $K_{1,3,4,5,7,8}$, et cetera. More formally
 (and generally),
 we define a set of functions ({\em not} circuits):
+
 
 \begin{defn}
 \label{BUGGY-k-CLIQUE}
@@ -136,7 +148,7 @@ contains a function which is 1 if the input contains any $K_6 \in A$,
 and 0 otherwise.
 \end{defn}
 
-This clearly includes HAS-$k$-CLIQUE (which finds all the cliques).
+This clearly includes $k$-CLIQUE (which finds all the cliques).
 
 These functions are all distinct. If $f_1,f_2\in $BUGGY-$k$-CLIQUE$(n)$,
 then there's some $K_k$ such that if $y$ is the graph with {\em only}
@@ -188,10 +200,15 @@ Cliques are arguably difficult to draw in a two-dimensional space.
 As an approximate diagram reflecting what we know,
 we sketch a Hasse of possible subsets of cliques. Although
 we only draw a few subsets of three-vertex cliques
-on six vertices, hopefully
-many of the intuitions apply more generally.
+on six vertices, hopefully this provides some
+intuition.
 
+\begin{figure}
+\centering
 \includegraphics[width=1\textwidth]{R/Hasse.pdf}
+\caption{Hasse diagram of circuits}
+\label{fig:Hasse}
+\end{figure}
 
 
 
@@ -208,8 +225,6 @@ many smaller subsets of cliques. This suggests that in general,
 finding more cliques requires more gates, but doesn't prove it.
 
 
-
-
 Triangles can be detected using matrix multiplication \cite{itai_finding_1977},
 and there are fast algorithms known for matrix multiplication
 \cite{strassen_gaussian_1969}
@@ -220,12 +235,12 @@ using fewer than one NAND gate per triangle (for large enough input graphs).
 On the other hand, if the triangles overlap less (as on the right),
 then to detect all of the triangles, we will definitely need at least one
 gate per triangle.
-To see this, note that if we feed in a 0 to the input for one
-of the edges unique to some triangle, then any gate connected to
-that edge will only output a 1. We can repeat this for each of the
-triangles, constructing a series of strictly smaller circuits
-(this is essentially what I think is called
-the ``method of restrictions'' FIXME CITE).
+To see this, consider feeding in a 0 to the input for one
+of the edges unique to some triangle (this is a
+standard technique in circuit bounds).
+Then any gate connected to
+that edge will only output a constant 1. We can repeat this for each of the
+triangles, constructing a series of strictly smaller circuits, each of which 
 
 It seems intuitive that, in some sense, finding more cliques should
 be harder.
@@ -233,25 +248,18 @@ Indeed, since we're using NAND gates, we know that finding any non-empty
 subset of cliques is strictly harder than finding {\em some} other 
 smaller set of cliques (namely, the set you get after feeding in 0's to
 all the edges connected to some vertex).
-Unfortunately, this doesn't help much
-in the case of CLIQUE.  If we have a circuit which
-finds 6-cliques on 100 vertices, and feed in 0's to all edges connected to
-one vertex, we
-end up with a strictly smaller circuit which finds 6-cliques on
-99 vertices! We still haven't connected the complexity of CLIQUE with
-the complexity of all those ``buggy'' circuits which find exactly half
-the cliques.
+Unfortunately, the relevance of this to the difficulty
+of $k$-CLIQUE is not clear.
 
+\section{Counting slightly larger sets of functions}
 
-\subsection{Counting slightly larger sets of functions}
 
 We construct somewhat larger sets of functions, based on
 which cliques they recognize. For instance, we can define the
 function PICKY-CLIQUE.
 
 
-\theoremstyle{definition}
-\begin{definition}{pickyClique}
+\begin{defn}{pickyClique}
 Let $A$ be a set of cliques, and $B \subset A$.
 Define PICKY-CLIQUE(A, B) to be the function which is 1 iff
 
@@ -264,7 +272,7 @@ Define PICKY-CLIQUE(A, B) to be the function which is 1 iff
 \end{itemize}
 Cliques outside of $A$ are ignored.
 
-\end{definition}
+\end{defn}
 
 
 
@@ -340,69 +348,20 @@ then clique detection isn't in BQP.
 However, it's not clear what sort of quantum gates would be
 appropriate.
 
-\subsubsection{Counting the number of solutions to problems in NP: \#P}
-
-Could we modify the counting argument to address the complexity 
-of \#P? (I'm not even sure that counting cliques is
-\#P-complete FIXME check this?).
-
-Suppose we have a family of circuits which count how
-many $K_k$s are in an $n$-vertex graph $G$; call this number
-$k(G)$. These circuits would have to be able to output a number
-which is at most ${n \choose k}$, and so would need
-at least $\ceil{\lg {n \choose k}}$ outputs.
-
-Could we then apply the
-previous hypergraph-covering strategy to count a subset of the
-cliques? In this case, if hypergraphs A and B don't overlap, then
-$k(A \cup B) = k(A)+k(B)$. 
-But also, if $A \subset B$, then $k(B - A) = k(B)-k(A)$.
-Thus, if there is a way to represent the possible input
-hypergraphs as unions or differences of hypercliques, we
-would get a better upper bound, presumably leading to a
-sharper lower bound.
-
-Also, I don't know how well-studied
-covering hypergraphs with unions and intersections of
-hypercliques is. It seems potentially related to
-random hypergraph theory (FIXME cite keevah).
-(There's also the relatively minor problem of accounting for
-the bitwise complexity of doing arithmetic on counts of cliques).
-
 \section{Conclusion}
 
 We give a lower bound on finding {\em some} set of cliques.
 It is a modified form of Shannon's counting argument
-\cite{shannon_synthesis_1949}.
-
-We also present a connection between this argument and the problem of covering
-hypergraphs with hypercliques.
-It seems that if an arbitrary hypergraph can be covered with 
-``large'' hypercliques,
-then this would give a lower bound on the NAND gates required to
-detect cliques.
-
-Unfortunately, using several strategies for doing this covering,
-the bound was far less than one. If we could prove that
-smaller hyperclique coverings of random hypergraphs exist,
-this approach should yield a bound on clique detection.
-
-Unfortunately, it's not obvious that smaller hyperclique
-coverings do in fact exist.
-
- Possibly improving the covering
-strategy would help, but I'm not convinced it would help much.
+\cite{shannon_synthesis_1949}. Unfortunately,
+this doesn't seem directly related to the
+complexity of 
 
 \section{Acknowledgements}
 
 The author would like to thank William Gasarch for introducing him
-to lower bound strategies and probabilistic proofs about graphs.
-He would also like to thank the maintainers of
-several entertaining and relevant blogs, including but
-not limited to: the Computational Complexity blog
-(Lance Fortnow and William Gasarch), 
-G\"odel's Lost Letter (Richard Lipton and Ken Regan),
-and Shtetl-Optimized (Scott Aaronson). 
+to lower bound strategies and probabilistic proofs about graphs. He would
+also like to thank the Cheung lab for
+employment, and his parents for financial support.
 
 \bibliography{references}
 \bibliographystyle{abbrv}

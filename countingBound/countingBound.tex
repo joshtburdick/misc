@@ -8,6 +8,7 @@
 \newtheorem{thm}{Theorem}[section]
 \newtheorem{lem}[thm]{Lemma}
 \newtheorem{defn}{Definition}[section]
+\newtheorem{conj}{Conjecture}[section]
 \newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
 \newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
 \newcommand{\bigC}[0]{\mathcal{C}}
@@ -131,46 +132,70 @@ average case bound is just one fewer gates than the worst-case bound.
 
 \subsection{Counting CLIQUE-like functions}
 
-
-
+Suppose we are given an $n$-vertex graph.
+Let $k$-CLIQUE($n$) be the boolean function which
+detects $k$-cliques: it outputs 1 if any $k$-clique
+is present, and 0 otherwise. This is a classic
+NP-complete problem.
 
 We now consider ``buggy'' NAND gate circuits (with any fan-in) which find some of the possible $k$-cliques in $n$-vertex
 graphs.
-For concreteness,
+As a concrete example,
 consider a set of ``buggy'' 6-clique finders. 
 Maybe the circuit correctly
 finds all the cliques. Or maybe it finds all of the cliques except $K_{1..6}$,
 or it misses half the cliques, or finds none (and always outputs 0), or maybe
-it only successfully finds $K_{1,3,4,5,7,8}$, et cetera. More formally
-(and generally),
-we define a set of functions ({\em not} circuits):
+it only successfully finds $K_{1,3,4,5,7,8}$, et cetera.
 
+First, we define a variant of $k$-CLIQUE which only
+finds a subset of cliques. Throughout this section,
+we will let $K$ denote the set of all possible
+$k$-vertex cliques.
 
 \begin{defn}
-\label{BUGGY-k-CLIQUE}
-BUGGY-$k$-CLIQUE$(n)$ is the set of functions which recognize any set
-of $K_k$s. That is, for each set $A$ of $K_k$s, BUGGY-$k$-CLIQUE$(n)$
-contains a function which is 1 if the input contains any $K_6 \in A$,
-and 0 otherwise.
+\label{CLIQUE}
+Let $A \subset K$.
+CLIQUE$(A)$ is the set of functions which recognize any of the $K_k$s in $A$. That is, for each set $A$ of $K_k$s, CLIQUE$(A)$
+contains a function which is 1 if the input contains any $K_k \in A$,
+and 0 otherwise. (Using this nomenclature,
+$k$-CLIQUE(n) = $CLIQUE(K)$).
 \end{defn}
 
-This clearly includes $k$-CLIQUE (which finds all the cliques).
+We now define a set of functions:
 
-These functions are all distinct. If $f_1,f_2\in $BUGGY-$k$-CLIQUE$(n)$,
-then there's some $K_k$ such that if $y$ is the graph with {\em only}
-1's in that $K_k$ (and 0's elsewhere), $f_1(y) = 0$ and $f_2(y) = 1$.
+\begin{defn}
+\label{BUGGY-CLIQUE}
+Again, let $A \subseteq K$. Define
+
+\[
+BUGGY-CLIQUE(A) = \bigcup_{B \subseteq A} CLIQUE(B)
+\]
+\end{defn}
+
+
 
 Of course, many of these functions are quite similar (e.g. all but one of them
 output a 1 when you feed in all 1's). However, they're all slightly different.
 
 \begin{thm}
 \label{buggyDistinct}
-BUGGY-$k$-CLIQUE$(n)$ contains $2^{n \choose k}$ distinct functions.
+BUGGY-CLIQUE$(A)$ contains $2^{|A|}$ distinct functions.
 \end{thm}
 \begin{proof}
-That is how many subsets of the $K_k$s there are.
+
+Let $A,B \subset K$, with A and B different, and w.l.o.g.
+let $x \in A-B$. Then $CLIQUE(A)$ outputs 1 on the input
+with just the edges in $x$ set to 1 (and 0 everywhere else),
+while $CLIQUE(B)$ outputs a 0.
+
+There are $2^{|A|}$ many subsets of the $K_k$s there are,
+and by the above, each induces a distinct function.
 \end{proof}
 
+For a given $A$, many of the functions in $BUGGY-CLIQUE(A)$
+are similar (for instance, most
+of them output a 1 when all the edges are present);
+but they are all distinct.
 Although $2^{n \choose k}$ is a fairly large number,
 it's still comfortably less than $2^{2^{n \choose 2}}$, the number of boolean
 functions on the ${n \choose 2}$ input wires (one per edge).
@@ -192,7 +217,7 @@ Because we don't know that the circuit which finds {\em all} of the
 $K_k$s, is one of these larger circuits. As far as what I've
 shown thus far goes, it could be harder to find some weird subset of the $K_k$s.
 
-Indeed, as far as what I've formally shown goes, the problem which needs
+Indeed, as far as what we've formally shown goes, the problem which needs
 the most NAND gates could be finding a single $K_k$! That's easily ruled out
 (because that only needs one NAND gate, plus the output gate).
 
@@ -212,10 +237,9 @@ intuition.
 \begin{figure}
 \centering
 \includegraphics[width=1\textwidth]{R/Hasse.pdf}
-\caption{Hasse diagram of circuits}
+\caption{Hasse diagram of BUGGY-CLIQUE functions.}
 \label{fig:Hasse}
 \end{figure}
-
 
 
 \begin{thm}
@@ -287,6 +311,14 @@ $k$-CLIQUE (that is, detecting whether a graph
 confused with the independent set problem).
 
 
+\begin{figure}
+\centering
+\includegraphics[width=1\textwidth]{R/HasseWithOmissions.pdf}
+\caption{Hasse diagram of PICKY-CLIQUE functions.}
+\label{fig:Hasse}
+\end{figure}
+
+
 We can represent this using something akin
 to figure \ref{fig:Hasse}. In this case, however, we
 draw functions at the level of how many
@@ -318,15 +350,12 @@ Here we sketch other potential applications of this strategy.
 
 \subsubsection{The complement of NP: co-NP}
 
-FIXME is this right?
-
 Although there's no obvious reduction from co-NP to NP, essentially
 the same argument seems to work. Suppose some family of circuits
 checks that there {\em isn't} any $K_k$ in an $n$-vertex graph.
-Then we can check that an arbitrary graph is free of $K_k$s by
-ANDing together circuits which check that subsets of vertices are
-clear of $K_k$s. (ANDing them all together can be done with
-two additional NAND gates; there may be a cheaper way).
+Then we can construct circuits analogous to BUGGY-CLIQUE.
+
+(FIXME is this right?)
 
 \subsubsection{Quantum computation: BQP}
 

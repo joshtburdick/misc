@@ -133,27 +133,31 @@ plot(0,0,
 	type="n", xaxt="n", yaxt="n",xlab="", ylab="", bty="n")
 plot.counts()
 
+# set of triangles, intermediate in size
+s1 = c(1,2,3,4,5,6,11)
+s2 = setdiff(s1, 4)
+
 # at level 0
 plot.tri.subset.3d.grey(0, -0.5, 3,
 	0, c(1:20), c(), "a)")
 plot.tri.subset.3d.grey(0, -0.2, 2.5,
-	1/3, c(1:10), c(), "")
-plot.tri.subset.3d.grey(0, 0.3, 0.8,
+	1/3, s1, c(), "")
+plot.tri.subset.3d.grey(0, 0.19, 0.8,
 	2/3, c(1:3), c(), "")
 
 # at level 2
-plot.tri.subset.3d.grey(0, -0.6, 5.5,
+plot.tri.subset.3d.grey(0, -0.33, 5.5,
   0, c(1:20), c(1,2), "b)")
-plot.tri.subset.3d.grey(0, 0, 2.5,
-  1/3, c(1:10), c(1,2), "")
-plot.tri.subset.3d.grey(0, 0.6, 0.8,
+plot.tri.subset.3d.grey(0, -0.05, 2.5,
+  1/3, s1, c(1,2), "")
+plot.tri.subset.3d.grey(0, 0.33, 0.8,
   2/3, c(1:3), c(1,2), "")
 
-# at level 9
-plot.tri.subset.3d.grey(-0.1, -0.2, 5,
-	0, c(1:20), c(1:9), "c)")
+# somewhere in the middle
+plot.tri.subset.3d.grey(-0.1, 0, 5,
+	0, c(1:20), s2, "c)")
 plot.tri.subset.3d.grey(0.1, 0.1, 2.5,
-	1/3, c(1:10), c(1:9), "")
+	1/3, s1, s2, "")
 
 # at level 19
 plot.tri.subset.3d.grey(0, 0, 5,

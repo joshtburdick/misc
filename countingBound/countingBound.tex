@@ -288,7 +288,6 @@ We construct somewhat larger sets of functions, based on
 which cliques they recognize. For instance, we can define the
 function PICKY-CLIQUE.
 
-
 \begin{defn}{pickyClique}
 Let $A$ be a set of cliques, and $B \subset A$.
 Define PICKY-CLIQUE(A, B) to be the function which is 1 iff
@@ -309,6 +308,22 @@ this almost corresponds to the complement of
 $k$-CLIQUE (that is, detecting whether a graph
 {\em doesn't} contain a clique; not to be
 confused with the independent set problem).
+
+\begin{thm}
+\label{pickyDistinct}
+PICKY-CLIQUE$(A)$ contains $2^{|A|}$ distinct functions.
+\end{thm}
+\begin{proof}
+
+Let $A,B \subset K$, with A and B different, and w.l.o.g.
+let $x \in A-B$. Then $CLIQUE(A)$ outputs 1 on the input
+with just the edges in $x$ set to 1 (and 0 everywhere else),
+while $CLIQUE(B)$ outputs a 0.
+
+There are $2^{|A|}$ many subsets of the $K_k$s there are,
+and by the above, each induces a distinct function.
+\end{proof}
+
 
 
 \begin{figure}
@@ -343,6 +358,15 @@ function-counting argument \cite{shannon_synthesis_1949}.
 Broadly speaking, the idea of using an upper bound to prove a lower bound
 is not new. Aaronson describes this as ``ironic complexity theory''
 \cite{aaronson_pnp}, and mentions several recent applications of it.
+
+A related question is whether problems
+(such as $k$-SAT) are
+hard on average \cite{bogdanov2006average}.
+These efforts seem to focus more on whether
+random
+instances of a given problem are hard, rather
+than using random problems to show that
+a specific problem is hard.
 
 \subsection{Possible relevance to other problems}
 

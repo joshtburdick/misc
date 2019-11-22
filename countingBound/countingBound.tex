@@ -18,7 +18,6 @@ An attempt to connect Shannon's
 circuit counting bound with clique detection}
 
 \author{Josh Burdick \\
-Howard Hughes Medical Institute \\
 {\tt josh.t.burdick@gmail.com}}
 \maketitle
 
@@ -212,7 +211,7 @@ Applying Theorem
 ${\sqrt {2 {n \choose {k/2}} + b^2}} - b = \Omega(n^{k/2})$ 
 NAND gates (where $b = {k \choose 2} - 0.5$).
 
-Why doesn't this bound HAS-$k$-CLIQUE?
+Why doesn't this bound $k$-CLIQUE?
 Because we don't know that the circuit which finds {\em all} of the
 $K_k$s, is one of these larger circuits. As far as what I've
 shown thus far goes, it could be harder to find some weird subset of the $K_k$s.
@@ -237,29 +236,41 @@ intuition.
 \begin{figure}
 \centering
 \includegraphics[width=1\textwidth]{R/Hasse.pdf}
-\caption{Hasse diagram of BUGGY-CLIQUE functions.}
+\caption{Hasse diagram of BUGGY-CLIQUE functions.
+(a-d) 
+Detecting all the possible cliques in larger graphs will be
+increasingly difficult (although {\em how much} harder isn't clear).
+(e) 
+Detecting this set of cliques is definitely harder than (b),
+since we can convert from (e) to (b) by feeding in 0's to
+some set of edges.
+(f) Detecting a set of cliques which doesn't overlap much will be
+harder than detecting the same number of cliques, when they overlap
+maximally (as in (b)).}
 \label{fig:Hasse}
 \end{figure}
 
 
 \begin{thm}
 \label{edgeZonking}
-Suppose a circuit finds 
+Let $A \subsetneq B \subseteq K$, such that $B$ covers input edges
+which $A$ doesn't. Then $|\bigC(B)| > |\bigC(A)|$.
 \end{thm}
 \begin{proof}
-Suppose we feed in
+Feed in a 0 to an edge which is in $B$ but not $A$. At least one
+NAND gate will only output a 1.
 \end{proof}
 
-This shows that finding many subsets of cliques is harder than
-many smaller subsets of cliques. This suggests that in general,
-finding more cliques requires more gates, but doesn't prove it.
-
+This shows that sometimes, finding a larger set of cliques is
+harder. However, the above theorem doesn't help if the two
+sets of cliques cover the same set of edges.
 
 Triangles can be detected using matrix multiplication \cite{itai_finding_1977},
 and there are fast algorithms known for matrix multiplication
 \cite{strassen_gaussian_1969}
-\cite{williams_multiplying_2012}, so
-the triangles on the left can be detected
+\cite{williams_multiplying_2012}, so the set of all possible
+cliques on some set of vertices
+ can be detected
 using fewer than one NAND gate per triangle (for large enough input graphs).
 
 On the other hand, if the triangles overlap less (as on the right),
@@ -271,6 +282,11 @@ standard technique in circuit bounds).
 Then any gate connected to
 that edge will only output a constant 1. We can repeat this for each of the
 triangles, constructing a series of strictly smaller circuits, each of which 
+detects some set of cliques. (Thus, for large enough graphs,
+graphs analogous to \ref{fig:Hasse} (f), which don't overlap much,
+require more NAND gates to detect than graphs 
+analogous to (b), which overlap
+a lot).
 
 It seems intuitive that, in some sense, finding more cliques should
 be harder.
@@ -282,7 +298,6 @@ Unfortunately, the relevance of this to the difficulty
 of $k$-CLIQUE is not clear.
 
 \section{Counting slightly larger sets of functions}
-
 
 We construct somewhat larger sets of functions, based on
 which cliques they recognize. For instance, we can define the
@@ -311,17 +326,13 @@ confused with the independent set problem).
 
 \begin{thm}
 \label{pickyDistinct}
-PICKY-CLIQUE$(A)$ contains $2^{|A|}$ distinct functions.
+PICKY-CLIQUE$(A)$ contains $3^{|A|} - 2^{|A|}$ distinct functions.
 \end{thm}
 \begin{proof}
 
-Let $A,B \subset K$, with A and B different, and w.l.o.g.
-let $x \in A-B$. Then $CLIQUE(A)$ outputs 1 on the input
-with just the edges in $x$ set to 1 (and 0 everywhere else),
-while $CLIQUE(B)$ outputs a 0.
 
-There are $2^{|A|}$ many subsets of the $K_k$s there are,
-and by the above, each induces a distinct function.
+
+
 \end{proof}
 
 
@@ -329,7 +340,8 @@ and by the above, each induces a distinct function.
 \begin{figure}
 \centering
 \includegraphics[width=1\textwidth]{R/HasseWithOmissions.pdf}
-\caption{Hasse diagram of PICKY-CLIQUE functions.}
+\caption{Hasse diagram of PICKY-CLIQUE functions. 
+}
 \label{fig:Hasse}
 \end{figure}
 

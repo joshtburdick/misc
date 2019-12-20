@@ -231,7 +231,7 @@ the most NAND gates could be finding a single $K_k$! That's easily ruled out
 The hardness of these functions depends
 on how the cliques they find are laid out.
 
-Cliques are arguably difficult to draw in a two-dimensi onal space.
+Cliques are arguably difficult to draw in a two-dimensional space.
 As an approximate diagram reflecting what we know,
 we sketch a Hasse of possible subsets of cliques. Although
 we only draw a few subsets of three-vertex cliques
@@ -293,20 +293,70 @@ require more NAND gates to detect than graphs
 analogous to (b), which overlap
 a lot).
 
+\subsection{Defining levels of CLIQUE}
+
+An intuitive measure for how hard a set of cliques
+is to find is, simply, the number of cliques.
+
+As alluded to above, we know that there's at least 
+
+
+\begin{defn}
+\label{CLIQUE-level}
+Assume $n, k$ are fixed. Let $K_l$ be the set of all sets
+with exactly $l$ cliques. 
+\end{defn}
+
+The definitions of $CLIQUE(K_l)$ and $\bigC(CLIQUE(K_l))$ then
+follow obviously.
+
+\subsubsection{Concavity}
+
+What can we say about $E[\bigC(CLIQUE(K_l))]$? If we could
+prove something in general, for all levels $l$, then we'd be bounding
+$CLIQUE = CLIQUE(K_N)$.
+
+
+\begin{thm}
+\label{concavity}
+Pick $a, b$ with $0 < a < b < a+b < N$. We have:
+\[
+E[|\bigC(CLIQUE(K_{a+b}))] \le
+E[|\bigC(CLIQUE(K_a))|] + E[|\bigC(CLIQUE(K_b))|]
+\]
+
+In other words, $E[|\bigC(CLIQUE(K_l))|]$ is ``concave downward''.
+\end{thm}
+\begin{proof}
+Consider a random set in $K_{a+b}$. Break it randomly into
+two sets, which are in $K_a$ and $K_b$, and pick minimal
+circuits which find each of these. We can then OR them together
+(using no additional gates -- FIXME is this true?), and end up
+with a circuit for the edges in $K_{a+b}$
+
+All the choices there are arbitrary, and so we're overcounting
+the circuits in $K_a$ and $K_b$. But we're overcounting them all
+the same number of times.
+\end{proof}
+
+This is the sort of proof which combinatorialists (sp?)
+might like, and is all well and good. But
+it is unfortunately not helpful in
+terms of proving CLIQUE is difficult.
 It seems intuitive that, in some sense, finding more cliques should
 be harder.
 Indeed, since we're using NAND gates, we know that finding any non-empty
 subset of cliques is strictly harder than finding {\em some} other 
-smaller set of cliques (namely, the set you get after feeding in 0's to
-all the edges connected to some vertex).
-Unfortunately, the relevance of this to the difficulty
-of $k$-CLIQUE is not clear.
+smaller set of cliques \ref{edgeZonking}.
+
 
 \section{Counting slightly larger sets of functions}
 
-We construct somewhat larger sets of functions, based on
+We can construct somewhat larger sets of functions, based on
 which cliques they recognize. For instance, we can define the
 function PICKY-CLIQUE.
+
+FIXME make A and B disjoint sets?
 
 \begin{defn}{pickyClique}
 Let $A$ be a set of cliques, and $B \subset A$.
@@ -364,8 +414,29 @@ intuitively, the average-case complexity of
 PICKY-$k$-CLIQUE is weighted towards cases
 in which $A$ is larger.
 
+\subsection{Levels of PICKY-CLIQUE}
 
+One obvious way of implementing any function in PICKY-CLIQUE
+is by using a circuit to find everything in $A$, and then
+masking it with everything in $B$.
 
+\[
+E[|\bigC(PICKY-CLIQUE(A, B))|] \le
+E[|\bigC(CLIQUE(A))|] + E[|\bigC(CLIQUE(B))|]
+\]
+
+Turning this around, we have:
+
+\[
+E[|\bigC(CLIQUE(A))|]
+\ge
+E[|\bigC(PICKY-CLIQUE(A, B))|] - E[|\bigC(CLIQUE(B))|]
+\]
+
+Note that we can also use a circuit for $CLIQUE(A \cup B)$,
+and then mask out everything in $B$.
+
+It's not clear that this helps, though.
 
 \section{Related work}
 

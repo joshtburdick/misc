@@ -35,7 +35,7 @@ let rec term_iter_1 vars depth f =
 					(fun b -> f (App (a, b)))))) in
 term_iter_1 [] depth f
 
-(** (approximate) normal form *)
+(** XXX (approximate) normal form *)
 let nf x = reduce 50 x
 
 let is_nf x = alpha_equiv x (nf x)
@@ -43,7 +43,7 @@ let is_nf x = alpha_equiv x (nf x)
 (** "approximately normalizable" *)
 let is_normy x = is_nf (reduce 50 x)
 
-(** Tests whether x is in the "retract set" r *)
+(** Tests whether z is in the "retract set" r *)
 let is_in_retract r z =
 let x1 = nf z in alpha_equiv x1 (nf (App (r, z)))
 (*
@@ -74,9 +74,9 @@ let r x =
   let f = Abstr(b, App(Abstr(x1, App(x, App(x, Var(b)))), x)) in
 	  ((is_nf x) && (alpha_equiv (nf x) (nf f)))
 
-let search_for_inhabitants _ =
+let search_for_inhabitants r =
 	let process_term x =
-		(if (is_in_retract si x) then
+		(if (is_nf x) && (is_in_retract r x) then
 		(print_term x; print_string "\n\n")) in
 	term_iter process_term 4
 
@@ -135,7 +135,16 @@ let read_term _ =
   let lexbuf = Lexing.from_channel stdin in
   Parser.main Lexer.token lexbuf
 
+(* for debugging: print reductions
 let _ =
   let a = read_term() in
   reduce_and_print 100 a
+*)
+
+(* attempt at printing what's in retract *)
+let _ =
+  let a = read_term() in
+  search_for_inhabitants a
+
+
 

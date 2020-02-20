@@ -196,7 +196,7 @@ let yyact = [|
 ; (fun __caml_parser_env ->
     let _1 = (Parsing.peek_val __caml_parser_env 0 : string) in
     Obj.repr(
-# 38 "parser.mly"
+# 37 "parser.mly"
           ( let x = ref _1
             in add symbol _1 x; _1 )
 # 203 "parser.ml"
@@ -204,7 +204,7 @@ let yyact = [|
 ; (fun __caml_parser_env ->
     let _1 = (Parsing.peek_val __caml_parser_env 0 : 'expr1) in
     Obj.repr(
-# 42 "parser.mly"
+# 41 "parser.mly"
             ( _1 )
 # 210 "parser.ml"
                : 'app))
@@ -212,21 +212,21 @@ let yyact = [|
     let _1 = (Parsing.peek_val __caml_parser_env 1 : 'app) in
     let _2 = (Parsing.peek_val __caml_parser_env 0 : 'expr1) in
     Obj.repr(
-# 43 "parser.mly"
+# 42 "parser.mly"
                 ( App (_1, _2) )
 # 218 "parser.ml"
                : 'app))
 ; (fun __caml_parser_env ->
     let _1 = (Parsing.peek_val __caml_parser_env 0 : string) in
     Obj.repr(
-# 46 "parser.mly"
+# 45 "parser.mly"
           ( let x = find symbol _1 in Var (x) )
 # 225 "parser.ml"
                : 'expr1))
 ; (fun __caml_parser_env ->
     let _2 = (Parsing.peek_val __caml_parser_env 1 : 'expr) in
     Obj.repr(
-# 47 "parser.mly"
+# 46 "parser.mly"
                         ( _2 )
 # 232 "parser.ml"
                : 'expr1))

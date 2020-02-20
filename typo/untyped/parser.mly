@@ -34,7 +34,6 @@ expr:
 let_binding:
   LET bind EQUAL expr SEMICOLON  { ($2, $4) }
 */
-
 bind: ID 	{ let x = ref $1
             in add symbol $1 x; $1 }
 

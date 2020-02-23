@@ -116,9 +116,19 @@ g & = & -b \pm \sqrt{ b^2 + 2w} \\
 \end{eqnarray*}
 
 Thus, given a set of functions, we know that at least one of them requires
-some number of gates.
+this many gates.
 
-\subsection{Bounding the average number of gates}
+This expression is a bit inconvenient, and as $n$ increases, we
+expect the number of gates to be much larger than the number of
+inputs $b$. To avoid such issues, we can count the number of gates
+beyond the number of inputs. This gives the bound
+
+\begin{eqnarray*}
+g & \ge & {\sqrt 2w} - m \\
+\end{eqnarray*}
+
+
+\subsection{Bounding the mean and variance of the number of gates}
 
 We can also count the total number of functions from $m$ input bits to one
 output bit, using up to $g$ NAND gates, as
@@ -127,12 +137,42 @@ output bit, using up to $g$ NAND gates, as
 \sum_{i=0}^{g-1} 2^{m+i} & = & 2^{m+g} - 2^m
 \end{eqnarray*}
 
-If we're counting circuits with up to $g$ gates, then some of the circuits
+As a first crude approximation:
+if we're counting circuits with up to $g$ gates, then some of the circuits
 have fewer than $g$ gates. This somewhat complicates the book-keeping.
 However, {\em most} of the
 circuits have $g$ gates. (Indeed, well over half, since each additional
 gate adds many potential wires). Because of this, I think that the
 average case bound is just one fewer gates than the worst-case bound.
+
+(Side note: if we have a series of increasingly large
+sets of functions
+$A_1 \subset A_2 ...$, we know that the size of the smallest and
+largest circuit is decreasing and increasing. But we don't know
+anything about the expected circuit size.)
+
+What about the variance of the number of gates? That depends on the
+expected number of gates. If we have a large number of functions,
+if their circuits are all small, then their circuits must differ in
+size a fair amount, because each ``layer'' can only fit a limited
+number of circuits, and thus functions. A larger number of gates
+can be ``wired together'' in many more ways.
+
+It's not clear how important this is, but supposing it is: consider
+the following metaphor. Imagine, if you will, a conical martini
+glass of circuits, with smaller circuits at the bottom. Ignoring
+the number of wires, this represents (on log scale) how many
+functions can have a given size\footnote{Biologists may
+prefer to think of conical centrifugation tubes.}.
+If the functions are crammed into the bottom of the tube, then
+at the bottom, they must differ in size a fair amount. Further up,
+a narrow slice can fit a larger ``slice'' of functions.
+
+Somewhat more rigorously:
+
+
+
+
 
 \subsection{Counting CLIQUE-like functions}
 
@@ -436,7 +476,22 @@ E[|\bigC(PICKY-CLIQUE(A, B))|] - E[|\bigC(CLIQUE(B))|]
 Note that we can also use a circuit for $CLIQUE(A \cup B)$,
 and then mask out everything in $B$.
 
-It's not clear that this helps, though.
+Furthermore, we can reverse this, and ``repair'' 
+PICKYCLIQUE(A, B) to find all of CLIQUE(A), by ORing together
+a circuit for PICKYCLIQUE(A, B) and a circuit for CLIQUE(B).
+(Then, if there are no cliques in B, but there's a clique in A,
+we'll see it; we'll also see if there {\em is} a clique in B).
+
+Combined, this implies that the functions in
+PICKYCLIQUE(A, B) are ``near'' functions in CLIQUE(A) in
+complexity. In terms of the previous metaphor, PICKYCLIQUE(A, B)
+is surrounded by a layer of styrofoam peanuts, depending on how
+large B is. Intuitively, it seems that larger A should be
+``near'' a larger set of functions B, forcing A to have more
+gates.
+
+This is merely an intuition, though.
+
 
 \section{Related work}
 

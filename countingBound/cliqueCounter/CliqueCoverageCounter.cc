@@ -55,3 +55,38 @@ bits CliqueCoverageCounter::randomBitset(int numBits) {
     return b;
 }
 
+/** Prints total coverage counts, for all possible graphs.
+  Note that this may be slow.
+
+  XXX Note that this uses the cliqueCount and coveredEdgeCount
+  vectors in a different way -- as a total across many different
+  hypergraphs, rather than in only one hypergraph.
+ */
+bool CliqueCoverageCounter::printCoverageAllHypergraphs() {
+    // if the number of edges is more than 62, just punt
+    if (cliques.getNumEdges() >= 62)
+      return false;
+    // this will track which hyperedges in g are covered
+    bits coveredEdges(cliques.getNumEdges());
+    // loop through the possible hypergraphs
+    for(unsigned int i=0; i < (1ul << cliques.getNumEdges()); i++) {
+      // convert counter to a hypergraph
+      bits g(cliques.getNumEdges(), i);
+      // check for cliques of each size
+      for(int k = 0; k <= cliques.max_clique_size_; ++k) {
+        // add to totals of each size
+        cliqueCount[k] += cliques.getCoveredEdges(g, k, coveredEdges);
+        coveredEdgeCount[k] += coveredEdges.count();
+      }
+    }
+    // print the (total!) counts
+    for(int k = 0; k <= cliques.max_clique_size_; ++k)
+        cout << cliqueCount[k] << " ";
+    cout << " ";  // add a tiny bit of formatting
+    for(int k = 0; k <= cliques.max_clique_size_; ++k)
+        cout << coveredEdgeCount[k] << " ";
+    cout << endl;
+
+    return true;
+}
+

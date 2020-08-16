@@ -17,6 +17,8 @@ int main(int argc, char** argv) {
         cerr << "  (can be much smaller than n)" << endl;
         cerr << "numSamples: number of (pairs of) samples" << endl;
         cerr << "  (as this samples graphs and their complements" << endl;
+        cerr << "  If this is -1, loop through all possible (hyper)graphs" << endl;
+        cerr << "    (note that this may be slow)" << endl;
         return 1;
     }
 
@@ -34,9 +36,22 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-    CliqueCoverageCounter counter(n, r, maxCliqueSize);
-    for(int s = 0; s <= numSamples; ++s)
-        counter.printCoverageCounts();
+    if (numSamples > 0) {
+      // print some number of samples
+      CliqueCoverageCounter counter(n, r, maxCliqueSize);
+      for(int s = 0; s <= numSamples; ++s)
+          counter.printCoverageCounts();
+    }
+    else {
+      // print totals for all possible hypergraphs
+      // first, print parameters
+      cout << n << " " << r << " " << maxCliqueSize << "  ";
+      // loop through all the possible hypergraphs
+      CliqueCoverageCounter counter(n, r, maxCliqueSize);
+      r = counter.printCoverageAllHypergraphs();
+      return (r ? 1 : 0); 
+    }
+
     return 0;
 }
 

@@ -23,12 +23,17 @@ public:
         Side effects: prints counts to standard output */
     void printCoverageCounts();
 
+    /** Print coverage totals for all possible hypergraphs.
+      (Note that, in general, this is slow).
+      Returns: true on success */
+    bool printCoverageAllHypergraphs();
+
 private:
     /** List of cliques to check for. */
     CliqueList cliques;
 
     /** The counts of cliques of each size. */
-    vector<int> cliqueCount;        
+    vector<int> cliqueCount;
 
     /** The counts of edges covered by each size of clique. */
     vector<int> coveredEdgeCount;        

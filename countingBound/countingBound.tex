@@ -128,7 +128,7 @@ g & \ge & {\sqrt 2w} - m \\
 \end{eqnarray*}
 
 
-\subsection{Bounding the mean and variance of the number of gates}
+\subsection{Bounding the mean number of gates}
 
 We can also count the total number of functions from $m$ input bits to one
 output bit, using up to $g$ NAND gates, as
@@ -151,6 +151,8 @@ $A_1 \subset A_2 ...$, we know that the size of the smallest and
 largest circuit is decreasing and increasing. But we don't know
 anything about the expected circuit size.)
 
+\subsection{Bounding the variance of the number of gates}
+
 What about the variance of the number of gates? That depends on the
 expected number of gates. If we have a large number of functions,
 if their circuits are all small, then their circuits must differ in
@@ -163,12 +165,21 @@ the following metaphor. Imagine, if you will, a conical martini
 glass of circuits, with smaller circuits at the bottom. Ignoring
 the number of wires, this represents (on log scale) how many
 functions can have a given size\footnote{Biologists may
-prefer to think of conical centrifugation tubes.}.
+prefer to think of conical centrifuge tubes.}.
 If the functions are crammed into the bottom of the tube, then
-at the bottom, they must differ in size a fair amount. Further up,
-a narrow slice can fit a larger ``slice'' of functions.
+at the bottom, they must fill up a fairly large ``slice''.
+Further up,
+a narrow ``slice'' can more functions. 
 
-Somewhat more rigorously:
+(Furthermore, it seems that if some set of functions has a
+high-ish variance, it may require a lot of gates to implement,
+even if the set doesn't contain very many functions.
+Unclear if this is useful, though).
+
+Slightly more rigorously:
+
+
+
 
 
 
@@ -273,7 +284,7 @@ on how the cliques they find are laid out.
 
 Cliques are arguably difficult to draw in a two-dimensional space.
 As an approximate diagram reflecting what we know,
-we sketch a Hasse of possible subsets of cliques. Although
+we sketch a Hasse diagram of possible subsets of cliques. Although
 we only draw a few subsets of three-vertex cliques
 on six vertices, hopefully this provides some
 intuition.
@@ -338,8 +349,8 @@ a lot).
 An intuitive measure for how hard a set of cliques
 is to find is, simply, the number of cliques.
 
-As alluded to above, we know that there's at least 
-
+As alluded to above, we know that there's at least ... 
+(FIXME omit this, as I don't know what it means?).
 
 \begin{defn}
 \label{CLIQUE-level}
@@ -353,8 +364,10 @@ follow obviously.
 \subsubsection{Concavity}
 
 What can we say about $E[\bigC(CLIQUE(K_l))]$? If we could
-prove something in general, for all levels $l$, then we'd be bounding
-$CLIQUE = CLIQUE(K_N)$.
+prove something in general, for all levels $l$, then at
+the top of the diagram, we'd be bounding
+$CLIQUE = CLIQUE(K_N)$. (This suggests that doing that would
+be difficult...)
 
 
 \begin{thm}
@@ -371,8 +384,12 @@ In other words, $E[|\bigC(CLIQUE(K_l))|]$ is ``concave downward''.
 Consider a random set in $K_{a+b}$. Break it randomly into
 two sets, which are in $K_a$ and $K_b$, and pick minimal
 circuits which find each of these. We can then OR them together
-(using no additional gates -- FIXME is this true?), and end up
-with a circuit for the edges in $K_{a+b}$
+by taking all wires leading to the second circuit's output gate,
+and connecting them to the first circuit's output gate (this
+actually uses one fewer gate).
+(FIXME check this, and maybe add a picture?)
+We end up
+with a circuit for the cliques in $K_{a+b}$
 
 All the choices there are arbitrary, and so we're overcounting
 the circuits in $K_a$ and $K_b$. But we're overcounting them all
@@ -399,7 +416,7 @@ function PICKY-CLIQUE.
 FIXME make A and B disjoint sets?
 
 \begin{defn}{pickyClique}
-Let $A$ be a set of cliques, and $B \subset A$.
+Let $A$ be a set of cliques, and $B \subsetneq A$.
 Define PICKY-CLIQUE(A, B) to be the function which is 1 iff
 
 \begin{itemize}
@@ -421,16 +438,17 @@ confused with the independent set problem).
 
 \begin{thm}
 \label{pickyDistinct}
-PICKY-CLIQUE$(A)$ contains $3^{|A|} - 2^{|A|}$ distinct functions.
+PICKY-CLIQUE$(A)$ contains $2^{|A|} - 1$ distinct functions.
 \end{thm}
 \begin{proof}
-
-
-
-
+PICKY-CLIQUE$(A)$ is ``paying attention'' to $|A|$ cliques
+We can label each clique $c$ with a 1 (if it's in $A-B$),
+or 0 (if it's in $B$). Any assignment of these (except all 0's)
+is a different function.
 \end{proof}
 
-
+(??? there are a lot of alternative ways to define this;
+this may not be the best option).
 
 \begin{figure}
 \centering
@@ -488,10 +506,9 @@ complexity. In terms of the previous metaphor, PICKYCLIQUE(A, B)
 is surrounded by a layer of styrofoam peanuts, depending on how
 large B is. Intuitively, it seems that larger A should be
 ``near'' a larger set of functions B, forcing A to have more
-gates.
-
-This is merely an intuition, though.
-
+gates. At the tippy top of the Hasse diagram, we need to squish
+into the cone of circuits not only CLIQUE, but also many functions
+somewhat like CLIQUE.
 
 \section{Related work}
 

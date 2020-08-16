@@ -10,7 +10,7 @@ using namespace std;
 
 int main(int argc, char** argv) {
     if (argc != 5) {
-        cerr << "usage: coverage n r maxCliqueSize" << endl;
+        cerr << "usage: coverage n r maxCliqueSize numSamples" << endl;
         cerr << "n: number of vertices" << endl;
         cerr << "r: number of vertices per (hyper)edge" << endl;
         cerr << "maxCliqueSize: only look for cliques up to this size" << endl;

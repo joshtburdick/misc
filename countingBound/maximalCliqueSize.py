@@ -7,7 +7,7 @@ from scipy.special import comb
 # number of vertices
 n = 4
 # size of edges
-r = 3
+r = 2
 
 # note that n = 4, r = 2 is fairly near the border of what's convenient for
 # "writing out all the cases"

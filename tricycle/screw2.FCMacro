@@ -9,8 +9,15 @@ import Mesh
 import Part
 import polarMesh
 
+# various dimensions
+washerOutsideRadius = 35.0
+washerInsideRadius = 25.0
+
 # number of subdivisions of the circle
 numDivs = 100
+
+# radius of where the bolts are
+boltCircleRadius = (washerOutsideRadius + washerInsideRadius) / 2
 
 # constructs a rectangular face
 def quadFace(p):
@@ -124,15 +131,14 @@ a = constructThreads(14, 14.5, [0, 0.5, 0], [0, 0.5, 1],
 # which attaches to the wheel.
 # Bearing outside dimensions are 22mm OD x 7mm width
 a.extend(sweep(
-	[14.5, 11, 11, 10, 10, 11, 11, 35, 35, 14.5],
-	[   0,  0,  7,  7, 10, 10, 18, 18, 15,   15]))
+	[14.5, 11, 11, 10, 10, 11, 11, washerOutsideRadius, washerOutsideRadius, 14.5],
+	[   0,  0,  7,  7, 10, 10, 18,                  18,                  15,   15]))
 
 # 2016116: carve out space for the hub
-
+# XXX I think this is done?
 
 # carve out screw holes
 def screwHole(th, r, z):
-
 	# holes for bolts
 	boltDiameter = 3
 	h = Part.makeCone(float(boltDiameter), float(boltDiameter) / 2, float(boltDiameter) / 2)
@@ -146,19 +152,33 @@ def screwHole(th, r, z):
 #		polygonRadius * math.cos(th1/2) - wallThickness,
 #		- float(sideLength) / 2,
 #		zOffset))
-#	h.rotate(Base.Vector(0,0,0), Base.Vector(0,0,1),
-#		th * (180 / math.pi))
+	h.rotate(Base.Vector(0,0,0), Base.Vector(0,0,1),
+		360 * th)
 	return(h)
 
 # create basic hub
 planarMeshObject = Mesh.Mesh(a)
 a1 = polarMesh.mesh2shape(planarMeshObject)
 
-# cut out screw holes
+# add washer
+washer = Part.makeCylinder(float(washerOutsideRadius), 3)
+washer = washer.cut(Part.makeCylinder(float(washerInsideRadius), 3))
+washer.translate(Base.Vector(0, 0, 23))
+a1 = a1.fuse(washer)
 
-s = screwHole(0, 30, 14)
-a1 = a1.fuse(s)
+# locations of bolts, in turns (fractions of a circle)
+boltAngle = set()
+for n in [3,4,5]:
+	for i in range(n):
+		boltAngle.add(i/float(n))
+boltAngle = list(boltAngle)
+print(boltAngle)
+# cut out screw holes
+for th in boltAngle:
+	s = screwHole(th, boltCircleRadius, 14)
+	a1 = a1.cut(s)
+
 # s = screwHole(2*math.pi/3, 30, 14)
 # a1 = a1.fuse(s)
-Part.show(a1)
 
+Part.show(a1)

@@ -1,0 +1,164 @@
+# Generates a threaded part which should fit a
+# BMX 11-tooth sprocket.
+
+import math
+
+from FreeCAD import Base
+
+import Mesh
+import Part
+import polarMesh
+
+# number of subdivisions of the circle
+numDivs = 100
+
+# constructs a rectangular face
+def quadFace(p):
+	return [p[0], p[2], p[3], p[0], p[1], p[2]]
+
+# converts to polar coordinates
+def polar(x):
+	th = x[0]
+	r = x[1]
+	z = x[2]
+	return [ r * math.cos(th), r * math.sin(th), z ]
+
+# constructs a rectangular face, using polar coordinates
+def quadFacePolar(p):
+	corners =[polar(x) for x in p]
+	return quadFace(corners)
+
+# returns one plane around the circle
+# note float() cast, since FreeCAD is using Python 2
+def facePolar(i):
+	th1 = 2 * math.pi * (float(i) / numDivs)
+	th2 = 2 * math.pi * (float(i+1) / numDivs)
+	return quadFacePolar([
+		[th1, 1, 1], [th1, 1, 0], [th2, 1, 0], [th2, 1, 1]])
+
+# Constructs threads, by sweeping a shape.
+# Args:
+#	numTurns - the number of rotations
+#	r - base radius
+#	h, z - shape to sweep (h is height relative to r)
+# 	fadeIn, fadeOut - fraction of first and last turns
+#		to be linearly scaled
+# Returns: coordinates which can be passed to Mesh.mesh()
+def constructThreads(numTurns, r, h, z, fadeIn, fadeOut):
+	a = []
+	pitch = z[len(z)-1] - z[0]
+	zMax = (numTurns + 1.0) * pitch
+	for i in range(0, numTurns * numDivs):
+		# utility to scale thread height at start and end
+		def hScale(i):
+			s = 1.0
+			i1 = float(i) / numDivs
+			if i1 < fadeIn:
+				s = i1 / fadeIn
+			if numTurns - i1 < fadeOut:
+				s = (numTurns - i1) / fadeOut
+#			if (i > numDivs * (numTurns - fadeOut)):
+#				s = float(numTurns * numDivs - i) / fadeOut
+			return max(0.0, min(1.0, s))
+		th0 = 2 * math.pi * (float(i) / numDivs)
+		th1 = 2 * math.pi * (float(i+1) / numDivs)
+		z0 = pitch * float(i) / numDivs
+		z1 = pitch * float(i+1) / numDivs
+		for j in range(0, len(h)-1):
+			# XXX this is sort of finicky
+			f = quadFacePolar([
+				[th1, r + hScale(i+1) * h[j], z1 + z[j]],
+				[th1, r + hScale(i+1) * h[j+1], z1 + z[j+1]],
+				[th0, r + hScale(i) * h[j+1], z0 + z[j+1]],
+				[th0, r + hScale(i) * h[j], z0 + z[j]] ]) 
+			a.extend(f)
+		# add end caps, first at the start...
+		if i < numDivs:
+			f = quadFacePolar([
+				[th0, r + hScale(i) * h[0], (z0 + z[0])],
+				[th0, r + 0* hScale(i) * h[1], 0*(z0 + z[1])],
+				[th1, r + 0* hScale(i+1) * h[1], 0*(z1 + z[1])],
+				[th1, r + hScale(i+1) * h[0], (z1 + z[0])]
+				]) 
+			a.extend(f)
+		# then at the end
+		if i >= (numTurns - 1) * numDivs:
+			j = len(h) - 1    # probably not needed
+			f = quadFacePolar([
+				[th0, r, zMax ],
+				[th0, r + hScale(i) * h[j], z0 + z[j]],
+				[th1, r + hScale(i+1) * h[j], z1 + z[j]],
+				[th1, r, zMax]
+				]) 
+			a.extend(f)
+	return a
+
+# Constructs a surface by sweeping a shape (admittedly I
+# could do this in FreeCAD, but this seems easier)
+# Args:
+#   r, z - coordinates of shape to sweep
+#		(the shape is not automatically closed, but this
+#		effect can be obtained by repeating the first
+#		coordinates at the end)
+# Returns: coordinates which can be passed to Mesh.mesh()
+def sweep(r, z):
+	a = []
+	for i in range(0, numDivs):
+		for j in range(0, len(r)-1):
+			th0 = 2 * math.pi * (float(i) / numDivs)
+			th1 = 2 * math.pi * (float(i+1) / numDivs)
+			f = quadFacePolar([
+				[th0, r[j], z[j]],
+				[th0, r[j+1], z[j+1]],
+				[th1, r[j+1], z[j+1]],
+				[th1, r[j], z[j]]
+			])
+			a.extend(f)
+	return a
+
+# BMX threading, hopefully; this should be 15mm long
+a = constructThreads(14, 14.5, [0, 0.5, 0], [0, 0.5, 1],
+	0.25, 0.25)
+
+# this includes space for two bearings, and a disk
+# which attaches to the wheel.
+# Bearing outside dimensions are 22mm OD x 7mm width
+a.extend(sweep(
+	[14.5, 11, 11, 10, 10, 11, 11, 35, 35, 14.5],
+	[   0,  0,  7,  7, 10, 10, 18, 18, 15,   15]))
+
+# 2016116: carve out space for the hub
+
+
+# carve out screw holes
+def screwHole(th, r, z):
+
+	# holes for bolts
+	boltDiameter = 3
+	h = Part.makeCone(float(boltDiameter), float(boltDiameter) / 2, float(boltDiameter) / 2)
+	h1 = Part.makeCylinder(float(boltDiameter) / 2, 100)
+#	h1.translate(Base.Vector(0, 0, z+50))
+	h = h.fuse(h1)
+ #	h.rotate(Base.Vector(0,0,0), Base.Vector(0,1,0), 90)
+	h.translate(Base.Vector(0, r, z))
+#	b = b.cut(h)
+#	h.translate(Base.Vector(
+#		polygonRadius * math.cos(th1/2) - wallThickness,
+#		- float(sideLength) / 2,
+#		zOffset))
+#	h.rotate(Base.Vector(0,0,0), Base.Vector(0,0,1),
+#		th * (180 / math.pi))
+	return(h)
+
+# create basic hub
+planarMeshObject = Mesh.Mesh(a)
+a1 = polarMesh.mesh2shape(planarMeshObject)
+
+# cut out screw holes
+
+s = screwHole(0, 30, 14)
+a1 = a1.fuse(s)
+# s = screwHole(2*math.pi/3, 30, 14)
+# a1 = a1.fuse(s)
+Part.show(a1)
+

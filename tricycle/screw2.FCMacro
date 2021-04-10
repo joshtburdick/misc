@@ -10,8 +10,8 @@ import Part
 import polarMesh
 
 # various dimensions
-washerOutsideRadius = 35.0
-washerInsideRadius = 25.0
+washerOutsideRadius = 26.0
+washerInsideRadius = 16.0
 
 # number of subdivisions of the circle
 numDivs = 100
@@ -168,7 +168,7 @@ a1 = a1.fuse(washer)
 
 # locations of bolts, in turns (fractions of a circle)
 boltAngle = set()
-for n in [3,4,5]:
+for n in [2,3,5]:
 	for i in range(n):
 		boltAngle.add(i/float(n))
 boltAngle = list(boltAngle)

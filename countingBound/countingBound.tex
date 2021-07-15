@@ -31,9 +31,8 @@ $n$-vertex graph requires, on average, $\Omega(n^{k/2})$ NAND gates.
 Unfortunately,
 this doesn't directly bound the complexity of detecting {\em all} of the cliques; however, it seems like a
 possibly related problem.
-Here, we attempt to connect this
-average-case bound on detecting some
-cliques, with the problem of detecting all of them.
+Here, we attempt to use random restrictions to approximately
+connect the number of cliques detected, and the number of gates.
 \end{abstract}
 
 \newpage
@@ -56,20 +55,369 @@ of Shannon's function-counting argument
 
 It has long been known that computing {\em some} function of a bit-string
 requires exponentially large circuits \cite{shannon_synthesis_1949}.
+Let $f: \{0,1\}^m \rightarrow \{0,1\}$ be a function from bitvectors to bits.
 If there are $m$ inputs to a circuit,
 then there are $2^{2^m}$ possible functions from the $m$-input bitstring to
 a one-bit output. Each of these functions, being different, must have a
 different circuit.
 
-Let $f: \{0,1\}^m \rightarrow \{0,1\}$ be a function from bitvectors to bits.
+Given a count of functions, we can then see, for instance,
+how many unbounded fan-in NAND gates are needed to compute
+those functions (see Theorem \ref{boundFromCounting}
+in Appendix \ref{gateMath}).
+
+\subsection{Counting CLIQUE-like functions}
+
+Suppose we are given an $n$-vertex graph.
+Let $k$-CLIQUE($n$) be the boolean function which
+detects $k$-cliques: it outputs 1 if any $k$-clique
+is present, and 0 otherwise. This is a classic
+NP-complete problem.
+
+We now consider a ``buggy'' variant of the $k$-CLIQUE function,
+which only detects a subset of cliques.
+As a concrete example,
+consider a set of ``buggy'' 6-clique finders. 
+Maybe the circuit correctly
+finds all the cliques. Or maybe it finds all of the cliques except $K_{1..6}$,
+or it misses half the cliques, or finds none (and always outputs 0), or maybe
+it only successfully finds $K_{1,3,4,5,7,8}$, et cetera.
+
+We define a variant of $k$-CLIQUE which only
+finds a subset of cliques.
+Let $K$ denote the set of all possible
+$k$-vertex cliques.
+
+\begin{defn}
+\label{BUGGYCLIQUE}
+Let $A \subseteq K$.
+Let $m = {n \choose 2}$ be the number of edges in the input graph.
+$BUGGYCLIQUE(A): \{0,1\}^m \rightarrow \{0,1\}$ is the function which
+is 1 iff any of the $K_k$s in $A$ is present 
+That is, for each set $A$ of $K_k$s, $BUGGYCLIQUE(A)$
+contains a function which is 1 if the input contains any $K_k \in A$,
+and 0 otherwise. (Using this nomenclature,
+$k$-CLIQUE(n) = $BUGGYCLIQUE(K)$).
+\end{defn}
+
+Of course, many of these functions are quite similar (e.g. all but one of them
+output a 1 when you feed in all 1's). However, they're all slightly different.
+
+\begin{thm}
+\label{buggyDistinct}
+There are  $2^{|K|}$ distinct $BUGGYCLIQUE$ functions.
+\end{thm}
+\begin{proof}
+
+Let $A,B \subseteq K$, with $A \neq B$, and w.l.o.g.
+let $x \in A-B$. Then $BUGGYCLIQUE(A)$ outputs 1 on the input
+with just the edges in $x$ set to 1 (and 0 everywhere else),
+while $BUGGYCLIQUE(B)$ outputs a 0.
+
+There are $2^{|K|}$ many subsets of $K$,
+and by the above, each corresponds to a diffferent function.
+\end{proof}
+
+For a given $A$, many of the functions in $BUGGYCLIQUE(A)$
+are similar (for instance, most
+of them output a 1 when all the edges are present);
+but they are all distinct.
+Although $2^{n \choose k}$ is a fairly large number,
+it's still comfortably less than $2^{2^{n \choose 2}}$, the number of boolean
+functions on the ${n \choose 2}$ input wires (one per edge).
+
+\subsubsection{But {\em which} function requires many gates?}
+
+Thus, there are $2^{n \choose k}$ different functions. 
+How many NAND gates do these take?
+(We consider NAND gate circuits (with any fan-in) which find $k$-cliques in $n$-vertex
+graphs, as a circuit with $n \choose 2$ inputs)
+
+Applying Theorem
+\ref{boundFromCounting}, we know that at least one of the circuits requires
+${\sqrt {2 {n \choose {k/2}} + b^2}} - b = \Omega(n^{k/2})$ 
+NAND gates (where $b = {k \choose 2} - 0.5$).
+
+Why doesn't this bound $k$-CLIQUE?
+Because we don't know that the circuit which finds {\em all} of the
+$K_k$s, is one of these larger circuits. As far as what I've
+shown thus far goes, it could be harder to find some weird subset of the $K_k$s.
+
+Indeed, as far as what we've formally shown goes, the problem which needs
+the most NAND gates could be finding a single clique! That's easily ruled out
+(because that only needs one NAND gate, plus the output gate).
+
+\subsection{Which sets of cliques are hard to find?}
+\label{sec:whichCliques}
+
+The hardness of these functions depends
+on how the cliques they find are laid out.
+
+Cliques are arguably difficult to draw in a two-dimensional space.
+As an approximate diagram reflecting what we know,
+we sketch a Hasse diagram of possible subsets of cliques. Although
+we only draw a few subsets of three-vertex cliques
+on six vertices, hopefully this provides some
+intuition.
+
+\begin{figure}
+\centering
+\includegraphics[width=1\textwidth]{R/Hasse.pdf}
+\caption{Hasse diagram of BUGGYCLIQUE functions.
+(a-d) 
+Detecting all the possible cliques in larger graphs will be
+increasingly difficult (although {\em how much} harder isn't clear).
+(e) 
+Detecting this set of cliques is definitely harder than (b),
+since we can convert from (e) to (b) by feeding in 0's to
+some set of edges.
+(f) Detecting a set of cliques which doesn't overlap much will be
+harder than detecting the same number of cliques, when they overlap
+maximally (as in (b)).}
+\label{fig:Hasse}
+\end{figure}
+
+
+\begin{thm}
+\label{edgeZonking}
+Let $A \subsetneq B \subseteq K$, such that $A$ is what remains
+of $B$ after removing all cliques overlapping some edge $e$.
+Then $|\bigC(BUGGYCLIQUE(B))| > |\bigC(BUGGYCLIQUE(A))|$.
+\end{thm}
+\begin{proof}
+Feed in a 0 to $e$ which is in $\bigC(B)$. The resulting
+circuit computes $BUGGYCLIQUE(A)$, and so has size
+at least $|\bigC(BUGGYCLIQUE(A))|$. But at least one
+NAND gate has been removed by feeding in the 0.
+\end{proof}
+
+This shows that sometimes, finding a larger set of cliques is
+harder. However, the above theorem doesn't help if the two
+sets of cliques cover the same set of edges.
+
+\begin{figure}
+\label{overlappingTris}
+\centering
+\includegraphics[width=1\textwidth]{R/tri1.pdf}
+\caption{Sets of cliques which are highly overlapping (left),
+or not overlapping much (right).}
+\label{fig:overlappingTriangles}
+\end{figure}
+
+Triangles can be detected using matrix multiplication \cite{itai_finding_1977},
+and there are fast algorithms known for matrix multiplication
+\cite{strassen_gaussian_1969}
+\cite{williams_multiplying_2012}, so the set of all possible
+cliques on some set of vertices (Figure \ref{overlappingTris}, left)
+ can be detected
+using fewer than one NAND gate per triangle (for large enough input graphs).
+
+On the other hand, if the triangles overlap less (as in
+Figure \ref{overlappingTris}, right),
+then to detect all of the triangles, we will definitely need at least one
+gate per triangle. We can see this by feeding in a 0 to some input
+unique to a triangle, applying \ref{edgeZonking}, and repeating.
+
+\subsection{Defining levels of CLIQUE}
+
+To me, it seems a reasonably intuitive guess that the hardness of
+computing $BUGGYCLIQUE(A)$ should be somehow related to
+$|A|$, which is simply the number of cliques it ``sees''.
+
+\begin{defn}
+\label{CLIQUE-level}
+Assume $n, k$ are fixed. For any $l$ such that
+$0 \le l \le |K|$, let $K_l$ be the set of all sets
+with exactly $l$ cliques. 
+\end{defn}
+
+We abuse notation slightly, and write
+
+\[
+BUGGYCLIQUE(K_l) = \{ BUGGYCLIQUE(k) : k \in K_l \}
+\]
+
+What can we say about $E[|\bigC(BUGGYCLIQUE(K_l))|]$, for
+some fixed $l$? Let $N = {n \choose k}$.
+At the ``bottom'', there's only one $BUGGYCLIQUE(\emptyset)$
+function, so the counting argument is useless.
+In the ``middle'',
+there are ${N \choose {N/2}}$ functions, and so the counting
+argument gives a nontrivial lower bound for
+$E[|\bigC(BUGGYCLIQUE(K_{N \choose {N/2}}))|]$ (although
+without actually constructing even one difficult function).
+At the ``top'', again, there's only one $BUGGYCLIQUE(K) = k-CLIQUE$
+function, so the counting argument is, once again, useless.
+
+It would be nice if we could show that, as $l$ increases,
+$E[|\bigC(BUGGYCLIQUE(K_l))|]$ also increases.
+If we could prove something in general, for all levels $l$, then at
+the top of the diagram, we'd be bounding just the function
+$BUGGYCLIQUE(K_l) = k-CLIQUE$. (This suggests that doing so would
+be difficult...)
+
+
+\section{Using random restrictions}
+
+Random restrictions have been used in lower bounds of formula
+\cite{subbotovskaya1963comparison} and circuit \cite{hastad1987lower}
+complexity.
+Here, we apply random restrictions to a set of functions (and circuits),
+rather than just one function and circuit.
+
+\subsection{Counting functions by their ``rank'' in a list}
+
+This argument relies on measuring the size of a circuit,
+for a given basis. (Here, we assume unbounded fan-in
+NAND gates, but this doesn't seem crucial.)
+
+\begin{defn}
+\label{Rank}
+For all $C \subseteq K$,
+arrange all of the sets of cliques in nondecreasing order
+of $|\bigC(BUGGYCLIQUE(C))|$ (using unbounded fan-in NAND gates,
+breaking ties by some lexicographic order of circuits).
+
+Let $A \subset K$. The {\em rank} of $A$, $rank(A)$, is the zero-based
+index of $A$ in this list.
+\end{defn}
+
+If we can lower-bound $rank(A)$, then that should imply a
+lower bound on $|\bigC(BUGGYCLIQUE(A))|$. (Possibly, if we
+can only lower-bound $E[rank(A)]$, we may be able to get
+a bound in terms of number of gates using Jensen's inequality?
+Not clear.)
+
+With apologies to languages which aren't written left-to-write,
+we can imagine that the list starts with $\emptyset$, and
+continues to the right.
+
+Note that the above list only includes functions in $BUGGYCLIQUE$.
+There are a {\em ton} of other functions (parity, primality, etc.), but omitting
+those should still leave a valid lower bound.
+
+\subsection{How much smaller are ``restricted'' circuits, on average?}
+
+
+\begin{conj}
+\label{vaguelyUpward}
+Let $C \subseteq K$ be a set of cliques chosen uniformly at random
+from $K$.
+
+Let $a = {n-2 \choose k-2}$ (this is the number of $k$-cliques
+intersecting a given edge).
+
+Then there is a function $f: 2^K \rightarrow 2^K$ such that
+\begin{itemize}
+
+\item $E[|C| - |f(C)|] = a/2$
+
+\item $E[rank(C) - rank(f(C))] = a/2$
+
+\end{itemize}
+
+\end{conj}
+\begin{proof}
+
+Pick a distinguished input edge $e$, and let $A \subseteq C$ be
+the set of cliques in $C$ which include $e$, and $B \subseteq C$ be
+the set of cliques in $C$ which don't include $e$.
+
+We define $f(C) = B$.
+
+Now, take the circuit computing $BUGGYCLIQUE(C)$, and
+feed in a 0 to $e$. The resulting circuit computes
+$BUGGYCLIQUE(B)$. Note that $A$ could contain up to $a$
+cliques, so since $C$ is chosen uniformly at random,
+$E[|A|] = a/2$.
+
+Furthermore, $|\bigC(B)| < |\bigC(C)|$ (because feeding in
+a zero to the circuit for $BUGGYCLIQUE(C)$ constructed a
+possibly non-optimal circuit for $BUGGYCLIQUE(B)$).
+ This means that
+$C$ is, on average, $a/2$ functions ``to the left of'' $B$,
+implying at least that large a difference in rank.
+
+\end{proof}
+
+(FIXME add figure?)
+
+Although both these numbers (the reduction in number of cliques, and
+the reduction in rank) have an expected value of $a/2$,
+they aren't necessarily the same, or even correlated.
+
+One objection to only feeding in a 0 to a distinguished edge is that
+it only applies once. However, after restricting $e$ to be 0,
+if the resulting set is nonempty,
+some permutation of the vertices will result in a graph which
+again intersects $e$, but has the same number of gates. 
+
+
+\subsubsection{Why this doesn't bound $k-CLIQUE$?}
+
+\ref{vaguelyUpward} seems to show that ``finding more cliques is
+a tiny bit harder on average.'' However, once again, it only applies
+on average. If we feed in a 0 to $k-CLIQUE$, which is one function,
+we get only one other function. By iterating, this gives a bound
+slightly less than the number of input edges...
+
+Another idea might be to try some sort of induction on $l$, to
+try to show that circuits finding larger
+numbers of cliques, on average, had higher rank.
+
+\section{Related work}
+
+This strategy relies heavily on a modification of Shannon's original
+function-counting argument \cite{shannon_synthesis_1949},
+combined with random restrictions
+\cite{subbotovskaya1963comparison} \cite{hastad1987lower}.
+
+A related question is whether problems
+(such as $k$-SAT) are
+hard on average \cite{bogdanov2006average}.
+These efforts seem to focus more on whether
+random
+instances of a given problem are hard, rather
+than using random problems to show that
+a specific problem is hard.
+
+This lower-bound strategy also seems potentially
+relevant to quantum computing,
+as the argument makes few restrictions on the sort of gates used.
+
+\section{Conclusion}
+
+We give a lower bound on finding {\em some} set of cliques.
+It is a modified form of Shannon's counting argument
+\cite{shannon_synthesis_1949}. Unfortunately,
+this doesn't seem directly related to the
+complexity of $k$-CLIQUE.
+
+\section{Acknowledgements}
+
+The author would like to thank William Gasarch for introducing him
+to lower bound strategies, and probabilistic proofs.
+He would also like to thank the maintainers of
+several entertaining and relevant blogs, including but
+not limited to: the Computational Complexity blog
+(Lance Fortnow and William Gasarch), 
+G\"odel's Lost Letter (Richard Lipton and Ken Regan),
+and Shtetl-Optimized (Scott Aaronson). 
+He would also like to thank
+his parents for support (financial and otherwise).
+
+\appendix
+\section{Calculations for unbounded fan-in NAND gates}
+\label{gateMath}
+
+We used unbounded fan-in NAND gates largely because they are
+convenient to convert from ``number of functions'' to
+``number of gates''.
+
 Let $\bigC(f)$ be the circuit
 with the fewest unbounded fan-in NAND
-gates computing $f$ (with ties broken
-arbitrarily), and let $|\bigC(f)| = g$ be the number of gates in
-said circuit. (This is standard notation, except for the use
-of NAND gates as a basis). 
-
-The
+gates computing $f$, and let $|\bigC(f)| = g$ be the number of gates in
+that circuit. The
 circuit could have at most $gm$ wires from inputs to gates, and ${g \choose 2}$
 wires from gates to gates. We can view the possible circuits as a bitmask,
 containing a 1 everywhere a gate is connected to an input (or another gate),
@@ -95,6 +443,9 @@ the set of functions, then we know that at least {\em one} of them requires
 a large number of gates. (Knowing {\em which} function requires a lot, or many,
 gates is still an issue).
 
+We used unbounded-fan-in NAND gates because, given a number of circuits,
+it's easier (I think!) to solve for the number of wires than if we had
+used two-input gates.
 Consider functions from $m$ bits to one bit of output.
 Let $g$ be the number of gates, and $w$ be the number of wires.
 Solving for the number of gates:
@@ -127,452 +478,6 @@ beyond the number of inputs. This gives the bound
 g & \ge & {\sqrt 2w} - m \\
 \end{eqnarray*}
 
-
-\subsection{Bounding the mean number of gates}
-
-We can also count the total number of functions from $m$ input bits to one
-output bit, using up to $g$ NAND gates, as
-
-\begin{eqnarray*}
-\sum_{i=0}^{g-1} 2^{m+i} & = & 2^{m+g} - 2^m
-\end{eqnarray*}
-
-As a first crude approximation:
-if we're counting circuits with up to $g$ gates, then some of the circuits
-have fewer than $g$ gates. This somewhat complicates the book-keeping.
-However, {\em most} of the
-circuits have $g$ gates. (Indeed, well over half, since each additional
-gate adds many potential wires). Because of this, I think that the
-average case bound is just one fewer gates than the worst-case bound.
-
-(Side note: if we have a series of increasingly large
-sets of functions
-$A_1 \subset A_2 ...$, we know that the size of the smallest and
-largest circuit is decreasing and increasing. But we don't know
-anything about the expected circuit size.)
-
-\subsection{Bounding the variance of the number of gates}
-
-What about the variance of the number of gates? That depends on the
-expected number of gates. If we have a large number of functions,
-if their circuits are all small, then their circuits must differ in
-size a fair amount, because each ``layer'' can only fit a limited
-number of circuits, and thus functions. A larger number of gates
-can be ``wired together'' in many more ways.
-
-It's not clear how important this is, but supposing it is: consider
-the following metaphor. Imagine, if you will, a conical martini
-glass of circuits, with smaller circuits at the bottom. Ignoring
-the number of wires, this represents (on log scale) how many
-functions can have a given size\footnote{Biologists may
-prefer to think of conical centrifuge tubes.}.
-If the functions are crammed into the bottom of the tube, then
-at the bottom, they must fill up a fairly large ``slice''.
-Further up,
-a narrow ``slice'' can more functions. 
-
-(Furthermore, it seems that if some set of functions has a
-high-ish variance, it may require a lot of gates to implement,
-even if the set doesn't contain very many functions.
-Unclear if this is useful, though).
-
-Slightly more rigorously:
-
-
-
-
-
-
-
-
-\subsection{Counting CLIQUE-like functions}
-
-Suppose we are given an $n$-vertex graph.
-Let $k$-CLIQUE($n$) be the boolean function which
-detects $k$-cliques: it outputs 1 if any $k$-clique
-is present, and 0 otherwise. This is a classic
-NP-complete problem.
-
-We now consider ``buggy'' NAND gate circuits (with any fan-in) which find some of the possible $k$-cliques in $n$-vertex
-graphs.
-As a concrete example,
-consider a set of ``buggy'' 6-clique finders. 
-Maybe the circuit correctly
-finds all the cliques. Or maybe it finds all of the cliques except $K_{1..6}$,
-or it misses half the cliques, or finds none (and always outputs 0), or maybe
-it only successfully finds $K_{1,3,4,5,7,8}$, et cetera.
-
-First, we define a variant of $k$-CLIQUE which only
-finds a subset of cliques. Throughout this section,
-we will let $K$ denote the set of all possible
-$k$-vertex cliques.
-
-\begin{defn}
-\label{CLIQUE}
-Let $A \subset K$.
-CLIQUE$(A)$ is the set of functions which recognize any of the $K_k$s in $A$. That is, for each set $A$ of $K_k$s, CLIQUE$(A)$
-contains a function which is 1 if the input contains any $K_k \in A$,
-and 0 otherwise. (Using this nomenclature,
-$k$-CLIQUE(n) = $CLIQUE(K)$).
-\end{defn}
-
-We now define a set of functions:
-
-\begin{defn}
-\label{BUGGY-CLIQUE}
-Again, let $A \subseteq K$. Define
-
-\[
-BUGGY-CLIQUE(A) = \bigcup_{B \subseteq A} CLIQUE(B)
-\]
-\end{defn}
-
-
-
-Of course, many of these functions are quite similar (e.g. all but one of them
-output a 1 when you feed in all 1's). However, they're all slightly different.
-
-\begin{thm}
-\label{buggyDistinct}
-BUGGY-CLIQUE$(A)$ contains $2^{|A|}$ distinct functions.
-\end{thm}
-\begin{proof}
-
-Let $A,B \subset K$, with A and B different, and w.l.o.g.
-let $x \in A-B$. Then $CLIQUE(A)$ outputs 1 on the input
-with just the edges in $x$ set to 1 (and 0 everywhere else),
-while $CLIQUE(B)$ outputs a 0.
-
-There are $2^{|A|}$ many subsets of the $K_k$s there are,
-and by the above, each induces a distinct function.
-\end{proof}
-
-For a given $A$, many of the functions in $BUGGY-CLIQUE(A)$
-are similar (for instance, most
-of them output a 1 when all the edges are present);
-but they are all distinct.
-Although $2^{n \choose k}$ is a fairly large number,
-it's still comfortably less than $2^{2^{n \choose 2}}$, the number of boolean
-functions on the ${n \choose 2}$ input wires (one per edge).
-
-\subsubsection{But {\em which} function requires many gates?}
-
-Thus, there are $2^{n \choose k}$ different functions. 
-How many NAND gates do these take?
-(We consider NAND gate circuits (with any fan-in) which find $k$-cliques in $n$-vertex
-graphs, as a circuit with $n \choose 2$ inputs)
-
-Applying Theorem
-\ref{boundFromCounting}, we know that at least one of the circuits requires
-${\sqrt {2 {n \choose {k/2}} + b^2}} - b = \Omega(n^{k/2})$ 
-NAND gates (where $b = {k \choose 2} - 0.5$).
-
-Why doesn't this bound $k$-CLIQUE?
-Because we don't know that the circuit which finds {\em all} of the
-$K_k$s, is one of these larger circuits. As far as what I've
-shown thus far goes, it could be harder to find some weird subset of the $K_k$s.
-
-Indeed, as far as what we've formally shown goes, the problem which needs
-the most NAND gates could be finding a single $K_k$! That's easily ruled out
-(because that only needs one NAND gate, plus the output gate).
-
-\subsection{Which sets of cliques are hard to find?}
-\label{sec:whichCliques}
-
-The hardness of these functions depends
-on how the cliques they find are laid out.
-
-Cliques are arguably difficult to draw in a two-dimensional space.
-As an approximate diagram reflecting what we know,
-we sketch a Hasse diagram of possible subsets of cliques. Although
-we only draw a few subsets of three-vertex cliques
-on six vertices, hopefully this provides some
-intuition.
-
-\begin{figure}
-\centering
-\includegraphics[width=1\textwidth]{R/Hasse.pdf}
-\caption{Hasse diagram of BUGGY-CLIQUE functions.
-(a-d) 
-Detecting all the possible cliques in larger graphs will be
-increasingly difficult (although {\em how much} harder isn't clear).
-(e) 
-Detecting this set of cliques is definitely harder than (b),
-since we can convert from (e) to (b) by feeding in 0's to
-some set of edges.
-(f) Detecting a set of cliques which doesn't overlap much will be
-harder than detecting the same number of cliques, when they overlap
-maximally (as in (b)).}
-\label{fig:Hasse}
-\end{figure}
-
-
-\begin{thm}
-\label{edgeZonking}
-Let $A \subsetneq B \subseteq K$, such that $B$ covers input edges
-which $A$ doesn't. Then $|\bigC(B)| > |\bigC(A)|$.
-\end{thm}
-\begin{proof}
-Feed in a 0 to an edge which is in $B$ but not $A$. At least one
-NAND gate will only output a 1.
-\end{proof}
-
-This shows that sometimes, finding a larger set of cliques is
-harder. However, the above theorem doesn't help if the two
-sets of cliques cover the same set of edges.
-
-Triangles can be detected using matrix multiplication \cite{itai_finding_1977},
-and there are fast algorithms known for matrix multiplication
-\cite{strassen_gaussian_1969}
-\cite{williams_multiplying_2012}, so the set of all possible
-cliques on some set of vertices
- can be detected
-using fewer than one NAND gate per triangle (for large enough input graphs).
-
-On the other hand, if the triangles overlap less (as on the right),
-then to detect all of the triangles, we will definitely need at least one
-gate per triangle.
-To see this, consider feeding in a 0 to the input for one
-of the edges unique to some triangle (this is a
-standard technique in circuit bounds).
-Then any gate connected to
-that edge will only output a constant 1. We can repeat this for each of the
-triangles, constructing a series of strictly smaller circuits, each of which 
-detects some set of cliques. (Thus, for large enough graphs,
-graphs analogous to \ref{fig:Hasse} (f), which don't overlap much,
-require more NAND gates to detect than graphs 
-analogous to (b), which overlap
-a lot).
-
-\subsection{Defining levels of CLIQUE}
-
-An intuitive measure for how hard a set of cliques
-is to find is, simply, the number of cliques.
-
-As alluded to above, we know that there's at least ... 
-(FIXME omit this, as I don't know what it means?).
-
-\begin{defn}
-\label{CLIQUE-level}
-Assume $n, k$ are fixed. Let $K_l$ be the set of all sets
-with exactly $l$ cliques. 
-\end{defn}
-
-The definitions of $CLIQUE(K_l)$ and $\bigC(CLIQUE(K_l))$ then
-follow obviously.
-
-\subsubsection{Concavity}
-
-What can we say about $E[\bigC(CLIQUE(K_l))]$? If we could
-prove something in general, for all levels $l$, then at
-the top of the diagram, we'd be bounding
-$CLIQUE = CLIQUE(K_N)$. (This suggests that doing that would
-be difficult...)
-
-
-\begin{thm}
-\label{concavity}
-Pick $a, b$ with $0 < a < b < a+b < N$. We have:
-\[
-E[|\bigC(CLIQUE(K_{a+b}))] \le
-E[|\bigC(CLIQUE(K_a))|] + E[|\bigC(CLIQUE(K_b))|]
-\]
-
-In other words, $E[|\bigC(CLIQUE(K_l))|]$ is ``concave downward''.
-\end{thm}
-\begin{proof}
-Consider a random set in $K_{a+b}$. Break it randomly into
-two sets, which are in $K_a$ and $K_b$, and pick minimal
-circuits which find each of these. We can then OR them together
-by taking all wires leading to the second circuit's output gate,
-and connecting them to the first circuit's output gate (this
-actually uses one fewer gate).
-(FIXME check this, and maybe add a picture?)
-We end up
-with a circuit for the cliques in $K_{a+b}$
-
-All the choices there are arbitrary, and so we're overcounting
-the circuits in $K_a$ and $K_b$. But we're overcounting them all
-the same number of times.
-\end{proof}
-
-This is the sort of proof which combinatorialists (sp?)
-might like, and is all well and good. But
-it is unfortunately not helpful in
-terms of proving CLIQUE is difficult.
-It seems intuitive that, in some sense, finding more cliques should
-be harder.
-Indeed, since we're using NAND gates, we know that finding any non-empty
-subset of cliques is strictly harder than finding {\em some} other 
-smaller set of cliques \ref{edgeZonking}.
-
-
-\section{Counting slightly larger sets of functions}
-
-We can construct somewhat larger sets of functions, based on
-which cliques they recognize. For instance, we can define the
-function PICKY-CLIQUE.
-
-FIXME make A and B disjoint sets?
-
-\begin{defn}{pickyClique}
-Let $A$ be a set of cliques, and $B \subsetneq A$.
-Define PICKY-CLIQUE(A, B) to be the function which is 1 iff
-
-\begin{itemize}
-
-\item any clique in $A-B$ is present, {\em and}
-
-\item no clique in $B$ is present
-
-\end{itemize}
-Cliques outside of $A$ are ignored.
-
-\end{defn}
-
-Note that when B is almost as large as A,
-this almost corresponds to the complement of
-$k$-CLIQUE (that is, detecting whether a graph
-{\em doesn't} contain a clique; not to be
-confused with the independent set problem).
-
-\begin{thm}
-\label{pickyDistinct}
-PICKY-CLIQUE$(A)$ contains $2^{|A|} - 1$ distinct functions.
-\end{thm}
-\begin{proof}
-PICKY-CLIQUE$(A)$ is ``paying attention'' to $|A|$ cliques
-We can label each clique $c$ with a 1 (if it's in $A-B$),
-or 0 (if it's in $B$). Any assignment of these (except all 0's)
-is a different function.
-\end{proof}
-
-(??? there are a lot of alternative ways to define this;
-this may not be the best option).
-
-\begin{figure}
-\centering
-\includegraphics[width=1\textwidth]{R/HasseWithOmissions.pdf}
-\caption{Hasse diagram of PICKY-CLIQUE functions. 
-}
-\label{fig:Hasse}
-\end{figure}
-
-
-We can represent this using something akin
-to figure \ref{fig:Hasse}. In this case, however, we
-draw functions at the level of how many
-cliques force the output to be 0 (that is,
-the cliques in $B$).
-
-One notable feature of this is that when $A$ is
-larger, PICKY-$k$-CLIQUE includes functions
-throughout the Hasse diagram. This means that,
-intuitively, the average-case complexity of
-PICKY-$k$-CLIQUE is weighted towards cases
-in which $A$ is larger.
-
-\subsection{Levels of PICKY-CLIQUE}
-
-One obvious way of implementing any function in PICKY-CLIQUE
-is by using a circuit to find everything in $A$, and then
-masking it with everything in $B$.
-
-\[
-E[|\bigC(PICKY-CLIQUE(A, B))|] \le
-E[|\bigC(CLIQUE(A))|] + E[|\bigC(CLIQUE(B))|]
-\]
-
-Turning this around, we have:
-
-\[
-E[|\bigC(CLIQUE(A))|]
-\ge
-E[|\bigC(PICKY-CLIQUE(A, B))|] - E[|\bigC(CLIQUE(B))|]
-\]
-
-Note that we can also use a circuit for $CLIQUE(A \cup B)$,
-and then mask out everything in $B$.
-
-Furthermore, we can reverse this, and ``repair'' 
-PICKYCLIQUE(A, B) to find all of CLIQUE(A), by ORing together
-a circuit for PICKYCLIQUE(A, B) and a circuit for CLIQUE(B).
-(Then, if there are no cliques in B, but there's a clique in A,
-we'll see it; we'll also see if there {\em is} a clique in B).
-
-Combined, this implies that the functions in
-PICKYCLIQUE(A, B) are ``near'' functions in CLIQUE(A) in
-complexity. In terms of the previous metaphor, PICKYCLIQUE(A, B)
-is surrounded by a layer of styrofoam peanuts, depending on how
-large B is. Intuitively, it seems that larger A should be
-``near'' a larger set of functions B, forcing A to have more
-gates. At the tippy top of the Hasse diagram, we need to squish
-into the cone of circuits not only CLIQUE, but also many functions
-somewhat like CLIQUE.
-
-\section{Related work}
-
-This strategy relies heavily on a modification of Shannon's original
-function-counting argument \cite{shannon_synthesis_1949}.
-
-Broadly speaking, the idea of using an upper bound to prove a lower bound
-is not new. Aaronson describes this as ``ironic complexity theory''
-\cite{aaronson_pnp}, and mentions several recent applications of it.
-
-A related question is whether problems
-(such as $k$-SAT) are
-hard on average \cite{bogdanov2006average}.
-These efforts seem to focus more on whether
-random
-instances of a given problem are hard, rather
-than using random problems to show that
-a specific problem is hard.
-
-\subsection{Possible relevance to other problems}
-
-Here we sketch other potential applications of this strategy
-({\em if} it worked; thus far it doesn't seem to).
-
-\subsubsection{The complement of NP: co-NP}
-
-Although there's no obvious reduction from co-NP to NP, essentially
-the same argument seems to work. Suppose some family of circuits
-checks that there {\em isn't} any $K_k$ in an $n$-vertex graph.
-Then we can construct circuits analogous to BUGGY-CLIQUE.
-
-(FIXME is this right?)
-
-\subsubsection{Quantum computation: BQP}
-
-This lower-bound strategy also seems potentially
-relevant to quantum computing,
-as the argument makes few restrictions on the sort of gates used.
-If it's the case that any function in BQP can be represented
-as a circuit made of discrete quantum gates, as well as AND and NOT,
-then clique detection isn't in BQP.
-However, it's not clear what sort of quantum gates would be
-appropriate.
-
-\section{Conclusion}
-
-We give a lower bound on finding {\em some} set of cliques.
-It is a modified form of Shannon's counting argument
-\cite{shannon_synthesis_1949}. Unfortunately,
-this doesn't seem directly related to the
-complexity of 
-
-\section{Acknowledgements}
-
-The author would like to thank William Gasarch for introducing him
-to lower bound strategies, and probabilistic proofs about graphs.
-He would also like to thank the maintainers of
-several entertaining and relevant blogs, including but
-not limited to: the Computational Complexity blog
-(Lance Fortnow and William Gasarch), 
-G\"odel's Lost Letter (Richard Lipton and Ken Regan),
-and Shtetl-Optimized (Scott Aaronson). 
-He would also like to thank
-his parents for support (financial and otherwise).
 
 \bibliography{references}
 \bibliographystyle{unsrt}

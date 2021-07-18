@@ -387,9 +387,26 @@ on average. If we feed in a 0 to $k-CLIQUE$, which is one function,
 we get only one other function. By iterating, this gives a bound
 slightly less than the number of input edges...
 
-Another idea might be to try some sort of induction on $l$, to
-try to show that circuits finding larger
-numbers of cliques, on average, had higher rank.
+\subsection{Using induction on the level}
+
+It seems intuitive that finding a larger fraction of the cliques
+should be harder.
+So, another idea is to try to show this using induction on $l$.
+
+Base case: finding zero cliques requires zero gates.
+
+Step case: ummmm... Suppose that for all levels $a < l$,
+the expected rank is non-decreasing.
+We want to bound the expected rank of level $l$.
+Consider a set $C$. I think that we can assume w.l.o.g. that
+$C$ contains a distinguished edge $e$ (because, by the above,
+we're overcounting each set of cliques the same number of times.)
+
+
+It feels like we need two parts to this: the bound that
+``the new sets have higher rank than the old sets'', and
+``there are (sometimes) a lot of new sets''.
+
 
 \section{Related work}
 

@@ -13,6 +13,7 @@
 \newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
 \newcommand{\bigC}[0]{\mathcal{C}}
 \begin{document}
+\emergencystretch 3em
 \title{
 An attempt to connect Shannon's
 circuit counting bound with clique detection}
@@ -342,15 +343,40 @@ implying at least that large a difference in rank.
 
 (FIXME add figure?)
 
+
 Although both these numbers (the reduction in number of cliques, and
 the reduction in rank) have an expected value of $a/2$,
 they aren't necessarily the same, or even correlated.
+
+
+\subsubsection{Effect of only restricting one edge}
+
+Note that if we feed in a 0 to edge $e$ of $C$, obtaining $B$, then
+we can't feed in a 0 to the same edge.
+
+However, note that in a given level $l$ (except for $l_0$),
+every set of cliques includes at least one edge. Thus, there is
+a permutation of vertices $\pi$ such that $\pi(B)$ overlaps $e$.
+
+Conjecture: every level consists of the graphs which overlap $e$,
+and some number of copies of those graphs.
+
+Thus, if we account for just the graphs which include an edge,
+then the average expected rank will be the same.
+
+ 
+
+
 
 One objection to only feeding in a 0 to a distinguished edge is that
 it only applies once. However, after restricting $e$ to be 0,
 if the resulting set is nonempty,
 some permutation of the vertices will result in a graph which
 again intersects $e$, but has the same number of gates. 
+
+
+
+
 
 
 \subsubsection{Why this doesn't bound $k-CLIQUE$?}

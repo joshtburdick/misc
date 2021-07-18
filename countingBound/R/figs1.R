@@ -96,3 +96,6 @@ dev.off()
 # various Hasse diagrams
 source("Hasse.R")
 
+# shows effect of restricting one edge
+# source("restriction.R")
+

@@ -1,4 +1,5 @@
 \documentclass[12pt]{article}
+%% \documentclass[format=manuscript]{acmart}
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage{fullpage}
 \usepackage{graphicx}
@@ -18,9 +19,8 @@
 An attempt to connect Shannon's
 circuit counting bound with clique detection}
 
-\author{Josh Burdick \\
-{\tt josh.t.burdick@gmail.com}}
-\maketitle
+\author{Josh Burdick}
+
 
 \begin{abstract}
 Shannon's function-counting argument
@@ -35,6 +35,8 @@ possibly related problem.
 Here, we attempt to use random restrictions to approximately
 connect the number of cliques detected, and the number of gates.
 \end{abstract}
+
+\maketitle
 
 \newpage
 
@@ -320,6 +322,8 @@ Then there is a function $f: 2^K \rightarrow 2^K$ such that
 \end{conj}
 \begin{proof}
 
+FIXME: what if $A$ doesn't overlap $e$?
+
 Pick a distinguished input edge $e$, and let $A \subseteq C$ be
 the set of cliques in $C$ which include $e$, and $B \subseteq C$ be
 the set of cliques in $C$ which don't include $e$.
@@ -446,8 +450,7 @@ not limited to: the Computational Complexity blog
 (Lance Fortnow and William Gasarch), 
 G\"odel's Lost Letter (Richard Lipton and Ken Regan),
 and Shtetl-Optimized (Scott Aaronson). 
-He would also like to thank
-his parents for support (financial and otherwise).
+
 
 \appendix
 \section{Calculations for unbounded fan-in NAND gates}

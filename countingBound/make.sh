@@ -5,4 +5,5 @@
 pdflatex countingBound.tex
 bibtex countingBound.aux
 pdflatex countingBound.tex
+pdflatex countingBound.tex
 

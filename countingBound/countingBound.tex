@@ -290,12 +290,14 @@ can only lower-bound $E[rank(A)]$, we may be able to get
 a bound in terms of number of gates using Jensen's inequality?
 Not clear.)
 
-With apologies to languages which aren't written left-to-write,
+We could imagine a miles-long linear warehouse of chips with the minimal
+circuit for each problem, sorted in terms of number of gates.
+Or, with apologies to languages which aren't written left-to-write,
 we can imagine that the list starts with $\emptyset$, and
 continues to the right.
 
 Note that the above list only includes functions in $BUGGYCLIQUE$.
-There are a {\em ton} of other functions (parity, primality, etc.), but omitting
+There are a {\em ton} of other functions (parity, primality, etc.), but ignoring
 those should still leave a valid lower bound.
 
 \subsection{How much smaller are ``restricted'' circuits, on average?}
@@ -335,14 +337,21 @@ $BUGGYCLIQUE(B)$. Note that $A$ could contain up to $a$
 cliques, so since $C$ is chosen uniformly at random,
 $E[|A|] = a/2$.
 
-Furthermore, $|\bigC(B)| < |\bigC(C)|$ (because feeding in
+Furthermore, $|\bigC(B)| < |\bigC(C)|$, because feeding in
 a zero to the circuit for $BUGGYCLIQUE(C)$ constructed a
-possibly non-optimal circuit for $BUGGYCLIQUE(B)$).
- This means that
-$C$ is, on average, $a/2$ functions ``to the left of'' $B$,
+(possibly non-optimal) circuit for $BUGGYCLIQUE(B)$.
+This means that
+$C$ is, on average, $a/2$ functions ``to the right of'' $B$,
 implying at least that large a difference in rank.
 
 \end{proof}
+
+In terms of the previous warehouse analogy, we can imaging that,
+when an edge is disabled, the chip now has strictly fewer gates.
+By construction of the warehouse, that means it will be shifted
+toward the ``smaller'' (in number of gates) end of the warehouse.
+That means that the corresponding set of cliques is also
+in the ``smaller'' end of the warehouse.
 
 (FIXME add figure?)
 
@@ -368,8 +377,6 @@ and some number of copies of those graphs.
 Thus, if we account for just the graphs which include an edge,
 then the average expected rank will be the same.
 
- 
-
 
 
 One objection to only feeding in a 0 to a distinguished edge is that
@@ -377,9 +384,6 @@ it only applies once. However, after restricting $e$ to be 0,
 if the resulting set is nonempty,
 some permutation of the vertices will result in a graph which
 again intersects $e$, but has the same number of gates. 
-
-
-
 
 
 
@@ -406,10 +410,22 @@ Consider a set $C$. I think that we can assume w.l.o.g. that
 $C$ contains a distinguished edge $e$ (because, by the above,
 we're overcounting each set of cliques the same number of times.)
 
-
 It feels like we need two parts to this: the bound that
 ``the new sets have higher rank than the old sets'', and
 ``there are (sometimes) a lot of new sets''.
+
+Step case: Consider any level $l$.
+
+Pick a random set of cliques from that level (which can be thought of
+as a hypergraph with $l$ hyperedges). Feed in a 0 to a randomly-chosen
+edge. We know that at least one gate will be ``zonked'' by this.
+We can also approximate how many cliques will be ``disabled'' by this.
+
+??? how accurate is this approximation?
+
+Note that at higher levels, the number of cliques disabled will be
+fairly large. However, no more than ${n-2 \choose k-2}$ cliques can
+be disabled, which is a fair amount less than $n \choose k$.
 
 
 \section{Related work}
@@ -431,6 +447,9 @@ a specific problem is hard.
 This lower-bound strategy also seems potentially
 relevant to quantum computing,
 as the argument makes few restrictions on the sort of gates used.
+However, we did use the property of NAND gates that ``feeding in
+a 0 disables a gate''; it's not clear whether that's needed,
+or holds for quantum gates.
 
 \section{Conclusion}
 

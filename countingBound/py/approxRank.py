@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 # Estimates rank of various things.
 
+import matplotlib
+import matplotlib.pyplot as plt
+
 import numpy
 import scipy.stats
 import scipy.special
@@ -35,4 +38,14 @@ def rankBound(n, k):
     return r
 
 b = rankBound(6,3)
-print(b)
+
+plt.plot(range(21), b)
+plt.title('n = 6, k = 3')
+plt.xlabel('Level')
+plt.ylabel('Rank')
+# force x-axis to be plotted as integers
+# ax = plt.figure().axes
+# ax.xaxis.get_major_locator().set_params(integer=True)
+plt.gca().xaxis.get_major_locator().set_params(integer=True)
+plt.savefig('rank.png')
+

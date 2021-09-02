@@ -23,14 +23,14 @@
 
 \begin{abstract}
 Shannon's function-counting argument
-\cite{shannon_synthesis_1949} showed that some Boolean functions have
+\cite{shannon_synthesis_1949} showed that most Boolean functions have
 exponential circuit complexity, but doesn't provide a specific example
 of such a hard-to-compute function. A simple modification of that argument
 shows that detecting a randomly-chosen subset of the $k$-vertex cliques in an
 $n$-vertex graph requires, on average, $\Omega(n^{k/2})$ NAND gates.
 Unfortunately,
 this doesn't directly bound the complexity of detecting {\em all} of the cliques;
-however, it seems like a possibly related problem.
+however, it seems like a related problem.
 Here, we attempt to combine a counting argument with
 random restrictions, to estimate the number
 of NAND gates needed to detect some cliques (as a function
@@ -103,7 +103,7 @@ $k$-vertex cliques.
 Let $A \subseteq K$.
 Let $m = {n \choose 2}$ be the number of edges in the input graph.
 $BUGGYCLIQUE(A): \{0,1\}^m \rightarrow \{0,1\}$ is the function which
-is 1 iff any of the $K_k$s in $A$ is present 
+is 1 iff any of the $K_k$s in $A$ is present.
 That is, for each set $A$ of $K_k$s, $BUGGYCLIQUE(A)$
 contains a function which is 1 if the input contains any $K_k \in A$,
 and 0 otherwise. (Using this nomenclature,
@@ -141,7 +141,7 @@ functions on the ${n \choose 2}$ input wires (one per edge).
 Thus, there are $2^{n \choose k}$ different functions. 
 How many NAND gates do these take?
 (We consider NAND gate circuits (with any fan-in) which find $k$-cliques in $n$-vertex
-graphs, as a circuit with $n \choose 2$ inputs)
+graphs, as a circuit with $n \choose 2$ inputs.)
 
 Applying Theorem
 \ref{boundFromCounting}, we know that at least one of the circuits requires
@@ -150,7 +150,7 @@ NAND gates (where $b = {k \choose 2} - 0.5$).
 
 Why doesn't this bound $k$-CLIQUE?
 Because we don't know that the circuit which finds {\em all} of the
-$K_k$s, is one of these larger circuits. As far as what I've
+$K_k$s is one of these larger circuits. As far as what I've
 shown thus far goes, it could be harder to find some weird subset of the $K_k$s.
 
 Indeed, as far as what we've formally shown goes, the problem which needs
@@ -272,7 +272,7 @@ be difficult...)
 
 Random restrictions have been used in lower bounds of formula
 \cite{subbotovskaya1963comparison} and circuit \cite{hastad1987lower}
-complexity.
+complexity (see also the slides at \cite{rossmanRestrictions}).
 Here, we apply random restrictions to a set of functions (and circuits),
 rather than just one function and circuit.
 
@@ -293,7 +293,8 @@ Let $A \subset K$. The {\em rank} of $A$, $rank(A)$, is the zero-based
 index of $A$ in this list.
 \end{defn}
 
-If we can lower-bound $rank(A)$, then that should imply a
+If we can lower-bound $rank(A)$, then we should be able to translate
+that into a
 lower bound on $|\bigC(BUGGYCLIQUE(A))|$. (Possibly, if we
 can only lower-bound $E[rank(A)]$, we may be able to get
 a bound in terms of number of gates using Jensen's inequality?
@@ -351,7 +352,8 @@ and $B$, implying at least that large a difference in rank.
 
 (Note that if $e$ ``misses'' all of the cliques in $C$, then $B = C$
 and $rank(B) = rank(C)$. However, provided $e$ is in some clique in $C$,
-then since we're feeding in a 0, the inequality $\bigC(B) < \bigC(C)$ is strict.)
+then since we're feeding in a 0 to a NAND-gate circuit,
+the inequality $rank(B) < rank(C)$ is strict.)
 
 \end{proof}
 

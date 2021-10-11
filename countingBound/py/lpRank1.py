@@ -17,26 +17,30 @@ class LpBound:
     """
     self.n = n
     self.k = k
-    # the total number of functions
-    self.numFunctions = scipy.special.comb(n, k)
-    # the number of functions hitting an arbitrary edge,
-    # (say, e_{12})
+    # the total number of cliques
+    self.numCliques = scipy.special.comb(n, k)
+    # the number of sets of cliques (and functions) which
+    # include an arbitrary edge, (say, e_{12})
     self.numHittingEdge = scipy.special.comb(n-2, k-2)
-    # number of variables in a constraint
-    self.numVarsInConstraint = (2 * numFunctions
-            + self.numHittingEdge *
-            (self.numFunctions - self.numHittingEdge)
+    # the number of sets of cliques which don't include e_{12}
+    self.numNotHittingEdge = self.numCliques - self.numHittingEdge
     # these store the constraints, as lists (for easy appending,
     # since it's not clear how many there will be).
     # ??? rename these?
-    # A is stored as a list of numpy vectors...
+    # A is stored as a list of numpy matrices
     self.A = []
     # ... and b as a list of numbers
     self.b = []
 
-    def getConstraintRow():
-        """Gets a row of the constraint matrix A (of the right size)."""
-        return np.array([ self.numVarsInConstraint ])
+    def getConstraintMatrix():
+        """Gets a matrix corresponding to one constraint.
+        
+        The row index is the number of cliques in A (which
+        intersect an arbitrarily-chosen edge), while
+        the column index is the number of cliques in B.
+        """
+        return np.zeros([self.numHittingEdge+1,
+            self.numNotHittingEdge+1])
 
     def addConstraint(A, b):
         """Adds one row to the constraints.
@@ -45,30 +49,8 @@ class LpBound:
         b: the corresponding bound
         Side effects: adds a row to the bound, of the form "Ax >= b"
         """
-        # note that we negate both of these, since scipy.linsolve
-        # inequalities are "Ax <= b"
-        self.A.append(-A)
-        self.b.append(-b)
-
-    def C(self, i):
-        """Index of C_i, E[rank(finding i cliques)]."""
-        return i - 1
-
-    def B(self, i):
-        """Index of B_i,
-        E[rank(finding i cliques which miss e_{12})].
-        """
-        return self.numFunctions + i - 1
-
-    def A(self, i, j):
-        """Index of A_{ij}, E[rank("higher-up functions")].
-
-        Specifically, this is E[rank(finding a set of cliques,
-        of which i miss e_{12}, and j hit e_{12}.
-        """
-        return (2 * self.numFunctions
-                + i * self.numHittingEdge
-                + j)
+        self.A.append(A)
+        self.b.append(b)
 
     def addBTotalConstraint():
         """Adds constraint on expected value of E[B].
@@ -87,11 +69,19 @@ class LpBound:
         self.addConstraint(a, 0.5 * (2 ** m))
 
 
-    def addAConstraint():
-        """Adds a constraint on A.
+    def addZeroRestrictionConstraint():
+        """Adds effect of restricting e_{12} to 0.
 
-        This constraint 
+        
 
+
+        """
+        pass
+
+    def addPermutationConstraint():
+        """Add constraint that "permuting vertices doesn't matter".
+
+        XXX FIXME it's not clear what this should look like
         """
         pass
 
@@ -100,15 +90,19 @@ class LpBound:
         
         Note that by default, the solver constrains all x >= 0.
 
-        Returns: a numpy array, of the minimum rank of C_i.
+        Returns: a numpy array, of the minimum rank of each set
+            of functions.
         """
-        # convert A and b of the constraints into numpy objects
-        A = np.stack(self.A, axis=FIXME)
-        b = np.array(self.b)
-
-        # the objective function: how low can C_N go?
-        c = np.zeros([ self.numVarsInConstraint ])
-        c[ self.C(self.numFunctions) ] = 1
+        # convert A and b to np.array objects (note that both are
+        # negated, since the solver is solving Ax <= b).
+        A = - np.stack([a.reshape(FIXME) for a in self.A], axis=?)
+        # b is just converted into a column vector
+        b = - np.array(self.b)
+        # the objective function: how low can finding all the
+        # cliques go?
+        c = self.getConstraintMatrix()
+        c[ self.numHittingEdge(), self.numNotHittingEdge() ] = 1
+        c = c.reshape(FIXME)
 
 
 

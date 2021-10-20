@@ -44,8 +44,6 @@ class LpBound:
     self.A_ub = None
     self.b_ub = None
 
-
-
     def addConstraint(self, A, b):
         """Adds one row to the constraints.
 
@@ -59,15 +57,23 @@ class LpBound:
     def addVertexZeroConstraint(self):
         """Adds constraint from restricting some vertex's edges to 0.
 
+        This constraint says that if you take a random graph with
+        j+1 vertices, and zero out all the edges from one vertex,
+        the rank of the resulting graph will be smaller.
+        
         Note that punctuating the possessive of a word ending in 'x'
         is just problematic.
+        ??? also add constraint that these are all higher?
         Side effects: adds a constraint on expected.
         """
         # j is the number of vertices _after_ a vertex is zeroed out
+        A = []
         for j in range(self.k, self.n):
+            a = [(j,   , -1.0)]
             # i is the number of cliques
-            a = [(i,j,FIXME)] for i in range(   , )]
+            a += [(i,j+1,comb()] for i in range(   , )]
 
+            b
 
         pass
 
@@ -79,10 +85,15 @@ class LpBound:
         many vertices.
         """
         # j is the number of vertices
-        for j in range(self.k, self.n):
+        for j in range(self.k, self.n+1):
+            # the number of functions with that many vertices
+            numFunctions = 2 ** comb(j, self.k)
             # constraint on the "weighted average" of these
-
-
+            a = [(i, j, comb(j,i) / numFunctions)
+                    for i in range(0, comb(j, self.k)+1)]
+            # the weighted average should be at least
+            # half the number of functions
+            self.addConstraint(a, numFunctions / 2)
 
     def setBounds():
         """Sets the bounds matrices, A_ub and b_ub."""
@@ -114,8 +125,9 @@ class LpBound:
         # the objective function: how low can finding all the
         # cliques go?
         c = np.zeros(self.numVariables)
-        c[ self.numHittingEdge(), self.numNotHittingEdge() ] = 1
-        
+        numCliques = comb(numVertices, self.k)
+        c[ self.varIndex[(numVertices, numCliques)] ] = 1
+        # solve
 
 
 

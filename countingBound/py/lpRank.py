@@ -2,6 +2,7 @@
 # Linear programming bound on rank of different functions.
 # This includes several constraints; not all of them may be useful.
 # In this version, we zero out a vertex at a time.
+# Note that the nomenclature is confusing here.
 
 import numpy as np
 import scipy.optimize
@@ -16,33 +17,35 @@ class LpBound:
     """
 
     def __init__(self, n, k):
-    """ Constructor
-    n: number of vertices
-    k: clique size
-    """
-    self.n = n
-    self.k = k
-    # mapping from tuples (numVertices, numCliques) to index in the LP
-    self.varIndex = {}
-    index = 0
-    # set up the mapping
-    for i in range(k, n+1):
-        for j in range(0, comb(i, k)):
-            self.varIndex[(i,j)] = index
-            index += 1
-    # this is the total number of variables we're solving for
-    self.numVariables = index - 1
-    # these store the constraints, as lists (for easy appending,
-    # since it's not clear how many there will be).
-    # A is stored as a list of triples
-    # (numVertices, numCliques, coefficient), which hopefully
-    # will be easier to understand...
-    self.A = []
-    # ... and b as a list of numbers
-    self.b = []
-    # the bounds matrices (initially undefined)
-    self.A_ub = None
-    self.b_ub = None
+        """ Constructor
+        n: number of vertices
+        k: clique size
+        """
+        # problem size
+        self.n = n
+        self.k = k
+        # mapping from tuples (numVertices, numCliques) to
+        # variable index in the LP
+        self.varIndex = {}
+        index = 0
+        # set up the mapping of variable indices
+        for i in range(k, n+1):
+            for j in range(0, comb(i, k)+1):
+                self.varIndex[(i,j)] = index
+                index += 1
+        # this is the total number of variables we're solving for
+        self.numVariables = index - 1
+        # these store the constraints, as lists (for easy appending,
+        # since it's not clear how many there will be).
+        # A is stored as a list of triples
+        # (numVertices, numCliques, coefficient), which hopefully
+        # will be easier to understand...
+        self.A = []
+        # ... and b as a list of numbers
+        self.b = []
+        # the bounds matrices (initially undefined)
+        self.A_ub = None
+        self.b_ub = None
 
     def addConstraint(self, A, b):
         """Adds one row to the constraints.
@@ -54,7 +57,31 @@ class LpBound:
         self.A.append(A)
         self.b.append(b)
 
-    def addVertexZeroConstraint(self):
+    def addVertexTotalConstraint(self):
+        """Constraint on rank of sets with some number of vertices.
+
+        Note that the sets with more vertices also includes functions
+        with a smaller number of vertices.
+
+        Side effects: for each possible number of vertices, adds
+        a constraint on the total rank of the sets with that
+        many vertices.
+        """
+        # i is the number of vertices
+        for i in range(self.k, self.n+1):
+            # the number of possible cliques with that many vertices
+            numCliques = comb(i, self.k)
+            # the number of functions with up to that many cliques
+            numFunctions = 2 ** numCliques
+            # constraint on the "weighted average" of these
+            # (here, i is the number of cliques in the function)
+            a = [(i, j, comb(j,i) / numFunctions)
+                    for j in range(0, numCliques+1)]
+            # the weighted average should be at least
+            # half the number of functions
+            self.addConstraint(a, numFunctions / 2)
+
+    def addVertexZeroExpectedConstraint(self):
         """Adds constraint from restricting some vertex's edges to 0.
 
         This constraint says that if you take a random graph with
@@ -63,37 +90,32 @@ class LpBound:
         
         Note that punctuating the possessive of a word ending in 'x'
         is just problematic.
-        ??? also add constraint that these are all higher?
-        Side effects: adds a constraint on expected.
+        ??? also add constraint that "zeroing out a vertex's edges
+            strictly reduces rank"?
+        Side effects: adds a constraint on expected rank.
         """
-        # j is the number of vertices _after_ a vertex is zeroed out
         A = []
-        for j in range(self.k, self.n):
-            a = [(j,   , -1.0)]
-            # i is the number of cliques
-            a += [(i,j+1,comb()] for i in range(   , )]
-
-            b
-
-        pass
-
-    def addVertexTotalConstraint(self):
-        """Constraint on rank of sets with some number of vertices.
-
-        Side effects: for each possible number of vertices, adds
-        a constraint on the total rank of the sets with that
-        many vertices.
-        """
-        # j is the number of vertices
-        for j in range(self.k, self.n+1):
-            # the number of functions with that many vertices
-            numFunctions = 2 ** comb(j, self.k)
-            # constraint on the "weighted average" of these
-            a = [(i, j, comb(j,i) / numFunctions)
-                    for i in range(0, comb(j, self.k)+1)]
-            # the weighted average should be at least
-            # half the number of functions
-            self.addConstraint(a, numFunctions / 2)
+        # i is the number of vertices _after_ a vertex is zeroed out
+        # (and thus ranges up to n-1)
+        for i in range(self.k, self.n):
+            # maximum number of cliques which might be made
+            # impossible, by zeroing out the edges connected to a vertex
+            numCliquesZeroed = comb(i-1, self.k-1)
+            # corresponding number of functions
+            numFunctionsZeroed = 2 ** numCliquesZeroed
+            # j is the number of cliques _after_ a vertex is zeroed out
+            for j in range(0, comb(i, self.k)+1):
+                # the rank, after a vertex is zeroed out
+                a = [(i, j, 1.0)]
+                # k is the number of cliques which were zeroed out
+                # (this shouldn't throw a KeyError)
+                a += [(i+1, j+k, -comb(maxCliquesZeroed, k))
+                        for k in range(0, maxCliquesZeroed+1)]
+                # the constraint is that "the expected rank after
+                # zeroing out a clique is some amount higher than
+                # the rank of what remains"
+                b = 0
+                self.addConstraint(a, b)
 
     def setBounds():
         """Sets the bounds matrices, A_ub and b_ub."""
@@ -118,16 +140,25 @@ class LpBound:
         
         Note that by default, the solver constrains all x >= 0,
         so we don't add that constraint.
-        numVertices: the number of vertices to solve for
+        numVertices: the number of vertices in the function to minimize.
         Returns: a numpy array, of the minimum rank of finding
-            all the cliques.
+            all the k-vertex cliques in an m-vertex graph,
+            for 0 <= m <= n. (Note that this is only minimized
+            for m==numVertices; for the others, I'm curious what bounds
+            it gives, but there's no guarantee that it's minimal.)
+            For m < k, this is 0, but those cases are included
+            for indexing convenience.
         """
-        # the objective function: how low can finding all the
-        # cliques go?
+        # set A_ub and b_ub (if they haven't been set already)
+        self.setBounds()
+        # the objective function: how low can the rank of finding
+        # all the cliques (with that many vertices) be?
         c = np.zeros(self.numVariables)
         numCliques = comb(numVertices, self.k)
         c[ self.varIndex[(numVertices, numCliques)] ] = 1
         # solve
+        r = scipy.optimize.linprog(c, self.A_ub, self.b_ub)
+        return(r)
 
-
-
+if __file__ == '__main__':
+    print('in main')

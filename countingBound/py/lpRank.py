@@ -6,6 +6,10 @@
 
 import numpy as np
 import scipy.optimize
+# note that comb() returns a float by default;
+# for loop bounds, it needs the "exact=True" option,
+# so that it returns an int
+
 from scipy.special import comb
 
 class LpBound:
@@ -30,7 +34,7 @@ class LpBound:
         index = 0
         # set up the mapping of variable indices
         for i in range(k, n+1):
-            for j in range(0, comb(i, k)+1):
+            for j in range(0, comb(i, k, exact=True)+1):
                 self.varIndex[(i,j)] = index
                 index += 1
         # this is the total number of variables we're solving for
@@ -70,13 +74,13 @@ class LpBound:
         # i is the number of vertices
         for i in range(self.k, self.n+1):
             # the number of possible cliques with that many vertices
-            numCliques = comb(i, self.k)
+            numCliques = comb(i, self.k, exact=True)
             # the number of functions with up to that many cliques
             numFunctions = 2 ** numCliques
             # constraint on the "weighted average" of these
             # (here, i is the number of cliques in the function)
             a = [(i, j, comb(j,i) / numFunctions)
-                    for j in range(0, numCliques+1)]
+                    for j in range(0, numCliques+1, exact=True)]
             # the weighted average should be at least
             # half the number of functions
             self.addConstraint(a, numFunctions / 2)
@@ -117,7 +121,7 @@ class LpBound:
                 b = 0
                 self.addConstraint(a, b)
 
-    def setBounds():
+    def setBounds(self):
         """Sets the bounds matrices, A_ub and b_ub."""
         # if these are already computed, skip this
         if self.A_ub and self.B_ub:
@@ -135,7 +139,7 @@ class LpBound:
         # b is just converted into a column vector
         self.b_ub = - np.array(self.b)
  
-    def solve(numVertices):
+    def solve(self, numVertices):
         """Solves the linear system.
         
         Note that by default, the solver constrains all x >= 0,
@@ -160,5 +164,8 @@ class LpBound:
         r = scipy.optimize.linprog(c, self.A_ub, self.b_ub)
         return(r)
 
-if __file__ == '__main__':
+if __name__ == '__main__':
     print('in main')
+    lp = LpBound(7,3)
+    r = lp.solve(7)
+    print(r)

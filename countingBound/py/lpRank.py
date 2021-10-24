@@ -74,13 +74,13 @@ class LpBound:
         # i is the number of vertices
         for i in range(self.k, self.n+1):
             # the number of possible cliques with that many vertices
-            numCliques = comb(i, self.k, exact=True)
+            maxNumCliques = comb(i, self.k, exact=True)
             # the number of functions with up to that many cliques
-            numFunctions = 2 ** numCliques
+            numFunctions = 2 ** maxNumCliques
             # constraint on the "weighted average" of these
             # (here, i is the number of cliques in the function)
-            a = [(i, j, comb(numCliques, j) / numFunctions)
-                    for j in range(0, numCliques+1)]
+            a = [(i, j, comb(maxNumCliques, j) / numFunctions)
+                    for j in range(0, maxNumCliques+1)]
             # the weighted average should be at least
             # half the number of functions
             self.addConstraint(a, numFunctions / 2)
@@ -89,8 +89,9 @@ class LpBound:
         """Adds constraint from restricting some vertex's edges to 0.
 
         This constraint says that if you take a random graph with
-        j+1 vertices, and zero out all the edges from one vertex,
-        the rank of the resulting graph will be smaller.
+        i+1 vertices, and zero out all the edges from one vertex,
+        the rank of the resulting graph (with i vertices)
+        will be smaller.
         
         Note that punctuating the possessive of a word ending in 'x'
         is just problematic.
@@ -104,17 +105,18 @@ class LpBound:
         for i in range(self.k, self.n):
             # maximum number of cliques which might be made
             # impossible, by zeroing out the edges connected to a vertex
-            numCliquesZeroed = comb(i-1, self.k-1)
+            maxNumCliquesZeroed = comb(i, self.k-1, exact=True)
             # corresponding number of functions
-            numFunctionsZeroed = 2 ** numCliquesZeroed
+            numFunctionsZeroed = 2 ** maxNumCliquesZeroed
             # j is the number of cliques _after_ a vertex is zeroed out
-            for j in range(0, comb(i, self.k)+1):
+            for j in range(0, comb(i, self.k, exact=True)+1):
                 # the rank, after a vertex is zeroed out
                 a = [(i, j, 1.0)]
                 # k is the number of cliques which were zeroed out
                 # (this shouldn't throw a KeyError)
-                a += [(i+1, j+k, -comb(maxCliquesZeroed, k))
-                        for k in range(0, maxCliquesZeroed+1)]
+                a += [(i+1, j+k,
+                       -comb(maxNumCliquesZeroed, k) / numFunctionsZeroed)
+                       for k in range(0, maxNumCliquesZeroed+1)]
                 # the constraint is that "the expected rank after
                 # zeroing out a clique is some amount higher than
                 # the rank of what remains"
@@ -169,6 +171,7 @@ if __name__ == '__main__':
     lp = LpBound(5,3)
     # this probably won't do much
     lp.addVertexTotalConstraint()
+    lp.addVertexZeroExpectedConstraint()
     # pdb.set_trace()
     r = lp.solve(5)
     print(r)

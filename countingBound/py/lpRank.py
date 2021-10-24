@@ -5,11 +5,11 @@
 # Note that the nomenclature is confusing here.
 
 import numpy as np
+import pdb
 import scipy.optimize
 # note that comb() returns a float by default;
 # for loop bounds, it needs the "exact=True" option,
 # so that it returns an int
-
 from scipy.special import comb
 
 class LpBound:
@@ -38,7 +38,7 @@ class LpBound:
                 self.varIndex[(i,j)] = index
                 index += 1
         # this is the total number of variables we're solving for
-        self.numVariables = index - 1
+        self.numVariables = index
         # these store the constraints, as lists (for easy appending,
         # since it's not clear how many there will be).
         # A is stored as a list of triples
@@ -79,8 +79,8 @@ class LpBound:
             numFunctions = 2 ** numCliques
             # constraint on the "weighted average" of these
             # (here, i is the number of cliques in the function)
-            a = [(i, j, comb(j,i) / numFunctions)
-                    for j in range(0, numCliques+1, exact=True)]
+            a = [(i, j, comb(numCliques, j) / numFunctions)
+                    for j in range(0, numCliques+1)]
             # the weighted average should be at least
             # half the number of functions
             self.addConstraint(a, numFunctions / 2)
@@ -166,6 +166,9 @@ class LpBound:
 
 if __name__ == '__main__':
     print('in main')
-    lp = LpBound(7,3)
-    r = lp.solve(7)
+    lp = LpBound(5,3)
+    # this probably won't do much
+    lp.addVertexTotalConstraint()
+    # pdb.set_trace()
+    r = lp.solve(5)
     print(r)

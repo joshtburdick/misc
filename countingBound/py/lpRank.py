@@ -111,11 +111,11 @@ class LpBound:
             # j is the number of cliques _after_ a vertex is zeroed out
             for j in range(0, comb(i, self.k, exact=True)+1):
                 # the rank, after a vertex is zeroed out
-                a = [(i, j, 1.0)]
+                a = [(i, j, -1.0)]
                 # k is the number of cliques which were zeroed out
                 # (this shouldn't throw a KeyError)
                 a += [(i+1, j+k,
-                       -comb(maxNumCliquesZeroed, k) / numFunctionsZeroed)
+                       comb(maxNumCliquesZeroed, k) / numFunctionsZeroed)
                        for k in range(0, maxNumCliquesZeroed+1)]
                 # the constraint is that "the expected rank after
                 # zeroing out a clique is some amount higher than

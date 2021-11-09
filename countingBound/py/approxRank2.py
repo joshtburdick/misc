@@ -3,10 +3,8 @@
 
 import pdb
 
-import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
-# import scipy.stats
 from scipy.special import comb, binom
 from scipy.stats import hypergeom
 
@@ -57,7 +55,7 @@ def rankBound(n, k):
                     + comb(maxCliques, i) / 2)
     return r
 
-b = rankBound(6,3)
+b = rankBound(10,3)
 pdb.set_trace()
 
 plt.plot(range(21), b)

@@ -44,7 +44,8 @@ def rankBound(n, k):
                     # number of possible cliques we're sampling
                     numCliquesIncludingVertex
                     ).pmf(z)
-            # the bound for this many cliques (defined on this many vertices)
+            # the "expected value" bound for this many cliques
+            # (defined on this many vertices)
             r[(i,j)] = (
                     # the expected rank of functions which are definitely smaller
                     # (a weighted sum of the number of cliques "left over" after
@@ -52,10 +53,11 @@ def rankBound(n, k):
                     sum( w * np.array([r[(i,j-z1)] for z1 in z]) )
                     # ... plus half the number of functions (with this many
                     # cliques, defined on this many vertices) being added
-                    + comb(maxCliques, i) / 2)
+                    + comb(maxCliques, j) / 2)
+
     return r
 
-b = rankBound(10,3)
+b = rankBound(6,3)
 pdb.set_trace()
 
 plt.plot(range(21), b)

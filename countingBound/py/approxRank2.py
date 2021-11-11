@@ -8,9 +8,10 @@ import numpy as np
 from scipy.special import comb, binom
 from scipy.stats import hypergeom
 
-def rankBound(n, k):
+def rankBoundZeroedVertices(n, k):
     """Estimate of rank for finding some number of cliques.
 
+    This version feeds in zeros to all edges incident to a vertex.
     n: size of the input graph
     k: size of the cliques to find
     Returns: a dict r, with keys (numVertices, numCliques),
@@ -57,7 +58,7 @@ def rankBound(n, k):
 
     return r
 
-b = rankBound(6,3)
+b = rankBoundZeroedVertices(6,3)
 pdb.set_trace()
 
 plt.plot(range(21), b)

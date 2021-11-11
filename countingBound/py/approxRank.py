@@ -8,9 +8,10 @@ import numpy
 import scipy.stats
 import scipy.special
 
-def rankBound(n, k):
+def rankBoundZeroedEdges(n, k):
     """Estimate of rank for finding some number of cliques.
 
+    This version "zonks" edges.
     n: size of the input graph
     k: size of the cliques to find
     Returns: a vector r of length N+1, where N = choose(n, k),
@@ -37,7 +38,7 @@ def rankBound(n, k):
         r[i] = sum(w * r[0:i]) + scipy.special.comb(numCliques, i) / 2
     return r
 
-b = rankBound(6,3)
+b = rankBoundZeroedEdges(6,3)
 
 plt.plot(range(21), b)
 plt.title('n = 6, k = 3')

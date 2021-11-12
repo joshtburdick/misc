@@ -1,12 +1,3 @@
-#!/usr/bin/env python3
-# Estimates rank of various functions.
-
-import pdb
-
-import matplotlib.pyplot as plt
-import numpy as np
-from scipy.special import comb, binom
-from scipy.stats import hypergeom
 
 def rankBoundZeroedVertices(n, k):
     """Estimate of rank for finding some number of cliques.
@@ -58,16 +49,6 @@ def rankBoundZeroedVertices(n, k):
 
     return r
 
-b = rankBoundZeroedVertices(6,3)
-pdb.set_trace()
+# b = rankBoundZeroedVertices(6,3)
 
-plt.plot(range(21), b)
-plt.title('n = 6, k = 3')
-plt.xlabel('Level')
-plt.ylabel('Rank')
-# force x-axis to be plotted as integers
-# ax = plt.figure().axes
-# ax.xaxis.get_major_locator().set_params(integer=True)
-plt.gca().xaxis.get_major_locator().set_params(integer=True)
-plt.savefig('rank.png')
 

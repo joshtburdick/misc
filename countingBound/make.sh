@@ -1,8 +1,8 @@
 #!/bin/bash
 # Builds the document.
 
-(cd R; R CMD BATCH --no-save --quiet figs1.R )
-(cd py; ./approxRank.py)
+# (cd R; R CMD BATCH --no-save --quiet figs1.R )
+# (cd py; ./approxRank.py)
 pdflatex countingBound.tex
 bibtex countingBound.aux
 pdflatex countingBound.tex

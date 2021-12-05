@@ -359,13 +359,13 @@ the inequality $rank(B) < rank(C)$ is strict.)
 
 In terms of the previous warehouse analogy, we can imagine that,
 when an edge is disabled, the chip now has strictly fewer gates.
-By construction of the warehouse, that means it will be shifted,
+(Perhaps the chip-maker spent their entire budget on designing the
+optimal circuits, but then skimped on the wires connecting the chips?)
+By construction of the warehouse, that means the faulty chip will be shifted,
 on a giant conveyor belt,
 toward the ``smaller'' (in number of gates) end of the warehouse.
 That means that the corresponding set of cliques is also
 in the ``smaller'' end of the warehouse.
-
-(FIXME add figure?)
 
 Although both these numbers (the reduction in number of cliques, and
 the reduction in rank) have an expected value of $a/2$,
@@ -393,14 +393,15 @@ sets of cliques.
 It seems intuitive that finding a larger fraction of the cliques
 should be harder.
 So, another idea is to try to show this using induction on $l$.
-As usual, the base case ($l=0$) is easy: finding zero cliques requires zero gates.
+As usual, the base case ($l=0$) is easy: finding zero cliques is easiest,
+so its rank is 0.
 
 The step case is not so straightforward. Suppose we've computed bounds for
 levels 0 through $l-1$ (thus, we're using some sort of strong induction.)
 In other words, we've lower-bounded $E[rank(K_i)]$, for $i \in [0,l-1]$.
 Can we lower-bound $E[rank(K_l)]$?
 
-Suppose we pick a set of $l$ cliques, uniformly at random.
+Suppose we pick a set of cliques at level $l$, uniformly at random.
 If we then pick an edge $e$ uniformly at random, and remove the cliques
 which contain $e$, then the number of cliques removed will vary
 depending on the level. When $l=1$, we'll remove 0 or 1 cliques; when $l=N$,
@@ -416,10 +417,11 @@ level $l$ will depend on estimates for levels fairly ``high up'' near $l$.
 Also, when $n$ is large, $N$ is way larger; so the distribution of
 the fraction of cliques removed will be sharply peaked near $p$.
 
-However, note that it's not clear that we're choosing sets of cliques uniformly from
-a given level. We may have a bound on $E[rank(K_i)]$, for $i$ in $[0,l-1]$.
-But when we pick a random set of cliques $K_l$, and feed in a 0, we may not be
-sampling uniformly from levels 0 through $l-1$.
+However, this induction isn't quite correct.
+We may have a bound on $E[rank(K_i)]$, for $i$ in $[0,l-1]$.
+But when we pick a random set of cliques $K_l$, and feed in a 0, we definitely
+aren't sampling uniformly from levels 0 through $l-1$, because the graphs we're
+sampling definitely lack one edge.
 
 Thus, this is {\em only an estimate} of the rank of functions at level $l$.
 To me, this raises (at least) the following questions:
@@ -462,7 +464,11 @@ For $0 < l \le N$, define
 	R(l) = [ \sum_{1\le i < N} binom(i; l, 1-p) R(i) ] + {N \choose l}/2
 \]
 
-The file {\tt py/approxRank.py} computes this bound.
+The file {\tt py/approxRank.py} computes this bound. Here are the bounds
+for two small cases.
+
+\includegraphics[width=0.45\textwidth]{py/rank_n=6_k=3.pdf}
+\includegraphics[width=0.45\textwidth]{py/rank_n=11_k=4.pdf}
 
 \section{Related work}
 

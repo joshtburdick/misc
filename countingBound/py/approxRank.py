@@ -91,26 +91,40 @@ def rankBoundZeroedVertices(n, k):
 
     return r
 
+def plotBoundAtLevels(n, k):
+    """Plots the bound at various levels.
 
-##### plotting
+    n: number of vertices
+    k: number of vertices in cliques
+    Side effects: plots different bounds on the rank of the function
+        finding some number of cliques.
+    """
+    print('n = ' + str(n) + ', k = ' + str(k))
+    maxCliques = comb(n, k, exact=True)
+    # compute the bounds
+    bound1 = rankBoundZeroedEdges(n, k)
+    bound2All = rankBoundZeroedVertices(n, k)
+    bound2 = [bound2All[n,k] for k in range(maxCliques+1)]
+    # plot
+    plt.figure()
+    plt.plot(range(maxCliques+1), bound1, label='Zeroing out edges')
+    # plt.plot(range(maxCliques+1), bound2, label='Zonking vertices')
+    plt.plot(range(maxCliques+1),
+            [comb(maxCliques, c)/2 for c in range(maxCliques+1)],
+            label='Naive counting bound')
+    plt.title('n = ' + str(n) + ', k = ' + str(k))
+    plt.xlabel('Number of cliques')
+    plt.ylabel('E[rank of functions]')
+    plt.legend()
+    # force x-axis to be plotted as integers
+    plt.gca().xaxis.get_major_locator().set_params(integer=True)
+    plt.savefig('rank_n=' + str(n) + '_k=' + str(k) + '.pdf')
 
-n = 6
-k = 3
-maxCliques = comb(n, k, exact=True)
 
-bound1 = rankBoundZeroedEdges(n, k)
-bound2All = rankBoundZeroedVertices(n, k)
-bound2 = [bound2All[n,k] for k in range(maxCliques+1)]
+# for n in range(6, 12):
+#     plotBoundAtLevels(n, 3)
+#     plotBoundAtLevels(n, 4)
 
-plt.plot(range(maxCliques+1), bound1, label="Edges")
-plt.plot(range(maxCliques+1), bound2, label="Vertices")
-
-plt.title('n = ' + str(n) + ', k = ' + str(k))
-plt.xlabel('Level')
-plt.ylabel('Rank')
-# force x-axis to be plotted as integers
-# ax = plt.figure().axes
-# ax.xaxis.get_major_locator().set_params(integer=True)
-plt.gca().xaxis.get_major_locator().set_params(integer=True)
-plt.savefig('rank.png')
+plotBoundAtLevels(6, 3)
+plotBoundAtLevels(11, 4)
 

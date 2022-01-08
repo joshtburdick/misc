@@ -213,6 +213,10 @@ def plotBoundAtLevels(n, k):
 #     plotBoundAtLevels(n, 3)
 #     plotBoundAtLevels(n, 4)
 
+# this runs, but gives a not-great bound
+z = rankBoundZeroingVertexEdges(6,3)
+pdb.set_trace()
+
 plotBoundAtLevels(6, 3)
 plotBoundAtLevels(11, 4)
 

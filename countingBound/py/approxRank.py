@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # Estimates rank of finding various numbers of functions.
+# These try to emphasize clarity over efficiency.
 
 import matplotlib
 import matplotlib.pyplot as plt
@@ -57,12 +58,12 @@ def rankBoundZeroedVertices(n, k):
     # FIXME make this a dict of numpy vectors, or a ragged array?
     r = {(k,0):0, (k,1):1}
     # loop through the number of vertices
-    for i in range(k+1, n+1):
+    for v in range(k+1, n+1):
         # loop through the number of cliques with that many vertices
-        maxCliques = comb(i, k, exact=True)
+        maxCliques = comb(v, k, exact=True)
         for j in range(maxCliques+1):
             # the number of cliques which include an arbitrary vertex
-            numCliquesIncludingVertex = comb(i-1, k-1, exact=True)
+            numCliquesIncludingVertex = comb(v-1, k-1, exact=True)
             # the number of cliques potentially zonked by
             # zeroing out edges connected to a vertex
             maxCliquesZonked = min(j, numCliquesIncludingVertex)
@@ -80,16 +81,104 @@ def rankBoundZeroedVertices(n, k):
                     ).pmf(z)
             # the "expected value" bound for this many cliques
             # (defined on this many vertices)
-            r[(i,j)] = (
+            r[(v,j)] = (
                     # the expected rank of functions which are definitely smaller
                     # (a weighted sum of the number of cliques "left over" after
                     # zonking cliques from one vertex) ...
-                    sum( w * np.array([r[(i,j-z1)] for z1 in z]) )
+                    sum( w * np.array([r[(v,j-z1)] for z1 in z]) )
                     # ... plus half the number of functions (with this many
                     # cliques, defined on this many vertices) being added
+                    # ??? should w also be weighting this ? I think that it
+                    # doesn't matter, by linearity of expectation.
                     + comb(maxCliques, j) / 2)
-
     return r
+
+def rankBoundZeroingVertexEdges(maxNumVertices, k):
+    """Bounds function rank, zeroing a vertex' edges, one at a time.
+
+    This version adds vertices, one at a time. For each, it adds
+    edges one at a time, and tracks how many cliques would be lost
+    by zeroing out that edge.
+    XXX this function is getting looooong
+
+    maxNumVertices: size of the input graph
+    k: size of the cliques to find
+    Returns: a dict r, keyed by (v, e), where:
+        v: the number of vertices "completely" added so far
+            (which ranges up to maxNumVertices)
+        e: the number of edges added to the "new" vertex
+            (this can be 0)
+        The value r[(v,e)] is a numpy array such that r[(v,e)][i] is a lower
+        bound on E[rank] of all functions with exactly i cliques.
+    """
+    # the bound: initially there are only two functions, defined on
+    # k vertices (either there's a k-clique, or not)
+    # ??? rename this?
+    # ??? should the rank in the bound be 0-based? does it matter?
+    bound = { (k,0): np.array([0, 1]) }
+    # loop through the number of vertices, including the new vertex v
+    for v in range(k+1, maxNumVertices+1):
+        # the bound, without the new vertex (initially with no edges added)
+        bound1 = bound[(v-1, 0)]
+        # Loop through the number of edges connected to v.
+        # Here, j is the number of edges after adding a new edge, e.
+        # (Note that when we add a new vertex, we initially need
+        # at least k-1 edges, in order for the new vertex to possibly
+        # be part of a k-clique).
+        for numNewEdges in range(k-1, v-1):
+            # number of cliques so far (formed from vertices other
+            # than v, plus edges connected from v so far)
+            numCurrentCliques = bound1.shape[0] - 1
+            # The number of cliques created by adding an edge e;
+            # all of these would be "zonked" if e were set to 0.
+            # e's ends determine two vertices of these cliques, but
+            # the remaining edges could be any subset of the remaining edges.
+            numNewCliques = comb(numNewEdges-1, k-2, exact=True)
+            # the total number of cliques which are possible
+            # (with the new edge added)
+            maxCliques = numCurrentCliques + numNewCliques
+            # the bound on rank for every possible number of cliques
+            # (with the new edge, more cliques are possible)
+            bound2 = np.zeros(maxCliques+1)
+            # numCliques is the total number of cliques in the graph,
+            # with the edge added (whether they include it, or not)
+            for numCliques in range(0, maxCliques+1):
+                # the number of cliques potentially zonked by
+                # zeroing out edges connected to a vertex
+                maxCliquesZonked = min(numCliques, numNewCliques)
+                # The number of cliques zonked. Note that we don't
+                # require any cliques to be zonked (this is basically
+                # including the functions from the previous step).
+                z = np.arange(maxCliquesZonked+1)
+                # the probability of some number of these being zonked
+                w = hypergeom(
+                    # number of possible cliques
+                    maxCliques,
+                    # number of those present
+                    numCliques,
+                    # number of cliques which intersect the new edge
+                    # (and so could be zonked)
+                    numNewCliques
+                    ).pmf(z)
+                # The number of _new_ functions with this many cliques.
+                # This is the total with the new edge added, minus
+                # the total without the new edge (this latter number
+                # can be zero).
+                numNewFunctions = (comb(maxCliques, numCliques, exact=True)
+                    - comb(numCurrentCliques, numCliques, exact=True))
+                # the bound on E[rank] for this many cliques
+                bound2[numCliques] = (
+                        # first, the bound from the "previous" cliques,
+                        # with the edge zonked
+                        w.dot(bound1[numCurrentCliques-z])
+                        # plus, half the new functions 
+                        + numNewFunctions / 2)
+            # update the bound
+            bound1 = bound2
+            # FIXME also save this when the new vertex is only
+            # partially added (mostly for debugging) ?
+        bound[(v,0)] = bound2
+    return bound
 
 def plotBoundAtLevels(n, k):
     """Plots the bound at various levels.
@@ -108,7 +197,7 @@ def plotBoundAtLevels(n, k):
     # plot
     plt.figure()
     plt.plot(range(maxCliques+1), bound1, label='Zeroing out edges')
-    # plt.plot(range(maxCliques+1), bound2, label='Zonking vertices')
+    # plt.plot(range(maxCliques+1), bound2, label='Zonking vertices')  # deprecated
     plt.plot(range(maxCliques+1),
             [comb(maxCliques, c)/2 for c in range(maxCliques+1)],
             label='Naive counting bound')
@@ -119,7 +208,6 @@ def plotBoundAtLevels(n, k):
     # force x-axis to be plotted as integers
     plt.gca().xaxis.get_major_locator().set_params(integer=True)
     plt.savefig('rank_n=' + str(n) + '_k=' + str(k) + '.pdf')
-
 
 # for n in range(6, 12):
 #     plotBoundAtLevels(n, 3)

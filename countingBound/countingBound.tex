@@ -276,6 +276,8 @@ complexity (see also the slides at \cite{rossmanRestrictions}).
 Here, we apply random restrictions to a set of functions (and circuits),
 rather than just one function and circuit.
 
+??? Is this just a ``gate-elimination argument''?
+
 \subsection{Counting functions by their ``rank'' in a list}
 
 This argument relies on measuring the size of a circuit,
@@ -359,9 +361,11 @@ the inequality $rank(B) < rank(C)$ is strict.)
 
 In terms of the previous warehouse analogy, we can imagine that,
 when an edge is disabled, the chip now has strictly fewer gates.
-(Perhaps the chip-maker spent their entire budget on designing the
-optimal circuits, but then skimped on the wires connecting the chips?)
-By construction of the warehouse, that means the faulty chip will be shifted,
+Perhaps the chip-maker spent their entire budget on designing the
+optimal circuits, but then skimped on the wires connecting the chips?
+In that case, assuming the missing wire is treated as a 0, the chip still
+finds some cliques, and so might be sellable.
+By construction of the warehouse, that means the faulty chip could be shifted,
 on a giant conveyor belt,
 toward the ``smaller'' (in number of gates) end of the warehouse.
 That means that the corresponding set of cliques is also
@@ -486,6 +490,11 @@ instances of a given problem are hard, rather
 than using random problems to show that
 a specific problem is hard.
 
+??? What about:
+- co-NP?
+- formula size?
+
+
 This lower-bound strategy also seems potentially
 relevant to quantum computing,
 as the argument makes few restrictions on the sort of gates used.
@@ -502,6 +511,9 @@ It is a modified form of Shannon's counting argument
 This suggests {\em approximate} bounds on functions {\em similar} to $k$-CLIQUE.
 Unfortunately, however, this is an approximate bound,
 and so doesn't bound the complexity of $k$-CLIQUE.
+
+If this were true, then by the contrapositive,
+\cite{fenner1996complexity} would give a concise list of some of the consequences...
 
 \section{Acknowledgements}
 

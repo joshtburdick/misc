@@ -197,7 +197,8 @@ def plotBoundAtLevels(n, k):
     # plot
     plt.figure()
     plt.plot(range(maxCliques+1), bound1, label='Zeroing out edges')
-    # plt.plot(range(maxCliques+1), bound2, label='Zonking vertices')  # deprecated
+    # ??? should this be included?
+    plt.plot(range(maxCliques+1), bound2, label='Zonking vertices')
     plt.plot(range(maxCliques+1),
             [comb(maxCliques, c)/2 for c in range(maxCliques+1)],
             label='Naive counting bound')
@@ -207,16 +208,23 @@ def plotBoundAtLevels(n, k):
     plt.legend()
     # force x-axis to be plotted as integers
     plt.gca().xaxis.get_major_locator().set_params(integer=True)
-    plt.savefig('rank_n=' + str(n) + '_k=' + str(k) + '.pdf')
+    # plt.savefig('rank_n=' + str(n) + '_k=' + str(k) + '.pdf')
+    plt.savefig('rank_n=' + str(n) + '_k=' + str(k) + '.png')
 
-# for n in range(6, 12):
-#     plotBoundAtLevels(n, 3)
-#     plotBoundAtLevels(n, 4)
+if False:
+    for n in range(6, 12):
+        plotBoundAtLevels(n, 3)
+        plotBoundAtLevels(n, 4)
+        plotBoundAtLevels(n, 5)
+
+for k in range(3, 7):
+    plotBoundAtLevels(2*k, k)
 
 # this runs, but gives a not-great bound
-z = rankBoundZeroingVertexEdges(6,3)
-pdb.set_trace()
+# z = rankBoundZeroingVertexEdges(6,3)
+# pdb.set_trace()
 
-plotBoundAtLevels(6, 3)
-plotBoundAtLevels(11, 4)
+if False:
+    plotBoundAtLevels(6, 3)
+    plotBoundAtLevels(11, 4)
 

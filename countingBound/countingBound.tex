@@ -229,6 +229,16 @@ then to detect all of the triangles, we will definitely need at least one
 gate per triangle. We can see this by feeding in a 0 to some input
 unique to a triangle, applying \ref{edgeZonking}, and repeating.
 
+Consider the case of finding $k$-cliques on $n$ vertices.
+Possibly the most na\"ive strategy in this case is to pick a vertex $v_1$,
+and feed in 0's to edges, one at a time. We can repeat this
+(zonking at least one NAND gate as we go), until there
+$k-2$ edges remaining connected to $v_1$. At this point, $v_1$ can no
+longer be part of a clique. We feed in 0's to those edges (with no
+provable effect on the circuit size), and repeat with $v_2$...
+This strategy is simple, but only gives a bound a bit lower than
+the number of input edges.
+
 \subsection{Defining levels of CLIQUE}
 
 To me, it seems a reasonably intuitive guess that the hardness of
@@ -471,8 +481,8 @@ For $0 < l \le N$, define
 The file {\tt py/approxRank.py} computes this bound. Here are the bounds
 for two small cases.
 
-\includegraphics[width=0.45\textwidth]{py/rank_n=6_k=3.pdf}
-\includegraphics[width=0.45\textwidth]{py/rank_n=11_k=4.pdf}
+\includegraphics[width=0.45\textwidth]{py/rank_n=6_k=3.png}
+\includegraphics[width=0.45\textwidth]{py/rank_n=8_k=4.png}
 
 \section{Related work}
 
@@ -596,7 +606,7 @@ inputs $b$. To avoid such issues, we can count the number of gates
 beyond the number of inputs. This gives the bound
 
 \begin{eqnarray*}
-g & \ge & {\sqrt 2w} - m \\
+	g & \ge & \sqrt{2w} - m \\
 \end{eqnarray*}
 
 

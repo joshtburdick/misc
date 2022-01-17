@@ -93,7 +93,7 @@ def rankBoundZeroedVertices(n, k):
                     + comb(maxCliques, j) / 2)
     return r
 
-def rankBoundZeroingVertexEdges(maxNumVertices, k):
+def rankBoundZeroingVertexEdges(maxNumVertices, k, includePartialVertices=False):
     """Bounds function rank, zeroing a vertex' edges, one at a time.
 
     This version adds vertices, one at a time. For each, it adds
@@ -103,10 +103,12 @@ def rankBoundZeroingVertexEdges(maxNumVertices, k):
 
     maxNumVertices: size of the input graph
     k: size of the cliques to find
+    includePartialVertices: if True, include cases in which a vertex is only
+        partially added. (If False, the (v,e) keys below will all have e==0.)
     Returns: a dict r, keyed by (v, e), where:
         v: the number of vertices "completely" added so far
             (which ranges up to maxNumVertices)
-        e: the number of edges added to the "new" vertex
+        e: the number of edges added (thus far) to the "new" vertex
             (this can be 0)
         The value r[(v,e)] is a numpy array such that r[(v,e)][i] is a lower
         bound on E[rank] of all functions with exactly i cliques.
@@ -125,9 +127,9 @@ def rankBoundZeroingVertexEdges(maxNumVertices, k):
         # (Note that when we add a new vertex, we initially need
         # at least k-1 edges, in order for the new vertex to possibly
         # be part of a k-clique).
-        for numNewEdges in range(k-1, v-1):
-            # number of cliques so far (formed from vertices other
-            # than v, plus edges connected from v so far)
+        for numNewEdges in range(k-1, v):
+            # number of possible cliques so far (formed from vertices
+            # other than v, plus edges connected from v so far)
             numCurrentCliques = bound1.shape[0] - 1
             # The number of cliques created by adding an edge e;
             # all of these would be "zonked" if e were set to 0.
@@ -175,8 +177,10 @@ def rankBoundZeroingVertexEdges(maxNumVertices, k):
                         + numNewFunctions / 2)
             # update the bound
             bound1 = bound2
-            # FIXME also save this when the new vertex is only
+            # also save this when the new vertex is only
             # partially added (mostly for debugging) ?
+            if includePartialVertices and numNewEdges < v-1:
+                bound[(v, numNewEdges)] = bound2
         bound[(v,0)] = bound2
     return bound
 
@@ -190,15 +194,20 @@ def plotBoundAtLevels(n, k):
     """
     print('n = ' + str(n) + ', k = ' + str(k))
     maxCliques = comb(n, k, exact=True)
-    # compute the bounds
+    # compute various bounds
     bound1 = rankBoundZeroedEdges(n, k)
     bound2All = rankBoundZeroedVertices(n, k)
     bound2 = [bound2All[n,k] for k in range(maxCliques+1)]
+    bound3 = rankBoundZeroingVertexEdges(n+1, k)
+    # pdb.set_trace()
+    bound3 = bound3[(n, 0)]
     # plot
     plt.figure()
     plt.plot(range(maxCliques+1), bound1, label='Zeroing out edges')
     # ??? should this be included?
     plt.plot(range(maxCliques+1), bound2, label='Zonking vertices')
+    plt.plot(range(maxCliques+1), bound3,
+            label='Zonking vertices, an edge at a time')
     plt.plot(range(maxCliques+1),
             [comb(maxCliques, c)/2 for c in range(maxCliques+1)],
             label='Naive counting bound')
@@ -208,8 +217,8 @@ def plotBoundAtLevels(n, k):
     plt.legend()
     # force x-axis to be plotted as integers
     plt.gca().xaxis.get_major_locator().set_params(integer=True)
-    # plt.savefig('rank_n=' + str(n) + '_k=' + str(k) + '.pdf')
-    plt.savefig('rank_n=' + str(n) + '_k=' + str(k) + '.png')
+    plt.savefig('rank_n=' + str(n) + '_k=' + str(k) + '.pdf')
+    # plt.savefig('rank_n=' + str(n) + '_k=' + str(k) + '.png')
 
 if False:
     for n in range(6, 12):
@@ -217,12 +226,14 @@ if False:
         plotBoundAtLevels(n, 4)
         plotBoundAtLevels(n, 5)
 
-for k in range(3, 7):
-    plotBoundAtLevels(2*k, k)
+if False:
+    for k in range(6, 7):
+        plotBoundAtLevels(2*k, k)
 
 # this runs, but gives a not-great bound
-# z = rankBoundZeroingVertexEdges(6,3)
-# pdb.set_trace()
+z = rankBoundZeroingVertexEdges(8, 3, includePartialVertices=True)
+for i in z.items():
+    print(i[0], i[1].shape[0]-1)
 
 if False:
     plotBoundAtLevels(6, 3)

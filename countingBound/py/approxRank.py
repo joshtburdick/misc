@@ -16,6 +16,9 @@ def rankBoundZeroedEdges(n, k):
     """Estimate of rank for finding some number of cliques.
 
     This version "zonks" edges.
+    Note that this seems inaccurate, because "zonking" edges in this
+    way means that we aren't sampling uniformly from circuits which
+    find smaller numbers of cliques.
     n: size of the input graph
     k: size of the cliques to find
     Returns: a vector r of length N+1, where N = choose(n, k),
@@ -41,6 +44,55 @@ def rankBoundZeroedEdges(n, k):
         # circuits we're adding at this level.
         r[i] = sum(w * r[0:i]) + comb(numCliques, i) / 2
     return r
+
+def zeroingStep(rankBoundA, sizeOfB):
+    """Calculates a new bound, after zeroing out some edges.
+
+    This is the "step case": given a bound for some set of cliques A,
+        it gives a bound if some other set of cliques B were added.
+    rankBoundA: numpy array (whose length implicitly gives the size
+        of A). Its i'th entry is a lower bound on the expected rank
+        of a circuit (picked uniformly randomly) which finds
+        exactly i cliques.
+    sizeOfB: number of cliques in B, which are being added.
+        There should be an edge (or edges) which can be set to zero,
+        which remove all the cliques in B, but leave all the cliques
+        in A.
+    Returns: A numpy array (like rankBoundA) whose i'th entry is
+        a lower bound on the expected rank of a circuit which
+        finds exactly i cliques, except in C = A union B.
+    """
+    sizeOfA = rankBoundA.shape-1
+    sizeOfC = sizeOfA + sizeOfB
+    rankBoundC = np.zeros(sizeOfC+1)
+    # loop through the possible combined sizes
+    for numCliquesInC in range(sizeOfC+1):
+        # the number of cliques in B potentially zonked
+        # by zeroing out edges 
+        maxCliquesInB = min(numCliquesInC, sizeOfB)
+        # the number of cliques zonked (which may be zero)
+        z = np.arange(maxCliquesInB+1)
+        # the probability of some number of these being in B
+        # (and thus zonked)
+        w = hypergeom(
+            # number of possible cliques
+            sizeOfC,
+            # number of those present (in C = A union B)
+            numCliquesInC,
+            # number of possible cliques in B
+            sizeOfB
+            ).pmf(z)
+        # How much the rank goes up, given the number of cliques in B.
+        # Presumably, the expected rank goes up by |B|/2 ...
+        rankIncreaseFromB = comb(sizeOfB, range(sizeOfB+1))
+        # ... unless B is empty, in which case there's no increase
+        # (but we still have the previous bound).
+        rankIncreaseFromB[0] = 0
+        # combining these: the bound is a weighted sum of the
+        # previous bound (from A), and what's added
+        rankBoundC[ numCliquesInC ] = w.dot(
+                rankBoundA[ numCliquesInC - z ] + rankIncreaseFromB )
+
 
 def rankBoundZeroedVertices(n, k):
     """Estimate of rank for finding some number of cliques.
@@ -198,16 +250,24 @@ def plotBoundAtLevels(n, k):
     bound1 = rankBoundZeroedEdges(n, k)
     bound2All = rankBoundZeroedVertices(n, k)
     bound2 = [bound2All[n,k] for k in range(maxCliques+1)]
-    bound3 = rankBoundZeroingVertexEdges(n+1, k)
-    # pdb.set_trace()
-    bound3 = bound3[(n, 0)]
+    # omitting this one for now
+    # bound3 = rankBoundZeroingVertexEdges(n+1, k)
+    # bound3 = bound3[(n, 0)]
     # plot
     plt.figure()
     plt.plot(range(maxCliques+1), bound1, label='Zeroing out edges')
     # ??? should this be included?
     plt.plot(range(maxCliques+1), bound2, label='Zonking vertices')
-    plt.plot(range(maxCliques+1), bound3,
-            label='Zonking vertices, an edge at a time')
+    # plt.plot(range(maxCliques+1), bound3,
+    #         label='Zonking vertices, an edge at a time')
+    # bound of "half of all functions of size <= this"
+    # FIXME rename?
+    # also currently omitted, as it looks weirdly high
+    if False:
+        plt.plot(range(maxCliques+1),
+            np.cumsum(np.array(
+                [comb(maxCliques, c)/2 for c in range(maxCliques+1)])),
+            label='"Half of all the functions"')
     plt.plot(range(maxCliques+1),
             [comb(maxCliques, c)/2 for c in range(maxCliques+1)],
             label='Naive counting bound')
@@ -217,23 +277,24 @@ def plotBoundAtLevels(n, k):
     plt.legend()
     # force x-axis to be plotted as integers
     plt.gca().xaxis.get_major_locator().set_params(integer=True)
-    plt.savefig('rank_n=' + str(n) + '_k=' + str(k) + '.pdf')
-    # plt.savefig('rank_n=' + str(n) + '_k=' + str(k) + '.png')
+    # plt.savefig('rank_n=' + str(n) + '_k=' + str(k) + '.pdf')
+    plt.savefig('rank_n=' + str(n) + '_k=' + str(k) + '.png')
 
-if False:
+if True:
+    plotBoundAtLevels(4, 3)   # XXX super-small test
     for n in range(6, 12):
         plotBoundAtLevels(n, 3)
         plotBoundAtLevels(n, 4)
         plotBoundAtLevels(n, 5)
-
 if False:
     for k in range(6, 7):
         plotBoundAtLevels(2*k, k)
 
 # this runs, but gives a not-great bound
-z = rankBoundZeroingVertexEdges(8, 3, includePartialVertices=True)
-for i in z.items():
-    print(i[0], i[1].shape[0]-1)
+if False:
+    z = rankBoundZeroingVertexEdges(8, 3, includePartialVertices=True)
+    for i in z.items():
+        print(i[0], i[1].shape[0]-1)
 
 if False:
     plotBoundAtLevels(6, 3)

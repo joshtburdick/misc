@@ -62,39 +62,61 @@ def zeroingStep(rankBoundA, sizeOfB):
         a lower bound on the expected rank of a circuit which
         finds exactly i cliques, except in C = A union B.
     """
-    sizeOfA = rankBoundA.shape-1
+    sizeOfA = rankBoundA.shape[0]-1
     sizeOfC = sizeOfA + sizeOfB
     rankBoundC = np.zeros(sizeOfC+1)
     # loop through the possible combined sizes
     for numCliquesInC in range(sizeOfC+1):
-        # the number of cliques in B potentially zonked
-        # by zeroing out edges 
+        # bounds on how many cliques in B might potentially be
+        # zonked by zeroing out edges
+        minCliquesInB = max(0, numCliquesInC - sizeOfA)
         maxCliquesInB = min(numCliquesInC, sizeOfB)
         # the number of cliques zonked (which may be zero)
-        z = np.arange(maxCliquesInB+1)
+        z = np.arange(minCliquesInB, maxCliquesInB+1)
         # the probability of some number of these being in B
         # (and thus zonked)
         w = hypergeom(
             # number of possible cliques
             sizeOfC,
-            # number of those present (in C = A union B)
+            # number of those present (in C = A \union B)
             numCliquesInC,
             # number of possible cliques in B
             sizeOfB
             ).pmf(z)
         # How much the rank goes up, given the number of cliques in B.
         # Presumably, the expected rank goes up by |B|/2 ...
-        rankIncreaseFromB = comb(sizeOfB, range(sizeOfB+1))
+        rankIncreaseFromB = np.array(
+                [comb(sizeOfB, c, exact=True)
+                    for c in range(sizeOfB+1)]) / 2
         # ... unless B is empty, in which case there's no increase
         # (but we still have the previous bound).
         rankIncreaseFromB[0] = 0
         # combining these: the bound is a weighted sum of the
         # previous bound (from A), and what's added
-        rankBoundC[ numCliquesInC ] = w.dot(
-                rankBoundA[ numCliquesInC - z ] + rankIncreaseFromB )
+        rankBoundC[ numCliquesInC ] = w.dot( rankBoundA[ numCliquesInC - z ] + rankIncreaseFromB[ z ])
+    # return the bound, for A \union B
+    return rankBoundC
 
+def rankBoundZeroedVertices(maxVertices, k):
+    """Estimate of rank for finding some number of cliques.
 
-def rankBoundZeroedVertices(n, k):
+    This version feeds in zeros to all edges incident to a vertex.
+    maxVertices: largest size of the input graph
+    k: size of the cliques to find
+    Returns: a dict r, keyed by numVertices,
+        such that r[i] is a lower bound on the expected rank of
+        the smallest circuit finding i cliques in a graph with
+        <= numVertices vertices.
+    """
+    # initially there are two functions
+    bound = { k: np.array([0, 1]) }
+    # loop through the number of vertices
+    for numVertices in range(k+1, maxVertices+1):
+        bound[numVertices] = zeroingStep(bound[numVertices-1],
+            comb(numVertices-1, k-1, exact=True))
+    return bound
+
+def rankBoundZeroedVertices1(n, k):
     """Estimate of rank for finding some number of cliques.
 
     This version feeds in zeros to all edges incident to a vertex.
@@ -229,10 +251,12 @@ def rankBoundZeroingVertexEdges(maxNumVertices, k, includePartialVertices=False)
                         + numNewFunctions / 2)
             # update the bound
             bound1 = bound2
-            # also save this when the new vertex is only
-            # partially added (mostly for debugging) ?
+            # possibly also save the bound when the new vertex is
+            # only partially added (mostly for debugging) ?
             if includePartialVertices and numNewEdges < v-1:
                 bound[(v, numNewEdges)] = bound2
+        # save the bound, for "no additional edges"
+        # ??? shouldn't this be v+1 ?
         bound[(v,0)] = bound2
     return bound
 
@@ -248,16 +272,17 @@ def plotBoundAtLevels(n, k):
     maxCliques = comb(n, k, exact=True)
     # compute various bounds
     bound1 = rankBoundZeroedEdges(n, k)
-    bound2All = rankBoundZeroedVertices(n, k)
-    bound2 = [bound2All[n,k] for k in range(maxCliques+1)]
+    # bound2All = rankBoundZeroedVertices1(n, k)
+    # bound2 = [bound2All[n,k] for k in range(maxCliques+1)]
+    bound2 = rankBoundZeroedVertices(n, k)
     # omitting this one for now
     # bound3 = rankBoundZeroingVertexEdges(n+1, k)
     # bound3 = bound3[(n, 0)]
     # plot
     plt.figure()
-    plt.plot(range(maxCliques+1), bound1, label='Zeroing out edges')
     # ??? should this be included?
-    plt.plot(range(maxCliques+1), bound2, label='Zonking vertices')
+    plt.plot(range(maxCliques+1), bound1, label='Zeroing out edges')
+    plt.plot(range(maxCliques+1), bound2[n], label='Zonking vertices')
     # plt.plot(range(maxCliques+1), bound3,
     #         label='Zonking vertices, an edge at a time')
     # bound of "half of all functions of size <= this"

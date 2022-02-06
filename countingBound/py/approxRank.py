@@ -317,21 +317,27 @@ def plotBoundAtLevels(n, k):
     """
     print('n = ' + str(n) + ', k = ' + str(k))
     maxCliques = comb(n, k, exact=True)
-    # compute various bounds
+    # compute various bounds, and plot them
+    plt.figure()
+    plt.plot(range(maxCliques+1),
+        [comb(maxCliques, c)/2 for c in range(maxCliques+1)],
+        label='Naive counting bound', alpha=0.5, linewidth=5)
+
     bound1 = rankBoundZeroedEdges(n, k)
-    # bound2All = rankBoundZeroedVertices1(n, k)
+    plt.plot(range(maxCliques+1), bound1, label='Zeroing out edges', alpha=0.6)
+
+    # bound2All = rankBoundZeroedVertices(n, k)
     # bound2 = [bound2All[n,k] for k in range(maxCliques+1)]
-    bound2 = rankBoundZeroedVertices1(n, k)
-    # omitting this one for now
+    # plt.plot(range(maxCliques+1), bound2[n], label='Zonking vertices (take 2)', alpha=0.6)
+
+    bound2a = rankBoundZeroedVertices1(n, k)
+    plt.plot(range(maxCliques+1), bound2a[n], label='Zonking vertices (take 2)', alpha=0.6)
+
     bound3 = rankBoundZeroingVertexEdges1(n+1, k)
     bound3 = bound3[(n, 0)]
-    # plot
-    plt.figure()
-    # ??? should this be included?
-    plt.plot(range(maxCliques+1), bound1, label='Zeroing out edges', alpha=0.6)
-    plt.plot(range(maxCliques+1), bound2[n], label='Zonking vertices', alpha=0.6)
     plt.plot(range(maxCliques+1), bound3,
             label='Zonking vertices, an edge at a time')
+
     # bound of "half of all functions of size <= this"
     # FIXME rename?
     # also currently omitted, as it looks weirdly high
@@ -340,9 +346,6 @@ def plotBoundAtLevels(n, k):
             np.cumsum(np.array(
                 [comb(maxCliques, c)/2 for c in range(maxCliques+1)])),
             label='"Half of all the functions"')
-    plt.plot(range(maxCliques+1),
-        [comb(maxCliques, c)/2 for c in range(maxCliques+1)],
-        label='Naive counting bound', alpha=0.5, linewidth=5)
     plt.title('n = ' + str(n) + ', k = ' + str(k))
     plt.xlabel('Number of cliques')
     plt.ylabel('E[rank of functions]')

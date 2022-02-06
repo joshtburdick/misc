@@ -67,34 +67,29 @@ def zeroingStep(rankBoundA, sizeOfB):
     rankBoundC = np.zeros(sizeOfC+1)
     # loop through the possible combined sizes
     for numCliquesInC in range(sizeOfC+1):
-        # bounds on how many cliques in B might potentially be
-        # zonked by zeroing out edges
-        minCliquesInB = max(0, numCliquesInC - sizeOfA)
-        maxCliquesInB = min(numCliquesInC, sizeOfB)
-        # the number of cliques zonked (which may be zero)
-        z = np.arange(minCliquesInB, maxCliquesInB+1)
-        # the probability of some number of these being in B
-        # (and thus zonked)
+        # bounds on how many of these cliques might be in A
+        minCliquesInA = max(0, numCliquesInC - sizeOfB)
+        maxCliquesInA = min(sizeOfA, numCliquesInC)
+        # the possibilities for the number of cliques in A
+        a = np.arange(minCliquesInA, maxCliquesInA+1)
+        # the probability of some number of these being in A
         w = hypergeom(
             # number of possible cliques
             sizeOfC,
-            # number of those present (in C = A \union B)
+            # number of those present (in C = A union B)
             numCliquesInC,
-            # number of possible cliques in B
-            sizeOfB
-            ).pmf(z)
-        # How much the rank goes up, given the number of cliques in B.
-        # Presumably, the expected rank goes up by |B|/2 ...
-        rankIncreaseFromB = np.array(
-                [comb(sizeOfB, c, exact=True)
-                    for c in range(sizeOfB+1)]) / 2
-        # ... unless B is empty, in which case there's no increase
-        # (but we still have the previous bound).
-        rankIncreaseFromB[0] = 0
+            # number of possible cliques in A
+            sizeOfA
+            ).pmf(a)
+        # the number of "new" functions we get by adding B
+        # (which is the number in A union C, minus those
+        # already counted in A)
+        numNewFunctions = (comb(sizeOfC, numCliquesInC, exact=True)
+                - comb(sizeOfA, numCliquesInC, exact=True))
         # combining these: the bound is a weighted sum of the
-        # previous bound (from A), and what's added
-        rankBoundC[ numCliquesInC ] = w.dot( rankBoundA[ numCliquesInC - z ] + rankIncreaseFromB[ z ])
-    # return the bound, for A \union B
+        # previous bound (from A), and half the number of "new" functions
+        rankBoundC[ numCliquesInC ] = (w.dot( rankBoundA[ a ]) + numNewFunctions / 2)
+    # return the bound, for A union B
     return rankBoundC
 
 def rankBoundZeroedVertices(maxVertices, k):
@@ -167,7 +162,7 @@ def rankBoundZeroedVertices1(n, k):
                     + comb(maxCliques, j) / 2)
     return r
 
-def rankBoundZeroingVertexEdges(maxNumVertices, k, includePartialVertices=False):
+def rankBoundZeroingVertexEdges1(maxNumVertices, k, includePartialVertices=False):
     """Bounds function rank, zeroing a vertex' edges, one at a time.
 
     This version adds vertices, one at a time. For each, it adds
@@ -281,8 +276,8 @@ def plotBoundAtLevels(n, k):
     # plot
     plt.figure()
     # ??? should this be included?
-    plt.plot(range(maxCliques+1), bound1, label='Zeroing out edges')
-    plt.plot(range(maxCliques+1), bound2[n], label='Zonking vertices')
+    plt.plot(range(maxCliques+1), bound1, label='Zeroing out edges', alpha=0.6)
+    plt.plot(range(maxCliques+1), bound2[n], label='Zonking vertices', alpha=0.6)
     # plt.plot(range(maxCliques+1), bound3,
     #         label='Zonking vertices, an edge at a time')
     # bound of "half of all functions of size <= this"
@@ -294,8 +289,8 @@ def plotBoundAtLevels(n, k):
                 [comb(maxCliques, c)/2 for c in range(maxCliques+1)])),
             label='"Half of all the functions"')
     plt.plot(range(maxCliques+1),
-            [comb(maxCliques, c)/2 for c in range(maxCliques+1)],
-            label='Naive counting bound')
+        [comb(maxCliques, c)/2 for c in range(maxCliques+1)],
+        label='Naive counting bound', alpha=0.5, linewidth=5)
     plt.title('n = ' + str(n) + ', k = ' + str(k))
     plt.xlabel('Number of cliques')
     plt.ylabel('E[rank of functions]')
@@ -305,8 +300,8 @@ def plotBoundAtLevels(n, k):
     # plt.savefig('rank_n=' + str(n) + '_k=' + str(k) + '.pdf')
     plt.savefig('rank_n=' + str(n) + '_k=' + str(k) + '.png')
 
+plotBoundAtLevels(6, 3)
 if True:
-    plotBoundAtLevels(4, 3)   # XXX super-small test
     for n in range(6, 12):
         plotBoundAtLevels(n, 3)
         plotBoundAtLevels(n, 4)

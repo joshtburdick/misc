@@ -326,9 +326,9 @@ def plotBoundAtLevels(n, k):
     bound1 = rankBoundZeroedEdges(n, k)
     plt.plot(range(maxCliques+1), bound1, label='Zeroing out edges', alpha=0.6)
 
-    # bound2All = rankBoundZeroedVertices(n, k)
-    # bound2 = [bound2All[n,k] for k in range(maxCliques+1)]
-    # plt.plot(range(maxCliques+1), bound2[n], label='Zonking vertices (take 2)', alpha=0.6)
+    bound2All = rankBoundZeroedVertices(n, k)
+    bound2 = [bound2All[n,k] for k in range(maxCliques+1)]
+    plt.plot(range(maxCliques+1), bound2, label='Zonking vertices', alpha=0.6)
 
     bound2a = rankBoundZeroedVertices1(n, k)
     plt.plot(range(maxCliques+1), bound2a[n], label='Zonking vertices (take 2)', alpha=0.6)

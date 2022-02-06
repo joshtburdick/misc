@@ -58,7 +58,7 @@ def zeroingStep(rankBoundA, sizeOfB):
         There should be an edge (or edges) which can be set to zero,
         which remove all the cliques in B, but leave all the cliques
         in A.
-    Returns: A numpy array (like rankBoundA) whose i'th entry is
+    Returns: a numpy array (like rankBoundA) whose i'th entry is
         a lower bound on the expected rank of a circuit which
         finds exactly i cliques, except in C = A union B.
     """
@@ -92,7 +92,7 @@ def zeroingStep(rankBoundA, sizeOfB):
     # return the bound, for A union B
     return rankBoundC
 
-def rankBoundZeroedVertices(maxVertices, k):
+def rankBoundZeroedVertices1(maxVertices, k):
     """Estimate of rank for finding some number of cliques.
 
     This version feeds in zeros to all edges incident to a vertex.
@@ -111,7 +111,59 @@ def rankBoundZeroedVertices(maxVertices, k):
             comb(numVertices-1, k-1, exact=True))
     return bound
 
-def rankBoundZeroedVertices1(n, k):
+def rankBoundZeroingVertexEdges1(maxNumVertices, k, includePartialVertices=False):
+    """Bounds function rank, zeroing a vertex' edges, one at a time.
+
+    This version adds vertices, one at a time. For each, it adds
+    edges one at a time, and tracks how many cliques would be lost
+    by zeroing out that edge.
+    XXX this function is getting looooong
+
+    maxNumVertices: size of the input graph
+    k: size of the cliques to find
+    includePartialVertices: if True, include cases in which a vertex is only
+        partially added. (If False, the (v,e) keys below will all have e==0.)
+    Returns: a dict r, keyed by (v, e), where:
+        v: the number of vertices "completely" added so far
+            (which ranges up to maxNumVertices)
+        e: the number of edges added (thus far) to the "new" vertex
+            (this can be 0)
+        The value r[(v,e)] is a numpy array such that r[(v,e)][i] is a lower
+        bound on E[rank] of all functions with exactly i cliques.
+    """
+    # the bound: initially there are only two functions, defined on
+    # k vertices (either there's a k-clique, or not)
+    # ??? rename this?
+    # ??? should the rank in the bound be 0-based? does it matter?
+    bound = { (k,0): np.array([0, 1]) }
+    # loop through the number of vertices, including the new vertex v
+    for v in range(k+1, maxNumVertices+1):
+        # the bound, without the new vertex (initially with no edges added)
+        bound1 = bound[(v-1, 0)]
+        # Loop through the number of edges connected to v.
+        # Here, j is the number of edges after adding a new edge, e.
+        # (Note that when we add a new vertex, we initially need
+        # at least k-1 edges, in order for the new vertex to possibly
+        # be part of a k-clique).
+        for numNewEdges in range(k-1, v):
+            # The number of cliques created by adding an edge e;
+            # all of these would be "zonked" if e were set to 0.
+            # e's ends determine two vertices of these cliques, but
+            # the remaining edges could be any subset of the remaining edges.
+            numNewCliques = comb(numNewEdges-1, k-2, exact=True)
+            # update the bound on rank for every possible number of cliques
+            # (with the new edge, more cliques are possible)
+            bound1 = zeroingStep(bound1, numNewCliques)
+            # possibly also save the bound when the new vertex is
+            # only partially added (mostly for debugging) ?
+            if includePartialVertices and numNewEdges < v-1:
+                bound[(v, numNewEdges)] = bound1
+        # save the bound, for "no additional edges"
+        # ??? shouldn't this be v+1 ?
+        bound[(v,0)] = bound1
+    return bound
+
+def rankBoundZeroedVertices(n, k):
     """Estimate of rank for finding some number of cliques.
 
     This version feeds in zeros to all edges incident to a vertex.
@@ -162,7 +214,7 @@ def rankBoundZeroedVertices1(n, k):
                     + comb(maxCliques, j) / 2)
     return r
 
-def rankBoundZeroingVertexEdges1(maxNumVertices, k, includePartialVertices=False):
+def rankBoundZeroingVertexEdges(maxNumVertices, k, includePartialVertices=False):
     """Bounds function rank, zeroing a vertex' edges, one at a time.
 
     This version adds vertices, one at a time. For each, it adds
@@ -269,17 +321,17 @@ def plotBoundAtLevels(n, k):
     bound1 = rankBoundZeroedEdges(n, k)
     # bound2All = rankBoundZeroedVertices1(n, k)
     # bound2 = [bound2All[n,k] for k in range(maxCliques+1)]
-    bound2 = rankBoundZeroedVertices(n, k)
+    bound2 = rankBoundZeroedVertices1(n, k)
     # omitting this one for now
-    # bound3 = rankBoundZeroingVertexEdges(n+1, k)
-    # bound3 = bound3[(n, 0)]
+    bound3 = rankBoundZeroingVertexEdges1(n+1, k)
+    bound3 = bound3[(n, 0)]
     # plot
     plt.figure()
     # ??? should this be included?
     plt.plot(range(maxCliques+1), bound1, label='Zeroing out edges', alpha=0.6)
     plt.plot(range(maxCliques+1), bound2[n], label='Zonking vertices', alpha=0.6)
-    # plt.plot(range(maxCliques+1), bound3,
-    #         label='Zonking vertices, an edge at a time')
+    plt.plot(range(maxCliques+1), bound3,
+            label='Zonking vertices, an edge at a time')
     # bound of "half of all functions of size <= this"
     # FIXME rename?
     # also currently omitted, as it looks weirdly high

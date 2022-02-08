@@ -88,7 +88,7 @@ def zeroingStep(rankBoundA, sizeOfB):
                 - comb(sizeOfA, numCliquesInC, exact=True))
         # combining these: the bound is a weighted sum of the
         # previous bound (from A), and half the number of "new" functions
-        rankBoundC[ numCliquesInC ] = (w.dot( rankBoundA[ a ]) + numNewFunctions / 2)
+        rankBoundC[ numCliquesInC ] = sum(w * rankBoundA[ a ]) + numNewFunctions / 2
     # return the bound, for A union B
     return rankBoundC
 
@@ -326,9 +326,10 @@ def plotBoundAtLevels(n, k):
     bound1 = rankBoundZeroedEdges(n, k)
     plt.plot(range(maxCliques+1), bound1, label='Zeroing out edges', alpha=0.6)
 
-    bound2All = rankBoundZeroedVertices(n, k)
-    bound2 = [bound2All[n,k] for k in range(maxCliques+1)]
-    plt.plot(range(maxCliques+1), bound2, label='Zonking vertices', alpha=0.6)
+    # this looks odd
+    # bound2All = rankBoundZeroedVertices(n, k)
+    # bound2 = [bound2All[n,k] for k in range(maxCliques+1)]
+    # plt.plot(range(maxCliques+1), bound2, label='Zonking vertices', alpha=0.6)
 
     bound2a = rankBoundZeroedVertices1(n, k)
     plt.plot(range(maxCliques+1), bound2a[n], label='Zonking vertices (take 2)', alpha=0.6)

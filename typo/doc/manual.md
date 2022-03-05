@@ -1,4 +1,4 @@
-# typo
+# typo manual, v. -5.0.0
 
 Testing markdown rendering.
 
@@ -9,6 +9,8 @@ if True:
   print('var')
 ```
 
-- [x] tweak syntax
-- [ ] add comments
+- [ ] sketch language
+- [ ] tweak syntax
+- [ ] implement language
+
 

@@ -206,8 +206,20 @@ This shows that sometimes, finding a larger set of cliques is
 harder. However, the above theorem doesn't help if the two
 sets of cliques cover the same set of edges.
 
-If we consider (A, B) as a relation, then it defines a meet-semilattice
-(lower semilattice), with a lower bound (which may be $\empty$), and
+\begin{defn}
+\label{zRelation}
+Let $A, B \subseteq K$. We define a relation Z (on sets of cliques) :
+
+$Z(A,B)$ iff there is some edge $e$ such that $B$ contains all of the
+cliques in $A$ except those which intersect $e$. Thus, $B$ consists
+of exactly the cliques in $A$ which would be ``left over'' after
+feeding in a 0 to $e$.
+\end{defn}
+
+(??? Should this be $R$ for ``restriction''?)
+
+If we consider $Z(A, B)$ as a relation, then it defines a meet-semilattice
+(lower semilattice) with 
 many distinct ``upper bounds''. Indeed, any pair of subsets which
 cover all of the input edges are an upper bound, all of which
 are incomparable.

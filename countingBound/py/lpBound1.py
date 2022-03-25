@@ -57,6 +57,7 @@ class LpBound:
         Side effects: adds a row to the bound, of the form "Ax >= b"
         """
         # converts from "list of numbers" to a row of A
+        pdb.set_trace()
         A_row = np.zeros(len(self.var_index))
         for entry in A:
             (i, a) = entry
@@ -72,8 +73,9 @@ class LpBound:
         """
         # loop through the number of cliques
         for num_cliques in range(self.max_cliques+1):
-            # the maximum number of cliques containing edge e
+            # bounds on number of cliques containing edge e
             # (these won't actually be zeroed)
+            min_cliques_zeroed = max(num_cliques, FIXME)
             max_cliques_zeroed = min(num_cliques, self.max_cliques_zeroed)
             # the probability of some number of cliques containing edge e
             h = hypergeom(
@@ -83,14 +85,11 @@ class LpBound:
                 num_cliques,
                 # number of cliques which could intersect edge e
                 max_cliques_zeroed)
-            # FIXME explain this better
-            # first, the case when no cliques intersect edge e
-            A = [((0, num_cliques), h.pmf(0) - 1)]
             # here, z is the number of cliques which _do_ intersect edge e
             A += [((z, num_cliques-z), h.pmf(z))
-                for z in range(1, max_cliques_zeroed+1)]
+                for z in range(0, max_cliques_zeroed+1)]
             # the bound is half the number of functions
-            b = comb(self.max_cliques, num_cliques, exact=True) / 2
+            b = (comb(self.max_cliques, num_cliques, exact=True) - 1) / 2
             self.add_constraint(A, b)
 
     def add_edge_zeroing_constraints(self):
@@ -104,19 +103,22 @@ class LpBound:
         # 1 (for the function without any cliques overlapping e)
         num_higher_functions = 2 ** self.max_cliques_zeroed
         # the probabilities of some number of cliques being zeroed
-        p = comb(self.max_cliques_zeroed, range(self.max_cliques_zeroed+1))
+        p = (comb(self.max_cliques_zeroed, range(self.max_cliques_zeroed+1)) /
+            num_higher_functions)
         # loop through the number of cliques "left over"
         pdb.set_trace()
-        for j in range(self.max_cliques_remaining):
+        for j in range(self.max_cliques_remaining+1):
             # this has a "-1" because the functions in which some cliques
-            # include edge e are all higher than the functions in which
+            # include edge e are all larger than the functions in which
             # no cliques include edge e
             A = [(0, p[0] - 1)]
             # constraints in the case of functions including a clique
             # which includes edge e
             A += [((i,j), p[i])
                 for i in range(1, self.max_cliques_zeroed+1)]
-            b = num_higher_functions / 2
+            # the amount the weighted average is higher depends on
+            # the number of functions
+            b = (num_higher_functions * comb(self.max_cliques_remaining, j - 1)) / 2
         self.add_constraint(A, b)
 
     def solve(self):
@@ -146,7 +148,6 @@ class LpBound:
 if __name__ == '__main__':
     print('in main')
     lp = LpBound(5,3)
-    pdb.set_trace()
     lp.add_counting_bound_constraints()
     lp.add_edge_zeroing_constraints()
     r = lp.solve()

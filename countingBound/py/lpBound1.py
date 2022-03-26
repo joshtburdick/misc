@@ -117,7 +117,7 @@ class LpBound:
                 for i in range(1, self.max_cliques_zeroed+1)]
             # the amount the weighted average is higher depends on
             # the number of functions
-            b = (num_higher_functions * comb(self.max_cliques_remaining, j - 1)) / 2
+            b = (num_higher_functions * comb(self.max_cliques_remaining, j) - 1) / 2
             self.add_constraint(A, b)
 
     def solve(self):
@@ -149,6 +149,6 @@ if __name__ == '__main__':
     lp = LpBound(5,3)
     lp.add_counting_bound_constraints()
     lp.add_edge_zeroing_constraints()
-    # r = lp.solve()
-    # print(r)
+    r = lp.solve()
+    print(r)
 

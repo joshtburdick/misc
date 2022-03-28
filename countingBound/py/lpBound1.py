@@ -117,7 +117,7 @@ class LpBound:
                 for i in range(1, self.max_cliques_zeroed+1)]
             # the amount the weighted average is higher depends on
             # the number of functions
-            b = (num_higher_functions * comb(self.max_cliques_remaining, j) - 1) / 2
+            b = (num_higher_functions - 1) / 2
             self.add_constraint(A, b)
 
     def solve(self):
@@ -140,8 +140,9 @@ class LpBound:
         c[ self.var_index[(self.max_cliques_zeroed, self.max_cliques_remaining)] ] = 1
         # solve
         r = scipy.optimize.linprog(c, self.A_ub, self.b_ub)
-        # for now, we return the entire result (rather than just
-        # the result), in case it's useful for debugging
+        # for now, we return the entire result (rather than just the
+        # value of the objective function), in case it's useful for debugging
+        # FIXME reshape this into a rectangle?
         return r
 
 if __name__ == '__main__':

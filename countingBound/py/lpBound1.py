@@ -65,8 +65,8 @@ class LpBound:
         self.A.append(A_row)
         self.b.append(b)
 
-    def add_counting_bound_constraints(self):
-        """Adds constraints based on the counting bound.
+    def add_total_cliques_counting_bound_constraints(self):
+        """Adds counting bound, based on total number of cliques.
 
         For each "level" of "total number of cliques found", this
         adds a bound, based on the counting bound.
@@ -140,16 +140,21 @@ class LpBound:
         c[ self.var_index[(self.max_cliques_zeroed, self.max_cliques_remaining)] ] = 1
         # solve
         r = scipy.optimize.linprog(c, self.A_ub, self.b_ub)
-        # for now, we return the entire result (rather than just the
-        # value of the objective function), in case it's useful for debugging
-        # FIXME reshape this into a rectangle?
-        return r
+        # ??? return the entire result?
+        # return r
+        # reshape into a rectangle
+        x = np.empty( (self.max_cliques_zeroed+1, self.max_cliques_remaining+1) )
+        for i in range(self.max_cliques_zeroed+1):
+            for j in range(self.max_cliques_remaining+1):
+                x[i,j] = r.x[ self.var_index[(i,j)] ]
+        return x
 
 if __name__ == '__main__':
     print('in main')
-    lp = LpBound(5,3)
-    lp.add_counting_bound_constraints()
+    lp = LpBound(6,3)
+    lp.add_total_cliques_counting_bound_constraints()
     lp.add_edge_zeroing_constraints()
-    r = lp.solve()
-    print(r)
+    x = lp.solve()
+    print()
+    print(x.round(1).transpose())
 

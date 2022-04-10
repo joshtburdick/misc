@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
-# Linear programming bound on rank of different functions.
-# This includes several constraints; not all of them may be useful.
+# Linear programming bound, counting number of gates.
+# FIXME
+# - add == constraints
+
 
 import numpy as np
 import pdb
@@ -11,8 +13,29 @@ import scipy.optimize
 from scipy.special import comb
 from scipy.stats import hypergeom
 
+class UnboundedFanInNandBasis:
+    """
+    Bound on expected number of functions needed.
+
+    """
+    def __init__(self, num_inputs):
+        self.num_inputs = num_inputs
+        self.b = num_inputs - 0.5
+        pass
+
+    def expected_gates(self, num_functions):
+        """
+        Lower bound on expected number of gates.
+
+        log2_num_functions: log_2(number of functions)
+        Returns: expected number of gates needed
+        """
+        g = math.sqrt(2 * num_functions + self.b^2) - self.b
+        return max(0, g)
+
+
 class LpBound:
-    """Computes a bound on the rank of finding cliques.
+    """Computes a bound on the number of gates for finding cliques.
 
     This version tries to do bookkeeping by zeroing out a distinguished edge, e.
     ??? should I rename the edge which is zeroed out?
@@ -64,41 +87,6 @@ class LpBound:
             A_row[ self.var_index[ i ] ] = a
         self.A.append(A_row)
         self.b.append(b)
-
-    def add_counting_bound_constraints_1(self):
-        """Adds counting bound, for a given number of cliques zonked.
-
-        """
-        # FIXME this is half-baked
-        # the probability of some number of cliques being zonked
-
-
-        # loop through the number of cliques left over
-        for j in range(self.max_cliques_remaining+1):
-
-
-            # for i in range(self.max_cliques_zeroed+1):
-
-
-
-            # bounds on number of cliques containing edge e
-            # (these won't actually be zeroed)
-            min_cliques_zeroed = max(0, num_cliques - self.max_cliques_remaining)
-            max_cliques_zeroed = min(num_cliques, self.max_cliques_zeroed)
-            # the probability of some number of cliques containing edge e
-            h = hypergeom(
-                # number of possible cliques
-                self.max_cliques,
-                # number of those present
-                num_cliques,
-                # number of cliques which could intersect edge e
-                max_cliques_zeroed)
-            # here, z is the number of cliques which _do_ intersect edge e
-            A = [((z, num_cliques-z), h.pmf(z))
-                for z in range(min_cliques_zeroed, max_cliques_zeroed+1)]
-            # the bound is half the number of functions
-            b = (comb(self.max_cliques, num_cliques, exact=True) - 1) / 2
-            self.add_constraint(A, b)
 
     def add_total_cliques_counting_bound_constraints(self):
         """Adds counting bound, based on total number of cliques.
@@ -154,6 +142,10 @@ class LpBound:
             # the number of functions
             b = (num_higher_functions - 1) / 2
             self.add_constraint(A, b)
+
+    # FIXME
+
+
 
     def solve(self):
         """Solves the linear system.

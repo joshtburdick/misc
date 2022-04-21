@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 # Linear programming bound, counting number of gates.
 # FIXME
-# - add == constraints
 
 
 import numpy as np
@@ -15,24 +14,49 @@ from scipy.stats import hypergeom
 
 class UnboundedFanInNandBasis:
     """
-    Bound on expected number of functions needed.
+    Bound on E[ number of unbounded fan-in NAND gates needed ].
 
+    This may not be used.
     """
     def __init__(self, num_inputs):
         self.num_inputs = num_inputs
         self.b = num_inputs - 0.5
         pass
 
-    def expected_gates(self, num_functions):
+    def expected_gates(self, log2_num_functions):
         """
         Lower bound on expected number of gates.
 
         log2_num_functions: log_2(number of functions)
         Returns: expected number of gates needed
         """
-        g = math.sqrt(2 * num_functions + self.b^2) - self.b
+        g = math.sqrt(2 * log2_num_functions + self.b^2) - self.b
         return max(0, g)
 
+class TwoInputNandBasis:
+    """
+    Bound on E[ number of two-input NAND gates needed ].
+
+    """
+    def __init__(self, num_inputs, max_log2_num_functions):
+        """Constructor (which precomputes a table for this).
+
+        num_inputs: the number of inputs
+        """
+        self.num_inputs = num_inputs
+        self.num_gates = np.full([max_log2_num_functions], np.nan)
+        # FIXME
+        pass
+
+    def expected_gates(self, log2_num_functions):
+        """
+        Lower bound on expected number of gates.
+
+        log2_num_functions: log_2(number of functions)
+        Returns: expected number of gates needed
+        """
+        # this just looks in the table
+        return self.num_gates[ log2_num_functions ]
 
 class LpBound:
     """Computes a bound on the number of gates for finding cliques.
@@ -61,32 +85,57 @@ class LpBound:
         # variable index in the LP
         self.var_index = {}
         # set up the mapping of variable indices
+        # first, indexed by number of cliques (zeroed, remaining)
         for i in range(self.max_cliques_zeroed+1):
             for j in range(self.max_cliques_remaining+1):
                 self.var_index[(i,j)] = len(self.var_index)
-        # these store the constraints, as lists (for easy appending,
-        # since it's not clear how many there will be).
-        # A is stored as a list of numpy arrays
-        self.A = []
-        # ... and b as a list of numbers
-        self.b = []
+        # then, indexed by the total number of cliques
+        for i in range(self.max_cliques):
+            self.var_index[('total_cliques',i)] = len(self.var_index)
+        # These store the constraints, as lists of numpy arrays for A and b.
+        # the inequalities (note that the LP solver expects upper bounds)
+        self.A_ub = []
+        self.b_ub = []
+        # the equalities, stored similarly
+        self.A_eq = []
+        self.b_eq = []
 
-    def add_constraint(self, A, b):
+    def add_constraint(self, A, b, is_equality_constraint):
         """Adds one row to the constraints.
 
         A: a list of (index, coefficient) pairs, where "index" is
-            a key in varIndex
+            a key (of any hashable Python type) in var_index
         b: the corresponding lower bound
-        Side effects: adds a row to the bound, of the form "Ax >= b"
+        is_equality_constraint: if True, this is an "Ax = b" constraint;
+            if False, this is an "Ax >= b" constraint
+        Side effects: adds the constraint
         """
         # converts from "list of numbers" to a row of A
-        print(str(A) + ' , ' + str(b))
+        # print(str(A) + ' , ' + str(b))
         A_row = np.zeros(len(self.var_index))
         for entry in A:
             (i, a) = entry
             A_row[ self.var_index[ i ] ] = a
-        self.A.append(A_row)
-        self.b.append(b)
+        # add whichever kind of constraint
+        if is_equality_constraint:
+            self.A_eq.append(A_row)
+            self.b_eq.append(b)
+        else
+            # the inequality given as an arg is a lower bound,
+            # and so both terms need flipping
+            self.A_ub.append(-A_row)
+            self.b_ub.append(-b)
+
+    def add_total_cliques_equality_constraints(self):
+        """Adds constraints for a given total number of cliques.
+
+        For 0 <= m <= N, these define a variable for
+        E[ number of gates need to find m cliques ],
+        or "the expected number of gates needed at 'level m'".
+        """
+        pass
+
+
 
     def add_total_cliques_counting_bound_constraints(self):
         """Adds counting bound, based on total number of cliques.
@@ -143,10 +192,6 @@ class LpBound:
             b = (num_higher_functions - 1) / 2
             self.add_constraint(A, b)
 
-    # FIXME
-
-
-
     def solve(self):
         """Solves the linear system.
         
@@ -156,11 +201,12 @@ class LpBound:
             of cliques (rather than all of them) ?
         Returns: the LP result
         """
-        # convert A and b to np.array objects (note that both are
-        # negated, since the solver is solving Ax <= b).
-        self.A_ub = - np.stack(self.A)
-        # b is just converted into a column vector
-        self.b_ub = - np.array(self.b)
+        # convert A and b to np.array objects
+        A_ub = np.stack(self.A_ub)
+        b_ub = np.array(self.b_ub)
+        A_eq = np.stack(self.A_eq)
+        b_eq = np.array(self.b_eq)
+
         # the objective function: how low can the rank of finding
         # all the cliques (with that many vertices) be?
         c = np.zeros(len(self.var_index))

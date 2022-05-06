@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 # Linear programming bound, counting number of gates.
-# FIXME
 
 
 import numpy as np
@@ -16,7 +15,7 @@ class UnboundedFanInNandBasis:
     """
     Bound on E[ number of unbounded fan-in NAND gates needed ].
 
-    This may not be used.
+    This probably won't be used.
     """
     def __init__(self, num_inputs):
         self.num_inputs = num_inputs
@@ -44,8 +43,40 @@ class TwoInputNandBasis:
         num_inputs: the number of inputs
         """
         self.num_inputs = num_inputs
-        self.num_gates = np.full([max_log2_num_functions], np.nan)
-        # FIXME
+        # num_gates_needed[i] is (a lower bound on) the number of gates
+        # needed to implement 2^i different functions. (It's a lower
+        # bound because some of the circuits implement the same function,
+        # but using more gates.)
+        num_gates_needed = np.full([max_log2_num_functions], np.nan)
+        num_gates_needed[0] = 0
+        # we will fill this in, adding gates
+        # we start with no gates
+        num_gates = 0
+        # ... which can be used to implement 1 function
+        log2_num_functions = 1
+        # fill in the table, using more and more gates
+        while  < max_log2_num_functions:
+            
+            log2_num_functions_1 = 2 * math.log2(num_inputs + current_num_gates)
+
+
+            num_gates += 1
+
+        # Now that we have the number of gates needed, we get a lower
+        # bound on "expected # of gates needed", by weighting it by
+        # the number of functions. (Since adding a wire doubles the
+        # number of functions, it's possible that just using
+        # "num_gates_needed-1" would suffice.)
+        self.expected_gates_needed = np.full([max_log2_num_functions], np.nan)
+        # we assume there's an "empty circuit", which computes a 0 or 1
+        self.expected_gates_needed[1] = 0
+        for i in range(1, max_log2_num_functions):
+            # this is an exponential tower, so it's _slightly_ more likely
+            # that a random function comes from the top level, than any of
+            # the lower levels.
+            # FIXME that's not a great explanation.
+            self.expected_gates_needed[i] = (FIXME
+                + self.expected_gates_needed[i-1]) / 2.0
         pass
 
     def expected_gates(self, log2_num_functions):

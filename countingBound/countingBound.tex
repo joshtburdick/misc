@@ -208,7 +208,7 @@ sets of cliques cover the same set of edges.
 
 \begin{defn}
 \label{zRelation}
-Let $A, B \subseteq K$. We define a relation Z (on sets of cliques) :
+Let $A, B \subseteq K$. We define a relation $Z$ (on sets of cliques) :
 
 $Z(A,B)$ iff there is some edge $e$ such that $B$ contains all of the
 cliques in $A$ except those which intersect $e$. Thus, $B$ consists
@@ -220,9 +220,18 @@ feeding in a 0 to $e$.
 
 If we consider $Z(A, B)$ as a relation, then it defines a meet-semilattice
 (lower semilattice) with 
-many distinct ``upper bounds''. Indeed, any pair of subsets which
+many distinct upper bounds.  Indeed, any pair of subsets which
 cover all of the input edges are an upper bound, all of which
-are incomparable.
+are incomparable. They thus form an antichain, and so Dilworth's Theorem
+implies that these could be formed into chains. Each chain (by construction
+of the relation $Z$) has a strictly increasing number of gates, and so the
+functions at each level of the chain are strictly increasing in average
+size. (However, this doesn't seem to bound the number of gates in CLIQUE.)
+
+Unfortunately, at least according to this relation,
+the number of sets of cliques smaller than
+any of these upper bounds is less than $2^{\# input edges}$.
+(This holds for CLIQUE as well.)
 
 \begin{figure}
 \label{overlappingTris}

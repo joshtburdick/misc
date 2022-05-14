@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 # Linear programming bound, counting number of gates.
 
+import math
+import pdb
+import sys
 
 import numpy as np
-import pdb
 import scipy.optimize
 # note that comb() returns a float by default;
 # for loop bounds, it needs the "exact=True" option,
@@ -11,7 +13,7 @@ import scipy.optimize
 from scipy.special import comb
 from scipy.stats import hypergeom
 
-class UnboundedFanInNandBasis:
+class UnboundedFanInNandBound:
     """
     Bound on E[ number of unbounded fan-in NAND gates needed ].
 
@@ -32,7 +34,7 @@ class UnboundedFanInNandBasis:
         g = math.sqrt(2 * log2_num_functions + self.b^2) - self.b
         return max(0, g)
 
-class TwoInputNandBasis:
+class TwoInputNandBound:
     """
     Bound on E[ number of two-input NAND gates needed ].
 
@@ -47,6 +49,9 @@ class TwoInputNandBasis:
             number of functions in that interval.
         """
         self.num_inputs = num_inputs
+        # this tracks the range of number of functions expanded, each
+        # time we add a gate; it's mostly for debugging
+        self.num_functions_per_gate = []
         # num_gates_needed[i] is (a lower bound on) the number of gates
         # needed to implement 2^i different functions. (It's a lower
         # bound because some of the circuits implement the same function,
@@ -67,13 +72,17 @@ class TwoInputNandBasis:
                 # this is like "choosing any distinct two of an input, a
                 # gate output, or a constant 1 (which converts a two-input
                 # NAND gate to simply a NOT gate)"
-                + math.log2(comb(num_inputs + num_gates + 1, 2, exact=True))
+                + math.log2(comb(num_inputs + num_gates + 1, 2, exact=True)))
             # which part of the array to fill in: taking the ceiling
             # seems like a safer assumption
             a = math.ceil(log2_num_functions)
-            b = min(log2_num_functions_1, max_log2_num_functions)
+            b = min(math.ceil(log2_num_functions_1), max_log2_num_functions)
+            self.num_functions_per_gate.append(
+                (num_gates, log2_num_functions, log2_num_functions_1))
+            print(str(a) + ' ' + str(b))
             num_gates_needed[a:b] = num_gates
             num_gates += 1
+            log2_num_functions = log2_num_functions_1
         # Now that we have the number of gates needed, we get a lower
         # bound on "expected # of gates needed", by weighting it by
         # the number of functions. (Since adding a wire doubles the
@@ -164,7 +173,7 @@ class LpBound:
         if is_equality_constraint:
             self.A_eq.append(A_row)
             self.b_eq.append(b)
-        else
+        else:
             # the inequality given as an arg is a lower bound,
             # and so both terms need flipping
             self.A_ub.append(-A_row)
@@ -266,8 +275,19 @@ class LpBound:
                 x[i,j] = r.x[ self.var_index[(i,j)] ]
         return x
 
+def gate_bound_smoke_test():
+    """Basic test of 2-input NAND gate counting bound.
+
+    FIXME check these numbers
+    """
+    counting_bound = TwoInputNandBound(3, 30)
+    for b in counting_bound.num_functions_per_gate:
+        print(b)
 
 if __name__ == '__main__':
+    gate_bound_smoke_test()
+    sys.exit(0)
+
     print('in main')
     lp = LpBound(6,3)
     lp.add_total_cliques_counting_bound_constraints()

@@ -62,16 +62,17 @@ class TwoInputNandBasis:
         while log2_num_functions < max_log2_num_functions:
             # this is the total number of possible inputs to gates
             m = num_inputs + num_gates
+            # the new number of functions expressible, is the previous, plus:
             log2_num_functions_1 = (log2_num_functions
-                # ??? check this?
-                # it's "m choose 2" (if the NAND gate's inputs are distinct),
-                # plus "m" (if the inputs are the same, and it's a NOT gate)
-                + 2 * math.log2(m * (m+1) / 2)
+                # this is like "choosing any distinct two of an input, a
+                # gate output, or a constant 1 (which converts a two-input
+                # NAND gate to simply a NOT gate)"
+                + math.log2(comb(num_inputs + num_gates + 1, 2, exact=True))
             # which part of the array to fill in: taking the ceiling
             # seems like a safer assumption
             a = math.ceil(log2_num_functions)
             b = min(log2_num_functions_1, max_log2_num_functions)
-            num_gates_needed[:b] = num_gates
+            num_gates_needed[a:b] = num_gates
             num_gates += 1
         # Now that we have the number of gates needed, we get a lower
         # bound on "expected # of gates needed", by weighting it by

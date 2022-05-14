@@ -41,6 +41,10 @@ class TwoInputNandBasis:
         """Constructor (which precomputes a table for this).
 
         num_inputs: the number of inputs
+        Returns a list of tuples of the form (a, b, num_gates), where:
+            a, b: are [a, b) interval of a log2 number of functions
+            num_gates: number of gates which suffice to any (log_2)
+            number of functions in that interval.
         """
         self.num_inputs = num_inputs
         # num_gates_needed[i] is (a lower bound on) the number of gates
@@ -53,15 +57,22 @@ class TwoInputNandBasis:
         # we start with no gates
         num_gates = 0
         # ... which can be used to implement 1 function
-        log2_num_functions = 1
+        log2_num_functions = 0
         # fill in the table, using more and more gates
-        while  < max_log2_num_functions:
-            
-            log2_num_functions_1 = 2 * math.log2(num_inputs + current_num_gates)
-
-
+        while log2_num_functions < max_log2_num_functions:
+            # this is the total number of possible inputs to gates
+            m = num_inputs + num_gates
+            log2_num_functions_1 = (log2_num_functions
+                # ??? check this?
+                # it's "m choose 2" (if the NAND gate's inputs are distinct),
+                # plus "m" (if the inputs are the same, and it's a NOT gate)
+                + 2 * math.log2(m * (m+1) / 2)
+            # which part of the array to fill in: taking the ceiling
+            # seems like a safer assumption
+            a = math.ceil(log2_num_functions)
+            b = min(log2_num_functions_1, max_log2_num_functions)
+            num_gates_needed[:b] = num_gates
             num_gates += 1
-
         # Now that we have the number of gates needed, we get a lower
         # bound on "expected # of gates needed", by weighting it by
         # the number of functions. (Since adding a wire doubles the
@@ -74,10 +85,11 @@ class TwoInputNandBasis:
             # this is an exponential tower, so it's _slightly_ more likely
             # that a random function comes from the top level, than any of
             # the lower levels.
-            # FIXME that's not a great explanation.
-            self.expected_gates_needed[i] = (FIXME
+            # Here, we make the conservative assumption that it's
+            # equally likely that a random function came from the
+            # top layer, or one of the lower layers.
+            self.expected_gates_needed[i] = (num_gates_needed[i]
                 + self.expected_gates_needed[i-1]) / 2.0
-        pass
 
     def expected_gates(self, log2_num_functions):
         """
@@ -252,6 +264,7 @@ class LpBound:
             for j in range(self.max_cliques_remaining+1):
                 x[i,j] = r.x[ self.var_index[(i,j)] ]
         return x
+
 
 if __name__ == '__main__':
     print('in main')

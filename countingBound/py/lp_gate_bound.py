@@ -213,7 +213,7 @@ class LpBound:
             # this is constraining the total number of gates at this "level"
             # to be the average, weighted over how many cliques were zeroed
             # FIXME improve description
-            self.add_constraint(A + [(('total_cliques', num_cliques), -1.0), 0, True)
+            self.add_constraint(A + [(('total_cliques', num_cliques), -1.0)], 0, True)
 
     def add_total_cliques_counting_bound_constraints(self):
         """Adds counting bound, based on total number of cliques.
@@ -290,7 +290,7 @@ def gate_bound_smoke_test():
 
     FIXME check these numbers
     """
-    counting_bound = TwoInputNandBound(3, 30)
+    counting_bound = TwoInputNandBound(3, 60)
     for b in counting_bound.num_functions_per_gate:
         print(b)
 

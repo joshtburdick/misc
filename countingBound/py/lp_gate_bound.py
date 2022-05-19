@@ -152,6 +152,12 @@ class LpBound:
         # the equalities, stored similarly
         self.A_eq = []
         self.b_eq = []
+        # counting bound (for this number of inputs)
+        self.counting_bound = TwoInputNandBound(
+            comb(n, 2, exact=True), 10000)
+
+
+
 
     def add_constraint(self, A, b, is_equality_constraint):
         """Adds one row to the constraints.
@@ -182,19 +188,10 @@ class LpBound:
     def add_total_cliques_equality_constraints(self):
         """Adds constraints for a given total number of cliques.
 
-        For 0 <= m <= N, these define a variable for
-        E[ number of gates need to find m cliques ],
+        For 0 <= m <= N, these define a variable '(total_cliques, m)',
+        which is E[ number of gates need to find m cliques ],
         or "the expected number of gates needed at 'level m'".
-        """
-        pass
-
-
-
-    def add_total_cliques_counting_bound_constraints(self):
-        """Adds counting bound, based on total number of cliques.
-
-        For each "level" of "total number of cliques found", this
-        adds a bound, based on the counting bound.
+        It's constrained to equal the weighted average of FIXME describe this.
         """
         # loop through the number of cliques
         for num_cliques in range(self.max_cliques+1):
@@ -213,15 +210,28 @@ class LpBound:
             # here, z is the number of cliques which _do_ intersect edge e
             A = [((z, num_cliques-z), h.pmf(z))
                 for z in range(min_cliques_zeroed, max_cliques_zeroed+1)]
-            # the bound is half the number of functions
-            b = (comb(self.max_cliques, num_cliques, exact=True) - 1) / 2
-            self.add_constraint(A, b)
+            # this is constraining the total number of gates at this "level"
+            # to be the average, weighted over how many cliques were zeroed
+            # FIXME improve description
+            self.add_constraint(A + [(('total_cliques', num_cliques), -1.0), 0, True)
+
+    def add_total_cliques_counting_bound_constraints(self):
+        """Adds counting bound, based on total number of cliques.
+
+        For each "level" of "total number of cliques found", this
+        adds a bound, based on the counting bound.
+        """
+        for num_cliques in range(self.max_cliques+1):
+            A = [(('total_cliques', num_cliques), 1)]
+            b = self.counting_bound(
+                math.log2(comb(self.max_cliques, num_cliques, exact=True)))
+            self.add_constraint(A, b, True)
 
     def add_edge_zeroing_constraints(self):
         """Adds constraints based on zeroing out an edge.
 
         The bound is that all the sets of cliques which intersect
-        edge e have a higher expected rank than the sets
+        edge e require more gates than the sets
         remaining after feeding in a 0 to edge e.
         """
         # number of functions with a clique overlapping edge e, plus
@@ -240,10 +250,10 @@ class LpBound:
             # which includes edge e
             A += [((i,j), p[i])
                 for i in range(1, self.max_cliques_zeroed+1)]
-            # the amount the weighted average is higher depends on
-            # the number of functions
-            b = (num_higher_functions - 1) / 2
-            self.add_constraint(A, b)
+            # since we're measuring by "# gates", it seems like all
+            # we can say is "this requires at least one more gate,
+            # on average".
+            self.add_constraint(A, 1, False)
 
     def solve(self):
         """Solves the linear system.

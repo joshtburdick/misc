@@ -72,7 +72,13 @@ class TwoInputNandBound:
                 # this is like "choosing any distinct two of an input, a
                 # gate output, or a constant 1 (which converts a two-input
                 # NAND gate to simply a NOT gate)"
-                + math.log2(comb(num_inputs + num_gates + 1, 2, exact=True)))
+                # ... plus 1, to allow "less than or equal to this number of gates".
+                # This is somewhat over-counting (as one can "waste" two NOT gates
+                # to implement a function requiring exactly two fewer gates).
+                # However, many distinct circuits will end up computing the same
+                # function anyway, which seems likely to cause much more
+                # overcounting anyway.
+                + math.log2(comb(num_inputs + num_gates + 1, 2, exact=True) + 1))
             # which part of the array to fill in: taking the ceiling
             # seems like a safer assumption
             a = math.ceil(log2_num_functions)

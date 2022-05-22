@@ -114,8 +114,8 @@ class TwoInputNandBound:
         log2_num_functions: log_2(number of functions)
         Returns: expected number of gates needed
         """
-        # this just looks in the table
-        return self.num_gates[ log2_num_functions ]
+        # this basically just looks in the table
+        return self.expected_gates_needed[ math.floor(log2_num_functions) ]
 
 class LpBound:
     """Computes a bound on the number of gates for finding cliques.
@@ -149,7 +149,7 @@ class LpBound:
             for j in range(self.max_cliques_remaining+1):
                 self.var_index[(i,j)] = len(self.var_index)
         # then, indexed by the total number of cliques
-        for i in range(self.max_cliques):
+        for i in range(self.max_cliques+1):
             self.var_index[('total_cliques',i)] = len(self.var_index)
         # These store the constraints, as lists of numpy arrays for A and b.
         # the inequalities (note that the LP solver expects upper bounds)
@@ -159,11 +159,8 @@ class LpBound:
         self.A_eq = []
         self.b_eq = []
         # counting bound (for this number of inputs)
-        self.counting_bound = TwoInputNandBound(
-            comb(n, 2, exact=True), 10000)
-
-
-
+        num_inputs = comb(n, 2, exact=True)
+        self.counting_bound = TwoInputNandBound(num_inputs, 10000)
 
     def add_constraint(self, A, b, is_equality_constraint):
         """Adds one row to the constraints.
@@ -187,7 +184,7 @@ class LpBound:
             self.b_eq.append(b)
         else:
             # the inequality given as an arg is a lower bound,
-            # and so both terms need flipping
+            # and so both terms need negating
             self.A_ub.append(-A_row)
             self.b_ub.append(-b)
 
@@ -217,28 +214,28 @@ class LpBound:
             A = [((z, num_cliques-z), h.pmf(z))
                 for z in range(min_cliques_zeroed, max_cliques_zeroed+1)]
             # this is constraining the total number of gates at this "level"
-            # to be the average, weighted over how many cliques were zeroed
-            # FIXME improve description
+            # to equal the average, weighted by the probability of some
+            # number of cliques being zeroed out
             self.add_constraint(A + [(('total_cliques', num_cliques), -1.0)], 0, True)
 
     def add_total_cliques_counting_bound_constraints(self):
         """Adds counting bound, based on total number of cliques.
 
         For each "level" of "total number of cliques found", this
-        adds a bound, based on the counting bound.
+        simply adds a bound, based on the counting bound.
         """
         for num_cliques in range(self.max_cliques+1):
             A = [(('total_cliques', num_cliques), 1)]
-            b = self.counting_bound(
+            b = self.counting_bound.expected_gates(
                 math.log2(comb(self.max_cliques, num_cliques, exact=True)))
             self.add_constraint(A, b, True)
 
     def add_edge_zeroing_constraints(self):
         """Adds constraints based on zeroing out an edge.
 
-        The bound is that all the sets of cliques which intersect
-        edge e require more gates than the sets
-        remaining after feeding in a 0 to edge e.
+        The bound is that detecting the sets of cliques which
+        intersect edge e require, on average, one more gate
+        than the sets remaining after feeding in a 0 to edge e.
         """
         # number of functions with a clique overlapping edge e, plus
         # 1 (for the function without any cliques overlapping e)
@@ -283,7 +280,8 @@ class LpBound:
         # solve
         r = scipy.optimize.linprog(c, self.A_ub, self.b_ub)
         # ??? return the entire result?
-        # return r
+        return r
+        # FIXME summarize this somewhat
         # reshape into a rectangle
         x = np.empty( (self.max_cliques_zeroed+1, self.max_cliques_remaining+1) )
         for i in range(self.max_cliques_zeroed+1):
@@ -301,14 +299,12 @@ def gate_bound_smoke_test():
         print(b)
 
 if __name__ == '__main__':
-    gate_bound_smoke_test()
-    sys.exit(0)
-
+    # gate_bound_smoke_test()
     print('in main')
     lp = LpBound(6,3)
     lp.add_total_cliques_counting_bound_constraints()
     lp.add_edge_zeroing_constraints()
     x = lp.solve()
-    print()
+    pdb.set_trace()
     print(x.round(1).transpose())
 

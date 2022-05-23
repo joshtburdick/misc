@@ -96,7 +96,7 @@ class TwoInputNandBound:
         # "num_gates_needed-1" would suffice.)
         self.expected_gates_needed = np.full([max_log2_num_functions], np.nan)
         # we assume there's an "empty circuit", which computes a 0 or 1
-        self.expected_gates_needed[1] = 0
+        self.expected_gates_needed[0] = 0
         for i in range(1, max_log2_num_functions):
             # this is an exponential tower, so it's _slightly_ more likely
             # that a random function comes from the top level, than any of
@@ -306,5 +306,5 @@ if __name__ == '__main__':
     lp.add_edge_zeroing_constraints()
     x = lp.solve()
     pdb.set_trace()
-    print(x.round(1).transpose())
+    print(np.round(x.x, 1).transpose())
 

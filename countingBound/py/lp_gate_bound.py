@@ -236,6 +236,10 @@ class LpBound:
         The bound is that detecting the sets of cliques which
         intersect edge e require, on average, one more gate
         than the sets remaining after feeding in a 0 to edge e.
+
+        ??? should this just be that "if there are A cliques not
+        touching e, and B cliques touching it, and C = A \cup B,
+        then E[C] > E[A] + 1" ? That seems much simpler, and stronger.
         """
         # number of functions with a clique overlapping edge e, plus
         # 1 (for the function without any cliques overlapping e)

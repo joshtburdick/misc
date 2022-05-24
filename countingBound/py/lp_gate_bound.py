@@ -222,13 +222,13 @@ class LpBound:
         """Adds counting bound, based on total number of cliques.
 
         For each "level" of "total number of cliques found", this
-        simply adds a bound, based on the counting bound.
+        simply adds a lower bound, based on the counting bound.
         """
         for num_cliques in range(self.max_cliques+1):
             A = [(('total_cliques', num_cliques), 1)]
             b = self.counting_bound.expected_gates(
                 math.log2(comb(self.max_cliques, num_cliques, exact=True)))
-            self.add_constraint(A, b, True)
+            self.add_constraint(A, b, False)
 
     def add_edge_zeroing_constraints(self):
         """Adds constraints based on zeroing out an edge.
@@ -245,6 +245,7 @@ class LpBound:
             num_higher_functions)
         # loop through the number of cliques "left over"
         for j in range(self.max_cliques_remaining+1):
+            # FIXME ??? this seems the most likely to be wrong
             # this has a "-1" because the functions in which some cliques
             # include edge e are all larger than the functions in which
             # no cliques include edge e
@@ -302,9 +303,10 @@ if __name__ == '__main__':
     # gate_bound_smoke_test()
     print('in main')
     lp = LpBound(6,3)
+    lp.add_total_cliques_equality_constraints()
     lp.add_total_cliques_counting_bound_constraints()
     lp.add_edge_zeroing_constraints()
     x = lp.solve()
     pdb.set_trace()
-    print(np.round(x.x, 1).transpose())
+    print(np.round(x.x, 4).transpose())
 

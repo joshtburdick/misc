@@ -122,8 +122,8 @@ class LpBound:
 
     This version tries to do bookkeeping by zeroing out a distinguished edge, e.
     ??? should I rename the edge which is zeroed out?
+    ??? should this include a bound everywhere that E[# gates] >= 0 ?
     """
-
     def __init__(self, n, k):
         """ Constructor.
 

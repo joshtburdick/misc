@@ -250,6 +250,20 @@ class LpBound:
                 # "this requires at least one more gate, on average".
                 self.add_constraint(A, 1, False)
 
+    def add_upper_bound_constraint(self):
+        """Adds an upper bound.
+
+        """
+        # loop through # cliques, with 0 <= a < c <= max_cliques
+        for a in range(0, self.max_cliques):
+            for c in range(a+1, self.max_cliques):
+                b = c - a
+                A = [(('total_cliques', a), -1),
+                    (('total_cliques', b), -1),
+                    (('total_cliques', c), 1)]
+                # note that this is an upper bound
+                self.add_constraint(-A, -3, False)
+
     def solve(self):
         """Solves the linear system.
         

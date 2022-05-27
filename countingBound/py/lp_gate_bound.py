@@ -223,6 +223,10 @@ class LpBound:
 
         For each "level" of "total number of cliques found", this
         simply adds a lower bound, based on the counting bound.
+
+        ??? Another thing to try is just using the counting bound
+        on a weighted average of _all_ the levels. This seems
+        simpler in some ways.
         """
         for num_cliques in range(self.max_cliques+1):
             A = [(('total_cliques', num_cliques), 1)]
@@ -233,35 +237,18 @@ class LpBound:
     def add_edge_zeroing_constraints(self):
         """Adds constraints based on zeroing out an edge.
 
-        The bound is that detecting the sets of cliques which
-        intersect edge e require, on average, one more gate
-        than the sets remaining after feeding in a 0 to edge e.
-
-        ??? should this just be that "if there are A cliques not
-        touching e, and B cliques touching it, and C = A \cup B,
-        then E[C] > E[A] + 1" ? That seems much simpler, and stronger.
+        This is just "if there are A cliques not touching e, and B
+        cliques touching it, and C = A \cup B, then E[C] > E[A] + 1" ?
+        That seems much simpler, and stronger.
         """
-        # number of functions with a clique overlapping edge e, plus
-        # 1 (for the function without any cliques overlapping e)
-        num_higher_functions = 2 ** self.max_cliques_zeroed
-        # the probabilities of some number of cliques being zeroed
-        p = (comb(self.max_cliques_zeroed, range(self.max_cliques_zeroed+1)) /
-            num_higher_functions)
-        # loop through the number of cliques "left over"
-        for j in range(self.max_cliques_remaining+1):
-            # FIXME ??? this seems the most likely to be wrong
-            # this has a "-1" because the functions in which some cliques
-            # include edge e are all larger than the functions in which
-            # no cliques include edge e
-            A = [((0,j), p[0] - 1)]
-            # constraints in the case of functions including a clique
-            # which includes edge e
-            A += [((i,j), p[i])
-                for i in range(1, self.max_cliques_zeroed+1)]
-            # since we're measuring by "# gates", it seems like all
-            # we can say is "this requires at least one more gate,
-            # on average".
-            self.add_constraint(A, 1, False)
+        # loop through number of cliques zeroed (if >= 1)
+        for i in range(1, self.max_cliques_zeroed+1):
+            # loop through the number of cliques "left over"
+            for j in range(self.max_cliques_remaining+1):
+                A = [((i,j), 1), ((0,j), -1)]
+                # since we're measuring by "# gates", this is
+                # "this requires at least one more gate, on average".
+                self.add_constraint(A, 1, False)
 
     def solve(self):
         """Solves the linear system.

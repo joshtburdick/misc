@@ -505,15 +505,11 @@ For $0 < l \le N$, define
 	R(l) = [ \sum_{1\le i < N} binom(i; l, 1-p) R(i) ] + {N \choose l}/2
 \]
 
-The file {\tt py/approxRank.py} computes this bound. Here are the bounds
-for two small cases.
+The file {\tt py/approxRank.py} computes this bound. However, as noted above, this
+is only an approximation, because after you feed in a 0, you're no longer
+{\em uniformly} sampling from smaller sets of cliques.
 
-{\bf Although} this seems to show that finding all of the CLIQUES requires
-more than finding $N/2$ cliques, this counting is {\bf approximate} (and I don't
-know how approximate).
-
-\includegraphics[width=0.45\textwidth]{py/rank_n=6_k=3.png}
-\includegraphics[width=0.45\textwidth]{py/rank_n=8_k=4.png}
+FIXME add attempts to remedy this
 
 \section{Related work}
 

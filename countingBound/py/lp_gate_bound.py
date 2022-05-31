@@ -307,11 +307,12 @@ def gate_bound_smoke_test():
 if __name__ == '__main__':
     # gate_bound_smoke_test()
     print('in main')
-    lp = LpBound(6,3)
+    lp = LpBound(9,3)
     lp.add_total_cliques_equality_constraints()
     lp.add_total_cliques_counting_bound_constraints()
     lp.add_edge_zeroing_constraints()
     x = lp.solve()
-    pdb.set_trace()
-    print(np.round(x.x, 4).transpose())
-
+    # pdb.set_trace()
+    # print(np.round(x.x, 4).transpose())
+    bound1 = x.x[ lp.var_index[('total_cliques', lp.max_cliques)] ]
+    print(np.round(bound1, 4))

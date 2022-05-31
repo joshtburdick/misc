@@ -250,19 +250,22 @@ class LpBound:
                 # "this requires at least one more gate, on average".
                 self.add_constraint(A, 1, False)
 
-    def add_upper_bound_constraint(self):
+    def add_upper_bound_constraints(self):
         """Adds an upper bound.
 
         """
         # loop through # cliques, with 0 <= a < c <= max_cliques
         for a in range(0, self.max_cliques):
-            for c in range(a+1, self.max_cliques):
+            for c in range(a+1, self.max_cliques+1):
                 b = c - a
-                A = [(('total_cliques', a), -1),
-                    (('total_cliques', b), -1),
-                    (('total_cliques', c), 1)]
-                # note that this is an upper bound
-                self.add_constraint(-A, -3, False)
+                # Note that this is an _upper_ bound:
+                # |\scriptC(C)| <= |\scriptC(A)| + |\scriptC(B)| + 3
+                # But since add_constraint() expects a lower bound,
+                # everything's negated.
+                A = [(('total_cliques', a), 1),
+                    (('total_cliques', b), 1),
+                    (('total_cliques', c), -1)]
+                self.add_constraint(A, -3, False)
 
     def solve(self):
         """Solves the linear system.
@@ -311,6 +314,7 @@ if __name__ == '__main__':
     lp.add_total_cliques_equality_constraints()
     lp.add_total_cliques_counting_bound_constraints()
     lp.add_edge_zeroing_constraints()
+    lp.add_upper_bound_constraints()
     x = lp.solve()
     # pdb.set_trace()
     # print(np.round(x.x, 4).transpose())

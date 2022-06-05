@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # Linear programming bound, counting number of gates.
 
+import argparse
 import math
 import pdb
 import sys
@@ -13,26 +14,8 @@ import scipy.optimize
 from scipy.special import comb
 from scipy.stats import hypergeom
 
-class UnboundedFanInNandBound:
-    """
-    Bound on E[ number of unbounded fan-in NAND gates needed ].
 
-    This probably won't be used.
-    """
-    def __init__(self, num_inputs):
-        self.num_inputs = num_inputs
-        self.b = num_inputs - 0.5
-        pass
 
-    def expected_gates(self, log2_num_functions):
-        """
-        Lower bound on expected number of gates.
-
-        log2_num_functions: log_2(number of functions)
-        Returns: expected number of gates needed
-        """
-        g = math.sqrt(2 * log2_num_functions + self.b^2) - self.b
-        return max(0, g)
 
 class TwoInputNandBound:
     """
@@ -85,7 +68,7 @@ class TwoInputNandBound:
             b = min(math.ceil(log2_num_functions_1), max_log2_num_functions)
             self.num_functions_per_gate.append(
                 (num_gates, log2_num_functions, log2_num_functions_1))
-            print(str(a) + ' ' + str(b))
+            # print(str(a) + ' ' + str(b))
             num_gates_needed[a:b] = num_gates
             num_gates += 1
             log2_num_functions = log2_num_functions_1
@@ -309,14 +292,30 @@ def gate_bound_smoke_test():
 
 if __name__ == '__main__':
     # gate_bound_smoke_test()
-    print('in main')
-    lp = LpBound(9,3)
+
+    parser = argparse.ArgumentParser(
+        description='Attempt at bound on finding some number of cliques.')
+    parser.add_argument('n', type=int,
+        help='number of vertices in input graph')
+    parser.add_argument('k', type=int,
+        help='number of vertices in cliques to find')
+    parser.add_argument('--include-upper-bound', action='store_true',
+        help='include the upper bound constraint')
+    parser.add_argument('--write-all-vars', action='store_true',
+        help='write out all the bounds (not just the bound for finding all cliques)')
+    args = parser.parse_args()
+
+    lp = LpBound(args.n, args.k)
     lp.add_total_cliques_equality_constraints()
     lp.add_total_cliques_counting_bound_constraints()
     lp.add_edge_zeroing_constraints()
-    lp.add_upper_bound_constraints()
+    # possibly include the upper bound
+    if args.include_upper_bound:
+        lp.add_upper_bound_constraints()
     x = lp.solve()
-    # pdb.set_trace()
-    # print(np.round(x.x, 4).transpose())
     bound1 = x.x[ lp.var_index[('total_cliques', lp.max_cliques)] ]
-    print(np.round(bound1, 4))
+    if args.write_all_vars:
+        print('FIXME writing all the vars not yet implemented')
+    else:
+        print(np.round(bound1, 4))
+

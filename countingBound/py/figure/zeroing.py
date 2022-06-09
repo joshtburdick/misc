@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # Plots graphs, after zeroing out some hypercliques.
 
+import colorsys
 import pdb
 
 import matplotlib
@@ -51,7 +52,11 @@ class CliqueFigure:
         """
         for s in sets:
             v = radius * self.vertex[:,s] + np.array([center]).T
-            plt.fill(v[0,:], v[1,:], facecolor=self.colors[s], alpha=self.alpha)
+            plt.fill(v[0,:], v[1,:],
+                edgecolor=self.colors[s],
+                facecolor=scale_lightness(self.colors[s], 2),
+                lw=3,
+                alpha=self.alpha)
 
 
 
@@ -60,9 +65,15 @@ class CliqueFigure:
 
 def plot_it():
     plt.figure()
-    colors = {(0,1,2):'red', (0,1,3):'orange', (0,2,3):'green', (1,2,3):'blue'}
+    def color1(h):
+        return colorsys.hsv_to_rgb(h, 0.5, 0.5)
+    colors = {
+        (0,1,2):color1(0/4),
+        (0,1,3):color1(1/4),
+        (0,2,3):color1(2/4),
+        (1,2,3):color1(3/4)}
     cf = CliqueFigure(4, colors, 0)
-    cf.plot_sets(1, np.array([0,0.1]), [(0,1,2), (0,2,3), (1,2,3)])
+    cf.plot_sets(1, np.array([0,0.1]), [(0,1,2), (0,1,3)])
     plt.savefig('test0.png')
 
 if __name__ == '__main__':

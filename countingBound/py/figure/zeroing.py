@@ -2,6 +2,7 @@
 # Plots graphs, after zeroing out some hypercliques.
 
 import colorsys
+import itertools
 import pdb
 
 import matplotlib
@@ -46,7 +47,7 @@ class CliqueFigure:
         """Plots some sets.
 
         radius: the radius for the sets
-        center: the center, as a 2-element numpy array
+        center: the center, as a 2-element tuple, or np.array of shape (2,)
         sets: the sets, as a list of k-element tuples of ints
         Side effects: plots the sets
         """
@@ -62,9 +63,11 @@ class CliqueFigure:
 
 
 
-
-def plot_it():
-    plt.figure()
+def plot_Z_relation():
+    """Plots the 'zeroing-one-edge' relation."""
+    plt.figure(figsize=(6,7))
+    plt.xlim(-1,7)
+    plt.ylim(-1, 5)
     def color1(h):
         return colorsys.hsv_to_rgb(h, 0.5, 0.5)
     colors = {
@@ -73,9 +76,35 @@ def plot_it():
         (0,2,3):color1(2/4),
         (1,2,3):color1(3/4)}
     cf = CliqueFigure(4, colors, 0)
-    cf.plot_sets(1, np.array([0,0.1]), [(0,1,2), (0,1,3)])
-    plt.savefig('test0.png')
+    # lay out coordinates for each set; this will be keyed by set,
+    # and its value will be coordinates
+    set_location = {} 
+    edges = list(itertools.combinations(range(4), 3))
+    for i in range(5):
+        print(i)
+        subsets = tuple(itertools.combinations(edges, i))
+        for j in range(len(subsets)):
+            print(((i,j), subsets[j]))
+            set_location[subsets[j]] = (i,j)
+    # plot effects of zeroing out an edge
+
+
+
+    # cf.plot_sets(0.4, np.array([0,0.1]), [(0,1,2), (0,1,3)])
+    plt.savefig('Z.png')
+
+def plot_zeroing():
+    """Plots effect of zeroing out one edge."""
+    pass
+
+
+
+
+
+
+
+
 
 if __name__ == '__main__':
-    plot_it()
+    plot_Z_relation()
 

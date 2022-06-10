@@ -51,8 +51,12 @@ class CliqueFigure:
         sets: the sets, as a list of k-element tuples of ints
         Side effects: plots the sets
         """
+        # if there are no sets, don't plot anything
+        if not sets:
+            return
         for s in sets:
             v = radius * self.vertex[:,s] + np.array([center]).T
+            # pdb.set_trace()
             plt.fill(v[0,:], v[1,:],
                 edgecolor=self.colors[s],
                 facecolor=scale_lightness(self.colors[s], 2),
@@ -79,17 +83,20 @@ def plot_Z_relation():
     # lay out coordinates for each set; this will be keyed by set,
     # and its value will be coordinates
     set_location = {} 
-    edges = list(itertools.combinations(range(4), 3))
-    for i in range(5):
-        print(i)
-        subsets = tuple(itertools.combinations(edges, i))
-        for j in range(len(subsets)):
-            print(((i,j), subsets[j]))
-            set_location[subsets[j]] = (i,j)
+    all_edges = list(itertools.combinations(range(4), 3))
+    for j in range(0, 5):
+        print(j)
+        subsets = tuple(itertools.combinations(all_edges, j))
+        for i in range(len(subsets)):
+            print(((i,j), subsets[i]))
+            set_location[subsets[i]] = (i,j)
     # plot effects of zeroing out an edge
 
 
 
+    # plot the sets
+    for (edges, location) in set_location.items():
+        cf.plot_sets(0.2, location, edges)
     # cf.plot_sets(0.4, np.array([0,0.1]), [(0,1,2), (0,1,3)])
     plt.savefig('Z.png')
 

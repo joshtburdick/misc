@@ -43,18 +43,18 @@ class CliqueFigure:
         theta = np.linspace(0, 2*np.pi, n, endpoint=False) + vertex_0_theta
         self.vertex = np.stack([np.cos(theta), np.sin(theta)])
 
-    def plot_sets(self, radius, center, sets):
-        """Plots some sets.
+    def plot_cliques(self, radius, center, cliques):
+        """Plots some cliques.
 
-        radius: the radius for the sets
+        radius: the radius for the cliques
         center: the center, as a 2-element tuple, or np.array of shape (2,)
-        sets: the sets, as a list of k-element tuples of ints
-        Side effects: plots the sets
+        cliques: the cliques, as a list of k-element tuples of ints
+        Side effects: plots the cliques
         """
-        # if there are no sets, don't plot anything
-        if not sets:
+        # if there are no cliques, don't plot anything
+        if not cliques:
             return
-        for s in sets:
+        for s in cliques:
             v = radius * self.vertex[:,s] + np.array([center]).T
             # pdb.set_trace()
             plt.fill(v[0,:], v[1,:],
@@ -62,7 +62,6 @@ class CliqueFigure:
                 facecolor=scale_lightness(self.colors[s], 2),
                 lw=3,
                 alpha=self.alpha)
-
 
 
 
@@ -96,14 +95,13 @@ def plot_Z_relation():
 
     # plot the sets
     for (edges, location) in set_location.items():
-        cf.plot_sets(0.25, location, edges)
+        cf.plot_cliques(0.25, location, edges)
     # cf.plot_sets(0.4, np.array([0,0.1]), [(0,1,2), (0,1,3)])
     plt.savefig('Z.png')
 
 def plot_zeroing():
     """Plots effect of zeroing out one edge."""
     pass
-
 
 
 

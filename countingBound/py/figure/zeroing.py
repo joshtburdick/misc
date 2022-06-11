@@ -70,7 +70,7 @@ class CliqueFigure:
 def plot_Z_relation():
     """Plots the 'zeroing-one-edge' relation."""
     plt.figure(figsize=(6,7))
-    plt.xlim(-1,7)
+    plt.xlim(-3.5, 3.5)
     plt.ylim(-1, 5)
     def color1(h):
         return colorsys.hsv_to_rgb(h, 0.5, 0.5)
@@ -89,14 +89,14 @@ def plot_Z_relation():
         subsets = tuple(itertools.combinations(all_edges, j))
         for i in range(len(subsets)):
             print(((i,j), subsets[i]))
-            set_location[subsets[i]] = (i,j)
+            set_location[subsets[i]] = (i + 1/2 - len(subsets)/2, j)
     # plot effects of zeroing out an edge
 
 
 
     # plot the sets
     for (edges, location) in set_location.items():
-        cf.plot_sets(0.2, location, edges)
+        cf.plot_sets(0.25, location, edges)
     # cf.plot_sets(0.4, np.array([0,0.1]), [(0,1,2), (0,1,3)])
     plt.savefig('Z.png')
 

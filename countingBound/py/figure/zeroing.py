@@ -118,11 +118,11 @@ def plot_Z_relation():
     # lay out coordinates for each set; this will be keyed by set,
     # and its value will be coordinates
     set_location = {} 
-    all_edges = list([frozenset(s) for s in itertools.combinations(range(4), 3)])
+    all_cliques = list([frozenset(s) for s in itertools.combinations(range(4), 3)])
     for j in range(0, 5):
         print(j)
         # ??? should this be a set rather than a tuple?
-        subsets = tuple(itertools.combinations(all_edges, j))
+        subsets = tuple(itertools.combinations(all_cliques, j))
         for i in range(len(subsets)):
             print(((i,j), subsets[i]))
             # this is mostly centered, but also slightly tilted
@@ -147,14 +147,27 @@ def plot_Z_relation():
 
 def plot_zeroing():
     """Plots effect of zeroing out one edge."""
-    pass
+    # colors for the two categories of edges
+    def color1(h):
+        return colorsys.hsv_to_rgb(h, 0.5, 0.5)
+    all_cliques = list([frozenset(s) for s in itertools.combinations(range(5), 3)])
+    # the color of one clique
+    def color_clique(clique):
+        zeroed_edge = frozenset([0,1])
+        if zeroed_edge < clique:
+            return color1(0)
+        else:
+            return color1(2/3)
+    colors = {clique: color_clique(clique) for clique in all_cliques}
+    cf = CliqueFigure(5, colors, 0)
 
 
-
-
-
+    plt.figure(figsize=(6,7))
+    plt.xlim(-3.5, 3.5)
+    plt.ylim(-1, 5)
 
 
 if __name__ == '__main__':
     plot_Z_relation()
+    plot_zeroing()
 

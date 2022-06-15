@@ -219,7 +219,13 @@ of exactly the cliques in $A$ which would be ``left over'' after
 feeding in a 0 to $e$.
 \end{defn}
 
-(??? Should this be $R$ for ``restriction''?)
+\begin{figure}
+\centering
+\includegraphics[width=1\textwidth]{py/figure/Z.png}
+\caption{$Z(A,B)$}
+\label{fig:Z}
+\end{figure}
+
 
 If we consider $Z(A, B)$ as a relation, then it defines a meet-semilattice
 (lower semilattice) with 
@@ -345,7 +351,8 @@ Not clear.)
 We can imagine a miles-long linear warehouse of chips with the minimal
 circuit for each problem, sorted in terms of number of gates.
 Note that the above list only includes functions in $BUGGYCLIQUE$.
-There are a {\em ton} of other functions (parity, primality, etc.), but ignoring
+There are a {\em ton} of other functions (parity, primality, ``looks
+sort of like a bitmap of a cat'', etc.), but ignoring
 those should still leave a valid lower bound for the functions in $BUGGYCLIQUE$.
 
 \subsection{How much smaller are ``restricted'' circuits, on average?}

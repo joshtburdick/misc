@@ -10,7 +10,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy.interpolate
 
-
 def scale_lightness(rgb, scale_l):
     """Scales the lightness of a color.
 
@@ -105,8 +104,9 @@ def zero_out_edges(cliques):
 def plot_Z_relation():
     """Plots the 'zeroing-one-edge' relation."""
     plt.figure(figsize=(6,7))
-    plt.xlim(-3.5, 3.5)
-    plt.ylim(-1, 5)
+    plt.axis('off')
+    plt.xlim(-3, 3.5)
+    plt.ylim(0, 4.5)
     def color1(h):
         return colorsys.hsv_to_rgb(h, 0.5, 0.5)
     colors = {
@@ -143,31 +143,35 @@ def plot_Z_relation():
         print("location = " + str(location))
         cf.plot_cliques(0.25, location, cliques)
     # cf.plot_sets(0.4, np.array([0,0.1]), [(0,1,2), (0,1,3)])
-    plt.savefig('Z.png')
+    plt.savefig('Z.png', bbox_inches='tight')
 
-def plot_zeroing():
-    """Plots effect of zeroing out one edge."""
-    # colors for the two categories of edges
-    def color1(h):
-        return colorsys.hsv_to_rgb(h, 0.5, 0.5)
-    all_cliques = list([frozenset(s) for s in itertools.combinations(range(5), 3)])
-    # the color of one clique
-    def color_clique(clique):
-        zeroed_edge = frozenset([0,1])
-        if zeroed_edge < clique:
-            return color1(0)
-        else:
-            return color1(2/3)
-    colors = {clique: color_clique(clique) for clique in all_cliques}
-    cf = CliqueFigure(5, colors, 0)
+class ZeroingPlot:
+    """Plots effect of zeroing out one edge.
 
+    Um, this may be deprecated before it's actually implemented...
+    """
+    def __init__(self):
+        all_cliques = list([frozenset(s) for s in itertools.combinations(range(5), 3)])
+        # color cliques, depending on whether the edge hits it
+        def color1(h):
+            return colorsys.hsv_to_rgb(h, 0.5, 0.5)
+        def color_clique(clique):
+            zeroed_edge = frozenset([0,1])
+            if zeroed_edge < clique:
+                return color1(0)
+            else:
+                return color1(2/3)
+        colors = {clique: color_clique(clique) for clique in all_cliques}
+        self.cf = CliqueFigure(5, colors, 0)
 
-    plt.figure(figsize=(6,7))
-    plt.xlim(-3.5, 3.5)
-    plt.ylim(-1, 5)
+    def plot_it(self):
+        plt.figure(figsize=(6,7))
+        plt.xlim(-3.5, 3.5)
+        plt.ylim(-1, 5)
+
+        plt.savefig('zeroing.png', bbox_inches=0)
 
 
 if __name__ == '__main__':
     plot_Z_relation()
-    plot_zeroing()
 

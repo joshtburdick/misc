@@ -243,7 +243,7 @@ larger cliques, seems like it would quickly get unmanageable.
 Note also that this is ``not to scale'' in a variety of ways. In
 particular, when $n$ is large, the middle layer dominates the graph
 (because if each clique is chosen with probability 1/2, on average,
-you'll pick very close to half the edges).
+you'll pick very close to half the cliques).
 
 Each line between sets indicates a set which requires a strictly larger number
 of gates.
@@ -417,7 +417,7 @@ the inequality $rank(B) < rank(C)$ is strict.)
 
 \end{proof}
 
-In terms of the previous warehouse analogy, we can imagine that,
+In terms of the previous warehouse analogy, we can see that,
 when an edge is disabled, the chip now has strictly fewer gates.
 Perhaps the chip-maker spent their entire budget on designing the
 optimal circuits, but then skimped on the wires connecting the chips?
@@ -591,7 +591,10 @@ done with three 2-input NAND gates. Thus, on average, we have
 |\bigC(C)| \le |\bigC(A)| + |\bigC(B)| + 3
 \]
 
-It may seem weird to include an {\em upper} bound. What was
+It may seem weird to include an {\em upper} bound.
+(\cite{aaronson_pnp} describes several lower bounds which make
+essential use of upper bounds, in possibly-surprising ways.)
+ What was
 my motivation? My thinking was that this might connect the difficulties
 of finding cliques at each ``level''. As noted earlier, CLIQUE
 is only above a fraction of the sets in $Z$. When the LP solver
@@ -604,7 +607,7 @@ not a rigorous description.
 \subsection{Results}
 
 Here is what this model estimates. Note that this quickly starts
-to be solving humungous LP problems. (Exercise for the reader:
+to be solving humongous LP problems. (Exercise for the reader:
 how many variables does this use, to model finding $k$-vertex
 cliques in an $n$-vertex graph?)
 
@@ -632,11 +635,12 @@ The idea of bounding the ``rank'' of functions (as in the
 ``miles-long linear warehouse'' model) seems massively cleaner to reason about.
 Dealing with the nitty-gritty of converting from ``number of functions''
 to ``number of 2-input NAND gates'' is complicated. The motivation
-for doing this was that it simplified adding an upper bound.
-However, in the rank model, we could simply bound the
-average cost of finding a uniformly-randomly-chosen set of cliques, as
+for doing this was that it simplified adding an upper bound, and I
+didn't see how to do this in the rank model.
+However, I now see that, we could simply bound the
+average rank of the circuit finding a uniformly-randomly-chosen set of cliques, as
 ${n \choose k}/2$. This bound is exact (in other words, both an
-upper and lower bound).
+upper and lower bound). It's not at all clear that this leads to a good bound, though.
 
 Also, zeroing out a random edge seems to complicate the book-keeping,
 as after doing so, you can end up with an arbitrary weird set of

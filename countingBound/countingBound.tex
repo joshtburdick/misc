@@ -220,7 +220,7 @@ feeding in a 0 to $e$.
 \end{defn}
 
 \begin{figure}
-\label{Z}
+\label{fig:Z}
 \centering
 \includegraphics[width=1\textwidth]{py/figure/Z.png}
 \caption{$Z(A,B)$}
@@ -238,7 +238,7 @@ functions at each level of the chain are strictly increasing in average
 size. (However, this doesn't seem to bound the number of gates in CLIQUE.)
 
 
-Figure \ref{Z} attempts to plot $Z(A,B)$. Using more vertices, or
+Figure \ref{fig:Z} attempts to plot $Z(A,B)$. Using more vertices, or
 larger cliques, seems like it would quickly get unmanageable.
 Note also that this is ``not to scale'' in a variety of ways. In
 particular, when $n$ is large, the middle layer dominates the graph
@@ -254,27 +254,26 @@ any of these upper bounds is less than $2^{\# input edges}$.
 a tiny fraction of these sets.)
 
 \begin{figure}
-\label{overlappingTris}
+\label{fig:overlappingTriangles}
 \centering
 \includegraphics[width=1\textwidth]{R/tri1.pdf}
 \caption{A given number of cliques can overlap maximally (left),
 or not overlap much (right).}
-\label{fig:overlappingTriangles}
 \end{figure}
 
 Triangles can be detected using matrix multiplication \cite{itai_finding_1977},
 and there are fast algorithms known for matrix multiplication
 \cite{strassen_gaussian_1969}
 \cite{williams_multiplying_2012}, so the set of all possible
-cliques on some set of vertices (Figure \ref{overlappingTris}, left)
+cliques on some set of vertices (Figure \ref{fig:overlappingTriangles}, left)
  can be detected
 using fewer than one NAND gate per triangle (for large enough input graphs).
 
 On the other hand, if the triangles overlap less (as in
-Figure \ref{overlappingTris}, right),
+Figure \ref{fig:overlappingTriangles}, right),
 then to detect all of the triangles, we will definitely need at least one
 gate per triangle. We can see this by feeding in a 0 to some input
-unique to a triangle, applying \ref{edgeZonking}, and repeating.
+unique to a triangle, applying Theorem \ref{edgeZonking}, and repeating.
 
 Consider the case of finding $k$-cliques on $n$ vertices.
 Possibly the most na\"ive strategy in this case is to pick a vertex $v_1$,

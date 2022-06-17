@@ -220,12 +220,12 @@ feeding in a 0 to $e$.
 \end{defn}
 
 \begin{figure}
+\label{Z}
 \centering
 \includegraphics[width=1\textwidth]{py/figure/Z.png}
 \caption{$Z(A,B)$}
 \label{fig:Z}
 \end{figure}
-
 
 If we consider $Z(A, B)$ as a relation, then it defines a meet-semilattice
 (lower semilattice) with 
@@ -237,10 +237,21 @@ of the relation $Z$) has a strictly increasing number of gates, and so the
 functions at each level of the chain are strictly increasing in average
 size. (However, this doesn't seem to bound the number of gates in CLIQUE.)
 
+
+Figure \ref{Z} attempts to plot $Z(A,B)$. Using more vertices, or
+larger cliques, seems like it would quickly get unmanageable.
+Note also that this is ``not to scale'' in a variety of ways. In
+particular, when $n$ is large, the middle layer dominates the graph
+(because if each clique is chosen with probability 1/2, on average,
+you'll pick very close to half the edges).
+
+Each line between sets indicates a set which requires a strictly larger number
+of gates.
 Unfortunately, at least according to this relation,
 the number of sets of cliques smaller than
 any of these upper bounds is less than $2^{\# input edges}$.
-(This holds for CLIQUE as well.)
+(For instance, the top levels are only forced to be higher than
+a tiny fraction of these sets.)
 
 \begin{figure}
 \label{overlappingTris}
@@ -411,7 +422,7 @@ when an edge is disabled, the chip now has strictly fewer gates.
 Perhaps the chip-maker spent their entire budget on designing the
 optimal circuits, but then skimped on the wires connecting the chips?
 In that case, assuming the missing wire is treated as a 0, the chip still
-finds some cliques, and so might be sellable.
+finds some cliques, and so might yet be sellable.
 By construction of the warehouse, that means the faulty chip could be shifted,
 on a giant conveyor belt,
 toward the ``smaller'' (in number of gates) end of the warehouse.
@@ -519,7 +530,122 @@ The file {\tt py/approxRank.py} computes this bound. However, as noted above, th
 is only an approximation, because after you feed in a 0, you're no longer
 {\em uniformly} sampling from smaller sets of cliques.
 
-FIXME add attempts to remedy this
+\subsection{Description of an attempt to remedy this}
+
+{\tt py/lp\_gate\_bound.py} is an attempt to remedy these problems.
+It formulates the lower bound as a linear programming (LP) problem,
+with a variable for problems with various numbers of cliques.
+It counts the bounds in terms of ``number of two-input NAND gates''.
+
+For a given set of cliques $C$, it divides these into the cliques
+hit by zeroing an arbitrary random edge, and those remaining.
+Let $n$ be the number of vertices, and $k$ be the size of the clique,
+and $N = {n \choose k}$ be the number of cliques. Then zeroing
+an arbitrarily-chosen edge could potentially eliminate up to
+${n-2 \choose k-2}$ cliques.
+
+Concretely, if $n=9$ and $k=3$, then there are 84 possible 3-cliques
+(triangles), and zeroing out an arbitrarily-chosen edge could
+eliminate up to 7 of these cliques.
+
+\subsubsection{Equality constraints}
+
+(added by {\tt lp.add\_total\_cliques\_equality\_constraints()})
+
+For some parts of this attempt, we need to think in terms of
+the total number of cliques. For other parts, we need to pay attention
+to how many cliques are ``hit'' by the zeroed edge. This constraint
+relates these: the cost of finding some set of cliques, is an
+average, weighted by how many cliques are ``hit'' by a random edge.
+
+\subsubsection{Counting-bound constraints}
+
+(added by {\tt lp.add\_total\_cliques\_counting\_bound\_constraints()})
+
+This includes the actual counting bound. Specifically, for
+each total number of cliques, this counts the number of functions,
+and constrains the expected number of gates.
+
+\subsubsection{Zeroing constraints}
+
+(added by {\tt lp.add\_edge\_zeroing\_constraints()})
+
+These encode the fact that if you feed in a 0 to an edge,
+you will end up with a circuit which finds a strictly smaller
+set of cliques. Note that we're only guaranteed that this
+number is 1 less.
+
+\subsubsection{Upper bound}
+
+(added by {\tt lp.add\_upper\_bound\_constraints()}, if you give
+the {\tt --upper-bound} command-line flag)
+
+This encodes an {\em upper} bound.
+Let $C$ be a set of cliques, and suppose we divide $C$ into
+disjoint sets of cliques $A$ and $B$. Given circuits to
+find those sets of cliques, we can clearly find the cliques
+in $C$ by OR'ing those together. Implementing 2-input OR can be
+done with three 2-input NAND gates. Thus, on average, we have
+
+\[
+|\bigC(C)| \le |\bigC(A)| + |\bigC(B)| + 3
+\]
+
+It may seem weird to include an {\em upper} bound. What was
+my motivation? My thinking was that this might connect the difficulties
+of finding cliques at each ``level''. As noted earlier, CLIQUE
+is only above a fraction of the sets in $Z$. When the LP solver
+``pushes down'' on CLIQUE, it also pushes down on that rather small
+set. But (my thinking was), with this upper bound, some of the
+higher-up sets would also be ``pulled down''; hopefully they'd
+eventually run into the counting bound. That is admittedly
+not a rigorous description.
+
+\subsection{Results}
+
+Here is what this model estimates. Note that this quickly starts
+to be solving humungous LP problems. (Exercise for the reader:
+how many variables does this use, to model finding $k$-vertex
+cliques in an $n$-vertex graph?)
+
+\begin{verbatim}
+$ ./lp_gate_bound.py 7 3
+30.7092
+$ ./lp_gate_bound.py 7 3 --include-upper-bound
+13.213
+$ ./lp_gate_bound.py 8 3
+34.6822
+$ ./lp_gate_bound.py 8 3 --include-upper-bound
+21.6523
+$ ./lp_gate_bound.py 9 3
+34.6545
+$ ./lp_gate_bound.py 9 3 --include-upper-bound
+51.5385
+\end{verbatim}
+
+\subsection{Further thoughts on this model}
+
+Having implemented this, and somewhat attempted to describe it,
+I'm contemplating major revisions.
+
+The idea of bounding the ``rank'' of functions (as in the
+``miles-long linear warehouse'' model) seems massively cleaner to reason about.
+Dealing with the nitty-gritty of converting from ``number of functions''
+to ``number of 2-input NAND gates'' is complicated. The motivation
+for doing this was that it simplified adding an upper bound.
+However, in the rank model, we could simply bound the
+average cost of finding a uniformly-randomly-chosen set of cliques, as
+${n \choose k}/2$. This bound is exact (in other words, both an
+upper and lower bound).
+
+Also, zeroing out a random edge seems to complicate the book-keeping,
+as after doing so, you can end up with an arbitrary weird set of
+input edges left over. It seems (retrospectively) much simpler to
+simply feed in 0's to all the edges incident to an arbitrary vertex.
+You then always end up with a graph with one less vertex.
+
+Various other files in the {\tt py/} folder implement attempts at
+this, without much success; but I may revisit those.
 
 \section{Related work}
 

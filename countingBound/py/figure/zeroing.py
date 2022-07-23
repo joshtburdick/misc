@@ -145,33 +145,6 @@ def plot_Z_relation():
     # cf.plot_sets(0.4, np.array([0,0.1]), [(0,1,2), (0,1,3)])
     plt.savefig('Z.png', bbox_inches='tight')
 
-class ZeroingPlot:
-    """Plots effect of zeroing out one edge.
-
-    Um, this may be deprecated before it's actually implemented...
-    """
-    def __init__(self):
-        all_cliques = list([frozenset(s) for s in itertools.combinations(range(5), 3)])
-        # color cliques, depending on whether the edge hits it
-        def color1(h):
-            return colorsys.hsv_to_rgb(h, 0.5, 0.5)
-        def color_clique(clique):
-            zeroed_edge = frozenset([0,1])
-            if zeroed_edge < clique:
-                return color1(0)
-            else:
-                return color1(2/3)
-        colors = {clique: color_clique(clique) for clique in all_cliques}
-        self.cf = CliqueFigure(5, colors, 0)
-
-    def plot_it(self):
-        plt.figure(figsize=(6,7))
-        plt.xlim(-3.5, 3.5)
-        plt.ylim(-1, 5)
-
-        plt.savefig('zeroing.png', bbox_inches=0)
-
-
 if __name__ == '__main__':
     plot_Z_relation()
 

@@ -83,8 +83,8 @@ class ZeroingPlot:
         # fig = plt.figure()
         ax = plt.axes(projection='3d')
         ax.plot_surface(X, Y, Z,
-            rstride=1, cstride=1, cmap='binary', edgecolor='none')
-#            rstride=1, cstride=1, cmap='viridis', edgecolor='none')
+            rstride=1, cstride=1,
+            cmap='binary', edgecolor='none', alpha=0.5)
         ax.set_xlabel('# cliques zonked')
         ax.set_ylabel('# cliques not zonked')
         ax.set_zlabel('lg(# functions)');

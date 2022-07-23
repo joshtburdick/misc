@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 # Plots graphs, after zeroing out some hypercliques.
+# FIXME
+# - tweak axes to make this rectangular
+# - make axes integers
 
 import colorsys
 import itertools
@@ -81,7 +84,6 @@ class ZeroingPlot:
         Z = log_num_functions
         # pdb.set_trace()
         # fig = plt.figure()
-        ax = plt.axes(projection='3d')
         ax.plot_surface(X, Y, Z,
             rstride=1, cstride=1,
             cmap='binary', edgecolor='none', alpha=0.5)
@@ -112,11 +114,11 @@ class ZeroingPlot:
 
     def plot_it(self):
         """Plots the rectangle containing all the functions."""
-        plt.figure(figsize=(6,7))
+        plt.figure(figsize=(9, 5))
         self.plot_num_functions()
 
 
-        plt.savefig('zeroing.png', bbox_inches='tight')
+        plt.savefig('zeroing.png')  # , bbox_inches='tight')
 
 
 if __name__ == '__main__':

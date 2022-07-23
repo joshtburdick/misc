@@ -32,6 +32,8 @@ class ZeroingPlot:
     def __init__(self):
         # number of vertices
         self.n = 6
+        # angle at which to place the 0'th vertex
+        vertex_0_theta = 0
         all_cliques = list([frozenset(s) for s in itertools.combinations(range(self.n), 3)])
         # which edge will be zeroed out
         self.zeroed_edge = frozenset([0,1])
@@ -45,11 +47,10 @@ class ZeroingPlot:
             else:
                 return color1(2/3)
         colors = {clique: color_clique(clique) for clique in all_cliques}
-
         # Set the vertices. Note that we angle these slightly, so that
         # they're "facing toward the origin". This is to emphasize
         # the importance of the "total number of cliques".
-        theta = np.linspace(0, 2*np.pi, n, endpoint=False) + vertex_0_theta
+        theta = np.linspace(0, 2*np.pi, self.n, endpoint=False) + vertex_0_theta
         # useful constant
         c = np.sqrt(2) / 2
         self.vertex = np.stack([
@@ -65,7 +66,7 @@ class ZeroingPlot:
 
     def plot_num_functions(self):
         """Plots log_2(number of functions), as a surface."""
-        log_num_functions = np.array(17, 5)
+        log_num_functions = np.zeros([17, 5])
         for i in range(17):
             for j in range(5):
                 # here, we're picking i cliques which aren't zonked,
@@ -73,6 +74,7 @@ class ZeroingPlot:
                 log_num_functions[i, j] = (math.log2(comb(16, i))
                     + math.log2(comb(4, j)))
         # plot this
+        pdb.set_trace()
         # FIXME
 
     def plot_cliques(self, radius, center, cliques):
@@ -97,9 +99,9 @@ class ZeroingPlot:
 
 
     def plot_it(self):
-    """Plots the rectangle containing all the functions."""
+        """Plots the rectangle containing all the functions."""
         plt.figure(figsize=(6,7))
-        plot_num_functions(self)
+        self.plot_num_functions()
 
 
         plt.savefig('zeroing.png', bbox_inches='tight')
@@ -107,5 +109,5 @@ class ZeroingPlot:
 
 if __name__ == '__main__':
     z = ZeroingPlot()
-    # z.plot_it()
+    z.plot_it()
 

@@ -74,8 +74,18 @@ class ZeroingPlot:
                 log_num_functions[i, j] = (math.log2(comb(16, i))
                     + math.log2(comb(4, j)))
         # plot this
-        pdb.set_trace()
-        # FIXME
+        ax = plt.axes(projection='3d')
+        x = np.arange(5)
+        y = np.arange(17)
+        X, Y = np.meshgrid(x, y)
+        Z = log_num_functions
+        # pdb.set_trace()
+        # fig = plt.figure()
+        ax = plt.axes(projection='3d')
+        ax.contour3D(X, Y, Z, 50, cmap='binary')
+        ax.set_xlabel('# cliques zonked')
+        ax.set_ylabel('# cliques not zonked')
+        ax.set_zlabel('lg(# functions)');
 
     def plot_cliques(self, radius, center, cliques):
         """Plots some cliques.

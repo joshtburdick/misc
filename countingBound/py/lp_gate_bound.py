@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # Linear programming bound, counting number of gates.
 
+print('NOTE: this isn\'t correct.')
+
 import argparse
 import math
 import pdb
@@ -13,8 +15,6 @@ import scipy.optimize
 # so that it returns an int
 from scipy.special import comb
 from scipy.stats import hypergeom
-
-
 
 
 class TwoInputNandBound:
@@ -271,15 +271,50 @@ class LpBound:
         c[ self.var_index[(self.max_cliques_zeroed, self.max_cliques_remaining)] ] = 1
         # solve
         r = scipy.optimize.linprog(c, self.A_ub, self.b_ub)
-        # ??? return the entire result?
-        return r
-        # FIXME summarize this somewhat
-        # reshape into a rectangle
+        # FIXME deal with this failing
+        
+        # pdb.set_trace()
+        # Reshape into a rectangle. This is admittedly inefficient when we
+        # just want the bound for finding all the cliques; but it seems
+        # simplest to just return all of this
         x = np.empty( (self.max_cliques_zeroed+1, self.max_cliques_remaining+1) )
         for i in range(self.max_cliques_zeroed+1):
             for j in range(self.max_cliques_remaining+1):
                 x[i,j] = r.x[ self.var_index[(i,j)] ]
         return x
+
+    def get_bound(self, include_upper_bound):
+        """Gets the bound.
+
+        include_upper_bound: if True, include the upper bound
+        Returns: a 2-D NumPy array, with axes "# cliques zeroed"
+            and "# cliques remaining"
+        """
+        self.add_total_cliques_equality_constraints()
+        self.add_total_cliques_counting_bound_constraints()
+        self.add_edge_zeroing_constraints()
+        # possibly include the upper bound
+        if include_upper_bound:
+            self.add_upper_bound_constraints()
+        x = self.solve()
+        return x
+
+def plot_bound_surfaces(n, k, output_prefix):
+    """Plots the bound surfaces.
+
+    n, k: size of problem
+    output_prefix: prefix for output
+    Side effects: plots surfaces, in a file prefixed with
+        output_prefix
+    """
+    print('getting bound without upper bound')
+    lp = LpBound(n, k)
+    Z0 = lp.get_bound(False)
+    print('getting bound with upper bound (this will take longer...)')
+    lp = LpBound(n, k)
+    Z1 = lp.get_bound(True)
+    pdb.set_trace()
+    print('plotting surfaces')
 
 def gate_bound_smoke_test():
     """Basic test of 2-input NAND gate counting bound.
@@ -301,21 +336,19 @@ if __name__ == '__main__':
         help='number of vertices in cliques to find')
     parser.add_argument('--include-upper-bound', action='store_true',
         help='include the upper bound constraint')
-    parser.add_argument('--write-all-vars', action='store_true',
-        help='write out all the bounds (not just the bound for finding all cliques)')
+    parser.add_argument('--plot-surface', action='store_true',
+        help='plot the bounds as a surface, with and without the upper bound')
     args = parser.parse_args()
 
+    # possibly plot the surfaces
+    if args.plot_surface:
+        # plot the surfaces
+        plot_bound_surfaces(args.n, args.k, 'bound_surfaces_')
+        sys.exit(0)
+
+    # otherwise, print the bound
     lp = LpBound(args.n, args.k)
-    lp.add_total_cliques_equality_constraints()
-    lp.add_total_cliques_counting_bound_constraints()
-    lp.add_edge_zeroing_constraints()
-    # possibly include the upper bound
-    if args.include_upper_bound:
-        lp.add_upper_bound_constraints()
-    x = lp.solve()
-    bound1 = x.x[ lp.var_index[('total_cliques', lp.max_cliques)] ]
-    if args.write_all_vars:
-        print('FIXME writing all the vars not yet implemented')
-    else:
-        print(np.round(bound1, 4))
+    x = lp.get_bound(args.include_upper_bound)
+    bound = x[ lp.max_cliques_zeroed, lp.max_cliques_remaining ]
+    print(np.round(bound, 4))
 

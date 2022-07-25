@@ -624,6 +624,21 @@ $ ./lp_gate_bound.py 9 3 --include-upper-bound
 51.5385
 \end{verbatim}
 
+{\bf EDIT, 20220725}
+
+These numbers are definitively wrong. For instance, running
+this with $n=7, k=3$, and adding a call to {\tt pdb.set\_trace},
+we see that:
+
+\begin{verbatim}
+(Pdb) z.x[self.var_index[('total_cliques', 35)]]
+30.709187135177608
+(Pdb) z.x[self.var_index[(5, 30)]]
+1.0000000000031937
+\end{verbatim}
+
+Although those should be equal.
+
 \subsection{Further thoughts on this model}
 
 Having implemented this, and somewhat attempted to describe it,

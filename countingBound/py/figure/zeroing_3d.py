@@ -12,9 +12,11 @@ import pdb
 import matplotlib
 import matplotlib.pyplot as plt
 from mpl_toolkits import mplot3d
+from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 import numpy as np
 import scipy.interpolate
 from scipy.special import comb
+
 
 # FIXME factor this out?
 def scale_lightness(rgb, scale_l):
@@ -77,22 +79,22 @@ class ZeroingPlot:
                 log_num_functions[i, j] = (math.log2(comb(16, i))
                     + math.log2(comb(4, j)))
         # plot this
-        ax = plt.axes(projection='3d')
+        # ax = plt.axes(projection='3d')
         x = np.arange(5)
         y = np.arange(17)
         X, Y = np.meshgrid(x, y)
         Z = log_num_functions
         # pdb.set_trace()
         # fig = plt.figure()
-        ax.plot_surface(X, Y, Z,
+        self.axs.plot_surface(X, Y, Z,
             rstride=1, cstride=1,
             cmap='binary', edgecolor='none', alpha=0.5)
-        ax.set_xlabel('# cliques zonked')
-        ax.set_ylabel('# cliques not zonked')
-        ax.set_zlabel('lg(# functions)');
+        self.axs.set_xlabel('# cliques zonked')
+        self.axs.set_ylabel('# cliques not zonked')
+        self.axs.set_zlabel('lg(# functions)');
 
-    def plot_cliques(self, radius, center, cliques):
-        """Plots some cliques.
+    def plot_clique_set(self, radius, center, cliques):
+        """Plots a set of cliques.
 
         radius: the radius for the cliques
         z: the z-coordinate for the cliques
@@ -111,14 +113,28 @@ class ZeroingPlot:
                 lw=3,
                 alpha=self.alpha)
 
+    def plot_clique_sets(self):
+        pass
 
     def plot_it(self):
         """Plots the rectangle containing all the functions."""
-        plt.figure(figsize=(9, 5))
+        self.fig = plt.figure(figsize=(9, 5))
+        self.axs = self.fig.add_subplot(111, projection='3d')
+        # axs = plt.axes()
+        # plot (log_2 of) the number of functions
         self.plot_num_functions()
 
+        # plot some random sets of cliques
+        cliques1 = frozenset([frozenset([0,1,3]), frozenset([2,3,4])])
+        # self.plot_clique_set(0.5, 0, cliques1)
 
-        plt.savefig('zeroing.png')  # , bbox_inches='tight')
+        # for practice: draw a triangle
+        # vertices = np.array([[0,0,0], [1,0,0], [0,1,0]])
+        vertices = [list(zip([0,0,0],[4,0,0],[0,4,0]))]
+        poly = Poly3DCollection(vertices, alpha=0.8, color='green')
+        self.axs.add_collection3d(poly)
+
+        plt.savefig('zeroing_3d.png')  # , bbox_inches='tight')
 
 
 if __name__ == '__main__':

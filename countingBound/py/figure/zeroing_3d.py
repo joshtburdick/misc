@@ -11,8 +11,10 @@ import pdb
 
 import matplotlib
 import matplotlib.pyplot as plt
+from matplotlib.ticker import MaxNLocator
 from mpl_toolkits import mplot3d
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
+
 import numpy as np
 import scipy.interpolate
 from scipy.special import comb
@@ -36,6 +38,8 @@ class ZeroingPlot:
     """
     def __init__(self):
         # number of vertices
+        # ??? This has some hard-coded constants. But the number of
+        # vertices may not change much.
         self.n = 6
         # angle at which to place the 0'th vertex
         vertex_0_theta = 0
@@ -113,13 +117,23 @@ class ZeroingPlot:
                 lw=3,
                 alpha=self.alpha)
 
-    def plot_clique_sets(self):
+    def plot_clique_sets(self, clique_sets):
+        # this is the height of the cliques plotted at particular
+        # coordinates (so far)
+        z = np.zeros([5, 17])
+
+
         pass
 
     def plot_it(self):
         """Plots the rectangle containing all the functions."""
+        # set up axes
         self.fig = plt.figure(figsize=(9, 5))
         self.axs = self.fig.add_subplot(111, projection='3d')
+        self.axs.set_xlim(4,0)
+        self.axs.xaxis.set_major_locator(MaxNLocator(integer=True))
+        # make x- and y-axis scales be square, and flatten it somewhat
+        self.axs.set_box_aspect((2,4,2))
         # axs = plt.axes()
         # plot (log_2 of) the number of functions
         self.plot_num_functions()
@@ -129,9 +143,11 @@ class ZeroingPlot:
         # self.plot_clique_set(0.5, 0, cliques1)
 
         # for practice: draw a triangle
-        # vertices = np.array([[0,0,0], [1,0,0], [0,1,0]])
+        vertices0 = np.array([[0,0,0], [4,0,0], [0,4,0]])
         vertices = [list(zip([0,0,0],[4,0,0],[0,4,0]))]
-        poly = Poly3DCollection(vertices, alpha=0.8, color='green')
+        # pdb.set_trace()
+
+        poly = Poly3DCollection(vertices, alpha=0.5, color='green')
         self.axs.add_collection3d(poly)
 
         plt.savefig('zeroing_3d.png')  # , bbox_inches='tight')

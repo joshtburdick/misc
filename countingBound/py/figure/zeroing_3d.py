@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 # Plots graphs, after zeroing out some hypercliques.
-# FIXME
-# - tweak axes to make this rectangular
-# - make axes integers
 
 import colorsys
 import itertools
@@ -43,6 +40,9 @@ class ZeroingPlot:
         self.n = 6
         # angle at which to place the 0'th vertex
         vertex_0_theta = 0
+        # radius of the cliques
+        self.radius = 0.6
+        self.alpha = 0.5
         all_cliques = list([frozenset(s) for s in itertools.combinations(range(self.n), 3)])
         # which edge will be zeroed out
         self.zeroed_edge = frozenset([0,1])
@@ -55,7 +55,7 @@ class ZeroingPlot:
                 return color1(0)
             else:
                 return color1(2/3)
-        colors = {clique: color_clique(clique) for clique in all_cliques}
+        self.colors = {clique: color_clique(clique) for clique in all_cliques}
         # Set the vertices. Note that we angle these slightly, so that
         # they're "facing toward the origin". This is to emphasize
         # the importance of the "total number of cliques".
@@ -63,15 +63,15 @@ class ZeroingPlot:
         # useful constant
         c = np.sqrt(2) / 2
         self.vertex = np.stack([
-            c * np.cos(theta), - c * np.cos(theta), np.sin(theta)])
+            c * np.cos(theta), - c * np.cos(theta), np.sin(theta)], axis=1)
 
     def get_location(self, cliques):
         """Gets the location of a clique."""
         # first, get the number "hit" by the zonked edge
-        cliques_hit = [c for c in cliques if self.zeroed_edge in c]
+        cliques_hit = [c for c in cliques if self.zeroed_edge < c]
         z = len(cliques_hit)
         n = len(cliques)
-        return (n, z-n)
+        return (z, n-z)
 
     def plot_num_functions(self):
         """Plots log_2(number of functions), as a surface."""
@@ -97,32 +97,47 @@ class ZeroingPlot:
         self.axs.set_ylabel('# cliques not zonked')
         self.axs.set_zlabel('lg(# functions)');
 
-    def plot_clique_set(self, radius, center, cliques):
+    def plot_clique_set(self, center, cliques):
         """Plots a set of cliques.
 
-        radius: the radius for the cliques
-        z: the z-coordinate for the cliques
+        center: the center of the cliques
         cliques: the cliques, as a list of k-element tuples of ints
         Side effects: plots the cliques
         """
         # if there are no cliques, don't plot anything
         if not cliques:
             return
-        # FIXME make this 3D
-        for s in cliques:
-            v = radius * self.vertex[:,list(s)] + np.array([center]).T
-            plt.fill(v[0,:], v[1,:],
-                edgecolor=self.colors[s],
-                facecolor=scale_lightness(self.colors[s], 2),
-                lw=3,
-                alpha=self.alpha)
+        # loop through the cliques
+        print(center)
+        for c in cliques:
+            i = [x for x in c]
+            v = self.radius * self.vertex[i,:] + center
+            vertices1 = [[tuple(r) for r in v]]
+            poly = Poly3DCollection(vertices1, alpha=self.alpha,
+                color=self.colors[c])
+            self.axs.add_collection3d(poly)
+            # plt.fill(v[0,:], v[1,:], v[2,:],
+            #     edgecolor=self.colors[c],
+            #     facecolor=scale_lightness(self.colors[c], 2),
+            #    lw=3,
+            #    alpha=self.alpha)
 
     def plot_clique_sets(self, clique_sets):
-        # this is the height of the cliques plotted at particular
-        # coordinates (so far)
+        # this is the height of the next clique to be plotted at
+        # particular coordinates (so far)
         z = np.zeros([5, 17])
+        # loop through the sets of cliques
+        for s in clique_sets:
+            (x, y) = self.get_location(s)
+            # put this clique above any other cliques in this column
+            center = (x, y, z[x,y])
+            z[x,y] += 1
+            self.plot_clique_set(center, s)
 
+        # lastly, draw a line connecting all the sets of cliques
+        # in this "stack"
 
+        
         pass
 
     def plot_it(self):
@@ -133,22 +148,21 @@ class ZeroingPlot:
         self.axs.set_xlim(4,0)
         self.axs.xaxis.set_major_locator(MaxNLocator(integer=True))
         # make x- and y-axis scales be square, and flatten it somewhat
-        self.axs.set_box_aspect((2,4,2))
+        self.axs.set_box_aspect((2,4,3))
         # axs = plt.axes()
         # plot (log_2 of) the number of functions
         self.plot_num_functions()
 
         # plot some random sets of cliques
-        cliques1 = frozenset([frozenset([0,1,3]), frozenset([2,3,4])])
-        # self.plot_clique_set(0.5, 0, cliques1)
+        cliques1 = [frozenset([frozenset([0,1,3]), frozenset([2,3,4])])]
+        self.plot_clique_sets(cliques1)
 
         # for practice: draw a triangle
-        vertices0 = np.array([[0,0,0], [4,0,0], [0,4,0]])
-        vertices = [list(zip([0,0,0],[4,0,0],[0,4,0]))]
+        # vertices0 = np.array([[0,0,0], [4,0,0], [0,4,0]])
+        # vertices = [list(zip([0,0,0],[4,0,0],[0,4,0]))]
         # pdb.set_trace()
-
-        poly = Poly3DCollection(vertices, alpha=0.5, color='green')
-        self.axs.add_collection3d(poly)
+        # poly = Poly3DCollection(vertices, alpha=0.5, color='green')
+        # self.axs.add_collection3d(poly)
 
         plt.savefig('zeroing_3d.png')  # , bbox_inches='tight')
 

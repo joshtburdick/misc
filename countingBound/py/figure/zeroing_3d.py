@@ -43,7 +43,7 @@ class ZeroingPlot:
         # radius of the cliques
         self.radius = 0.6
         self.alpha = 0.5
-        all_cliques = list([frozenset(s) for s in itertools.combinations(range(self.n), 3)])
+        self.all_cliques = list([frozenset(s) for s in itertools.combinations(range(self.n), 3)])
         # which edge will be zeroed out
         self.zeroed_edge = frozenset([0,1])
         # color cliques, depending on whether the edge hits it
@@ -55,7 +55,8 @@ class ZeroingPlot:
                 return color1(0)
             else:
                 return color1(2/3)
-        self.colors = {clique: color_clique(clique) for clique in all_cliques}
+        self.colors = {clique: color_clique(clique)
+            for clique in self.all_cliques}
         # Set the vertices. Note that we angle these slightly, so that
         # they're "facing toward the origin". This is to emphasize
         # the importance of the "total number of cliques".
@@ -92,7 +93,7 @@ class ZeroingPlot:
         # fig = plt.figure()
         self.axs.plot_surface(X, Y, Z,
             rstride=1, cstride=1,
-            cmap='binary', edgecolor='none', alpha=0.5)
+            cmap='binary', edgecolor='none', alpha=0.3)
         self.axs.set_xlabel('# cliques zonked')
         self.axs.set_ylabel('# cliques not zonked')
         self.axs.set_zlabel('lg(# functions)');
@@ -123,6 +124,7 @@ class ZeroingPlot:
             #    alpha=self.alpha)
 
     def plot_clique_sets(self, clique_sets):
+        stacking_height = 2
         # this is the height of the next clique to be plotted at
         # particular coordinates (so far)
         z = np.zeros([5, 17])
@@ -131,14 +133,12 @@ class ZeroingPlot:
             (x, y) = self.get_location(s)
             # put this clique above any other cliques in this column
             center = (x, y, z[x,y])
-            z[x,y] += 1
+            z[x,y] += stacking_height
             self.plot_clique_set(center, s)
 
         # lastly, draw a line connecting all the sets of cliques
-        # in this "stack"
-
-        
-        pass
+        # in this "stack"?
+        # FIXME
 
     def plot_it(self):
         """Plots the rectangle containing all the functions."""
@@ -155,6 +155,14 @@ class ZeroingPlot:
 
         # plot some random sets of cliques
         cliques1 = [frozenset([frozenset([0,1,3]), frozenset([2,3,4])])]
+        cliques1.append(self.all_cliques)
+        for i in range(5):
+            cliques1.append(frozenset(np.random.choice(self.all_cliques, 1)))
+            cliques1.append(frozenset(np.random.choice(self.all_cliques, 3)))
+            cliques1.append(frozenset(np.random.choice(self.all_cliques, 5)))
+            cliques1.append(frozenset(np.random.choice(self.all_cliques, 10)))
+            cliques1.append(frozenset(np.random.choice(self.all_cliques, 15)))
+
         self.plot_clique_sets(cliques1)
 
         # for practice: draw a triangle

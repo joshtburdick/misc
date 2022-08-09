@@ -10,6 +10,10 @@ import sys
 
 import numpy as np
 import scipy.optimize
+
+import scipy.sparse
+import scipy.optimize.linprog
+
 # note that comb() returns a float by default;
 # for loop bounds, it needs the "exact=True" option,
 # so that it returns an int
@@ -291,6 +295,7 @@ class LpBound:
             and "# cliques remaining"
         """
         self.add_total_cliques_equality_constraints()
+        pdb.set_trace()
         self.add_total_cliques_counting_bound_constraints()
         self.add_edge_zeroing_constraints()
         # possibly include the upper bound

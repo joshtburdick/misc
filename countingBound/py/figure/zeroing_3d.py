@@ -16,6 +16,8 @@ import numpy as np
 import scipy.interpolate
 from scipy.special import comb
 
+from numpy.random import default_rng
+rng = default_rng()
 
 # FIXME factor this out?
 def scale_lightness(rgb, scale_l):
@@ -154,23 +156,14 @@ class ZeroingPlot:
         self.plot_num_functions()
 
         # plot some random sets of cliques
-        cliques1 = [frozenset([frozenset([0,1,3]), frozenset([2,3,4])])]
-        cliques1.append(self.all_cliques)
-        for i in range(5):
-            cliques1.append(frozenset(np.random.choice(self.all_cliques, 1)))
-            cliques1.append(frozenset(np.random.choice(self.all_cliques, 3)))
-            cliques1.append(frozenset(np.random.choice(self.all_cliques, 5)))
-            cliques1.append(frozenset(np.random.choice(self.all_cliques, 10)))
-            cliques1.append(frozenset(np.random.choice(self.all_cliques, 15)))
-
+        cliques1 = [self.all_cliques]
+        all_cliques_1 = np.array(self.all_cliques)
+        for i in range(20):
+            j = np.random.binomial(1, 0.3, 20)
+            clique_set = all_cliques_1[np.argwhere(j)[:,0]]
+            cliques1.append(frozenset(clique_set))
         self.plot_clique_sets(cliques1)
-
-        # for practice: draw a triangle
-        # vertices0 = np.array([[0,0,0], [4,0,0], [0,4,0]])
-        # vertices = [list(zip([0,0,0],[4,0,0],[0,4,0]))]
-        # pdb.set_trace()
-        # poly = Poly3DCollection(vertices, alpha=0.5, color='green')
-        # self.axs.add_collection3d(poly)
+        # alas, this basically looks like a bunch of purple hexagons
 
         plt.savefig('zeroing_3d.png')  # , bbox_inches='tight')
 

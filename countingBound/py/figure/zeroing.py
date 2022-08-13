@@ -35,6 +35,7 @@ class CliqueFigure:
         colors: hash from sets (defined as sorted lists of k numbers)
             to color of each set
         vertex_0_theta: angle at which to place vertex 0
+        FIXME include radius here?
         """
         self.n = n
         self.colors = colors
@@ -59,8 +60,9 @@ class CliqueFigure:
             plt.fill(v[0,:], v[1,:],
                 edgecolor=self.colors[s],
                 facecolor=scale_lightness(self.colors[s], 2),
-                lw=3,
-                alpha=self.alpha)
+                lw=1,
+                alpha=self.alpha,
+                joinstyle='round')
 
 def interpolate(nodes, num_points=101):
     """Does spline interpretation.
@@ -174,6 +176,15 @@ def plot_zeroing_rectangle():
         for y in range(5):
             cliques = random.sample(hit_cliques, y) + random.sample(missed_cliques, x)
             cf.plot_cliques(0.3, (x,y), cliques)
+            # also, draw a line
+
+    # add lines showing "levels" of set size
+    # XXX this could be done with clipping, but this hopefully will also work,
+    # and is fairly easy to think about
+    for x in range(1, 17):
+        for y in range(0, 4):
+            plt.plot([x, x-1], [y, y+1], c='black', lw=0.5, alpha=0.5)
+
     plt.savefig('zeroingRectangle.pdf', bbox_inches='tight')
 
 if __name__ == '__main__':

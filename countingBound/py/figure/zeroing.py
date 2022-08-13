@@ -35,7 +35,9 @@ class CliqueFigure:
         colors: hash from sets (defined as sorted lists of k numbers)
             to color of each set
         vertex_0_theta: angle at which to place vertex 0
-        FIXME include radius here?
+        FIXME
+        - include radius here?
+        - add method to show which edge was zeroed out?
         """
         self.n = n
         self.colors = colors
@@ -158,6 +160,8 @@ def plot_zeroing_rectangle():
     margin = 0.5
     plt.xlim(-margin, 16+margin)
     plt.ylim(-margin, 4+margin)
+    plt.xlabel('# cliques not zonked')
+    plt.ylabel('# cliques zonked')
     # list of all cliques
     all_cliques = [frozenset(s) for s in itertools.combinations(range(n), 3)]
     # which cliques are hit, and which are missed

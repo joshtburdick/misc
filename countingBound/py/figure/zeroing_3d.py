@@ -165,10 +165,9 @@ class ZeroingPlot:
             clique_set = all_cliques_1[np.argwhere(j)[:,0]]
             cliques1.append(frozenset(clique_set))
         self.plot_clique_sets(cliques1)
-        # alas, this basically looks like a bunch of purple hexagons
+        # alas, this isn't terribly clear
 
         plt.savefig('zeroing_3d.pdf')  # , bbox_inches='tight')
-
 
 if __name__ == '__main__':
     z = ZeroingPlot()

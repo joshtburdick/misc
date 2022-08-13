@@ -4,6 +4,7 @@
 import colorsys
 import itertools
 import pdb
+import random
 
 import matplotlib
 import matplotlib.pyplot as plt
@@ -143,8 +144,39 @@ def plot_Z_relation():
         print("location = " + str(location))
         cf.plot_cliques(0.25, location, cliques)
     # cf.plot_sets(0.4, np.array([0,0.1]), [(0,1,2), (0,1,3)])
-    plt.savefig('Z.png', bbox_inches='tight')
+    plt.savefig('Z.pdf', bbox_inches='tight')
+
+def plot_zeroing_rectangle():
+    """Plots rectangle showing effect of zeroing out one edge."""
+    n = 6
+    # which edge will be zeroed out
+    zeroed_edge = frozenset([0,1])
+    plt.figure(figsize=(8,3))
+    # plt.axis('off')
+    margin = 0.5
+    plt.xlim(-margin, 16+margin)
+    plt.ylim(-margin, 4+margin)
+    # list of all cliques
+    all_cliques = [frozenset(s) for s in itertools.combinations(range(n), 3)]
+    # which cliques are hit, and which are missed
+    hit_cliques = [c for c in all_cliques if zeroed_edge < c]
+    missed_cliques = [c for c in all_cliques if not zeroed_edge < c]
+
+    # color scheme: red if the clique is hit, otherwise blue
+    def color1(h):
+        return colorsys.hsv_to_rgb(h, 0.5, 0.5)
+    colors = {c: color1(0) if zeroed_edge < c else color1(2/3)
+        for c in all_cliques}
+    cf = CliqueFigure(6, colors, 0)
+
+    # pick a random set of cliques "representative" of each point in the rectangle
+    for x in range(17):
+        for y in range(5):
+            cliques = random.sample(hit_cliques, y) + random.sample(missed_cliques, x)
+            cf.plot_cliques(0.3, (x,y), cliques)
+    plt.savefig('zeroingRectangle.pdf', bbox_inches='tight')
 
 if __name__ == '__main__':
     plot_Z_relation()
+    plot_zeroing_rectangle()
 

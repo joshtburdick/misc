@@ -541,15 +541,42 @@ with a variable for problems with various numbers of cliques.
 It counts the bounds in terms of ``number of two-input NAND gates''.
 
 For a given set of cliques $C$, it divides these into the cliques
-hit by zeroing an arbitrary random edge, and those remaining.
+hit by zeroing an arbitrary random edge $e$, and those remaining.
 Let $n$ be the number of vertices, and $k$ be the size of the clique,
 and $N = {n \choose k}$ be the number of cliques. Then zeroing
 an arbitrarily-chosen edge could potentially eliminate up to
 ${n-2 \choose k-2}$ cliques.
-
 Concretely, if $n=9$ and $k=3$, then there are 84 possible 3-cliques
 (triangles), and zeroing out an arbitrarily-chosen edge could
 eliminate up to 7 of these cliques.
+
+In Figure \ref{fig:zeroing3D},
+we plot all the possible sets of cliques on a rectangle, based on how many cliques $e$ ``hits'' or ``misses''.
+We can also plot the number of sets, which
+is peaked at $e$ hitting, and missing, half of the cliques that it could.
+(As $n$ grows, this is increasingly sharply peaked.)
+Alternatively, we can plot an example set of cliques for each point on this rectangle
+(Figure \ref{fig:zeroingRectangle}). Note that many sets of cliques are isomorphic;
+shuffling the vertex order doesn't change the relative arrangement of the cliques
+(and obviously doesn't affect how many of them there are). However, this can change
+how many cliques $e$ ``hits''. Hopefully, picking a distinguished edge $e$ reduces
+the amount of overcounting we need to deal with.
+
+\begin{figure}
+\centering
+\includegraphics[width=1\textwidth]{py/figure/zeroing_3d.pdf}
+\caption{Effect of zeroing a distinguished edge $e$.
+Here, we consider cliques of size $k=3$ on $n=6$ vertices.
+Only a few random sets of cliques are shown.
+Cliques which $e$ contains (``hits'')
+are colored red, and cliques which $e$ doesn't contain (``misses'')
+are colored blue.
+The surface shows the number of functions at each point
+on the rectangle (on a log-base-2 scale).
+}
+\label{fig:zeroing3D}
+\end{figure}
+
 
 \subsubsection{Equality constraints}
 

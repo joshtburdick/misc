@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 # Plots graphs, after zeroing out some hypercliques.
+# FIXME
+# - show the edge e which is zeroed out?
 
 import colorsys
 import itertools
@@ -145,7 +147,7 @@ class ZeroingPlot:
     def plot_it(self):
         """Plots the rectangle containing all the functions."""
         # set up axes
-        self.fig = plt.figure(figsize=(9, 5))
+        self.fig = plt.figure(figsize=(5, 5))
         self.axs = self.fig.add_subplot(111, projection='3d')
         self.axs.set_xlim(4,0)
         self.axs.xaxis.set_major_locator(MaxNLocator(integer=True))
@@ -165,7 +167,7 @@ class ZeroingPlot:
         self.plot_clique_sets(cliques1)
         # alas, this basically looks like a bunch of purple hexagons
 
-        plt.savefig('zeroing_3d.png')  # , bbox_inches='tight')
+        plt.savefig('zeroing_3d.pdf')  # , bbox_inches='tight')
 
 
 if __name__ == '__main__':

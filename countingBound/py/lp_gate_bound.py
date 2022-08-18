@@ -4,15 +4,14 @@
 print('NOTE: this isn\'t correct.')
 
 import argparse
+import itertools
 import math
 import pdb
 import sys
 
 import numpy as np
 import scipy.optimize
-
 import scipy.sparse
-import scipy.optimize.linprog
 
 # note that comb() returns a float by default;
 # for loop bounds, it needs the "exact=True" option,
@@ -138,7 +137,9 @@ class LpBound:
         # then, indexed by the total number of cliques
         for i in range(self.max_cliques+1):
             self.var_index[('total_cliques',i)] = len(self.var_index)
-        # These store the constraints, as lists of numpy arrays for A and b.
+        # These store the constraints:
+        # A: a list of lists of (A,i,j) entries (which go into a sparse matrix)
+        # b: a list of numbers
         # the inequalities (note that the LP solver expects upper bounds)
         self.A_ub = []
         self.b_ub = []
@@ -149,31 +150,38 @@ class LpBound:
         num_inputs = comb(n, 2, exact=True)
         self.counting_bound = TwoInputNandBound(num_inputs, 10000)
 
-    def add_constraint(self, A, b, is_equality_constraint):
+    def add_constraint(self, A, op, b):
         """Adds one row to the constraints.
 
         A: a list of (index, coefficient) pairs, where "index" is
             a key (of any hashable Python type) in var_index
-        b: the corresponding lower bound
-        is_equality_constraint: if True, this is an "Ax = b" constraint;
-            if False, this is an "Ax >= b" constraint
+        op: either '<', '=', or '>': this is the type of constraint
+            ??? can we treat '>' the same as '>='?
+        b: the corresponding bound
         Side effects: adds the constraint
         """
-        # converts from "list of numbers" to a row of A
-        # print(str(A) + ' , ' + str(b))
-        A_row = np.zeros(len(self.var_index))
-        for entry in A:
-            (i, a) = entry
-            A_row[ self.var_index[ i ] ] = a
+        # print(str(A) + ' ' + op + ' ' + str(b))
+        # converts from "list of coefficient" to a row of A
+        def get_coefs(i, negate): 
+            # this is arguably pushing limits for a list comprehension...
+            return [(-a if negate else a, i, self.var_index[k])
+                for (k,a) in A]
         # add whichever kind of constraint
-        if is_equality_constraint:
-            self.A_eq.append(A_row)
-            self.b_eq.append(b)
-        else:
-            # the inequality given as an arg is a lower bound,
-            # and so both terms need negating
-            self.A_ub.append(-A_row)
-            self.b_ub.append(-b)
+        if op == '<':
+            i = len(self.b_ub)
+            self.A_ub += get_coefs(i, False)
+            self.b_ub += [b]
+            return
+        if op == '=':
+            i = len(self.b_eq)
+            self.A_eq += get_coefs(i, False)
+            self.b_eq += [b]
+            return
+        if op == '>':
+            i = len(self.b_ub)
+            self.A_ub += get_coefs(i, True)
+            self.b_ub += [-b]
+            return
 
     def add_total_cliques_equality_constraints(self):
         """Adds constraints for a given total number of cliques.
@@ -203,7 +211,7 @@ class LpBound:
             # this is constraining the total number of gates at this "level"
             # to equal the average, weighted by the probability of some
             # number of cliques being zeroed out
-            self.add_constraint(A + [(('total_cliques', num_cliques), -1.0)], 0, True)
+            self.add_constraint(A + [(('total_cliques', num_cliques), -1.0)], '=', 0)
 
     def add_total_cliques_counting_bound_constraints(self):
         """Adds counting bound, based on total number of cliques.
@@ -219,7 +227,7 @@ class LpBound:
             A = [(('total_cliques', num_cliques), 1)]
             b = self.counting_bound.expected_gates(
                 math.log2(comb(self.max_cliques, num_cliques, exact=True)))
-            self.add_constraint(A, b, False)
+            self.add_constraint(A, '>', b)
 
     def add_edge_zeroing_constraints(self):
         """Adds constraints based on zeroing out an edge.
@@ -235,7 +243,7 @@ class LpBound:
                 A = [((i,j), 1), ((0,j), -1)]
                 # since we're measuring by "# gates", this is
                 # "this requires at least one more gate, on average".
-                self.add_constraint(A, 1, False)
+                self.add_constraint(A, '>', 1)
 
     def add_upper_bound_constraints(self):
         """Adds an upper bound.
@@ -252,7 +260,7 @@ class LpBound:
                 A = [(('total_cliques', a), 1),
                     (('total_cliques', b), 1),
                     (('total_cliques', c), -1)]
-                self.add_constraint(A, -3, False)
+                self.add_constraint(A, '<', -3)
 
     def solve(self):
         """Solves the linear system.
@@ -263,18 +271,25 @@ class LpBound:
             of cliques (rather than all of them) ?
         Returns: the LP result
         """
+        # utility to convert entries to a sparse array
+        def sparse_array_from_entries(A):
+            # gets i'th element of all the tuples
+            def ith(i):
+                return [a[i] for a in A]
+            return scipy.sparse.coo_array( (ith(0), (ith(1), ith(2))) )
         # convert A and b to np.array objects
-        A_ub = np.stack(self.A_ub)
+        A_ub = sparse_array_from_entries(self.A_ub)
         b_ub = np.array(self.b_ub)
-        A_eq = np.stack(self.A_eq)
+        A_eq = sparse_array_from_entries(self.A_eq)
         b_eq = np.array(self.b_eq)
 
         # the objective function: how low can the rank of finding
         # all the cliques (with that many vertices) be?
         c = np.zeros(len(self.var_index))
         c[ self.var_index[(self.max_cliques_zeroed, self.max_cliques_remaining)] ] = 1
+        pdb.set_trace()
         # solve
-        r = scipy.optimize.linprog(c, self.A_ub, self.b_ub)
+        r = scipy.optimize.linprog(c, A_ub, b_ub, A_eq, b_eq)
         # FIXME deal with this failing
         
         # pdb.set_trace()
@@ -295,7 +310,6 @@ class LpBound:
             and "# cliques remaining"
         """
         self.add_total_cliques_equality_constraints()
-        pdb.set_trace()
         self.add_total_cliques_counting_bound_constraints()
         self.add_edge_zeroing_constraints()
         # possibly include the upper bound

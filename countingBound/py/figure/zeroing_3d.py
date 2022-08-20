@@ -54,11 +54,10 @@ class ZeroingPlot:
         def color1(h):
             return colorsys.hsv_to_rgb(h, 0.5, 0.5)
         def color_clique(clique):
-            zeroed_edge = self.zeroed_edge
-            if zeroed_edge < clique:
-                return color1(0)
+            if self.zeroed_edge < clique:
+                return colorsys.hsv_to_rgb(0, 1, 0.5)
             else:
-                return color1(2/3)
+                return colorsys.hsv_to_rgb(2/3, 0.5, 0.5)
         self.colors = {clique: color_clique(clique)
             for clique in self.all_cliques}
         # Set the vertices. Note that we angle these slightly, so that

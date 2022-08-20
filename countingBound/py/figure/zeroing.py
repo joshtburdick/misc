@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 # Plots graphs, after zeroing out some hypercliques.
+# FIXME
+# - show which edge was zeroed!
+# - tweak alpha for cliques which are hit by an edge?
 
 import colorsys
 import itertools
@@ -41,7 +44,7 @@ class CliqueFigure:
         """
         self.n = n
         self.colors = colors
-        self.alpha = 0.5
+        self.alpha = 0.4
         # set the vertices
         theta = np.linspace(0, 2*np.pi, n, endpoint=False) + vertex_0_theta
         self.vertex = np.stack([np.cos(theta), np.sin(theta)])
@@ -171,7 +174,8 @@ def plot_zeroing_rectangle():
     # color scheme: red if the clique is hit, otherwise blue
     def color1(h):
         return colorsys.hsv_to_rgb(h, 0.5, 0.5)
-    colors = {c: color1(0) if zeroed_edge < c else color1(2/3)
+    colors = {c: colorsys.hsv_to_rgb(0, 1, 0.5) if zeroed_edge < c
+            else colorsys.hsv_to_rgb(2/3, 0.5, 0.5)
         for c in all_cliques}
     cf = CliqueFigure(6, colors, 0)
 

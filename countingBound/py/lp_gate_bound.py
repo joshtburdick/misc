@@ -255,12 +255,10 @@ class LpBound:
                 b = c - a
                 # Note that this is an _upper_ bound:
                 # |\scriptC(C)| <= |\scriptC(A)| + |\scriptC(B)| + 3
-                # But since add_constraint() expects a lower bound,
-                # everything's negated.
-                A = [(('total_cliques', a), 1),
-                    (('total_cliques', b), 1),
-                    (('total_cliques', c), -1)]
-                self.add_constraint(A, '<', -3)
+                A = [(('total_cliques', a), -1),
+                    (('total_cliques', b), -1),
+                    (('total_cliques', c), 1)]
+                self.add_constraint(A, '<', 3)
 
     def solve(self):
         """Solves the linear system.
@@ -286,10 +284,12 @@ class LpBound:
         # the objective function: how low can the rank of finding
         # all the cliques (with that many vertices) be?
         c = np.zeros(len(self.var_index))
-        c[ self.var_index[(self.max_cliques_zeroed, self.max_cliques_remaining)] ] = 1
-        pdb.set_trace()
+        # c[ self.var_index[(self.max_cliques_zeroed, self.max_cliques_remaining)] ] = 1
+        c[ self.var_index[('total_cliques', self.max_cliques)] ] = 1
         # solve
-        r = scipy.optimize.linprog(c, A_ub, b_ub, A_eq, b_eq)
+        # ??? Is there a way to tell the solver that this is sparse?
+        # (It's detecting this, but that throws a warning.)
+        r = scipy.optimize.linprog(c, A_ub=A_ub, b_ub=b_ub, A_eq=A_eq, b_eq=b_eq)
         # FIXME deal with this failing
         
         # pdb.set_trace()
@@ -300,6 +300,7 @@ class LpBound:
         for i in range(self.max_cliques_zeroed+1):
             for j in range(self.max_cliques_remaining+1):
                 x[i,j] = r.x[ self.var_index[(i,j)] ]
+        pdb.set_trace()
         return x
 
     def get_bound(self, include_upper_bound):

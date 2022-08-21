@@ -432,11 +432,12 @@ toward the ``smaller'' (in number of gates) end of the warehouse.
 That means that the corresponding set of cliques is also
 in the ``smaller'' end of the warehouse.
 
-Although both these numbers (the reduction in number of cliques, and
-the reduction in rank) have an expected value of $a/2$,
-they aren't necessarily the same, or even correlated.
-(Indeed, when $n$ is large, the number of cliques is sharply peaked around $a/2$,
-but the lower bound in reduction in rank is uniformly distributed across $0..a$.)
+Note that these numbers both decrease, but not necessarily at the same rate.
+The expected reduction in the number of cliques is $a/2$; I'm not sure
+about the expected reduction in rank. Presumably near the middle, the
+average rank will decrease a lot.
+(Note: in a previous version of this, I wrote that these both had an expected
+value of $a/2$; this is incorrect.)
 
 \subsubsection{Why this doesn't bound $k-CLIQUE$?}
 

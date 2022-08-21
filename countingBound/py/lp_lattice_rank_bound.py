@@ -14,9 +14,8 @@ import more_itertools
 import numpy as np
 import scipy.optimize
 import scipy.sparse
-# note that comb() returns a float by default;
-# for loop bounds, it needs the "exact=True" option,
-# so that it returns an int
+# note that comb() returns a float by default; for loop bounds, it needs
+# the "exact=True" option, so that it returns an int
 from scipy.special import comb
 from scipy.stats import hypergeom
 
@@ -41,7 +40,7 @@ class LatticeRankBound:
         # the variables are alll possible sets of cliques: this maps them
         # to a variable index in the LP
         self.var_index = {}
-        for s in more_itertools.powerset(all_cliques):
+        for s in more_itertools.powerset(self.all_cliques):
             self.var_index[s] = len(self.var_index) 
         # These store the constraints:
         # A: a list of lists of (A,i,j) entries (which go into a sparse matrix)
@@ -89,14 +88,37 @@ class LatticeRankBound:
     def add_average_of_all_sets_constraint(self):
         """Adds constraint on the average of all the ranks."""
         num_sets = len(self.var_index.keys())
+        # this is the average, over all of the sets
         A = [(s, 1.0/num_sets) for s in self.var_index.keys()]
         b = (num_sets-1) / 2.0
         self.add_constraint(A, '>', b)
 
-    def add_ (self, edge):
-        pass
+    def add_edge_zeroing_constraints(self):
+        """Constrains sets containing an edge e to be above sets without e.
+
+        Let A be a set of cliques, none of which include an edge e.
+        Then if B is A + (any set of cliques including e), |C(B)| >= |C(A)|.
 
 
+        """
+        # given a set of cliques, checks to see whether any clique 
+        # includes a given edge
+        def contains_edge(clique_set, e):
+            for clique in clique_set:
+                if e < clique:
+                    return True
+            return False
+        # loop through the edges
+        for e in itertools.combination(range(self.n), 2):
+            # get the sets of cliques which include e
+            B_sets = [s for s in self.var_index.keys() where contains_edge(s, e)]
+            # loop through sets of cliques
+            for A in self.var_index.keys():
+                # if this set includes e, skip it
+                if contains_edge(A, e):
+                    continue
+                # constrain the "sets above" A to be higher
+                
 
 
 

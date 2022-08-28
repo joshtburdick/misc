@@ -19,6 +19,15 @@ import scipy.sparse
 from scipy.special import comb
 from scipy.stats import hypergeom
 
+def cliques_left_after_zeroing(clique_set, edge):
+    """Finds cliques which are left after zeroing out an edge.
+
+    clique_set: a set of cliques
+    edge: an edge (as a two-element set)
+    Returns: the cliques in clique_set which aren't hit by that edge.
+    """
+    return frozenset([c for c in clique_set if not edge < c])
+
 class LatticeRankBound:
     """Computes a bound on the rank of functions for finding cliques.
 
@@ -36,12 +45,14 @@ class LatticeRankBound:
         self.n = n
         self.k = k
         # list of all the possible cliques
-        self.all_cliques = itertools.combinations(range(n), k)
+        self.all_cliques = [frozenset(c)
+            for c in itertools.combinations(range(n), k)]
         # the variables are alll possible sets of cliques: this maps them
         # to a variable index in the LP
         self.var_index = {}
         for s in more_itertools.powerset(self.all_cliques):
-            self.var_index[s] = len(self.var_index) 
+            self.var_index[frozenset(s)] = len(self.var_index)
+
         # These store the constraints:
         # A: a list of lists of (A,i,j) entries (which go into a sparse matrix)
         # b: a list of numbers
@@ -94,34 +105,41 @@ class LatticeRankBound:
         self.add_constraint(A, '>', b)
 
     def add_edge_zeroing_constraints(self):
+        """Add constraints that "zeroing an edge removes some gates".
+
+        This is arguably a relatively simple constraint: it's
+        basically encoding the edges in Z(X,Y).
+        """
+        # loop through the edges
+        for edge in itertools.combination(range(self.n), 2):
+            # loop through sets of cliques
+            for Y in self.var_index.keys():
+                # find effect of zeroing out that edge
+                X = cliques_left_after_zeroing(Y, frozenset(edge))
+                # is this smaller? (that is, did the edge "hit" B?
+                if X < Y:
+                    # constrain the "sets above" X to have more gates
+                    # (and so has higher rank)
+                    self.add_constraint([(Y, 1.0), (X, -1.0)], '>', 0)
+
+    def add_higher_set_constraints(self):
         """Constrains sets containing an edge e to be above sets without e.
 
-        Let A be a set of cliques, none of which include an edge e.
-        Then if B is A + (any set of cliques including e), |C(B)| >= |C(A)|.
-
-
+        Let X be a set of cliques, none of which include an edge e.
+        Then if Y is X + (any set of cliques including e), |C(Y)| >= |C(X)|.
         """
-        # given a set of cliques, checks to see whether any clique 
-        # includes a given edge
-        def contains_edge(clique_set, e):
-            for clique in clique_set:
-                if e < clique:
-                    return True
-            return False
+        # FIXME not yet implemented
         # loop through the edges
         for e in itertools.combination(range(self.n), 2):
             # get the sets of cliques which include e
-            B_sets = [s for s in self.var_index.keys() where contains_edge(s, e)]
+            B_sets = [s for s in self.var_index.keys() if contains_edge(s, e)]
             # loop through sets of cliques
             for A in self.var_index.keys():
                 # if this set includes e, skip it
-                if contains_edge(A, e):
+                if cliques_left_after_zeroing(A, e) < A:
                     continue
                 # constrain the "sets above" A to be higher
-                
-
-
-
+                pass   # FIXME
 
     def solve(self):
         """Solves the linear system.
@@ -145,22 +163,16 @@ class LatticeRankBound:
         # the objective function: how low can the rank of finding
         # all the cliques be?
         c = np.zeros(len(self.var_index))
-        c[ self.var_index[('total_cliques', self.max_cliques)] ] = 1
+        c[ self.var_index[frozenset(self.all_cliques)] ] = 1
         # solve
         # ??? Is there a way to tell the solver that this is sparse?
         # (It's detecting this, but that throws a warning.)
         r = scipy.optimize.linprog(c, A_ub=A_ub, b_ub=b_ub, A_eq=A_eq, b_eq=b_eq)
         # FIXME deal with this failing
-        
-        # pdb.set_trace()
-        # Reshape into a rectangle. This is admittedly inefficient when we
-        # just want the bound for finding all the cliques; but it seems
-        # simplest to just return all of this
-        x = np.empty( (self.max_cliques_zeroed+1, self.max_cliques_remaining+1) )
-        for i in range(self.max_cliques_zeroed+1):
-            for j in range(self.max_cliques_remaining+1):
-                x[i,j] = r.x[ self.var_index[(i,j)] ]
+       
+        # FIXME return average for each level (not just the bound for CLIQUE)
         pdb.set_trace()
+
         return x
 
     def get_bound(self, include_upper_bound):

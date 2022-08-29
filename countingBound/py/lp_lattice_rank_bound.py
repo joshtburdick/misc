@@ -111,7 +111,7 @@ class LatticeRankBound:
         basically encoding the edges in Z(X,Y).
         """
         # loop through the edges
-        for edge in itertools.combination(range(self.n), 2):
+        for edge in itertools.combinations(range(self.n), 2):
             # loop through sets of cliques
             for Y in self.var_index.keys():
                 # find effect of zeroing out that edge
@@ -159,7 +159,6 @@ class LatticeRankBound:
         b_ub = np.array(self.b_ub)
         A_eq = sparse_array_from_entries(self.A_eq)
         b_eq = np.array(self.b_eq)
-
         # the objective function: how low can the rank of finding
         # all the cliques be?
         c = np.zeros(len(self.var_index))
@@ -169,52 +168,42 @@ class LatticeRankBound:
         # (It's detecting this, but that throws a warning.)
         r = scipy.optimize.linprog(c, A_ub=A_ub, b_ub=b_ub, A_eq=A_eq, b_eq=b_eq)
         # FIXME deal with this failing
-       
-        # FIXME return average for each level (not just the bound for CLIQUE)
-        pdb.set_trace()
+        # FIXME move everything after this to get_bound() ?
+        # get average for each "level" (not just the bound for CLIQUE)
+        total_rank = np.zeros(self.max_cliques+1)
+        num_functions = np.zeros(self.max_cliques+1)
+        # loop through the cliques, and average the ranks
+        for (s, i) in self.var_index.items():
+            num_cliques = len(s)
+            total_rank[num_cliques] += r.x[i]
+            num_functions += 1
+        rank_bound = total_rank / num_functions
+        return rank_bound
 
-        return x
-
-    def get_bound(self, include_upper_bound):
+    def get_bound(self):
         """Gets the bound.
 
-        include_upper_bound: if True, include the upper bound
-        Returns: a 2-D NumPy array, with axes "# cliques zeroed"
-            and "# cliques remaining"
+        Returns: a 1-D Numpy array, whose i'th element is a
+            lower bound on the rank of finding i cliques
         """
-        self.add_total_cliques_equality_constraints()
-        self.add_total_cliques_counting_bound_constraints()
+        self.add_average_of_all_sets_constraint()
         self.add_edge_zeroing_constraints()
-        # possibly include the upper bound
-        if include_upper_bound:
-            self.add_upper_bound_constraints()
-        x = self.solve()
+        r = self.solve()
         return x
 
 if __name__ == '__main__':
     # gate_bound_smoke_test()
-
     parser = argparse.ArgumentParser(
         description='Attempt at bound on finding some number of cliques.')
     parser.add_argument('n', type=int,
         help='number of vertices in input graph')
     parser.add_argument('k', type=int,
         help='number of vertices in cliques to find')
-    parser.add_argument('--include-upper-bound', action='store_true',
-        help='include the upper bound constraint')
-    parser.add_argument('--plot-surface', action='store_true',
-        help='plot the bounds as a surface, with and without the upper bound')
     args = parser.parse_args()
-
-    # possibly plot the surfaces
-    if args.plot_surface:
-        # plot the surfaces
-        plot_bound_surfaces(args.n, args.k, 'bound_surfaces_')
-        sys.exit(0)
-
-    # otherwise, print the bound
-    lp = LpBound(args.n, args.k)
-    x = lp.get_bound(args.include_upper_bound)
-    bound = x[ lp.max_cliques_zeroed, lp.max_cliques_remaining ]
+    # get the bound
+    lp = LatticeRankBound(args.n, args.k)
+    x = lp.get_bound()
+    # for now, just printing the bound for CLIQUE
+    bound = x[ lp.max_cliques ]
     print(np.round(bound, 4))
 

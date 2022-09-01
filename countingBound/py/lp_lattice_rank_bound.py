@@ -102,7 +102,10 @@ class LatticeRankBound:
         # this is the average, over all of the sets
         A = [(s, 1.0/num_sets) for s in self.var_index.keys()]
         b = (num_sets-1) / 2.0
-        self.add_constraint(A, '>', b)
+        # Should this work if this is a '>' constraint?
+        # Don't know; but without this, there are no = constraints,
+        # and it crashes, so I guess I'll try using an =.
+        self.add_constraint(A, '=', b)
 
     def add_edge_zeroing_constraints(self):
         """Add constraints that "zeroing an edge removes some gates".
@@ -120,7 +123,7 @@ class LatticeRankBound:
                 if X < Y:
                     # constrain the "sets above" X to have more gates
                     # (and so has higher rank)
-                    self.add_constraint([(Y, 1.0), (X, -1.0)], '>', 0)
+                    self.add_constraint([(Y, 1.0), (X, -1.0)], '>', 1)
 
     def add_higher_set_constraints(self):
         """Constrains sets containing an edge e to be above sets without e.
@@ -141,11 +144,13 @@ class LatticeRankBound:
                 # constrain the "sets above" A to be higher
                 pass   # FIXME
 
-    def solve(self):
+    def solve(self, include_upper_bound):
         """Solves the linear system.
-        
+
+        include_upper_bound: if True, also constrain all x to be
+            less than the number of subsets of cliques.
         Note that by default, the solver constrains all x >= 0,
-        so we don't add that constraint.
+            so we don't add that constraint.
         Returns: the LP result
         """
         # utility to convert entries to a sparse array
@@ -163,32 +168,41 @@ class LatticeRankBound:
         # all the cliques be?
         c = np.zeros(len(self.var_index))
         c[ self.var_index[frozenset(self.all_cliques)] ] = 1
+        # This is the maximum rank: if we are ranking all of the functions,
+        # it can't go higher than the number of subsets of cliques.
+        # (The "-1" is because we're numbering ranks starting at 0.)
+        max_rank = len(self.var_index) - 1
         # solve
         # ??? Is there a way to tell the solver that this is sparse?
         # (It's detecting this, but that throws a warning.)
-        r = scipy.optimize.linprog(c, A_ub=A_ub, b_ub=b_ub, A_eq=A_eq, b_eq=b_eq)
+        r = scipy.optimize.linprog(c, A_ub=A_ub, b_ub=b_ub,
+            A_eq=A_eq, b_eq=b_eq,
+            bounds = (0, max_rank) if include_upper_bound else (0, None))
         # FIXME deal with this failing
         # FIXME move everything after this to get_bound() ?
         # get average for each "level" (not just the bound for CLIQUE)
-        total_rank = np.zeros(self.max_cliques+1)
-        num_functions = np.zeros(self.max_cliques+1)
+        total_rank = np.zeros(len(self.all_cliques)+1)
+        num_functions = np.zeros(len(self.all_cliques)+1)
         # loop through the cliques, and average the ranks
         for (s, i) in self.var_index.items():
             num_cliques = len(s)
             total_rank[num_cliques] += r.x[i]
-            num_functions += 1
+            num_functions[num_cliques] += 1
         rank_bound = total_rank / num_functions
+        # pdb.set_trace()
         return rank_bound
 
-    def get_bound(self):
+    def get_bound(self, include_upper_bound=False):
         """Gets the bound.
 
+        include_upper_bound: if True, also bound all variables to be
+            less than the number of subsets of cliques.
         Returns: a 1-D Numpy array, whose i'th element is a
             lower bound on the rank of finding i cliques
         """
         self.add_average_of_all_sets_constraint()
         self.add_edge_zeroing_constraints()
-        r = self.solve()
+        x = self.solve(include_upper_bound)
         return x
 
 if __name__ == '__main__':
@@ -202,8 +216,8 @@ if __name__ == '__main__':
     args = parser.parse_args()
     # get the bound
     lp = LatticeRankBound(args.n, args.k)
-    x = lp.get_bound()
+    x = lp.get_bound(include_upper_bound=False)
     # for now, just printing the bound for CLIQUE
-    bound = x[ lp.max_cliques ]
+    bound = x[ len(lp.all_cliques) ]
     print(np.round(bound, 4))
 

@@ -138,7 +138,9 @@ class LatticeRankBound:
 
         Let A be a set of cliques, none of which include an edge e.
         Let B be any set of cliques including e.
-        Then E[rank(A+B)] = E[rank(A)] + (|B|+1)/2
+        Then E[rank(A+B)] = E[rank(A)] + (|B|+1)/2 .
+
+        This doesn't appear to help much. Also, it's more complicated.
         """
         # loop through the edges
         for e in itertools.combinations(range(self.n), 2):
@@ -221,10 +223,17 @@ class LatticeRankBound:
             lower bound on the rank of finding i cliques
         """
         # loop through the levels of numbers of cliques
+        # N.B.: adding all these levels seems to help more than
+        # only adding the >= constraint for "all the cliques"
         for i in range(len(self.all_cliques)+1): 
-            self.add_average_of_levels_constraint(i)
-        # self.add_edge_zeroing_constraints()
-        self.add_higher_set_constraints()
+             self.add_average_of_levels_constraint(i)
+        # just adding this doesn't seem to help much
+        # self.add_average_of_levels_constraint(len(self.all_cliques))
+        # FIXME some of these seem to be way above the average.
+        # therefore, add the = constraint back in?
+        self.add_edge_zeroing_constraints()
+        # N.B.: this doesn't seem to help much
+        # self.add_higher_set_constraints()
         x = self.solve(include_upper_bound)
         return x
 
@@ -239,7 +248,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
     # get the bound
     lp = LatticeRankBound(args.n, args.k)
-    x = lp.get_bound(include_upper_bound=False)
+    x = lp.get_bound(include_upper_bound=True)
     # pdb.set_trace()
     print(x)
     # for now, just printing the bound for CLIQUE

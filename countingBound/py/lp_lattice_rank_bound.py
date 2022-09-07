@@ -96,16 +96,24 @@ class LatticeRankBound:
             self.b_ub += [-b]
             return
 
-    def add_average_of_all_sets_constraint(self):
-        """Adds constraint on the average of all the ranks."""
-        num_sets = len(self.var_index.keys())
+    def add_average_of_levels_constraint(self, max_cliques):
+        """Adds constraint on the average of some levels.
+
+        max_cliques: this will average sets including from 0 to
+            this number (inclusive) of cliques
+        Side effects: adds a constraint
+        """
+        # get all the sets which are small enough
+        clique_sets = [s for s in self.var_index.keys()
+            if len(s) <= max_cliques]
+        num_sets = len(clique_sets)
         # this is the average, over all of the sets
-        A = [(s, 1.0/num_sets) for s in self.var_index.keys()]
+        A = [(s, 1.0/num_sets) for s in clique_sets]
+        # the average of their ranks (using 0-based numbering)
         b = (num_sets-1) / 2.0
-        # Should this work if this is a '>' constraint?
-        # Don't know; but without this, there are no = constraints,
-        # and it crashes, so I guess I'll try using an =.
-        self.add_constraint(A, '=', b)
+        # for _all_ of the sets, this could be an = constraint,
+        # but not for the "lower" levels
+        self.add_constraint(A, '>', b)
 
     def add_edge_zeroing_constraints(self):
         """Add constraints that "zeroing an edge removes some gates".
@@ -128,21 +136,31 @@ class LatticeRankBound:
     def add_higher_set_constraints(self):
         """Constrains sets containing an edge e to be above sets without e.
 
-        Let X be a set of cliques, none of which include an edge e.
-        Then if Y is X + (any set of cliques including e), |C(Y)| >= |C(X)|.
+        Let A be a set of cliques, none of which include an edge e.
+        Let B be any set of cliques including e.
+        Then E[rank(A+B)] = E[rank(A)] + (|B|+1)/2
         """
-        # FIXME not yet implemented
         # loop through the edges
-        for e in itertools.combination(range(self.n), 2):
+        for e in itertools.combinations(range(self.n), 2):
             # get the sets of cliques which include e
-            B_sets = [s for s in self.var_index.keys() if contains_edge(s, e)]
+            B_cliques = [c for c in self.all_cliques if c > frozenset(e)]
+            # include all nonempty combinations of these
+            B_sets = [frozenset(s) for s in more_itertools.powerset(B_cliques)
+                if len(s) > 0]
             # loop through sets of cliques
             for A in self.var_index.keys():
                 # if this set includes e, skip it
-                if cliques_left_after_zeroing(A, e) < A:
+                if cliques_left_after_zeroing(A, frozenset(e)) < A:
                     continue
-                # constrain the "sets above" A to be higher
-                pass   # FIXME
+                # constrain the average of A and "sets above" A
+                # to be higher than A
+                B_set_constraints = [(A.union(B), 1./len(B_sets))
+                    for B in B_sets]
+                self.add_constraint(B_set_constraints + [(A, -1.)],
+                    '>',
+                    # since these are all distinct, and "higher" than A, this
+                    # is the average of numbers from 1 to |B_sets|, inclusive
+                    (len(B_sets)+1.) / 2)
 
     def solve(self, include_upper_bound):
         """Solves the linear system.
@@ -162,8 +180,9 @@ class LatticeRankBound:
         # convert A and b to np.array objects
         A_ub = sparse_array_from_entries(self.A_ub)
         b_ub = np.array(self.b_ub)
-        A_eq = sparse_array_from_entries(self.A_eq)
-        b_eq = np.array(self.b_eq)
+        # omitting equality constraints for now
+        # A_eq = sparse_array_from_entries(self.A_eq)
+        # b_eq = np.array(self.b_eq)
         # the objective function: how low can the rank of finding
         # all the cliques be?
         c = np.zeros(len(self.var_index))
@@ -176,7 +195,8 @@ class LatticeRankBound:
         # ??? Is there a way to tell the solver that this is sparse?
         # (It's detecting this, but that throws a warning.)
         r = scipy.optimize.linprog(c, A_ub=A_ub, b_ub=b_ub,
-            A_eq=A_eq, b_eq=b_eq,
+        # for now, omitting = constraints (since there aren't any)
+        #    A_eq=A_eq, b_eq=b_eq,
             bounds = (0, max_rank) if include_upper_bound else (0, None))
         # FIXME deal with this failing
         # FIXME move everything after this to get_bound() ?
@@ -200,8 +220,11 @@ class LatticeRankBound:
         Returns: a 1-D Numpy array, whose i'th element is a
             lower bound on the rank of finding i cliques
         """
-        self.add_average_of_all_sets_constraint()
-        self.add_edge_zeroing_constraints()
+        # loop through the levels of numbers of cliques
+        for i in range(len(self.all_cliques)+1): 
+            self.add_average_of_levels_constraint(i)
+        # self.add_edge_zeroing_constraints()
+        self.add_higher_set_constraints()
         x = self.solve(include_upper_bound)
         return x
 
@@ -217,6 +240,8 @@ if __name__ == '__main__':
     # get the bound
     lp = LatticeRankBound(args.n, args.k)
     x = lp.get_bound(include_upper_bound=False)
+    # pdb.set_trace()
+    print(x)
     # for now, just printing the bound for CLIQUE
     bound = x[ len(lp.all_cliques) ]
     print(np.round(bound, 4))

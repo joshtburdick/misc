@@ -96,12 +96,16 @@ class LatticeRankBound:
             self.b_ub += [-b]
             return
 
-    def add_average_of_levels_constraint(self, max_cliques):
+    def add_average_of_levels_constraint(self, max_cliques, constraint_type):
         """Adds constraint on the average of some levels.
 
         max_cliques: this will average sets including from 0 to
             this number (inclusive) of cliques
-        Side effects: adds a constraint
+        constraint_type: either '>' or '='.
+            Note that '=' is only valid if
+            max_cliques == the total number of cliques.
+        Side effects: adds a constraint on the average of levels from
+            0 to max_cliques (inclusive).
         """
         # get all the sets which are small enough
         clique_sets = [s for s in self.var_index.keys()
@@ -111,9 +115,8 @@ class LatticeRankBound:
         A = [(s, 1.0/num_sets) for s in clique_sets]
         # the average of their ranks (using 0-based numbering)
         b = (num_sets-1) / 2.0
-        # for _all_ of the sets, this could be an = constraint,
-        # but not for the "lower" levels
-        self.add_constraint(A, '>', b)
+        # add the constraint
+        self.add_constraint(A, constraint_type, b)
 
     def add_edge_zeroing_constraints(self):
         """Add constraints that "zeroing an edge removes some gates".
@@ -164,14 +167,11 @@ class LatticeRankBound:
                     # is the average of numbers from 1 to |B_sets|, inclusive
                     (len(B_sets)+1.) / 2)
 
-    def solve(self, include_upper_bound):
+    def solve(self):
         """Solves the linear system.
 
-        include_upper_bound: if True, also constrain all x to be
-            less than the number of subsets of cliques.
-        Note that by default, the solver constrains all x >= 0,
-            so we don't add that constraint.
-        Returns: the LP result
+        Returns: a vector, indexed by the number of cliques, of the
+            lower bound on the average for that level
         """
         # utility to convert entries to a sparse array
         def sparse_array_from_entries(A):
@@ -182,9 +182,12 @@ class LatticeRankBound:
         # convert A and b to np.array objects
         A_ub = sparse_array_from_entries(self.A_ub)
         b_ub = np.array(self.b_ub)
-        # omitting equality constraints for now
-        # A_eq = sparse_array_from_entries(self.A_eq)
-        # b_eq = np.array(self.b_eq)
+        # possibly add equality constraints
+        A_eq = None
+        b_eq = None
+        if self.A_eq:
+            A_eq = sparse_array_from_entries(self.A_eq)
+            b_eq = np.array(self.b_eq)
         # the objective function: how low can the rank of finding
         # all the cliques be?
         c = np.zeros(len(self.var_index))
@@ -197,9 +200,10 @@ class LatticeRankBound:
         # ??? Is there a way to tell the solver that this is sparse?
         # (It's detecting this, but that throws a warning.)
         r = scipy.optimize.linprog(c, A_ub=A_ub, b_ub=b_ub,
-        # for now, omitting = constraints (since there aren't any)
-        #    A_eq=A_eq, b_eq=b_eq,
-            bounds = (0, max_rank) if include_upper_bound else (0, None))
+            A_eq=A_eq, b_eq=b_eq,
+            # we include these bounds, although they don't seem to help
+            # all that much
+            bounds = (0, max_rank))
         # FIXME deal with this failing
         # FIXME move everything after this to get_bound() ?
         # get average for each "level" (not just the bound for CLIQUE)
@@ -214,27 +218,36 @@ class LatticeRankBound:
         # pdb.set_trace()
         return rank_bound
 
-    def get_bound(self, include_upper_bound=False):
+    def get_bound(self, include_expectation_lower_bound,
+            include_zeroing_bound, include_expectation_equality_bound):
         """Gets the bound.
 
-        include_upper_bound: if True, also bound all variables to be
-            less than the number of subsets of cliques.
+        include_expectation_lower_bound: if True, include the lower bound
+            on expected values of levels
+        include_zeroing_bound: if True, include bound from zeroing out
+            each edge
+        include_expectation_equality_bound: if True, include the exact
+            bound on expected value of _all_ the levels
         Returns: a 1-D Numpy array, whose i'th element is a
             lower bound on the rank of finding i cliques
         """
-        # loop through the levels of numbers of cliques
-        # N.B.: adding all these levels seems to help more than
-        # only adding the >= constraint for "all the cliques"
-        for i in range(len(self.all_cliques)+1): 
-             self.add_average_of_levels_constraint(i)
-        # just adding this doesn't seem to help much
-        # self.add_average_of_levels_constraint(len(self.all_cliques))
-        # FIXME some of these seem to be way above the average.
-        # therefore, add the = constraint back in?
-        self.add_edge_zeroing_constraints()
-        # N.B.: this doesn't seem to help much
-        # self.add_higher_set_constraints()
-        x = self.solve(include_upper_bound)
+        # include bounds on expected value of all the levels?
+        if include_expectation_lower_bound:
+            # loop through the levels of numbers of cliques
+            # n.b.: adding all these levels seems to help more than
+            # only adding the >= constraint for "all the cliques"
+            for i in range(len(self.all_cliques)+1): 
+                 self.add_average_of_levels_constraint(i, '>')
+        # include bounds from zeroing edges?
+        if include_zeroing_bound:
+            self.add_edge_zeroing_constraints()
+        # include exact bound on average of _all_ the levels?
+        if include_expectation_equality_bound:
+            self.add_average_of_levels_constraint(len(self.all_cliques)+1, '=')
+
+        # N.B.: this doesn't seem to help much. But tossing it in anyway...
+        self.add_higher_set_constraints()
+        x = self.solve()
         return x
 
 if __name__ == '__main__':
@@ -248,7 +261,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
     # get the bound
     lp = LatticeRankBound(args.n, args.k)
-    x = lp.get_bound(include_upper_bound=True)
+    x = lp.get_bound(True, True, True)
     # pdb.set_trace()
     print(x)
     # for now, just printing the bound for CLIQUE

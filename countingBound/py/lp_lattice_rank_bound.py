@@ -19,6 +19,11 @@ import scipy.sparse
 from scipy.special import comb
 from scipy.stats import hypergeom
 
+import canonical_graph
+
+foo = canonical_graph.canonical_hypergraph_map(4, 3)
+pdb.set_trace()
+
 def cliques_left_after_zeroing(clique_set, edge):
     """Finds cliques which are left after zeroing out an edge.
 
@@ -215,7 +220,10 @@ class LatticeRankBound:
             total_rank[num_cliques] += r.x[i]
             num_functions[num_cliques] += 1
         rank_bound = total_rank / num_functions
-        # pdb.set_trace()
+        # for debugging: print entries
+        entries = [(len(i[0]), r.x[i[1]]) for i in self.var_index.items()]
+        entries.sort()
+        for e in entries: print(e)
         return rank_bound
 
     def get_bound(self, include_expectation_lower_bound,

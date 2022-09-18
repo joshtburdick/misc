@@ -34,7 +34,8 @@ def canonical_hypergraph_map(n, k):
     # add everything isomorphic to G as well.
     m = dict()
     # loop through the hypergraphs
-    for g in more_itertools.powerset(all_cliques):
+    for g0 in more_itertools.powerset(all_cliques):
+        g = frozenset(g0)
         # has g been added yet?
         if g not in m:        
             # loop through hypergraphs isomorphic to g
@@ -44,7 +45,6 @@ def canonical_hypergraph_map(n, k):
     # super-basic check of correctness
     assert(len(m) == 2**len(all_cliques))
     return m
-
 
 
 

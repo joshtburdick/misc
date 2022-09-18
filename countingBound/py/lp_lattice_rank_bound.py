@@ -20,10 +20,6 @@ from scipy.special import comb
 from scipy.stats import hypergeom
 
 import canonical_graph
-
-foo = canonical_graph.canonical_hypergraph_map(4, 3)
-pdb.set_trace()
-
 def cliques_left_after_zeroing(clique_set, edge):
     """Finds cliques which are left after zeroing out an edge.
 
@@ -172,6 +168,25 @@ class LatticeRankBound:
                     # is the average of numbers from 1 to |B_sets|, inclusive
                     (len(B_sets)+1.) / 2)
 
+    def add_isomorphic_graph_constraints(self):
+        """Adds constraints that permuting vertices doesn't change rank.
+
+        This is a bit weirdly defined, since reputedly the functions have
+            each been assigned a distinct rank. I guess I'll try to define
+            this as "average rank, under all permutations of vertices".
+        Side effects: adds a constraint that the same set has the same
+            expected rank.
+        """
+        # get all the isomorphic graphs
+        canonical_map = canonical_graph.canonical_hypergraph_map(self.n, self.k)
+        # pdb.set_trace()
+        # for each pair of canonical graphs
+        for (g1, g2) in canonical_map.items():
+            # constraint that these are equal
+            A = [(g1, 1.), (g2, -1.)]
+            print(A)
+            self.add_constraint(A, '=', 0)
+
     def solve(self):
         """Solves the linear system.
 
@@ -227,7 +242,9 @@ class LatticeRankBound:
         return rank_bound
 
     def get_bound(self, include_expectation_lower_bound,
-            include_zeroing_bound, include_expectation_equality_bound):
+            include_zeroing_bound,
+            include_expectation_equality_bound,
+            include_isomorphic_graph_constraints):
         """Gets the bound.
 
         include_expectation_lower_bound: if True, include the lower bound
@@ -236,6 +253,8 @@ class LatticeRankBound:
             each edge
         include_expectation_equality_bound: if True, include the exact
             bound on expected value of _all_ the levels
+        include_isomorphic_graph_constraints: if True, include bound that
+            shuffling the vertices doesn't change expected rank
         Returns: a 1-D Numpy array, whose i'th element is a
             lower bound on the rank of finding i cliques
         """
@@ -252,9 +271,10 @@ class LatticeRankBound:
         # include exact bound on average of _all_ the levels?
         if include_expectation_equality_bound:
             self.add_average_of_levels_constraint(len(self.all_cliques)+1, '=')
-
+        if include_isomorphic_graph_constraints:
+            self.add_isomorphic_graph_constraints()
         # N.B.: this doesn't seem to help much. But tossing it in anyway...
-        self.add_higher_set_constraints()
+        # self.add_higher_set_constraints()
         x = self.solve()
         return x
 
@@ -266,10 +286,12 @@ if __name__ == '__main__':
         help='number of vertices in input graph')
     parser.add_argument('k', type=int,
         help='number of vertices in cliques to find')
+    parser.add_argument('--isomorphic-graph-constraints', action='store_true',
+        help='add isomorphic graph constraints')
     args = parser.parse_args()
     # get the bound
     lp = LatticeRankBound(args.n, args.k)
-    x = lp.get_bound(True, True, True)
+    x = lp.get_bound(True, True, True, args.isomorphic_graph_constraints)
     # pdb.set_trace()
     print(x)
     # for now, just printing the bound for CLIQUE

@@ -739,6 +739,7 @@ Another way of thinking of this is that ``all the other functions
 are `above' finding zero cliques''.
 
 Slightly less silly (FIXME finding exactly one clique).
+(Is this using ``restrictions'' to prove an {\em upper} bound?)
 
 It's not immediately obvious how well we can upper-bound the rank
 of finding other sets of functions.
@@ -755,14 +756,12 @@ to help in bounding the rank of $CLIQUE$.
 
 However, recall that we know that the average rank of all the functions
 is $N/2$.
-When we show that the constant function has rank 0, that ``pushes up''
-the average for all $N-1$ other functions (admittedly by a miniscule amount).
+When we show that the constant function has rank 0, that lifts
+the average for all $N-1$ other functions (although admittedly
+by a miniscule amount).
 Similarly, the bound on finding one clique pushes up all the other functions.
 Thus, perhaps, we can use such upper bounds to ``rule out'' $CLIQUE$ from
 having low rank.
-
-
-
 
 \section{Related work}
 

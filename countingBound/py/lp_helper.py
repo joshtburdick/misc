@@ -12,7 +12,7 @@ class LP_Helper:
     """Wrapper class for LP solver, providing convenient names.
 
     """
-    def __init__(self, var_names, var_to_minimize):
+    def __init__(self, var_names):
         """ Constructor.
     
         var_names: names of the variables

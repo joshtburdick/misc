@@ -29,17 +29,17 @@ class CanonicalGraphs:
         self.n = n
         self.k = k
         # compute mapping from graphs to a canonical graph
-        self.canonical_map = self.canonical_hypergraph_map()
+        self.canonical_map = self.get_canonical_map()
         # get set of all canonical graphs
         self.canonical_graphs = frozenset(self.canonical_map.values())
         # get number of graphs equivalent to each hypergraph
-        self.set_size = {g: 0 for g in self.canonical_graphs()}
+        self.set_size = {g: 0 for g in self.canonical_graphs}
         for k in self.canonical_map.keys():
             self.set_size[ self.canonical_map[k] ] += 1
         # get zeroing relation
         self.Z = self.get_zeroing_relation()
 
-    def canonical_hypergraph_map(self):
+    def get_canonical_map(self):
         """Constructs a dict of 'canonical hypergraphs'.
 
         Vertices are numbered from 0 to n-1, inclusive.
@@ -64,7 +64,7 @@ class CanonicalGraphs:
             # has g been added yet?
             if g not in m:        
                 # loop through hypergraphs isomorphic to g
-                for g1 in isomorphic_hypergraphs(n, g):
+                for g1 in self.isomorphic_hypergraphs(g):
                     # add g1, if it hasn't been added yet
                     if g1 not in m: m[g1] = g
         # super-basic check of correctness
@@ -87,12 +87,10 @@ class CanonicalGraphs:
         Here, A and B are canonical hypergraphs.
         """
         Z = set()
-        for edge in itertools.combinations(range(self.n)):
+        for edge in itertools.combinations(range(self.n), 2):
             for A in self.canonical_graphs:
-                B = cliques_left_after_zeroing(A, edge)
-                Z += (A, B)
-
-
-
-
-
+                B = cliques_left_after_zeroing(A, frozenset(edge))
+                # require that B < A (that is, the zeroing hit a clique)
+                if B < A:
+                    Z.add((A, B))
+        return Z

@@ -37,8 +37,10 @@ class LatticeRankBound2:
     def add_higher_sets_bound(self):
         """Add upper bound constraints, based on "higher" sets.
 
-
-
+        For each set A, we find the number of graphs "above and including"
+        that set; call that number b.
+        We then know that S is "below" all of those sets. Since we also
+        know |A|, we get that E[|C(A)|] <= (N - b) - |A|/2 .
         """
         pass
 

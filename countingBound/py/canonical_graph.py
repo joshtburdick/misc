@@ -4,7 +4,7 @@
 import itertools
 
 import more_itertools
-
+import scipy.sparse.csgraph
 
 def cliques_left_after_zeroing(clique_set, edge):
     """Finds cliques which are left after zeroing out an edge.
@@ -32,6 +32,8 @@ class CanonicalGraphs:
         self.canonical_map = self.get_canonical_map()
         # get set of all canonical graphs
         self.canonical_graphs = frozenset(self.canonical_map.values())
+        # number the canonical graphs
+        self.numbering = dict(zip(self.canonical_graphs, itertools.count()))
         # get zeroing relation
         self.Z = self.get_zeroing_relation()
         # get number of graphs equivalent to each hypergraph
@@ -95,3 +97,17 @@ class CanonicalGraphs:
                 if B < A:
                     Z.add((A, B))
         return Z
+
+    def get_num_sets_above(self):
+        """For each set, gets the set of supersets of it."""
+        # construct sparse matrix representing Z
+        n = len(self.canonical_graphs)
+        M = np.zeros([n,n])
+        for (A, B) in self.Z:
+            M[ self.numbering[A], self.numbering[B] ] = 1
+        M = csr_matrix(M)
+        # get all ancestors and descendents
+        dist = floyd_warshall(csgraph=M)
+        # for j in range(n):
+        #     s = 0
+

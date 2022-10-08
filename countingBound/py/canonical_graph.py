@@ -32,13 +32,13 @@ class CanonicalGraphs:
         self.canonical_map = self.get_canonical_map()
         # get set of all canonical graphs
         self.canonical_graphs = frozenset(self.canonical_map.values())
+        # get zeroing relation
+        self.Z = self.get_zeroing_relation()
         # get number of graphs equivalent to each hypergraph
         self.set_size = {g: 0 for g in self.canonical_graphs}
         for k in self.canonical_map.keys():
             self.set_size[ self.canonical_map[k] ] += 1
-        # get zeroing relation
-        self.Z = self.get_zeroing_relation()
-
+ 
     def get_canonical_map(self):
         """Constructs a dict of 'canonical hypergraphs'.
 
@@ -49,17 +49,18 @@ class CanonicalGraphs:
             large sets of hypergraphs.
         Returns: a dict, mapping each possible hypergraph g to
             a canonical hypergraph isomorphic to g.
+        Side effects: stores list of all cliques in self.all_cliques
         """
         n = self.n
         k = self.k
         # get the list of all cliques
-        all_cliques = [frozenset(c) for c in itertools.combinations(range(n), k)]
+        self.all_cliques = [frozenset(c) for c in itertools.combinations(range(n), k)]
         # This will be the mapping from a graph to a canonical (isomorphic) graph.
         # We maintain the invariant that whenever we add a graph G to this, we
         # add everything isomorphic to G as well.
         m = dict()
         # loop through the hypergraphs
-        for g0 in more_itertools.powerset(all_cliques):
+        for g0 in more_itertools.powerset(self.all_cliques):
             g = frozenset(g0)
             # has g been added yet?
             if g not in m:        
@@ -68,7 +69,7 @@ class CanonicalGraphs:
                     # add g1, if it hasn't been added yet
                     if g1 not in m: m[g1] = g
         # super-basic check of correctness
-        assert(len(m) == 2**len(all_cliques))
+        assert(len(m) == 2**len(self.all_cliques))
         return m
 
     def isomorphic_hypergraphs(self, g):

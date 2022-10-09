@@ -26,7 +26,7 @@ class LatticeRankBound2:
         """Adds equality constraint on average rank of all of the functions."""
         num_sets = sum(self.graph_info.set_size.values())
         A = [(S, n / num_sets)
-            for (S, n) in self.graph_info.set_size]
+            for (S, n) in self.graph_info.set_size.items()]
         self.lp.add_constraint(A, '=', num_sets / 2.)
 
     def add_zeroing_constraints(self):
@@ -42,7 +42,7 @@ class LatticeRankBound2:
         We then know that S is "below" all of those sets. Since we also
         know |A|, we get that E[|C(A)|] <= (N - b) - |A|/2 .
         """
-        pass
+        z = self.graph_info.get_num_higher_sets()
 
     def get_all_set_bounds(self):
         """Gets bounds for all the sets.
@@ -60,11 +60,12 @@ class LatticeRankBound2:
     def get_clique_bound(self):
         """Gets the bound for finding all the cliques."""
         bounds = self.get_all_set_bounds()
-        return bounds[self.graph_info.all_cliques]
+        return bounds[frozenset(self.graph_info.all_cliques)]
 
 if __name__ == '__main__':
-    lrb = LatticeRankBound2(4,3)   # start small
-
-
-
+    lrb = LatticeRankBound2(4,3)   # start small, eh
+    lrb.add_average_rank_constraint()
+    lrb.add_zeroing_constraints()
+    # lrb.add_higher_sets_bound()
+    print(str(lrb.get_clique_bound()))
 

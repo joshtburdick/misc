@@ -88,7 +88,7 @@ class LP_Helper:
             A_eq = sparse_array_from_entries(self.A_eq)
             b_eq = np.array(self.b_eq)
         c = np.zeros(len(self.var_index))
-        c[ var_to_minimize ] = 1
+        c[ self.var_index[var_to_minimize] ] = 1
         # solve
         # ??? Is there a way to tell the solver that this is sparse?
         # (It's detecting this, but that throws a warning.)
@@ -100,5 +100,5 @@ class LP_Helper:
         # FIXME deal with this failing
         # convert the bound to a dict
         bound = {var: r.x[i]
-            for (var, i) in self.var_index}
+            for (var, i) in self.var_index.items()}
         return bound

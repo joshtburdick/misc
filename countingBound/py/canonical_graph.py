@@ -95,19 +95,21 @@ class CanonicalGraphs:
                 B = cliques_left_after_zeroing(A, frozenset(edge))
                 # require that B < A (that is, the zeroing hit a clique)
                 if B < A:
-                    Z.add((A, B))
+                    # also, use the "canonical" version of B
+                    Z.add((A, self.canonical_map[B]))
         return Z
 
     def get_num_sets_above(self):
-        """For each set, gets the set of supersets of it."""
+        """For each set, gets the number of sets above it in Z."""
         # construct sparse matrix representing Z
         n = len(self.canonical_graphs)
         M = np.zeros([n,n])
         for (A, B) in self.Z:
-            M[ self.numbering[A], self.numbering[B] ] = 1
+            M[ self.numbering[B], self.numbering[A] ] = 1
         M = csr_matrix(M)
-        # get all ancestors and descendents
+        # get all ancestors by computing transitive closure
         dist = floyd_warshall(csgraph=M)
+        pdb.set_trace()
         # for j in range(n):
         #     s = 0
 

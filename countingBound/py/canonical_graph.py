@@ -2,8 +2,11 @@
 # related things.
 
 import itertools
+import pdb
 
+import numpy as np
 import more_itertools
+import scipy.sparse
 import scipy.sparse.csgraph
 
 def cliques_left_after_zeroing(clique_set, edge):
@@ -99,17 +102,29 @@ class CanonicalGraphs:
                     Z.add((A, self.canonical_map[B]))
         return Z
 
-    def get_num_sets_above(self):
+    def get_num_higher_sets(self):
         """For each set, gets the number of sets above it in Z."""
         # construct sparse matrix representing Z
         n = len(self.canonical_graphs)
         M = np.zeros([n,n])
+        # M[i,j] will be 1 iff j'th set is directly above the i'th set
         for (A, B) in self.Z:
             M[ self.numbering[B], self.numbering[A] ] = 1
-        M = csr_matrix(M)
+        M = scipy.sparse.csr_matrix(M)
+        # get list of sets by index
+        set_by_index = [None] * n
+        for (s, i) in self.numbering.items():
+            set_by_index[i] = s
         # get all ancestors by computing transitive closure
-        dist = floyd_warshall(csgraph=M)
-        pdb.set_trace()
-        # for j in range(n):
-        #     s = 0
-
+        # dist[i,j] will be >0 and <inf iff the j'th set is
+        # _somewhere_ above the i'th set
+        dist = scipy.sparse.csgraph.floyd_warshall(csgraph=M)
+        # total up number of sets above
+        num_higher_sets = dict()
+        for i in range(n):
+            s = 0
+            for j in range(n):
+                if 0 < dist[i,j] < np.inf:
+                    s += self.set_size[ set_by_index[j] ]
+            num_higher_sets[ set_by_index[i] ] = s
+        return num_higher_sets

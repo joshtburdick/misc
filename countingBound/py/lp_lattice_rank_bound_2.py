@@ -34,7 +34,7 @@ class LatticeRankBound2:
         for (A,B) in self.graph_info.Z:
             self.lp.add_constraint([(A, 1.), (B, -1.)], '>', 1)
 
-    def add_higher_sets_bound(self):
+    def add_higher_sets_constraints(self):
         """Add upper bound constraints, based on "higher" sets.
 
         For each set A, we find the number of graphs "above and including"
@@ -66,6 +66,6 @@ if __name__ == '__main__':
     lrb = LatticeRankBound2(4,3)   # start small, eh
     lrb.add_average_rank_constraint()
     lrb.add_zeroing_constraints()
-    # lrb.add_higher_sets_bound()
+    lrb.add_higher_sets_constraints()
     print(str(lrb.get_clique_bound()))
 

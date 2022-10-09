@@ -97,6 +97,7 @@ class LP_Helper:
             # we include these bounds, although they don't seem to help
             # all that much
             bounds = bounds)
+        pdb.set_trace()
         # FIXME deal with this failing
         # convert the bound to a dict
         bound = {var: r.x[i]

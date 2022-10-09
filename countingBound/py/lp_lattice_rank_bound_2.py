@@ -39,10 +39,17 @@ class LatticeRankBound2:
 
         For each set A, we find the number of graphs "above and including"
         that set; call that number b.
-        We then know that S is "below" all of those sets. Since we also
+        We then know that A is "below" all of those sets. Since we also
         know |A|, we get that E[|C(A)|] <= (N - b) - |A|/2 .
         """
-        z = self.graph_info.get_num_higher_sets()
+        num_higher_sets = self.graph_info.get_num_higher_sets()
+        for (A, num_in_B) in num_higher_sets.items():
+            # ??? this seems like it might have some off-by-one errors;
+            # probably should check some examples with e.g. n=4, k=3.
+            print(A)
+            self.lp.add_constraint([(A, 1.)], '<',
+                2 + len(self.graph_info.canonical_graphs) - 1 - num_in_B
+                - ((self.graph_info.set_size[A]-1) / 2))
 
     def get_all_set_bounds(self):
         """Gets bounds for all the sets.
@@ -63,9 +70,10 @@ class LatticeRankBound2:
         return bounds[frozenset(self.graph_info.all_cliques)]
 
 if __name__ == '__main__':
-    lrb = LatticeRankBound2(4,3)   # start small, eh
+    lrb = LatticeRankBound2(4,3)
     lrb.add_average_rank_constraint()
     lrb.add_zeroing_constraints()
     lrb.add_higher_sets_constraints()
+    print(str(lrb.get_all_set_bounds()))
     print(str(lrb.get_clique_bound()))
 

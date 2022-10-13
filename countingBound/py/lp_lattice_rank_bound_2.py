@@ -42,13 +42,22 @@ class LatticeRankBound2:
         We then know that A is "below" all of those sets. Since we also
         know |A|, we get that E[|C(A)|] <= (N - b) - |A|/2 .
         """
+        # total number of sets
+        total_num_sets = 2 ** len(self.graph_info.all_cliques)
+        # get info about how many sets are higher than each canonical set
         num_higher_sets = self.graph_info.get_num_higher_sets()
         for (A, num_in_B) in num_higher_sets.items():
             # ??? this seems like it might have some off-by-one errors;
             # probably should check some examples with e.g. n=4, k=3.
             print(A)
+            print(self.graph_info.set_size[A])
             self.lp.add_constraint([(A, 1.)], '<',
-                2 + len(self.graph_info.canonical_graphs) - 1 - num_in_B
+                # this is the highest (0-based) rank the set could have
+                total_num_sets - 1
+                # ... and there are this many sets above it,
+                - num_in_B
+                # ... and if there are many isomorphisms of this set
+                # of cliques, their expected rank is this much less
                 - ((self.graph_info.set_size[A]-1) / 2))
 
     def get_all_set_bounds(self):
@@ -70,10 +79,11 @@ class LatticeRankBound2:
         return bounds[frozenset(self.graph_info.all_cliques)]
 
 if __name__ == '__main__':
-    lrb = LatticeRankBound2(4,3)
+    lrb = LatticeRankBound2(5,3)
     lrb.add_average_rank_constraint()
     lrb.add_zeroing_constraints()
-    lrb.add_higher_sets_constraints()
+    # lrb.add_higher_sets_constraints()
+    # pdb.set_trace()
     print(str(lrb.get_all_set_bounds()))
     print(str(lrb.get_clique_bound()))
 

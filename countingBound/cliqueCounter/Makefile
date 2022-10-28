@@ -6,7 +6,7 @@
 CXXFLAGS = -O3 -Wall -g -I/opt/homebrew/include/
 
 OBJS = CliqueList.o SubsetIterator.o MaxCliqueCounter.o \
-  CliqueCoverageCounter.o
+  CliqueCoverageCounter.o utils.o
 
 all: coverage
 

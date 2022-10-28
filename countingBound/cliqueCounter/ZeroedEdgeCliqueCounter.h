@@ -1,11 +1,18 @@
 #pragma once
 
+#include <cstdlib>
+#include <map>
 #include <vector>
 
-#include <cstdlib>
+#include <boost/dynamic_bitset.hpp>
 
-#include "CliqueList.h"
+#include "SubsetIterator.h"
 
+using namespace std;
+using namespace boost;
+
+/** Type of bit vector implementation. */
+typedef dynamic_bitset<> bits;
 using namespace std;
 
 /** Counts (hyper)cliques, after input edges are zeroed out. */

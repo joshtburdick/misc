@@ -6,6 +6,7 @@
 
 #include <boost/dynamic_bitset.hpp>
 
+#include "utils.h"
 #include "SubsetIterator.h"
 
 using namespace std;
@@ -13,15 +14,29 @@ using namespace boost;
 
 /** Type of bit vector implementation. */
 typedef dynamic_bitset<> bits;
-using namespace std;
 
-/** Counts (hyper)cliques, after input edges are zeroed out. */
+/** Counts (hyper)edges in a (hyper)graph, after 2-edges
+    ("normal edges") are zeroed out. */
 class ZeroedEdgeCliqueCounter {
 public:
     /** Constructor.
         n: number of vertices in the graph
         r: size of each (hyper)edge */
-    MaxCliqueCounter(int n, int r);
+    MaxCliqueCounter(int n, int r, CliquesByEdge cbe &) :
+        n(n), r(r), cbe(cbe);
+
+    /** Samples a random hypergraph (and sets the mask of
+        "hyperedges not hit by an edge" to all 1's) */
+    void sampleGraph();
+
+    /** Picks a random edge, and zeros out hyperedges
+        which contain it.
+        Returns: index of the edge which was zeroed. */
+    int zeroEdge();
+
+    /** Samples a random hypergraph, then zeros out edges
+        until the graph is empty. */
+    void sampleGraphsDownToZero();
 
     /** Samples some graphs, and prints counts.
         numSamples: how many samples
@@ -29,13 +44,12 @@ public:
     void printMaxCounts(int numSamples);
 
 private:
-    /** List of cliques to check for. */
-    CliqueList cliques;
+    /** Which cliques cover each edge. */
+    CliquesByEdge cbe &;
 
-    /** The counts of cliques of each size. */
-    vector<int> count;        
+    /** Hyperedges in the currently-sampled hypergraph. */
+    bitset e_;
 
-    /** Creates a random bitset of some size. */
-    bits randomBitset(int numBits);
+    /** Hyperedges which haven't been zeroed out yet. */
+    bitset not_zeroed_;
 };
-

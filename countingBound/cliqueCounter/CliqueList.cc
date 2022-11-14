@@ -1,11 +1,11 @@
 
+#include "CliqueList.h"
+
 #include <iostream>
 #include <map>
 #include <vector>
 
 #include <boost/dynamic_bitset.hpp>
-
-#include "CliqueList.h"
 
 using namespace std;
 using namespace boost;

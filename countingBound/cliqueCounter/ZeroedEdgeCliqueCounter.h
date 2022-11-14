@@ -2,6 +2,7 @@
 
 #include <cstdlib>
 #include <map>
+#include <random>
 #include <vector>
 
 #include <boost/dynamic_bitset.hpp>
@@ -26,13 +27,14 @@ public:
         n(n), r(r), cbe(cbe);
 
     /** Samples a random hypergraph (and sets the mask of
-        "hyperedges not hit by an edge" to all 1's) */
-    void sampleGraph();
+        "hyperedges not hit by an edge" to all 1's)
+        Also sets the edges to a random permutation. */
+    void randomize();
 
     /** Picks a random edge, and zeros out hyperedges
         which contain it.
-        Returns: index of the edge which was zeroed. */
-    int zeroEdge();
+        i: index of the edge to zero */
+    void zeroEdge(int i);
 
     /** Samples a random hypergraph, then zeros out edges
         until the graph is empty. */
@@ -52,4 +54,7 @@ private:
 
     /** Hyperedges which haven't been zeroed out yet. */
     bitset not_zeroed_;
+
+    /** Order in which edges should be zeroed out. */
+    vector<int> edge_order_;
 };

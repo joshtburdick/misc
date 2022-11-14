@@ -33,21 +33,20 @@ CliquesByEdge::CliquesByEdge(int n, int r) {
     } while (hyperedgeIterator.next());
     // loop through the edges
     for(int i=0; i<edges_.size(); i++) {
-        e = edges_[i];
+        vector<int> e = edges_[i];
         // create bitset of edges
-        bits m(edges_.size());
-        // initialize to all 1 (since initially, all hyperedges are present)
-        bits.set();
+        bits m(hyperedges_.size());
         // loop through the hyperedges
         for(int j=0; j<hyperedges_.size(); j++) {
-            h = hyperedges_[j];
+            vector<int> h = hyperedges_[j];
             // does this 2-edge "hit" this hyperedge?
-            if (std.count(h.begin(), h.end(), e[0]) &&
-                    std.count(h.begin(), h.end(), e[1]))
-                // if so, clear the corresponding bit
-                bits[j] = 0;
+            if (count(h.begin(), h.end(), e[0]) &&
+                    count(h.begin(), h.end(), e[1]))
+                // if so, set the corresponding bit
+                m[j] = 1;
         }
         // store the mask for this edge
-        edge_mask_[i] = bits;
+        edge_mask_[i] = m;
     } 
 }
+

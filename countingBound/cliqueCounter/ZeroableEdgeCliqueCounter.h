@@ -24,7 +24,9 @@ class ZeroableEdgeCliqueCounter {
 public:
     /** Constructor.
         n: number of vertices in the graph
-        r: size of each (hyper)edge */
+        r: size of each (hyper)edge
+        cbe: list of hypercliques hit by each hyperedge.
+            This is separate */
     ZeroableEdgeCliqueCounter(int n, int r, CliquesByEdge & cbe);
 
     /** Samples a random hypergraph, then counts how many 2-edges
@@ -41,6 +43,12 @@ public:
     void printCounts(int numSamples);
 
 private:
+    /** Number of vertices. */
+    int n_;
+
+    /** Size of each (hyper)edge. */
+    int r_;
+
     /** Which cliques cover each edge. */
     CliquesByEdge & cbe_;
 

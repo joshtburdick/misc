@@ -24,7 +24,7 @@ public:
         n: number of vertices in the graph
         r: size of each (hyper)edge */
     MaxCliqueCounter(int n, int r, CliquesByEdge cbe &) :
-        n(n), r(r), cbe(cbe);
+        n_(n), r_(r), cbe(cbe);
 
     /** Samples a random hypergraph (and sets the mask of
         "hyperedges not hit by an edge" to all 1's)
@@ -46,6 +46,12 @@ public:
     void printMaxCounts(int numSamples);
 
 private:
+    /** Number of vertices. */
+    int n_;
+
+    /** Size of each (hyper)edge. */
+    int r_;
+
     /** Which cliques cover each edge. */
     CliquesByEdge cbe &;
 

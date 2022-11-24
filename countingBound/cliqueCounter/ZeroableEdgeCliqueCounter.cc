@@ -18,11 +18,15 @@ typedef dynamic_bitset<> bits;
 
 ZeroableEdgeCliqueCounter::ZeroableEdgeCliqueCounter(
         int n, int r, CliquesByEdge & cbe) :
-    n_(n), r_(r), cbe_(cbe) {}
+    n_(n), r_(r), cbe_(cbe), e_(1), zeroable_(1) {
+
+    cout << "created ZECC" << endl;
+}
 
 void ZeroableEdgeCliqueCounter::sample() {
     // sample a random hypergraph
     e_ = randomBitset(e_.size());
+    cout << "sampled hypergraph" << endl;
     // clear mask of hyperedges which would be "hit" by those
     zeroable_.reset();
     // clear count of which 2-edges could be zeroed

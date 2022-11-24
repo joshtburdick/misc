@@ -24,7 +24,9 @@ int main(int argc, char** argv) {
         return 1;
     }
     CliquesByEdge cbe(n, r);
+    cout << "constructed CliquesByEdge" << endl;
     ZeroableEdgeCliqueCounter zeroable_edges(n, r, cbe);
+    cout << "constructed ZeroableEdgeCliqueCounter" << endl;
     zeroable_edges.printCounts(num_samples);
     return 0;
 }

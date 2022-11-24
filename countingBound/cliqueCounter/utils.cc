@@ -1,6 +1,7 @@
 /** Various utilities. */
 
 #include <cstdlib>
+#include <iostream>
 #include <vector>
 
 #include <boost/dynamic_bitset.hpp>
@@ -14,7 +15,7 @@ typedef dynamic_bitset<> bits;
 /** Creates a random bitset of some size.
     FIXME use a better random number generator */
 bits randomBitset(int numBits) {
-    bits b;
+    bits b(0);
     // first, get enough 64-bit blocks
     for(int i = 0; i < (numBits/64)+1; i++) {
         // get a 64-bit random number
@@ -23,6 +24,7 @@ bits randomBitset(int numBits) {
     }
     // then truncate to the required size
     b.resize(numBits);
+    cout << "made random vector" << endl;
     return b;
 }
 

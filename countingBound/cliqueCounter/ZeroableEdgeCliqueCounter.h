@@ -29,18 +29,26 @@ public:
             This is separate */
     ZeroableEdgeCliqueCounter(int n, int r, CliquesByEdge & cbe);
 
-    /** Samples a random hypergraph, then counts how many 2-edges
-        could be zeroed out without hitting it (and how many
-        hyperedges would be hit by those 2-edges).
+    /** Samples a random hypergraph.
 
-        After running this, e_, zeroable_, and num_zeroable_edges_
+        Note that this will sample an exact number of hyperedges. Another
+            option would be to simply pick hyperedges with some probability.
+        num_hyperedges: the number of hyperedges the graph should have
+        Side effects: sets e_. */
+    void sample(int num_hyperedges);
+
+    /** Counts how many 2-edges could be zeroed out without hitting e_
+        (and how many hyperedges would be hit by those 2-edges).
+
+        After running this, zeroable_ and num_zeroable_edges_
         will all be valid. */
-    void sample();
+    void count_zeroable_edges();
 
     /** Samples some graphs, and prints counts.
-        numSamples: how many samples
+        num_hyperedges: how many hyperedges should be present
+        num_samples: how many samples
         Side effects: prints counts to standard output */
-    void printCounts(int numSamples);
+    void printCounts(int num_hyperedges, int num_samples);
 
 private:
     /** Number of vertices. */
@@ -60,5 +68,8 @@ private:
 
     /** Number of edges which could be zeroed out. */
     int num_zeroable_edges_;
+
+    /** Random number generator. */
+    std::mt19937 gen_;
 };
 

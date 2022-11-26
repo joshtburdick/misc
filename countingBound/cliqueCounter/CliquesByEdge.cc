@@ -27,7 +27,7 @@ CliquesByEdge::CliquesByEdge(int n, int r) {
     do {
         edges_.push_back(edgeIterator.getSet());
     } while (edgeIterator.next());
-    cout << "added edges" << endl;
+    // cout << "added edges" << endl;
     // allocate vector of edges
     edge_mask_.resize(edges_.size());
     // similarly, fill in list of hyperedges

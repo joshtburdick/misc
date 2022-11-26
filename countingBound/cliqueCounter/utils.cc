@@ -24,7 +24,6 @@ bits randomBitset(int numBits) {
     }
     // then truncate to the required size
     b.resize(numBits);
-    cout << "made random vector" << endl;
     return b;
 }
 

@@ -9,7 +9,7 @@ import scipy.optimize
 import scipy.sparse
 
 class LP_Helper:
-    """Wrapper class for LP solver, providing convenient names.
+    """Wrapper class for LP solver, providing convenient variable names.
 
     """
     def __init__(self, var_names):

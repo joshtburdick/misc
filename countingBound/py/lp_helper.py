@@ -74,6 +74,7 @@ class LP_Helper:
             the lower bound.
         """
         # utility to convert entries to a sparse array
+        # pdb.set_trace()
         def sparse_array_from_entries(A):
             # gets i'th element of all the tuples
             def ith(i):

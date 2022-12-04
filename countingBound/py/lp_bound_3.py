@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 # Attempt at bounding the average rank of functions,
 # relative to the number of hyperedges.
+# ?'s
+# - A and C both go "somewhat" high (although not at the top level).
+#   On the other hand, B (sets with one edge zonked) are stuck at 0.
+#   This seems inaccurate. (For instance, at the very least, we
+#   should be able to say A_1==B_1, because they're both the same set!)
 
 import pdb
 
@@ -63,7 +68,6 @@ class RankBound3:
             z = scipy.stats.hypergeom(self.num_cliques, i, max_z)
             # the probability of at least one clique being hit
             p_at_least_one_hit = 1. - z.pmf(0)
-            pdb.set_trace()
             self.lp.add_constraint(
                 # The constraint on A (which is "hit") is a weighted sum of
                 # what's left in B (none of which are "hit"), after zonking.
@@ -72,7 +76,7 @@ class RankBound3:
                 [(('A', i), 1.)] + [
                     (('B', i-j), -z.pmf(j) / p_at_least_one_hit)
                     for j in range(1, max_z+1)],
-                '>=',
+                '>',
                 # Everything in A_i has a higher expected value.
                 # Since we're adding distinct things, the expected value
                 # of all of the things in A_i is higher
@@ -107,9 +111,10 @@ class RankBound3:
         return bounds[('C', self.num_cliques)]
 
 if __name__ == '__main__':
-    rb = RankBound3(4, 3)
+    rb = RankBound3(7, 4)
     rb.add_mixture_equalities()
     rb.add_zeroing_constraints()
     rb.add_average_rank_constraint()
-    print(str(rb.get_clique_bound()))
+    print(rb.get_all_bounds())
+    # print(str(rb.get_clique_bound()))
 

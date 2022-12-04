@@ -64,6 +64,7 @@ class LP_Helper:
             self.A_ub += get_coefs(i, True)
             self.b_ub += [-b]
             return
+        raise ValueError(f'Unknown operator: {op}')
 
     def solve(self, var_to_minimize, bounds=None):
         """Solves the linear system.
@@ -74,23 +75,25 @@ class LP_Helper:
             the lower bound.
         """
         # utility to convert entries to a sparse array
-        # pdb.set_trace()
-        def sparse_array_from_entries(A):
+        def sparse_array_from_entries(A, shape):
             # gets i'th element of all the tuples
             def ith(i):
                 return [a[i] for a in A]
-            return scipy.sparse.coo_array( (ith(0), (ith(1), ith(2))) )
+            return scipy.sparse.coo_array( (ith(0), (ith(1), ith(2))), shape=shape)
         # convert A and b to np.array objects
-        A_ub = sparse_array_from_entries(self.A_ub)
+        A_ub = sparse_array_from_entries(self.A_ub,
+            (len(self.b_ub), len(self.var_index)))
         b_ub = np.array(self.b_ub)
         # possibly add equality constraints
         A_eq = None
         b_eq = None
         if self.A_eq:
-            A_eq = sparse_array_from_entries(self.A_eq)
+            A_eq = sparse_array_from_entries(self.A_eq,
+                (len(self.b_eq), len(self.var_index)))
             b_eq = np.array(self.b_eq)
         c = np.zeros(len(self.var_index))
         c[ self.var_index[var_to_minimize] ] = 1
+        # pdb.set_trace()
         # solve
         # ??? Is there a way to tell the solver that this is sparse?
         # (It's detecting this, but that throws a warning.)
@@ -105,3 +108,4 @@ class LP_Helper:
         bound = {var: r.x[i]
             for (var, i) in self.var_index.items()}
         return bound
+

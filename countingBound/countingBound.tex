@@ -706,7 +706,8 @@ as after doing so, you can end up with an arbitrary weird set of
 input edges left over. It seems (retrospectively) much simpler to
 simply feed in 0's to all the edges incident to an arbitrary vertex.
 You then always end up with a graph with one less vertex.
-
+(Although, if feeding in 0's an edge at a time made sense, we might
+address this using sampling.)
 Various other files in the {\tt py/} folder implement attempts at
 this, without much success; but I may revisit those.
 

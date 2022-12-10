@@ -13,5 +13,5 @@ Therefore, it might have made more sense to just use, e.g.,
 depth-first search.
 
 This is not the cleanest C++ code ever. (It sometimes follows the
-Google C++ guidelines, but not consistently).
+Google C++ guidelines, but not consistently.)
 

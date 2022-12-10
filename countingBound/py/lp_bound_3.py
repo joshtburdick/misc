@@ -111,10 +111,19 @@ class RankBound3:
         return bounds[('C', self.num_cliques)]
 
 if __name__ == '__main__':
-    rb = RankBound3(7, 4)
-    rb.add_mixture_equalities()
+    rb = RankBound3(4, 3)
+    # rb.add_mixture_equalities()
     rb.add_zeroing_constraints()
-    rb.add_average_rank_constraint()
-    print(rb.get_all_bounds())
+    # rb.add_average_rank_constraint()
+    pdb.set_trace()
+    # pretty-print this
+    print('i\tA\tB\tC')
+    b = rb.get_all_bounds()
+    for i in range(rb.num_cliques+1):
+        print('\t'.join([
+            str(i),
+            str(b[('A', i)]),
+            str(b[('B', i)]),
+            str(b[('C', i)])]))
     # print(str(rb.get_clique_bound()))
 

@@ -82,7 +82,7 @@ if __name__ == '__main__':
     lrb = LatticeRankBound2(5,3)
     lrb.add_average_rank_constraint()
     lrb.add_zeroing_constraints()
-    # lrb.add_higher_sets_constraints()
+    lrb.add_higher_sets_constraints()
     # pdb.set_trace()
     print(str(lrb.get_all_set_bounds()))
     print(str(lrb.get_clique_bound()))

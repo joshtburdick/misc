@@ -3,14 +3,24 @@
 
 import pdb
 
+import numpy as np
 import scipy.special
 import scipy.stats
 
 import lp_helper
 
+def count_bits(x):
+    """Counts number of bits set in a numpy vector."""
+    # we assume numbers are "somewhat small" (if they were
+    # large, they'd take a while to loop through anyway)
+    num_bits_set = np.zeros(x.shape[0])
+    for i in range(30):
+        mask = 2**i
+        num_bits_set += (x & mask > 0)
+    return num_bits_set
 
 class LpBruteForce1:
-    """Attempt at bounding the average rank of functions,
+    """Attempt at bound, by considering each possible hypergraph.
 
     """
 
@@ -36,7 +46,8 @@ class LpBruteForce1:
         # wrapper for LP solver, with one variable per "level"
         self.lp = lp_helper.LP_Helper(range(k-1, self.num_cliques+1))
         # numbering for the cliques
-        cliques = itertools.combinations(range(n), k)
+        cliques = [frozenset(s)
+            for s in itertools.combinations(range(n), k)]
         self.clique_index = dict(zip(cliques, range(len(cliques))))
         # the sets of cliques
         S = np.arange(self.num_functions)
@@ -44,14 +55,41 @@ class LpBruteForce1:
         Z = np.zeros(self.num_functions)
 
 
+    def count_zero_set(self, cliques_to_count):
+        """Adds everywhere that some cliques could be zeroed.
+
+        cliques_to_count: the cliques to count, as an int
+            representing a bitset
+        """
+        # find sets where those cliques would be missed
+        i = (S & cliques_to_count) == 0
+        # add those to Z
+        Z[i] = Z[i] | cliques_to_count
+        pass
+
+    def cliques_hit_by_edges(self, edge):
+        """Gets the set of cliques hit by an edge.
+
+        edge: the edge (as a pair)
+        Returns: the cliques hit by that edge, as an int
+            with bits set according to self.clique_index.
+        """
+        # loop through the cliques
+        for (  ,  ) in self.clique_index:
 
 
+    def zero_edges(self):
+        for edge in itertools.combinations(self.n, 2):
+            if 
+        pass
 
+    def zero_vertices(self):
+        """Presumably gives a worse (but easier to analyze) bound."""
 
+        pass
 
-
-    def add_zeroing_constraints(self):
-        """Adds constraints from zeroing out one edge."""
+    def add_upper_bound_constraints(self):
+        """Adds constraints based on upper bounds from zeroing."""
         # loop through the "levels" (number of cliques in C)
         # ??? should this start at 1?
         for i in range(self.num_cliques+1):

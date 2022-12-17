@@ -3,6 +3,7 @@
 
 import math
 import pdb
+import sys
 
 import numpy as np
 import scipy.optimize
@@ -102,7 +103,10 @@ class LP_Helper:
             # we include these bounds, although they don't seem to help
             # all that much
             bounds = bounds)
-        # pdb.set_trace()
+        # if this didn't work, print a message and crash
+        if not r.x:
+            print(r.message)
+            sys.exit(1)
         # FIXME deal with this failing
         # convert the bound to a dict
         bound = {var: r.x[i]

@@ -3,6 +3,7 @@
 
 import pdb
 
+import itertools
 import numpy as np
 import scipy.special
 import scipy.stats
@@ -15,12 +16,12 @@ def count_bits(x):
     # large, they'd take a while to loop through anyway)
     num_bits_set = np.zeros(x.shape[0])
     for i in range(30):
-        mask = 2**i
-        num_bits_set += (x & mask > 0)
+        mask = np.array(2**i)
+        num_bits_set += ((x & mask) > 0) + 0
     return num_bits_set
 
 class LpBruteForce1:
-    """Attempt at bound, by considering each possible hypergraph.
+    """Attempt at bound by finding zeroable edges/vertices, using brute force.
 
     """
 
@@ -28,9 +29,7 @@ class LpBruteForce1:
         """Constructor gets graph info, and sets up variable names.
 
         This will have one variable for each possible number of cliques
-        (or "level"). By convention, level k-1 is the empty set
-        of cliques (since with only k-1 vertices, there are no
-        k-cliques).
+        (or "level"). 
 
         n: number of vertices in the graph
         k: number of vertices in a clique (>= 3)
@@ -44,16 +43,15 @@ class LpBruteForce1:
         # the number of functions
         self.num_functions = 2 ** self.num_cliques
         # wrapper for LP solver, with one variable per "level"
-        self.lp = lp_helper.LP_Helper(range(k-1, self.num_cliques+1))
+        self.lp = lp_helper.LP_Helper(range(self.num_cliques+1))
         # numbering for the cliques
         cliques = [frozenset(s)
             for s in itertools.combinations(range(n), k)]
         self.clique_index = dict(zip(cliques, range(len(cliques))))
         # the sets of cliques
-        S = np.arange(self.num_functions)
+        self.S = np.arange(self.num_functions)
         # the sets of cliques which are "zeroable", and don't overlap S
-        Z = np.zeros(self.num_functions)
-
+        self.Z = np.zeros(self.num_functions, dtype='int')
 
     def count_zero_set(self, cliques_to_count):
         """Adds everywhere that some cliques could be zeroed.
@@ -62,10 +60,9 @@ class LpBruteForce1:
             representing a bitset
         """
         # find sets where those cliques would be missed
-        i = (S & cliques_to_count) == 0
+        i = (self.S & cliques_to_count) == 0
         # add those to Z
-        Z[i] = Z[i] | cliques_to_count
-        pass
+        self.Z[i] = self.Z[i] | cliques_to_count
 
     def cliques_hit_by_edges(self, edge):
         """Gets the set of cliques hit by an edge.
@@ -74,14 +71,22 @@ class LpBruteForce1:
         Returns: the cliques hit by that edge, as an int
             with bits set according to self.clique_index.
         """
+        edge1 = frozenset(edge)
         # loop through the cliques
-        for (  ,  ) in self.clique_index:
-
+        mask = 0
+        # loop through the cliques
+        for (clique, i) in self.clique_index.items():
+            # if the edge is in this clique, set the appropriate bit
+            if clique > edge1:
+                mask |= 2 ** i
+        return mask
 
     def zero_edges(self):
-        for edge in itertools.combinations(self.n, 2):
-            if 
-        pass
+        # loop through the edges
+        for edge in itertools.combinations(range(self.n), 2):
+            # record which sets of cliques are "missed"
+            mask = self.cliques_hit_by_edges(edge)
+            self.count_zero_set(mask)
 
     def zero_vertices(self):
         """Presumably gives a worse (but easier to analyze) bound."""
@@ -90,30 +95,26 @@ class LpBruteForce1:
 
     def add_upper_bound_constraints(self):
         """Adds constraints based on upper bounds from zeroing."""
+        # count cliques in each set
+        set_size = count_bits(self.S)
+        # count "zeroable" cliques "above" each set
+        zeroable_size = count_bits(self.Z)
         # loop through the "levels" (number of cliques in C)
-        # ??? should this start at 1?
         for i in range(self.num_cliques+1):
-            # this is the maximum number of cliques which could
-            # potentially be zeroed (at this level)
-            max_z = min(i, self.max_cliques_zeroed)
-            # the probability of some number of cliques being hit
-            z = scipy.stats.hypergeom(self.num_cliques, i, max_z)
-            # the probability of at least one clique being hit
-            p_at_least_one_hit = 1. - z.pmf(0)
-            self.lp.add_constraint(
-                # The constraint on A (which is "hit") is a weighted sum of
-                # what's left in B (none of which are "hit"), after zonking.
-                # Note that since this accounting is for A, we normalize
-                # by the probability of at least one clique being hit.
-                [(('A', i), 1.)] + [
-                    (('B', i-j), -z.pmf(j) / p_at_least_one_hit)
-                    for j in range(1, max_z+1)],
-                '>',
-                # Everything in A_i has a higher expected value.
-                # Since we're adding distinct things, the expected value
-                # of all of the things in A_i is higher
-                # (by at least half the number of functions).
-                0.5 * p_at_least_one_hit * scipy.special.comb(self.num_cliques, i, exact=True))
+            # find sets with this many cliques
+            j = (set_size == i)
+            # these should just be binomial coefficients
+            assert(sum(j)
+                == scipy.special.comb(self.num_cliques, i, exact=True) )
+            # get average number of zeroable sets "above" these
+            mean_zeroable = np.mean(zeroable_size[j])
+            print(str(i) + '   ' + str(mean_zeroable))
+            # add constraint that a function at this level...
+            self.lp.add_constraint([(i, 1.)],
+                '<',
+                # ... has expected rank less than the number zeroable,
+                # minus half the number of sets of this size
+                mean_zeroable - np.sum(j) / 2.)
 
     def add_average_rank_constraint(self):
         """Adds equality constraint on average rank of all of the functions."""
@@ -137,13 +138,14 @@ class LpBruteForce1:
         return bounds
 
 if __name__ == '__main__':
-    rb = RankBound3(4, 3)
-    # rb.add_zeroing_constraints()
-    rb.add_average_rank_constraint()
+    bound = LpBruteForce1(4, 3)
+    bound.add_average_rank_constraint()
+    bound.zero_edges()
+    bound.add_upper_bound_constraints()
     pdb.set_trace()
-    b = rb.get_all_bounds()
-    for i in range(rb.num_cliques+1):
-        print('\t'.join([str(i), b[i]))
+    b = bound.get_all_bounds()
+    for i in range(bound.num_cliques+1):
+        print('\t'.join([str(i), str(b[i])]))
     print()
-    print('bound = ' + str(b[self.num_cliques]))
+    print('bound = ' + str(b[bound.num_cliques]))
 

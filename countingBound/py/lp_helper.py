@@ -104,7 +104,7 @@ class LP_Helper:
             # all that much
             bounds = bounds)
         # if this didn't work, print a message and crash
-        if not r.x:
+        if r.status:
             print(r.message)
             sys.exit(1)
         # FIXME deal with this failing

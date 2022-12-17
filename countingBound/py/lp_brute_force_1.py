@@ -2,6 +2,7 @@
 # Attempt based on zeroing out edges (or vertices).
 
 import pdb
+import sys
 
 import itertools
 import numpy as np
@@ -107,14 +108,17 @@ class LpBruteForce1:
             assert(sum(j)
                 == scipy.special.comb(self.num_cliques, i, exact=True) )
             # get average number of zeroable sets "above" these
-            mean_zeroable = np.mean(zeroable_size[j])
-            print(str(i) + '   ' + str(mean_zeroable))
+            # (which may or may not include each of the zeroable cliques)
+            mean_zeroable = np.mean(2**zeroable_size[j] - 1)
+            # convert that to an upper bound on rank
+            mean_upper_bound = (self.num_functions-1) - mean_zeroable
+            print('at level ' + str(i) + ', mean_zeroable = ' + str(mean_zeroable))
             # add constraint that a function at this level...
             self.lp.add_constraint([(i, 1.)],
                 '<',
                 # ... has expected rank less than the number zeroable,
                 # minus half the number of sets of this size
-                mean_zeroable - np.sum(j) / 2.)
+                mean_upper_bound - ((np.sum(j)-1.) / 2.))
 
     def add_average_rank_constraint(self):
         """Adds equality constraint on average rank of all of the functions."""
@@ -122,7 +126,7 @@ class LpBruteForce1:
             [(i, scipy.special.comb(self.num_cliques, i, exact=False) / self.num_functions)
                 for i in range(self.num_cliques+1)],
             '=',
-            self.num_functions / 2.)
+            (self.num_functions-1) / 2.)
 
     def get_all_bounds(self):
         """Gets bounds for all the sets.
@@ -138,12 +142,16 @@ class LpBruteForce1:
         return bounds
 
 if __name__ == '__main__':
-    bound = LpBruteForce1(4, 3)
+    n = int(sys.argv[1])
+    k = int(sys.argv[2])
+    bound = LpBruteForce1(n, k)
     bound.add_average_rank_constraint()
     bound.zero_edges()
     bound.add_upper_bound_constraints()
-    pdb.set_trace()
+    # pdb.set_trace()
     b = bound.get_all_bounds()
+    print()
+    print('level\tbound')
     for i in range(bound.num_cliques+1):
         print('\t'.join([str(i), str(b[i])]))
     print()

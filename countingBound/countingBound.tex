@@ -241,7 +241,6 @@ of the relation $Z$) has a strictly increasing number of gates, and so the
 functions at each level of the chain are strictly increasing in average
 size. (However, this doesn't seem to bound the number of gates in CLIQUE.)
 
-
 Figure \ref{fig:Z} attempts to plot $Z(A,B)$. Using more vertices, or
 larger cliques, seems like it would quickly get unmanageable.
 Note also that this is ``not to scale'' in a variety of ways. In
@@ -249,13 +248,20 @@ particular, when $n$ is large, the middle layer dominates the graph
 (because if each clique is chosen with probability 1/2, on average,
 you'll pick very close to half the cliques).
 
-Each line between sets indicates a set which requires a strictly larger number
-of gates.
-Unfortunately, at least according to this relation,
+Each line between sets indicates a set which requires a strictly larger number of gates.  Unfortunately, at least according to this relation,
 the number of sets of cliques smaller than
 any of these upper bounds is less than $2^{\# input edges}$.
 (For instance, the top levels are only forced to be higher than
 a tiny fraction of these sets.)
+
+Note that the sets at any level are incomparable. (Proof: if you feed in
+a zero to a function $A$, and you get a different function $B$, then $B$
+detects fewer cliques than $A$, and so can't be at the same level.)
+In using Dilworth's Theorem, this provides a ready source of antichains.
+Furthermore, zeroing an edge
+can zonk at most ${n-2} \choose {k-2}$ cliques, so we can bound how
+many levels the edges of $Z$ jump. Unfortunately, it seems hard to use
+this to say anything useful about the particular chain which contains CLIQUE.
 
 \begin{figure}
 \centering

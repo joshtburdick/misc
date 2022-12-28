@@ -68,8 +68,19 @@ class LP_Helper:
         raise ValueError(f'Unknown operator: {op}')
 
     def solve(self, var_to_minimize, bounds=None):
+        """Solves the linear system, for one variable."""
+        c = np.zeros(len(self.var_index))
+        c[ self.var_index[var_to_minimize] ] = 1
+        r = self.solve_1(c, bounds=bounds)
+        # convert the bound to a dict
+        bound = {var: r.x[i]
+            for (var, i) in self.var_index.items()}
+        return bound
+
+    def solve_1(self, objective, bounds=None):
         """Solves the linear system.
 
+        objective: what to minimize (as a Numpy vector)
         var_to_minimize: name of the variable to minimize
         bounds: bounds on individual variables
         Returns: a dict, indexed by variable name, of
@@ -92,13 +103,11 @@ class LP_Helper:
             A_eq = sparse_array_from_entries(self.A_eq,
                 (len(self.b_eq), len(self.var_index)))
             b_eq = np.array(self.b_eq)
-        c = np.zeros(len(self.var_index))
-        c[ self.var_index[var_to_minimize] ] = 1
         # pdb.set_trace()
         # solve
         # ??? Is there a way to tell the solver that this is sparse?
         # (It's detecting this, but that throws a warning.)
-        r = scipy.optimize.linprog(c, A_ub=A_ub, b_ub=b_ub,
+        r = scipy.optimize.linprog(objective, A_ub=A_ub, b_ub=b_ub,
             A_eq=A_eq, b_eq=b_eq,
             # we include these bounds, although they don't seem to help
             # all that much
@@ -108,8 +117,5 @@ class LP_Helper:
             print(r.message)
             sys.exit(1)
         # FIXME deal with this failing
-        # convert the bound to a dict
-        bound = {var: r.x[i]
-            for (var, i) in self.var_index.items()}
-        return bound
+        return r.x
 

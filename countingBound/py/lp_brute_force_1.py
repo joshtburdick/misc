@@ -141,19 +141,39 @@ class LpBruteForce1:
             bounds=(0, self.num_functions-1))
         return bounds
 
+    def get_average_bound_at_top(self, num_top_levels):
+        """Gets bound for the top levels.
+
+        Returns: bound for the average of the sets in the
+            top num_top_levels levels of sets. (Thus, when
+            num_top_levels==1, this is "all the cliques".)
+        """
+        c = np.zeros(len(self.lp.var_index))
+        total_sets = 0.
+        for i in range(self.num_cliques+1-num_top_levels, self.num_cliques+1):
+            print(i)
+            num_sets_at_level = scipy.special.comb(
+                self.num_cliques, i, exact=True)
+            c[ i ] = num_sets_at_level
+            total_sets += num_sets_at_level
+        c = c / total_sets
+        x = self.lp.solve_1(c, bounds=(0, self.num_functions-1))
+        return {'x':x, 'objective': np.sum(c*x) }
+
 if __name__ == '__main__':
     n = int(sys.argv[1])
     k = int(sys.argv[2])
+    num_top_levels = int(sys.argv[3])
     bound = LpBruteForce1(n, k)
     bound.add_average_rank_constraint()
     bound.zero_edges()
     bound.add_upper_bound_constraints()
+    b = bound.get_average_bound_at_top(num_top_levels)
     # pdb.set_trace()
-    b = bound.get_all_bounds()
     print()
     print('level\tbound')
     for i in range(bound.num_cliques+1):
-        print('\t'.join([str(i), str(b[i])]))
+        print('\t'.join([str(i), str(b['x'][i])]))
     print()
-    print('bound = ' + str(b[bound.num_cliques]))
+    print('bound = ' + str(b['objective']))
 

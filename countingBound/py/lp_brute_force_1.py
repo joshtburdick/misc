@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # Attempt based on zeroing out edges (or vertices).
 
+import argparse
 import pdb
 import sys
 
@@ -112,7 +113,9 @@ class LpBruteForce1:
             mean_zeroable = np.mean(2**zeroable_size[j] - 1)
             # convert that to an upper bound on rank
             mean_upper_bound = (self.num_functions-1) - mean_zeroable
-            print('at level ' + str(i) + ', mean_zeroable = ' + str(mean_zeroable))
+            # possibly print number of zeroable sets 
+            if False:
+                print('at level ' + str(i) + ', mean_zeroable = ' + str(mean_zeroable))
             # add constraint that a function at this level...
             self.lp.add_constraint([(i, 1.)],
                 '<',
@@ -127,6 +130,18 @@ class LpBruteForce1:
                 for i in range(self.num_cliques+1)],
             '=',
             (self.num_functions-1) / 2.)
+
+    def add_counting_lower_bounds(self):
+        """Adds counting lower bound on a set of lower levels.
+
+        It's not clear whether it's more useful to bound each level i
+        individually, or the average of the first i levels.
+        """
+        # this version bounds each level individually
+        for i in range(self.num_cliques+1):
+            self.lp.add_constraint([(i, 1.)],
+                '>',
+                scipy.special.comb(self.num_cliques, i, exact=True) / 2. - 1.)
 
     def get_all_bounds(self):
         """Gets bounds for all the sets.
@@ -151,7 +166,7 @@ class LpBruteForce1:
         c = np.zeros(len(self.lp.var_index))
         total_sets = 0.
         for i in range(self.num_cliques+1-num_top_levels, self.num_cliques+1):
-            print(i)
+            # print(i)
             num_sets_at_level = scipy.special.comb(
                 self.num_cliques, i, exact=True)
             c[ i ] = num_sets_at_level
@@ -163,17 +178,19 @@ class LpBruteForce1:
 if __name__ == '__main__':
     n = int(sys.argv[1])
     k = int(sys.argv[2])
+    # this used to be an arg; for now, just leaving it at 1,
+    # to try to minimize rank of CLIQUE
     num_top_levels = int(sys.argv[3])
+    # num_top_levels = 1
     bound = LpBruteForce1(n, k)
     bound.add_average_rank_constraint()
     bound.zero_edges()
     bound.add_upper_bound_constraints()
+    # bound.add_counting_lower_bounds()
     b = bound.get_average_bound_at_top(num_top_levels)
     # pdb.set_trace()
-    print()
     print('level\tbound')
     for i in range(bound.num_cliques+1):
-        print('\t'.join([str(i), str(b['x'][i])]))
+        print('\t'.join([str(i), str('%.2f' % b['x'][i])]))
     print()
     print('bound = ' + str(b['objective']))
-

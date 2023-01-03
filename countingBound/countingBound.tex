@@ -390,7 +390,7 @@ Then there is a function $f: 2^K \rightarrow 2^K$ such that
 
 \item $E[|C| - |f(C)|] = a/2$
 
-\item $E[rank(C) - rank(f(C))] = a/2$
+\item $E[rank(C) - rank(f(C))] \ge a/2$
 
 \end{itemize}
 
@@ -557,33 +557,13 @@ Concretely, if $n=9$ and $k=3$, then there are 84 possible 3-cliques
 (triangles), and zeroing out an arbitrarily-chosen edge could
 eliminate up to 7 of these cliques.
 
-To clarify this, we plot some of these sets of cliques in various ways.
-In Figure \ref{fig:zeroing3D},
-we plot some sets of cliques on a rectangle, based on how many cliques $e$ ``hits'' or ``misses''.
-We can also plot the number of sets, which
-is peaked at $e$ hitting, and missing, half of the cliques that it could.
-(As $n$ grows, this is increasingly sharply peaked.)
-Alternatively, we can plot an example set of cliques for each point on this rectangle
+To clarify this, we
+plot an example set of cliques for each point on this rectangle
 (Figure \ref{fig:zeroingRectangle}). Note that many sets of cliques are isomorphic;
 shuffling the vertex order doesn't change the relative arrangement of the cliques
 (and obviously doesn't affect how many of them there are). However, this can change
 how many cliques $e$ ``hits''. Picking a distinguished edge $e$ to zero out
 is intended to reduce the amount of overcounting we need to deal with.
-
-\begin{figure}
-\centering
-\includegraphics[width=1\textwidth]{py/figure/zeroing_3d.pdf}
-\caption{Effect of zeroing a distinguished edge $e$.
-Here, we consider cliques of size $k=3$ on $n=6$ vertices.
-Only a few random sets of cliques are shown.
-Cliques which $e$ contains (``hits'')
-are colored red, and cliques which $e$ doesn't contain (``misses'')
-are colored blue.
-The surface shows the number of functions at each point
-on the rectangle (on a log-base-2 scale).
-}
-\label{fig:zeroing3D}
-\end{figure}
 
 \begin{figure}
 \centering
@@ -626,6 +606,7 @@ set of cliques. Note that we're only guaranteed that this
 number is 1 less.
 
 \subsubsection{Upper bound}
+\label{gateUpperBound}
 
 (added by {\tt lp.add\_upper\_bound\_constraints()}, if you give
 the {\tt --upper-bound} command-line flag)
@@ -720,7 +701,13 @@ this, without much success; but I may revisit those.
 
 \subsection{A rank-based bound}
 
-We now revisit the rank-based bounds.
+We now revisit the rank-based bounds. 
+
+This is implemented in
+{\tt py/lp\_brute\_force\_1.py}. It uses a linear program, with
+one variable $C_i$ per number of cliques, from 0 to ${n \choose k}$.
+Each variable represents the average rank of the functions with
+that many cliques.
 
 \subsubsection{Some trivial rank upper bounds}
 
@@ -745,18 +732,27 @@ Thus, the function finding zero cliques has rank zero.
 Another way of thinking of this is that ``all the other functions
 are `above' finding zero cliques''.
 
-Slightly less silly (FIXME finding exactly one clique).
-(Is this using ``restrictions'' to prove an {\em upper} bound?)
+This seems, in some sense, like using ``restrictions'' to prove an {\em upper} bound!
+Also, it's non-constructive: it doesn't give any idea of what circuit finds no cliques
+(although that's trivial); it only says that it must be easier than finding any
+{\em other} set of cliques. (Alternatively, we could view this as using restrictions
+to compute a lower bound -- on the average of $2^{n \choose k} - 1$ functions; which
+is a bit uninformative.)
 
-It's not immediately obvious how well we can upper-bound the rank
-of finding other sets of functions.
+A slightly less silly example is that we can feed in zeros to 
+the edges which hit all but $k$ vertices, leaving one clique.
+We can do this in ${n \choose k}$ different ways. Thus, the rank
+of all of these ways of finding exactly one clique, is right above
+finding zero cliques.
 
 Note the asymmetry of the situation. Using restrictions to show that
 $CLIQUE$ has high rank is difficult, as $CLIQUE$ isn't ``higher'' than
-many functions in $Z$. Each restriction step shows that a function is
-some approximate amount ``higher''.
+many functions in $Z$. Each restriction step (corresponding to an edge in $Z$)
+shows that a function is
+``higher'', but only by some approximate amount.
 On the other hand, at the other end of $Z$, we can unequivocally say
-that some functions have low rank.
+that {\em some} functions have low rank (and are thus
+``relatively easy'' to compute).
 This seems, at first, a trivial observation; we would expect upper bounds
 to be easier to find than lower bounds. It also, at first, doesn't seem
 to help in bounding the rank of $CLIQUE$.
@@ -765,10 +761,118 @@ However, recall that we know that the average rank of all the functions
 is $N/2$.
 When we show that the constant function has rank 0, that lifts
 the average for all $N-1$ other functions (although admittedly
-by a miniscule amount).
+by a stunningly miniscule amount).
 Similarly, the bound on finding one clique pushes up all the other functions.
 Thus, perhaps, we can use such upper bounds to ``rule out'' $CLIQUE$ from
 having low rank.
+
+It's not clear, though, how well we can upper-bound the rank
+of finding other sets of functions...
+
+\subsubsection{Generalizing that upper bound}
+
+Given a set $A$ of cliques, we
+can find the set $E$ of edges which aren't present in any of those cliques.
+Let $B$ be any clique which does include some edge in $E$, and let
+$C = A \cup B$. If we feed in zeros to all edges to a circuit
+finding the cliques in $C$, we end up with a strictly smaller circuit 
+which finds the cliques in $A$.
+
+Thus, for each level $i$, we loop through the sets of cliques in $C_i$.
+For each set $A \in C_i$, we find the edges $E$ which aren't hit by any clique, and then
+find $Z$, the set of cliques which {\em are} hit by an edge in $E$.
+We then have that 
+
+\[
+rank(A) \le 2^{n \choose k} - 2^{|Z|}
+\]
+
+We compute an upper bound for every $A \in C_i$, and then average these
+to get a bound on $rank(C_i)$. We use the fact that $C_i$ contains many
+functions to sharpen the upper bound.
+
+\[
+E[rank(C_i)] \le 2^{n \choose k} - E[2^{|Z|}] - |C_i|/2
+\]
+
+This is implemented by {\tt add\_upper\_bound\_constraints}.
+
+This has the {\em small practical problem} that it involves
+looping over all $2^{n \choose k}$ functions. To reduce the computational
+effort, rather than zeroing out individual edges,
+we might zero out all edges incident to a vertex. This seems like it might reduce
+the amount of bookkeeping, but presumably would only yield a weaker upper bound.
+
+\subsubsection{Average constraints}
+
+Another part of this strategy 
+(implemented by {\tt add\_average\_rank\_constraint}) was
+to use the average of all the functions:
+
+\[
+E[rank(A)] = (2^{n \choose k} - 1) / 2
+\]
+
+We also added a weak counting lower bound for each level $C_i$, of functions
+with exactly $i$ cliques. (This latter bound, implemented by
+{\tt add\_counting\_lower\_bounds}, only seemed to have much
+effect for $0 < i < {n \choose k}/2$; data not shown.)
+
+\[
+E[rank(C_i)] \ge ({n \choose i} - 1) / 2
+\]
+
+\subsubsection{Results}
+
+We set up the linear program, and asked it to minimize $E[C_{n \choose k}]$
+(in other words, finding all the cliques). We ran this with $n=6$, $k=3$
+(in other words, finding triangles in six-vertex graphs). In this case,
+the possible ranks range from $0$ to $2^{6 \choose 3}-1 = 2^{20}-1 = 1,048,575$.
+For each level, we get the following bounds:
+
+\begin{verbatim}
+level	bound
+0	0.00
+1	9.00
+2	94.00
+3	569.00
+4	2421.50
+5	7751.00
+6	19379.00
+7	38759.00
+8	62984.00
+9	83979.00
+10	524306.40
+11	964586.16
+12	985586.57
+13	1009813.80
+14	1029194.80
+15	1040823.27
+16	1046152.95
+17	1048005.50
+18	1048480.50
+19	1048565.50
+20	0.00
+\end{verbatim}
+
+Circumstantially speaking, this approach seems to at least suggest
+that finding {\em more than half} of the cliques is harder than finding
+{\em fewer than half} of the cliques.
+
+However, it fails to actually lower-bound $CLIQUE$.
+
+\subsubsection{Further thoughts on this model}
+
+Note that the above bound didn't use the structure of the lattice $Z$ 
+(figure \ref{fig:Z}) at all.
+Since we're using NAND gates, every edge along a path from $CLIQUE$ to $\emptyset$
+implies a slightly smaller circuit.
+
+We may also try counting gates instead of rank, and using the upper bound from section
+\ref{gateUpperBound}. $CLIQUE$ is only directly
+``above'' a {\em tiny} fraction of the functions
+in the lattice $Z$. However, possibly including the upper bound would force some
+things intermediate between $CLIQUE$ and $\emptyset$ to have many gates.
 
 \section{Related work}
 

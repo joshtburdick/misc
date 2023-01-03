@@ -186,11 +186,12 @@ if __name__ == '__main__':
     bound.add_average_rank_constraint()
     bound.zero_edges()
     bound.add_upper_bound_constraints()
-    # bound.add_counting_lower_bounds()
+    bound.add_counting_lower_bounds()
     b = bound.get_average_bound_at_top(num_top_levels)
     # pdb.set_trace()
     print('level\tbound')
     for i in range(bound.num_cliques+1):
         print('\t'.join([str(i), str('%.2f' % b['x'][i])]))
-    print()
-    print('bound = ' + str(b['objective']))
+    # for now, omitting the average
+    # print()
+    # print('bound = ' + str(b['objective']))

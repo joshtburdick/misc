@@ -69,11 +69,13 @@ class LP_Helper:
 
     def solve(self, var_to_minimize, bounds=None):
         """Solves the linear system, for one variable."""
+        # construct a vector with a 1. only at the variable
+        # to minimize (and 0. everywhere else)
         c = np.zeros(len(self.var_index))
-        c[ self.var_index[var_to_minimize] ] = 1
-        r = self.solve_1(c, bounds=bounds)
+        c[ self.var_index[var_to_minimize] ] = 1.
+        x = self.solve_1(c, bounds=bounds)
         # convert the bound to a dict
-        bound = {var: r.x[i]
+        bound = {var: x[i]
             for (var, i) in self.var_index.items()}
         return bound
 
@@ -83,7 +85,9 @@ class LP_Helper:
         objective: what to minimize (as a Numpy vector)
         var_to_minimize: name of the variable to minimize
         bounds: bounds on individual variables
-        Returns: a dict, indexed by variable name, of
+        Returns: the vector of the minizing solution (if found),
+            as a Numpy vector.
+        FIXME: return a dict, indexed by variable name, of
             the lower bound.
         """
         # utility to convert entries to a sparse array

@@ -194,4 +194,5 @@ if __name__ == '__main__':
         print('\t'.join([str(i), str('%.2f' % b['x'][i])]))
     # for now, omitting the average
     # print()
-    # print('bound = ' + str(b['objective']))
+    # print('bound of levels = ' + str(b['objective']))
+

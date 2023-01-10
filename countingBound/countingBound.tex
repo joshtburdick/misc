@@ -863,10 +863,12 @@ However, it fails to actually lower-bound $CLIQUE$.
 
 \subsubsection{Further thoughts on this model}
 
-Note that the above bound didn't use the structure of the lattice $Z$ 
-(figure \ref{fig:Z}) at all.
+Note that the above bound only used the structure of the lattice $Z$ 
+(figure \ref{fig:Z}) to count gates ``above'' a given node.
 Since we're using NAND gates, every edge along a path from $CLIQUE$ to $\emptyset$
-implies a slightly smaller circuit.
+implies a slightly smaller circuit. This doesn't, at first glance, help much, as
+$CLIQUE$ (and all of the other functions) are at a height less than the number of edges
+(in this example, 15).
 
 We may also try counting gates instead of rank, and using the upper bound from section
 \ref{gateUpperBound}. $CLIQUE$ is only directly

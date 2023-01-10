@@ -2,6 +2,7 @@
 # Bound using the lattice of canonical hypergraphs.
 
 import pdb
+import sys
 
 import numpy as np
 
@@ -125,12 +126,15 @@ class LatticeRankBound2:
         return bounds[frozenset(self.graph_info.all_cliques)]
 
 if __name__ == '__main__':
-    lrb = LatticeRankBound2(5,3)
+    n = int(sys.argv[1])
+    k = int(sys.argv[2])
+    lrb = LatticeRankBound2(n, k)
     lrb.add_average_rank_constraint()
     lrb.add_zeroing_constraints()
     # lrb.add_higher_sets_constraints()
     lrb.add_pooled_higher_sets_constraints()
     # pdb.set_trace()
-    print(str(lrb.get_all_set_bounds()))
-    print(str(lrb.get_clique_bound()))
+    bounds = lrb.get_all_set_bounds()
+    # print(str(bounds))
+    print(str(bounds[frozenset(lrb.graph_info.all_cliques)]))
 

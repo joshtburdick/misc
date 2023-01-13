@@ -76,6 +76,10 @@ class LatticeRankBound2:
         We "pool" the upper bounds at each level, to get a sharper upper
         bound. (This is especially conspicuous near N/2, where there are
         _many_ sets.)
+
+        ??? this seems to do the same thing as add_higher_sets_constraints() !
+        (um, at least for n=4,5, k=3)
+        Presumably it's slower, though.
         """
         # total number of sets
         total_num_sets = 2 ** len(self.graph_info.all_cliques)
@@ -131,8 +135,8 @@ if __name__ == '__main__':
     lrb = LatticeRankBound2(n, k)
     lrb.add_average_rank_constraint()
     lrb.add_zeroing_constraints()
-    # lrb.add_higher_sets_constraints()
-    lrb.add_pooled_higher_sets_constraints()
+    lrb.add_higher_sets_constraints()
+    # lrb.add_pooled_higher_sets_constraints()
     # pdb.set_trace()
     bounds = lrb.get_all_set_bounds()
     # print(str(bounds))

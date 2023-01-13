@@ -252,7 +252,9 @@ Each line between sets indicates a set which requires a strictly larger number o
 the number of sets of cliques smaller than
 any of these upper bounds is less than $2^{\# input edges}$.
 (For instance, the top levels are only forced to be higher than
-a tiny fraction of these sets.)
+a tiny fraction of these sets.) However, if a set doesn't cover an edge $e$ ,
+then that set is {\em below} a large number of sets in the lattice (namely,
+all of the sets which would lose a clique if you fed in a zero to $e$).
 
 Note that the sets at any level are incomparable. (Proof: if you feed in
 a zero to a function $A$, and you get a different function $B$, then $B$

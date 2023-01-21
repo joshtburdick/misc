@@ -62,16 +62,36 @@ requires exponentially large circuits \cite{shannon_synthesis_1949}.
 Let $f: \{0,1\}^m \rightarrow \{0,1\}$ be a function from bitvectors to bits.
 If there are $m$ inputs to a circuit,
 then there are $2^{2^m}$ possible functions from the $m$-input bitstring to
-a one-bit output. Each of these functions, being different, must have a
+a one-bit output.
+Each of these functions, being different, must have a
 different circuit.
+
+
+If we fix a particular number of gates $g$, we can only construct a limited
+number of $m$-input circuits. How many depends on the type of gate (known as
+the {\em basis}).  For instance,
+if we use $g$ unbounded-fan-in NAND gates, then we can construct FIXME circuits.
+
+
+(Note that there are many circuits which compute a given function,
+which adds some slack to this bound.)
+
 
 Given a count of functions, we can then see, for instance,
 how many unbounded fan-in NAND gates are needed to compute
 those functions (see Theorem \ref{boundFromCounting}
 in Appendix \ref{gateMath}).
 
-However, this argument also applies to a subset of the functions defined
-on $m$ inputs.
+This argument, although simple, is non-constructive: it doesn't give any
+{\em specific} example of a hard-to-compute function.
+There are explicitly-stated functions which are known to require
+a linear number of two-input gates.
+(FIXME CITE). However, although finding such functions and lower bounds is
+a well-studied problem, there aren't known functions which provably require
+a superlinear number of two-input gates.
+
+In its original form, this argument considered all possible $m$-input functions.
+However, we can easily apply this argument to a subset of functions.
 
 \subsection{Counting CLIQUE-like functions}
 
@@ -92,9 +112,9 @@ even though it isn't exactly the right nomenclature.)
 As a concrete example,
 consider the set of ``buggy'' 6-clique detectors.
 Maybe the circuit correctly
-finds all the cliques. Or maybe it finds all of the cliques except $K_{1..6}$,
+finds all the cliques. Or maybe it finds all of the cliques except $\{1,2,3,4,5,6\}$,
 or it misses half the cliques, or finds none (and always outputs 0), or maybe
-it only successfully finds $K_{1,3,4,5,7,8}$, et cetera.
+it only successfully finds $\{1,3,4,5,7,8\}$, et cetera.
 
 We define a variant of $k$-CLIQUE which only
 finds a subset of cliques.
@@ -877,6 +897,16 @@ We may also try counting gates instead of rank, and using the upper bound from s
 ``above'' a {\em tiny} fraction of the functions
 in the lattice $Z$. However, possibly including the upper bound would force some
 things intermediate between $CLIQUE$ and $\emptyset$ to have many gates.
+
+
+
+
+
+\subsection{Approximating $Z$}
+
+
+
+
 
 \section{Related work}
 

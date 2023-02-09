@@ -17,7 +17,7 @@ import scipy.sparse
 from scipy.special import comb
 from scipy.stats import hypergeom
 
-from function_gate_count import TwoInputNandBound
+import function_gate_count
 import lp_helper
 
 class LpBound:
@@ -113,15 +113,18 @@ class LpBound:
             max_cliques = comb(num_vertices, self.k, exact=True)
 
             # ??? should this be the counting bound for num_vertices?
-            # or is it for n?
-            counting_bound = FIXME
-
+            # or is it for n? for now, this is for num_vertices
+            counting_bound = function_gate_count.TwoInputNandBound(
+                # the number of input wires
+                comb(num_vertices, 2, exact=True),
+                # log_2 of the number of functions shouldn't exceed this
+                max_cliques + 5)
             # loop through how many cliques could be present
             for num_cliques in range(max_cliques+1):
                 A = [((num_vertices, num_cliques), 1.)]
-                b = self.counting_bound.expected_gates(
+                b = counting_bound.expected_gates(
                     math.log2(comb(max_cliques, num_cliques, exact=True)))
-                self.add_constraint(A, '>', b)
+                self.lp.add_constraint(A, '>', b)
 
     def add_upper_bound_constraints(self):
         """Adds an upper bound.
@@ -134,7 +137,7 @@ class LpBound:
         """
         # loop through number of vertices
         for num_vertices in range(self.k, self.n+1):
-            max_cliques = comb(self.n, num_vertices, exact=True)
+            max_cliques = comb(num_vertices, self.k, exact=True)
             # loop through # cliques, with 0 <= a < c <= max_cliques
             for a in range(0, max_cliques):
                 for c in range(a+1, max_cliques+1):
@@ -145,7 +148,7 @@ class LpBound:
                     A = [((num_vertices, a), -1.),
                         ((num_vertices, b), -1.),
                         ((num_vertices, c), 1.)]
-                    self.add_constraint(A, '<', 3)
+                    self.lp.add_constraint(A, '<', 3)
 
     def get_bound(self):
         """Gets the bound, by solving the linear system.
@@ -161,7 +164,7 @@ class LpBound:
         # (It's detecting this, but throws a warning.)
         x = self.lp.solve(i)
         # FIXME deal with this failing
-        return x[i]
+        return x
 
 def gate_bound_smoke_test():
     """Basic test of 2-input NAND gate counting bound.
@@ -189,9 +192,15 @@ if __name__ == '__main__':
     bound.add_vertex_zeroing_constraints()
     bound.add_total_cliques_counting_bound_constraints()
     # possibly include the upper bound
-    if include_upper_bound:
+    if args.include_upper_bound:
         bound.add_upper_bound_constraints()
     # otherwise, print the bound
     # FIXME print bound for all numbers of cliques (not just all of them)
-    print(np.round(bound.get_bound()), 4)
+    x = bound.get_bound()
+    for ((n, k), b) in x.items():
+        print(f'{n} {k} {np.round(b, 4)}')
+    print()
+    # key for "all the cliques"
+    i = (bound.n, comb(bound.n, bound.k, exact=True))
+    print('overall bound = ' + str(np.round(x[i], 4)))
 

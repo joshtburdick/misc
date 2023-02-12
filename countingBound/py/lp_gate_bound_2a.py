@@ -20,6 +20,16 @@ from scipy.stats import hypergeom
 import function_gate_count
 import lp_helper
 
+def count_bits(x):
+    """Counts number of bits set in a numpy vector."""
+    # we assume numbers are "somewhat small" (if they were
+    # large, they'd take a while to loop through anyway)
+    num_bits_set = np.zeros(x.shape[0])
+    for i in range(30):
+        mask = np.array(2**i)
+        num_bits_set += ((x & mask) > 0) + 0
+    return num_bits_set
+
 class LpBound:
     """Computes a bound on the number of gates for finding cliques.
 

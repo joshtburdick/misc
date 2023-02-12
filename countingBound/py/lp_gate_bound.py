@@ -300,7 +300,7 @@ class LpBound:
         for i in range(self.max_cliques_zeroed+1):
             for j in range(self.max_cliques_remaining+1):
                 x[i,j] = r.x[ self.var_index[(i,j)] ]
-        pdb.set_trace()
+        # pdb.set_trace()
         return x
 
     def get_bound(self, include_upper_bound):

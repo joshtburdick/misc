@@ -72,15 +72,8 @@ number of $m$-input circuits. How many depends on the type of gate (known as
 the {\em basis}).  For instance,
 if we use $g$ unbounded-fan-in NAND gates, then we can construct FIXME circuits.
 
-
 (Note that there are many circuits which compute a given function,
 which adds some slack to this bound.)
-
-
-Given a count of functions, we can then see, for instance,
-how many unbounded fan-in NAND gates are needed to compute
-those functions (see Theorem \ref{boundFromCounting}
-in Appendix \ref{gateMath}).
 
 This argument, although simple, is non-constructive: it doesn't give any
 {\em specific} example of a hard-to-compute function.
@@ -163,13 +156,10 @@ functions on the ${n \choose 2}$ input wires (one per edge).
 
 Thus, there are $2^{n \choose k}$ different functions. 
 How many NAND gates do these take?
-(We consider NAND gate circuits (with any fan-in) which find $k$-cliques in $n$-vertex
-graphs, as a circuit with $n \choose 2$ inputs.)
-
-Applying Theorem
+We consider NAND gate circuits (with any fan-in) which find $k$-cliques in $n$-vertex
+graphs, as a circuit with $n \choose 2$ inputs. Using the argument similar to
 \ref{boundFromCounting}, we know that at least one of the circuits requires
-${\sqrt {2 {n \choose {k/2}} + b^2}} - b = \Omega(n^{k/2})$ 
-NAND gates (where $b = {k \choose 2} - 0.5$).
+$\Omega(n^{k/2})$ unbounded-fan-in NAND gates.
 
 Why doesn't this bound $k$-CLIQUE?
 Because we don't know that the circuit which finds {\em all} of the
@@ -209,7 +199,6 @@ harder than detecting the same number of cliques, when they overlap
 maximally (as in (b)).}
 \label{fig:Hasse}
 \end{figure}
-
 
 \begin{thm}
 \label{edgeZonking}
@@ -364,8 +353,6 @@ complexity (see also the slides at \cite{rossmanRestrictions}).
 Here, we apply random restrictions to a set of functions (and circuits),
 rather than just one function and circuit.
 
-??? Is this just a ``gate-elimination argument''?
-
 \subsection{Counting functions by their ``rank'' in a list}
 
 This argument relies on measuring the size of a circuit,
@@ -392,10 +379,10 @@ Not clear.)
 
 We can imagine a miles-long linear warehouse of chips with the minimal
 circuit for each problem, sorted in terms of number of gates.
-Note that the above list only includes functions in $BUGGYCLIQUE$.
+(Note that the above list only includes functions in $BUGGYCLIQUE$.
 There are a {\em ton} of other functions (parity, primality, ``looks
 sort of like a bitmap of a cat'', etc.), but ignoring
-those should still leave a valid lower bound for the functions in $BUGGYCLIQUE$.
+those should still leave a valid lower bound for the functions in $BUGGYCLIQUE$.)
 
 \subsection{How much smaller are ``restricted'' circuits, on average?}
 
@@ -464,8 +451,6 @@ Note that these numbers both decrease, but not necessarily at the same rate.
 The expected reduction in the number of cliques is $a/2$; I'm not sure
 about the expected reduction in rank. Presumably near the middle, the
 average rank will decrease a lot.
-(Note: in a previous version of this, I wrote that these both had an expected
-value of $a/2$; this is incorrect.)
 
 \subsubsection{Why this doesn't bound $k-CLIQUE$?}
 
@@ -473,257 +458,35 @@ value of $a/2$; this is incorrect.)
 at least a tiny bit harder on average.'' However, it only applies
 on average.
 
-What happens if we try to use restrictions to bound $k-CLIQUE$?
-If we start ``at the top'',
-feeding in a 0 to $k-CLIQUE$, which is one function,
-we get only one other function.
-
-However, it seems vaguely plausible to proceed ``bottom-up'',
-estimating the difficulty of finding increasingly large
-sets of cliques.
-
 \subsection{Estimating the rank of functions, at each level}
 
 It seems intuitive that finding a larger fraction of the cliques
 should be harder.
 So, another idea is to try to show this using induction on $l$.
 As usual, the base case ($l=0$) is easy: finding zero cliques is easiest,
-so its rank is 0.
+so its rank is 0 (FIXME prove this).
 
-The step case is not so straightforward. Suppose we've computed bounds for
+The step case is not so straightforward, though. Suppose we've computed bounds for
 levels 0 through $l-1$ (thus, we're using some sort of strong induction.)
 In other words, we've lower-bounded $E[rank(K_i)]$, for $i \in [0,l-1]$.
 Can we lower-bound $E[rank(K_l)]$?
-
 Suppose we pick a set of cliques at level $l$, uniformly at random.
 If we then pick an edge $e$ uniformly at random, and remove the cliques
 which contain $e$, then the number of cliques removed will vary
 depending on the level. When $l=1$, we'll remove 0 or 1 cliques; when $l=N$,
 we'll remove all ${n-2 \choose k-2}$ cliques which contain $e$.
+The number of cliques ``hit'' will have a hypergeometric distribution,
+which is relatively tractable.
 
-We can {\em estimate} the number of cliques removed, by supposing that each
-clique is ``hit'' by $e$, with probability $p = {k \choose 2} / {n \choose 2}$.
-If we assume that $e$ hitting each clique is an independent event, then
-restricting a random set of $l$ cliques will hit $pl$ cliques, and
-leave $(1-p)l$ cliques.
-In general, when $n>>k$, $p$ will be pretty small. Thus, the step case at
-level $l$ will depend on estimates for levels fairly ``high up'' near $l$.
-Also, when $n$ is large, $N$ is way larger; so the distribution of
-the fraction of cliques removed will be sharply peaked near $p$.
+However, unfortunately, the graphs which {\em remain} are no longer uniformly
+sampled from each level! For instance, most levels include {\em tons} of
+graphs which include all the input edges. The above procedure will not
+be sampling any of them.
 
-However, this induction isn't quite correct.
-We may have a bound on $E[rank(K_i)]$, for $i$ in $[0,l-1]$.
-But when we pick a random set of cliques $K_l$, and feed in a 0, we definitely
-aren't sampling uniformly from levels 0 through $l-1$, because the graphs we're
-sampling definitely lack one edge.
+\subsection{Can we bound this using linear programming?}
 
-Thus, this is {\em only an estimate} of the rank of functions at level $l$.
-To me, this raises (at least) the following questions:
-
-\begin{itemize}
-
-\item If we compute the estimate, what do we get?
-
-\item Is there a way to modify this, to get an actual bound?
-
-\end{itemize}
-
-I only address the first question, and punt on the second.
-
-\subsection{An estimated bound}
-
-Thus, even though this is an estimate, we ``simulate'' this process, starting
-at level 0, and going up to level $N = {n \choose k}$. 
-First, define $p$, the estimated probability that a 0 ``hits'' a clique:
-
-\[ p = \frac{{k \choose 2}}{{n \choose 2}} \]
-
-Assume that the number of cliques after feeding in a 0 follows a binomial
-distribution, with $l$ ``trials'' and ``probability of success'' $1-p$.
-$B(l)$ will then be a weighted average of $B(0)$ through $B(l-1)$. However,
-if the 0 ``misses'' all the cliques, then we can't say anything about the
-rank, and just use 0.
-Furthermore, we know that at level $l$, we're adding ${N \choose l}$ new
-functions.
-
-
-Let $R(l)$ be the lower bound on the expected rank of functions in $K_l$.
-
-\[
-R(0) = 0
-\]
-
-For $0 < l \le N$, define
-\[
-	R(l) = [ \sum_{1\le i < N} binom(i; l, 1-p) R(i) ] + {N \choose l}/2
-\]
-
-The file {\tt py/approxRank.py} computes this bound. However, as noted above, this
-is only an approximation, because after you feed in a 0, you're no longer
-{\em uniformly} sampling from smaller sets of cliques.
-
-\subsection{Description of an attempt to remedy this}
-
-{\tt py/lp\_gate\_bound.py} is an attempt to remedy these problems.
-It formulates the lower bound as a linear programming (LP) problem,
-with a variable for problems with various numbers of cliques.
-It counts the bounds in terms of ``number of two-input NAND gates''.
-
-For a given set of cliques $C$, it divides these into the cliques
-hit by zeroing an arbitrary random edge $e$, and those remaining.
-Let $n$ be the number of vertices, and $k$ be the size of the clique,
-and $N = {n \choose k}$ be the number of cliques. Then zeroing
-an arbitrarily-chosen edge could potentially eliminate up to
-${n-2 \choose k-2}$ cliques.
-Concretely, if $n=9$ and $k=3$, then there are 84 possible 3-cliques
-(triangles), and zeroing out an arbitrarily-chosen edge could
-eliminate up to 7 of these cliques.
-
-To clarify this, we
-plot an example set of cliques for each point on this rectangle
-(Figure \ref{fig:zeroingRectangle}). Note that many sets of cliques are isomorphic;
-shuffling the vertex order doesn't change the relative arrangement of the cliques
-(and obviously doesn't affect how many of them there are). However, this can change
-how many cliques $e$ ``hits''. Picking a distinguished edge $e$ to zero out
-is intended to reduce the amount of overcounting we need to deal with.
-
-\begin{figure}
-\centering
-\includegraphics[width=1\textwidth]{py/figure/zeroingRectangle.pdf}
-\caption{Effect of zeroing a distinguished edge $e$
-(again with $n=6$ and $k=3$).
-At each point, we pick one random set of cliques in which
-a given number of cliques are hit or missed.
-Diagonal grey lines show levels in which all of the sets
-contain the same number of cliques.
-}
-\label{fig:zeroingRectangle}
-\end{figure}
-
-\subsubsection{Equality constraints}
-
-(added by {\tt lp.add\_total\_cliques\_equality\_constraints()})
-
-For some parts of this attempt, we need to think in terms of
-the total number of cliques. For other parts, we need to pay attention
-to how many cliques are ``hit'' by the zeroed edge. This constraint
-relates these: the cost of finding some set of cliques, is an
-average, weighted by how many cliques are ``hit'' by a random edge.
-
-\subsubsection{Counting-bound constraints}
-
-(added by {\tt lp.add\_total\_cliques\_counting\_bound\_constraints()})
-
-This includes the actual counting bound. Specifically, for
-each total number of cliques, this counts the number of functions,
-and constrains the expected number of gates.
-
-\subsubsection{Zeroing constraints}
-
-(added by {\tt lp.add\_edge\_zeroing\_constraints()})
-
-These encode the fact that if you feed in a 0 to an edge,
-you will end up with a circuit which finds a strictly smaller
-set of cliques. Note that we're only guaranteed that this
-number is 1 less.
-
-\subsubsection{Upper bound}
-\label{gateUpperBound}
-
-(added by {\tt lp.add\_upper\_bound\_constraints()}, if you give
-the {\tt --upper-bound} command-line flag)
-
-This encodes an {\em upper} bound.
-Let $C$ be a set of cliques, and suppose we divide $C$ into
-disjoint sets of cliques $A$ and $B$. Given circuits to
-find those sets of cliques, we can clearly find the cliques
-in $C$ by OR'ing those together. Implementing 2-input OR can be
-done with three 2-input NAND gates. Thus, on average, we have
-
-\[
-|\bigC(C)| \le |\bigC(A)| + |\bigC(B)| + 3
-\]
-
-It may seem weird to include an {\em upper} bound.
-(\cite{aaronson_pnp} describes several lower bounds which make
-essential use of upper bounds, in possibly-surprising ways.)
- What was
-my motivation? My thinking was that this might connect the difficulties
-of finding cliques at each ``level''. As noted earlier, CLIQUE
-is only above a fraction of the sets in $Z$. When the LP solver
-``pushes down'' on CLIQUE, it also pushes down on that rather small
-set. But (my thinking was), with this upper bound, some of the
-higher-up sets would also be ``pulled down''; hopefully they'd
-eventually run into the counting bound. That is admittedly
-not a rigorous description.
-
-\subsubsection{Results}
-
-Here is what this model estimates. Note that this quickly starts
-to be solving humongous LP problems. (Exercise for the reader:
-how many variables does this use, to model finding $k$-vertex
-cliques in an $n$-vertex graph?)
-
-\begin{verbatim}
-$ ./lp_gate_bound.py 7 3
-30.7092
-$ ./lp_gate_bound.py 7 3 --include-upper-bound
-13.213
-$ ./lp_gate_bound.py 8 3
-34.6822
-$ ./lp_gate_bound.py 8 3 --include-upper-bound
-21.6523
-$ ./lp_gate_bound.py 9 3
-34.6545
-$ ./lp_gate_bound.py 9 3 --include-upper-bound
-51.5385
-\end{verbatim}
-
-{\bf EDIT, 20220725}
-
-These numbers are definitively wrong. For instance, running
-this with $n=7, k=3$, and adding a call to {\tt pdb.set\_trace},
-we see that:
-
-\begin{verbatim}
-(Pdb) z.x[self.var_index[('total_cliques', 35)]]
-30.709187135177608
-(Pdb) z.x[self.var_index[(5, 30)]]
-1.0000000000031937
-\end{verbatim}
-
-Although those should be equal.
-
-\subsubsection{Further thoughts on this model}
-
-Having implemented this, and somewhat attempted to describe it,
-I'm contemplating major revisions.
-
-The idea of bounding the ``rank'' of functions (as in the
-``miles-long linear warehouse'' model) seems massively cleaner to reason about.
-Dealing with the nitty-gritty of converting from ``number of functions''
-to ``number of 2-input NAND gates'' is complicated. The motivation
-for doing this was that it simplified adding an upper bound, and I
-didn't see how to do this in the rank model.
-However, I now see that, we could simply bound the
-average rank of the circuit finding a uniformly-randomly-chosen set of cliques, as
-${n \choose k}/2$. This bound is exact (in other words, both an
-upper and lower bound). It's not at all clear that this leads to a good bound, though.
-
-Also, zeroing out a random edge seems to complicate the book-keeping,
-as after doing so, you can end up with an arbitrary weird set of
-input edges left over. It seems (retrospectively) much simpler to
-simply feed in 0's to all the edges incident to an arbitrary vertex.
-You then always end up with a graph with one less vertex.
-(Although, if feeding in 0's an edge at a time made sense, we might
-address this using sampling.)
-Various other files in the {\tt py/} folder implement attempts at
-this, without much success; but I may revisit those.
-
-
-\subsection{A rank-based bound}
-
-We now revisit the rank-based bounds. 
+We now attempt to bound the expected rank of finding a set
+of cliques, as a function of the number of cliques.
 
 This is implemented in
 {\tt py/lp\_brute\_force\_1.py}. It uses a linear program, with
@@ -892,21 +655,17 @@ implies a slightly smaller circuit. This doesn't, at first glance, help much, as
 $CLIQUE$ (and all of the other functions) are at a height less than the number of edges
 (in this example, 15).
 
-We may also try counting gates instead of rank, and using the upper bound from section
-\ref{gateUpperBound}. $CLIQUE$ is only directly
+One complication of this bound is that zeroing out an input edge leaves a potentially
+irregular graph of input edges. If instead, we were to zero out all the edges incident to a
+vertex $v$, then we simply end up with an input graph with one less vertex.
+(And, similarly, we remove the cliques which include $v$ from consideration.)
+This might simplify counting how many cliques ``remain'' at a given level.
+
+We might also try counting gates instead of rank.
+All of the functions, including $CLIQUE$, are only directly
 ``above'' a {\em tiny} fraction of the functions
 in the lattice $Z$. However, possibly including the upper bound would force some
 things intermediate between $CLIQUE$ and $\emptyset$ to have many gates.
-
-
-
-
-
-\subsection{Approximating $Z$}
-
-
-
-
 
 \section{Related work}
 
@@ -959,80 +718,6 @@ not limited to: the Computational Complexity blog
 (Lance Fortnow and William Gasarch), 
 G\"odel's Lost Letter (Richard Lipton and Ken Regan),
 and Shtetl-Optimized (Scott Aaronson). 
-
-
-\appendix
-\section{Calculations for unbounded fan-in NAND gates}
-\label{gateMath}
-
-We used unbounded fan-in NAND gates largely because they are
-convenient to convert from ``number of functions'' to
-``number of gates''.
-
-Let $\bigC(f)$ be the circuit
-with the fewest unbounded fan-in NAND
-gates computing $f$, and let $|\bigC(f)| = g$ be the number of gates in
-that circuit. The
-circuit could have at most $gm$ wires from inputs to gates, and ${g \choose 2}$
-wires from gates to gates. We can view the possible circuits as a bitmask,
-containing a 1 everywhere a gate is connected to an input (or another gate),
-and 0 everywhere else.
-
-\begin{thm}
-\label{boundFromCounting}
-Consider functions from $m$ bits to one bit of output.
-This means that, with $g$ gates, we can represent at most
-$2^{gm + {g \choose 2}}$ different boolean functions (with $m$ bits of input,
-and one bit of output).
-\end{thm}
-\begin{proof}
-
-The number of possible wires which are there, or not, is $gm + {g \choose 2}$,
-which bounds how many possible circuits there are.
-Some of these circuits compute the same function.
-However, there can't be any more than this many circuits with this many wires.
-\end{proof}
-
-This means that if we have a large set of functions, and we know the size of
-the set of functions, then we know that at least {\em one} of them requires
-a large number of gates. (Knowing {\em which} function requires a lot, or many,
-gates is still an issue).
-
-We used unbounded-fan-in NAND gates because, given a number of circuits,
-it's easier (I think!) to solve for the number of wires than if we had
-used two-input gates.
-Consider functions from $m$ bits to one bit of output.
-Let $g$ be the number of gates, and $w$ be the number of wires.
-Solving for the number of gates:
-
-\begin{eqnarray*}
-w & = & mg + {g \choose 2} \\
-  & = & mg + g(g-1)/2 \\
-  & = & mg + (g^2 - g) / 2 \\
-  & = & 0.5g^2 + (m-0.5)g \\
-0 & = & 0.5g^2 + (m-0.5)g - w \\
-\end{eqnarray*}
-
-We solve the quadratic formula (writing $b = m-0.5$ for simplicity), keeping
-only the non-imaginary root.
-
-\begin{eqnarray*}
-g & = & -b \pm \sqrt{ b^2 + 2w} \\
-  & = & {\sqrt {2w + b^2}} - b \\
-\end{eqnarray*}
-
-Thus, given a set of functions, we know that at least one of them requires
-this many gates.
-
-This expression is a bit inconvenient, and as $n$ increases, we
-expect the number of gates to be much larger than the number of
-inputs $b$. To avoid such issues, we can count the number of gates
-beyond the number of inputs. This gives the bound
-
-\begin{eqnarray*}
-	g & \ge & \sqrt{2w} - m \\
-\end{eqnarray*}
-
 
 \bibliography{references}
 \bibliographystyle{unsrt}

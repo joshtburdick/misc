@@ -10,6 +10,7 @@
 \newtheorem{lem}[thm]{Lemma}
 \newtheorem{defn}{Definition}[section]
 \newtheorem{conj}{Conjecture}[section]
+\newtheorem{prob}{Problem}[section]
 \newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
 \newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
 \newcommand{\bigC}[0]{\mathcal{C}}
@@ -325,7 +326,18 @@ We abuse notation slightly, and write
 BUGGYCLIQUE(K_l) = \{ BUGGYCLIQUE(k) : k \in K_l \}
 \]
 
-What can we say about $E[|\bigC(BUGGYCLIQUE(K_l))|]$, for
+\begin{prob}
+\label{gatesPerLevel}
+Consider graphs with $n$ vertices.
+Let $0 \le i \le N$.
+How many gates are required to find $i$ of the possible $N$
+cliques?
+
+\end{prob}
+
+
+Does the counting bound
+say anything about $E[|\bigC(BUGGYCLIQUE(K_l))|]$, for
 some fixed $l$? Let $N = {n \choose k}$.
 At the ``bottom'', there's only one $BUGGYCLIQUE(\emptyset)$
 function, so the counting argument is useless.

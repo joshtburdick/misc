@@ -67,20 +67,21 @@ a one-bit output.
 Each of these functions, being different, must have a
 different circuit.
 
-
 If we fix a particular number of gates $g$, we can only construct a limited
 number of $m$-input circuits. How many depends on the type of gate (known as
-the {\em basis}).  For instance,
-if we use $g$ unbounded-fan-in NAND gates, then we can construct FIXME circuits.
-
+the {\em basis}).
+For instance,
+if we have $g$ unbounded-fan-in NAND gates available, then there are
+$gm + {g \choose 2}$ wires which might or might not be present, so 
+we can construct at most $2^{gm + {g \choose 2}}$ circuits.
 (Note that there are many circuits which compute a given function,
 which adds some slack to this bound.)
 
 This argument, although simple, is non-constructive: it doesn't give any
 {\em specific} example of a hard-to-compute function.
 There are explicitly-stated functions which are known to require
-a linear number of two-input gates.
-(FIXME CITE). However, although finding such functions and lower bounds is
+a linear number of two-input Boolean gates \cite{iwama2002explicit}.
+However, although finding such functions and lower bounds is
 a well-studied problem, there aren't known functions which provably require
 a superlinear number of two-input gates.
 
@@ -694,11 +695,6 @@ random
 instances of a given problem are hard, rather
 than using random problems to show that
 a specific problem is hard.
-
-??? What about:
-- co-NP?
-- formula size?
-
 
 This lower-bound strategy also seems potentially
 relevant to quantum computing,

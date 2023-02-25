@@ -172,6 +172,60 @@ Indeed, as far as what we've formally shown goes, the problem which needs
 the most NAND gates could be finding a single clique! That's easily ruled out
 (because that only needs one NAND gate, plus the output gate).
 
+\subsection{Defining levels of CLIQUE}
+
+To me, it seems a reasonably intuitive guess that the hardness of
+computing $BUGGYCLIQUE(A)$ should be somehow related to
+$|A|$, which is simply the number of cliques it ``sees''.
+
+\begin{defn}
+\label{CLIQUE-level}
+Assume $n, k$ are fixed. For any $l$ such that
+$0 \le l \le |K|$, let $K_l$ be the set of all sets
+with exactly $l$ cliques. 
+\end{defn}
+
+We abuse notation slightly, and write
+
+\[
+BUGGYCLIQUE(K_l) = \{ BUGGYCLIQUE(k) : k \in K_l \}
+\]
+
+\begin{prob}
+\label{gatesPerLevel}
+Consider graphs with $n$ vertices.
+Let $0 \le i \le N$.
+How many gates are required to find a subset of size $i$ of the possible $N$
+cliques?
+
+\end{prob}
+
+(When $i=N$, this is asking about the circuit complexity of $k-CLIQUE$, a
+well-studied open problem, to say the least...)
+
+Does the counting bound
+say anything about $E[|\bigC(BUGGYCLIQUE(K_l))|]$, for
+some fixed $l$? Let $N = {n \choose k}$.
+At the ``bottom'', there's only one $BUGGYCLIQUE(\emptyset)$
+function, so the counting argument is useless.
+In the ``middle'',
+there are ${N \choose {N/2}}$ functions, and so the counting
+argument gives a nontrivial lower bound for
+$E[|\bigC(BUGGYCLIQUE(K_{N \choose {N/2}}))|]$ (although
+without actually constructing even {\em one} difficult function!).
+At the ``top'', again, there's only one $BUGGYCLIQUE(K) = k-CLIQUE$
+function, so the counting argument is, once again, useless.
+
+It would be nice if we could show that, as $l$ increases,
+$E[|\bigC(BUGGYCLIQUE(K_l))|]$ also increases.
+(This {\em seems} intuitive -- if finding {\em half} of the cliques
+is hard, at least sometimes, how much easier can finding {\em all}
+of them be? But that's only intuition, not proof.)
+If we could prove something in general, for all levels $l$, then at
+the top of the diagram, we'd be bounding just the function
+$BUGGYCLIQUE(K_l) = k-CLIQUE$. (This suggests that doing so would
+be difficult...)
+
 \subsection{Which sets of cliques are hard to find?}
 \label{sec:whichCliques}
 
@@ -307,62 +361,7 @@ longer be part of a clique. We feed in 0's to those edges (with no
 provable effect on the circuit size), and repeat with $v_2$...
 This strategy is simple, but only gives a bound a bit lower than
 the number of input edges.
-
-\subsection{Defining levels of CLIQUE}
-
-To me, it seems a reasonably intuitive guess that the hardness of
-computing $BUGGYCLIQUE(A)$ should be somehow related to
-$|A|$, which is simply the number of cliques it ``sees''.
-
-\begin{defn}
-\label{CLIQUE-level}
-Assume $n, k$ are fixed. For any $l$ such that
-$0 \le l \le |K|$, let $K_l$ be the set of all sets
-with exactly $l$ cliques. 
-\end{defn}
-
-We abuse notation slightly, and write
-
-\[
-BUGGYCLIQUE(K_l) = \{ BUGGYCLIQUE(k) : k \in K_l \}
-\]
-
-\begin{prob}
-\label{gatesPerLevel}
-Consider graphs with $n$ vertices.
-Let $0 \le i \le N$.
-How many gates are required to find a subset of size $i$ of the possible $N$
-cliques?
-
-\end{prob}
-
-(When $i=N$, this is asking about the circuit complexity of $k-CLIQUE$, a
-well-studied open problem, to say the least...)
-
-Does the counting bound
-say anything about $E[|\bigC(BUGGYCLIQUE(K_l))|]$, for
-some fixed $l$? Let $N = {n \choose k}$.
-At the ``bottom'', there's only one $BUGGYCLIQUE(\emptyset)$
-function, so the counting argument is useless.
-In the ``middle'',
-there are ${N \choose {N/2}}$ functions, and so the counting
-argument gives a nontrivial lower bound for
-$E[|\bigC(BUGGYCLIQUE(K_{N \choose {N/2}}))|]$ (although
-without actually constructing even {\em one} difficult function!).
-At the ``top'', again, there's only one $BUGGYCLIQUE(K) = k-CLIQUE$
-function, so the counting argument is, once again, useless.
-
-It would be nice if we could show that, as $l$ increases,
-$E[|\bigC(BUGGYCLIQUE(K_l))|]$ also increases.
-(This {\em seems} intuitive -- if finding {\em half} of the cliques
-is hard, at least sometimes, how much easier can finding {\em all}
-of them be? But that's only intuition, not proof.)
-If we could prove something in general, for all levels $l$, then at
-the top of the diagram, we'd be bounding just the function
-$BUGGYCLIQUE(K_l) = k-CLIQUE$. (This suggests that doing so would
-be difficult...)
-
-\section{Using random restrictions}
+section{Using random restrictions}
 
 Random restrictions have been used in lower bounds of formula
 \cite{subbotovskaya1963comparison} and circuit \cite{hastad1987lower}

@@ -10,7 +10,7 @@
 \newtheorem{lem}[thm]{Lemma}
 \newtheorem{defn}{Definition}[section]
 \newtheorem{conj}{Conjecture}[section]
-\newtheorem{prob}{Problem}[section]
+\newtheorem{prob}{Open problem}[section]
 \newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
 \newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
 \newcommand{\bigC}[0]{\mathcal{C}}
@@ -331,11 +331,13 @@ BUGGYCLIQUE(K_l) = \{ BUGGYCLIQUE(k) : k \in K_l \}
 \label{gatesPerLevel}
 Consider graphs with $n$ vertices.
 Let $0 \le i \le N$.
-How many gates are required to find $i$ of the possible $N$
+How many gates are required to find a subset of size $i$ of the possible $N$
 cliques?
 
 \end{prob}
 
+(When $i=N$, this is asking about the circuit complexity of $k-CLIQUE$, a
+well-studied open problem, to say the least...)
 
 Does the counting bound
 say anything about $E[|\bigC(BUGGYCLIQUE(K_l))|]$, for
@@ -352,11 +354,13 @@ function, so the counting argument is, once again, useless.
 
 It would be nice if we could show that, as $l$ increases,
 $E[|\bigC(BUGGYCLIQUE(K_l))|]$ also increases.
+(This {\em seems} intuitive -- if finding {\em half} of the cliques
+is hard, at least sometimes, how much easier can finding {\em all}
+of them be? But that's only intuition, not proof.)
 If we could prove something in general, for all levels $l$, then at
 the top of the diagram, we'd be bounding just the function
 $BUGGYCLIQUE(K_l) = k-CLIQUE$. (This suggests that doing so would
 be difficult...)
-
 
 \section{Using random restrictions}
 
@@ -477,7 +481,7 @@ It seems intuitive that finding a larger fraction of the cliques
 should be harder.
 So, another idea is to try to show this using induction on $l$.
 As usual, the base case ($l=0$) is easy: finding zero cliques is easiest,
-so its rank is 0 (FIXME prove this).
+so its rank is 0 (see Theorem \ref{zeroCliques}).
 
 The step case is not so straightforward, though. Suppose we've computed bounds for
 levels 0 through $l-1$ (thus, we're using some sort of strong induction.)

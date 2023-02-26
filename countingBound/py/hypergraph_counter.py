@@ -26,28 +26,56 @@ class HypergraphCounter:
         self.n = n
         self.k = k
 
-
-
     def count_hypergraphs_max_vertices(self):
-        """
+        """Counts hyperghraphs with _up to_ some number of vertices.
 
-        Returns: a hash h, with key v, an int in the range k..n,
+        Returns: a dict h, with key v, an int in the range k..n,
             representing the number of vertices.
             h[v] is a numpy array of length ${v \choose k}$.
             h[v][i] is the number of hypergraphs with up to
                 $v$ vertices, and exactly $i$ hyperedges.
-
         """
-        pass
-
+        # to compute this, first compute number of hypergraphs with
+        # exactly some number of vertices used
+        exact_counts = self.count_hypergraphs_exact_vertices()
+        # this will hold the vectors of counts, for each number of vertices
+        h = dict()
+        # then, loop through the number of vertices
+        for i in range(self.k, self.n+1):
+            # start with a count of 0
+            num_cliques = scipy.special.comb(i, self.k, exact=True)
+            h[i] = np.full([2 ** num_cliques + 1], 0)
+            # add in number of hypergraphs with up to that many vertices
+            for j in range(self.k, i+1):
+                n1 = exact_counts[j].shape[0]
+                h[i][:n1] += scipy.special.comb(i, j, exact=True) * exact_counts[j]
+        # lastly, count the empty hypergraph
+        h[0] = 1
+        return h
 
     def count_hypergraphs_exact_vertices(self):
-        """Counts hypergraphs with _exactly_ some num. of vertices.
+        """Counts hypergraphs with _exactly_ some number of vertices.
 
-        The nice thing about these, is that they're non-overlapping.
+        The nice thing about these is that since they all "use" some
+        number of vertices, they're all distinct.
         This is used by "count_hypergraphs_max_vertices".
         """
-        pass
+        exact_counts = dict()
+        # loop through number of vertices
+        for i in range(self.k, self.n+1):
+            # start with count of hypergraphs (on all n vertices) with
+            # _up to_ this many vertices
+            num_cliques = scipy.special.comb(i, self.k, exact=True)
+            exact_counts[i] = np.array([scipy.special.comb(i, r, exact=True)
+                for r in range(2 ** num_cliques + 1)]
+            # also, don't count case with zero hypergraphs (as that's not
+            # specific to a particular vertex set)
+            exact_counts[0] = 0
+            # then, subtract off hypergraphs with fewer vertices (if any)
+            for j in range(self.k, i):
+                n1 = exact_counts[j].shape[0]
+                exact_counts[i][:n1] -= scipy.special.comb(i, j, exact=True) * exact_counts[j]
+        return exact_counts
 
 def count_bits(x):
     """Counts number of bits set in a numpy vector."""

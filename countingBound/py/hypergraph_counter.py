@@ -48,7 +48,7 @@ class HypergraphCounter:
             # add in number of hypergraphs with up to that many vertices
             for j in range(self.k, i+1):
                 n1 = exact_counts[j].shape[0]
-                h[i][:n1] += scipy.special.comb(i, j, exact=True) * exact_counts[j]
+                h[i][:n1] += scipy.special.comb(self.n, j, exact=True) * exact_counts[j]
             # lastly, count the empty hypergraph
             h[i][0] = 1
         return h
@@ -146,6 +146,7 @@ class SlowHypergraphCounter:
 
 # XXX a quick test
 if __name__ == '__main__':
+    # this is a toy example, but is small enough to check by hand
     hc = HypergraphCounter(4,2)
 
     print('exact-number-of-vertex counts:')

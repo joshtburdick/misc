@@ -19,6 +19,7 @@ from scipy.stats import hypergeom
 
 import function_gate_count
 import lp_helper
+import hypergraph_counter
 
 def count_bits(x):
     """Counts number of bits set in a numpy vector."""

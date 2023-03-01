@@ -44,7 +44,7 @@ class HypergraphCounter:
         for i in range(self.k, self.n+1):
             # start with a count of 0
             num_cliques = scipy.special.comb(i, self.k, exact=True)
-            h[i] = np.full([num_cliques + 1], 0)
+            h[i] = np.full([num_cliques + 1], 0.)
             # add in number of hypergraphs with up to that many vertices
             for j in range(self.k, i+1):
                 n1 = exact_counts[j].shape[0]
@@ -66,7 +66,7 @@ class HypergraphCounter:
             # start with count of hypergraphs (on all n vertices) with
             # _up to_ this many vertices
             num_cliques = scipy.special.comb(i, self.k, exact=True)
-            exact_counts[i] = np.array([scipy.special.comb(num_cliques, r, exact=True)
+            exact_counts[i] = np.array([scipy.special.comb(num_cliques, r, exact=False)
                 for r in range(num_cliques + 1)])
             # also, don't count case with zero hypergraphs (as that's not
             # specific to a particular vertex set)
@@ -74,7 +74,7 @@ class HypergraphCounter:
             # then, subtract off hypergraphs with fewer vertices (if any)
             for j in range(self.k, i):
                 n1 = exact_counts[j].shape[0]
-                exact_counts[i][:n1] -= scipy.special.comb(i, j, exact=True) * exact_counts[j]
+                exact_counts[i][:n1] -= scipy.special.comb(i, j, exact=False) * exact_counts[j]
         return exact_counts
 
 def count_bits(x):

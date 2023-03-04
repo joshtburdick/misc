@@ -100,7 +100,7 @@ class LpBound:
                     [((i, C_size), 1.)] + A_mix, '>', 0.)
 
     def add_total_cliques_counting_bound_constraints(self):
-        """Adds counting bound, based on total number of cliques.
+        """Adds counting bound, based on total number of functions.
 
         For each number of vertices, and for each "level" of
         "total number of cliques found", this simply adds a lower bound,
@@ -137,10 +137,50 @@ class LpBound:
                     math.log2(comb(max_cliques, num_cliques, exact=True)))
                 self.lp.add_constraint(A, '>', b)
 
+    def add_counting_bound_2(self):
+        """Adds counting bound, based on total number of functions.
+
+        For each number of vertices, and for each "level" of
+        "total number of cliques found", this simply adds a lower bound,
+        based on the counting bound.
+
+        This assumes that we can we count the fact that we can zero out any of the
+        vertices; in other words, the vertices are "labeled".
+        It seems like we should be able to: if you're finding
+        triangles in a 6-vertex graph, you can zonk distinct
+        sets of vertices, and end up with distinct triangles.
+
+        The book-keeping seems a bit complicated.
+        """
+        # in this version of the counting bound, the number
+        # of input wires is the same (even when some vertices
+        # have been zonked).
+        counting_bound = function_gate_count.TwoInputNandBound(
+            # the number of input wires
+            comb(self.n, 2, exact=True),
+            # log_2 of the number of functions shouldn't exceed this
+            comb(self.n, self.k, exact=True) + 5)
+
+        # count of functions
+        hc = hypergraph_counter.HypergraphCounter(self.n, self.k)
+        num_functions = hc.count_hypergraphs_max_vertices()
+
+        # loop through number of vertices not "zonked"
+        for num_vertices in range(self.k, self.n+1):
+            # number of cliques possible, for this many vertices
+            max_cliques = comb(num_vertices, self.k, exact=True)
+
+            # loop through how many cliques could be present
+            for num_cliques in range(max_cliques+1):
+                A = [((num_vertices, num_cliques), 1.)]
+                b = counting_bound.expected_gates(
+                    math.log2(num_functions[num_vertices][num_cliques]))
+                self.lp.add_constraint(A, '>', b)
+
     def add_upper_bound_constraints(self):
         """Adds an upper bound.
 
-        This is says that if A and B are sets of cliques, and you have
+        This says that if A and B are sets of cliques, and you have
         circuits to detect each of them, you can detect all of the cliques
         in $A \cup B$, by ORing those circuits together.
 
@@ -201,7 +241,11 @@ if __name__ == '__main__':
 
     bound = LpBound(args.n, args.k)
     bound.add_vertex_zeroing_constraints()
-    bound.add_total_cliques_counting_bound_constraints()
+
+    # bound.add_total_cliques_counting_bound_constraints()
+    # revised version of this
+    bound.add_counting_bound_2()
+
     # possibly include the upper bound
     if args.include_upper_bound:
         bound.add_upper_bound_constraints()

@@ -42,11 +42,13 @@ of the number of cliques).
 
 \tableofcontents
 
-This is an attempt to obtain a lower bound on the the number of NAND gates
-needed to detect {\em some} of the cliques in a graph (as opposed to
-all of them).
-Although it seems unlikely to work, hopefully
-it will add to the long list of strange things which would happen
+\vspace{5mm}
+
+This is an exploration of lower bounds on the the number of NAND gates
+needed to detect {\em some} of the cliques in a graph.
+It seems unlikely to give a bound on finding {\em all} of the cliques.
+However, hopefully
+it will add to the long list of possibly-surprising things which would happen
 if P = NP \cite{fenner1996complexity}.
 
 \section{A counting bound}
@@ -75,9 +77,10 @@ if we have $g$ unbounded-fan-in NAND gates available, then there are
 $gm + {g \choose 2}$ wires which might or might not be present, so 
 we can construct at most $2^{gm + {g \choose 2}}$ circuits.
 (Note that there are many circuits which compute a given function,
-which adds some slack to this bound.)
+which adds some slack to this bound.) If we consider a large number of functions,
+then we know that, on average, most of them require many gates to compute.
 
-This argument, although simple, is non-constructive: it doesn't give any
+This argument is simple, but unfortunately is non-constructive: it doesn't give any
 {\em specific} example of a hard-to-compute function.
 There are explicitly-stated functions which are known to require
 a linear number of two-input Boolean gates \cite{iwama2002explicit}.
@@ -94,7 +97,7 @@ In particular, suppose we are given an $n$-vertex graph.
 Let $k$-CLIQUE($n$) be the boolean function which
 detects $k$-cliques: it outputs 1 if any $k$-clique
 is present, and 0 otherwise. This is a classic
-NP-complete problem.
+NP-complete problem \cite{aaronson_pnp}.
 
 We now consider a ``buggy'' variant of the $k$-CLIQUE function,
 which only detects a subset of cliques. (Nomenclature note:
@@ -113,12 +116,11 @@ it only successfully finds $\{1,3,4,5,7,8\}$, et cetera.
 
 We define a variant of $k$-CLIQUE which only
 finds a subset of cliques.
-Let $K$ denote the set of all possible
-$k$-vertex cliques.
 
 \begin{defn}
 \label{BUGGYCLIQUE}
-Let $A \subseteq K$.
+Let $K$ be the set of all possible
+$k$-vertex cliques, and let $A \subseteq K$.
 Let $m = {n \choose 2}$ be the number of edges in the input graph.
 $BUGGYCLIQUE(A): \{0,1\}^m \rightarrow \{0,1\}$ is the function which
 is 1 iff any of the $K_k$s in $A$ is present.
@@ -140,55 +142,46 @@ There are  $2^{|K|}$ distinct $BUGGYCLIQUE$ functions.
 Let $A,B \subseteq K$, with $A \neq B$, and w.l.o.g.
 let $x \in A-B$. Then $BUGGYCLIQUE(A)$ outputs 1 on the input
 with just the edges in $x$ set to 1 (and 0 everywhere else),
-while $BUGGYCLIQUE(B)$ outputs a 0.
+while $BUGGYCLIQUE(B)$ outputs a 0; thus the functions differ
+on that input.
 
 There are $2^{|K|}$ many subsets of $K$,
 and by the above, each corresponds to a diffferent function.
 \end{proof}
 
-For a given $A$, many of the functions in $BUGGYCLIQUE(A)$
-are similar (for instance, most
-of them output a 1 when all the edges are present);
-but they are all distinct.
 Although $2^{n \choose k}$ is a fairly large number,
 it's still comfortably less than $2^{2^{n \choose 2}}$, the number of boolean
 functions on the ${n \choose 2}$ input wires (one per edge).
 
-\subsubsection{But {\em which} function requires many gates?}
-
 Thus, there are $2^{n \choose k}$ different functions. 
 How many NAND gates do these take?
-We consider NAND gate circuits (with any fan-in) which find $k$-cliques in $n$-vertex
-graphs, as a circuit with $n \choose 2$ inputs. Using the argument similar to
-\ref{boundFromCounting}, we know that at least one of the circuits requires
+Again, consider NAND gate circuits (with any fan-in) which find $k$-cliques in $n$-vertex
+graphs, as a circuit with $n \choose 2$ inputs. Using an argument similar to
+\cite{shannon_synthesis_1949}, we know that at least one of the circuits requires
 $\Omega(n^{k/2})$ unbounded-fan-in NAND gates.
 
 Why doesn't this bound $k$-CLIQUE?
 Because we don't know that the circuit which finds {\em all} of the
-$K_k$s is one of these larger circuits. As far as what I've
-shown thus far goes, it could be harder to find some weird subset of the $K_k$s.
-
-Indeed, as far as what we've formally shown goes, the problem which needs
-the most NAND gates could be finding a single clique! That's easily ruled out
-(because that only needs one NAND gate, plus the output gate).
+cliques is one of these larger circuits! As far as what we've
+shown thus far goes, it could be harder to find some weird subset of the cliques.
 
 \subsection{Defining levels of CLIQUE}
 
-To me, it seems a reasonably intuitive guess that the hardness of
+It seems a reasonably intuitive guess that the hardness of
 computing $BUGGYCLIQUE(A)$ should be somehow related to
 $|A|$, which is simply the number of cliques it ``sees''.
 
 \begin{defn}
 \label{CLIQUE-level}
-Assume $n, k$ are fixed. For any $l$ such that
-$0 \le l \le |K|$, let $K_l$ be the set of all sets
-with exactly $l$ cliques. 
+Assume $n, k$ are fixed. For any $i$ such that
+$0 \le i \le |K|$, let $K_i$ be the set of all sets
+with exactly $i$ cliques. 
 \end{defn}
 
 We abuse notation slightly, and write
 
 \[
-BUGGYCLIQUE(K_l) = \{ BUGGYCLIQUE(k) : k \in K_l \}
+BUGGYCLIQUE(K_i) = \{ BUGGYCLIQUE(i) : i \in K_i \}
 \]
 
 \begin{prob}
@@ -197,45 +190,66 @@ Consider graphs with $n$ vertices.
 Let $0 \le i \le N$.
 How many gates are required to find a subset of size $i$ of the possible $N$
 cliques?
-
 \end{prob}
 
-(When $i=N$, this is asking about the circuit complexity of $k-CLIQUE$, a
-well-studied open problem, to say the least...)
-
 Does the counting bound
-say anything about $E[|\bigC(BUGGYCLIQUE(K_l))|]$, for
-some fixed $l$? Let $N = {n \choose k}$.
+say anything about $E[|\bigC(BUGGYCLIQUE(K_i))|]$, for
+some fixed $i$? Let $N = {n \choose k}$.
 At the ``bottom'', there's only one $BUGGYCLIQUE(\emptyset)$
 function, so the counting argument is useless.
 In the ``middle'',
 there are ${N \choose {N/2}}$ functions, and so the counting
 argument gives a nontrivial lower bound for
 $E[|\bigC(BUGGYCLIQUE(K_{N \choose {N/2}}))|]$ (although
-without actually constructing even {\em one} difficult function!).
+without actually constructing even {\em one} difficult function).
 At the ``top'', again, there's only one $BUGGYCLIQUE(K) = k-CLIQUE$
-function, so the counting argument is, once again, useless.
+function,
+so the counting argument is, once again, useless.
 
-It would be nice if we could show that, as $l$ increases,
-$E[|\bigC(BUGGYCLIQUE(K_l))|]$ also increases.
+It would be nice if we could show that, as $i$ increases,
+$E[|\bigC(BUGGYCLIQUE(K_i))|]$ also increases.
 (This {\em seems} intuitive -- if finding {\em half} of the cliques
 is hard, at least sometimes, how much easier can finding {\em all}
 of them be? But that's only intuition, not proof.)
-If we could prove something in general, for all levels $l$, then at
+If we could prove something in general, for all levels $i$, then at
 the top of the diagram, we'd be bounding just the function
-$BUGGYCLIQUE(K_l) = k-CLIQUE$. (This suggests that doing so would
+$BUGGYCLIQUE(K_i) = k-CLIQUE$. (This suggests that doing so would
 be difficult...)
 
-\subsection{Which sets of cliques are hard to find?}
-\label{sec:whichCliques}
+\subsection{Comparing sets of functions using restrictions}
 
-The hardness of these functions depends
-on how the cliques they find are laid out.
+A standard method for showing lower bounds is to feed in 0's or
+1's to particular inputs, and see what function and/or circuit remain.
+Methods using such ``restrictions'' have been used in lower bounds of formula
+\cite{subbotovskaya1963comparison} and circuit \cite{hastad1987lower}
+complexity (see also the slides at \cite{rossmanRestrictions}).
+Here, we apply random restrictions to a set of functions (and circuits),
+rather than just one function and circuit.
 
+\begin{thm}
+\label{edgeZonking}
+Let $A \subsetneq B \subseteq K$, such that $A$ is what remains
+of $B$ after removing all cliques overlapping some edge $e$.
+Then, assuming we measure circuit size using NAND gates,
+ $|\bigC(BUGGYCLIQUE(B))| > |\bigC(BUGGYCLIQUE(A))|$.
+\end{thm}
+\begin{proof}
+Feed in a 0 to $e$, which is in $B$; the remaining cliques are $A$.
+The resulting
+circuit computes $BUGGYCLIQUE(A)$, and so has size
+at least $|\bigC(BUGGYCLIQUE(A))|$. But at least one
+NAND gate has been removed by feeding in the 0.
+\end{proof}
+
+(NAND gates have the convenient property that feeding in a 0
+results in a strictly smaller circuit; many other gate ``bases'' would
+result in a circuit of smaller{\em or} equal size.)
+
+Figure \ref{fig:Hasse}
+sketches a Hasse diagram of possible subsets of cliques,
+which shows some of the implications of this ``zeroing'' argument.
 Cliques are arguably difficult to draw in a two-dimensional space.
-As an approximate diagram reflecting what we know,
-we sketch a Hasse diagram of possible subsets of cliques. Although
-we only draw a few subsets of three-vertex cliques
+Although we only draw a few subsets of three-vertex cliques
 on six vertices, hopefully this provides some
 intuition.
 
@@ -256,23 +270,7 @@ maximally (as in (b)).}
 \label{fig:Hasse}
 \end{figure}
 
-\begin{thm}
-\label{edgeZonking}
-Let $A \subsetneq B \subseteq K$, such that $A$ is what remains
-of $B$ after removing all cliques overlapping some edge $e$.
-Then $|\bigC(BUGGYCLIQUE(B))| > |\bigC(BUGGYCLIQUE(A))|$.
-\end{thm}
-\begin{proof}
-Feed in a 0 to $e$, which is in $B$; the remaining cliques are $A$.
-The resulting
-circuit computes $BUGGYCLIQUE(A)$, and so has size
-at least $|\bigC(BUGGYCLIQUE(A))|$. But at least one
-NAND gate has been removed by feeding in the 0.
-\end{proof}
-
-This shows that sometimes, finding a larger set of cliques is
-harder. However, the above theorem doesn't help if the two
-sets of cliques cover the same set of edges.
+\subsection{The zeroing-out lattice $Z$}
 
 \begin{defn}
 \label{zRelation}
@@ -296,6 +294,62 @@ there is a line from $B$ to $A$.
 \label{fig:Z}
 \end{figure}
 
+Figure \ref{fig:Z} plots $Z(A,B)$, when $n=4$ and $k=3$.
+Using more vertices, or
+larger cliques, seems like it would quickly get unmanageable.
+Note also that this is ``not to scale'' in a variety of ways. In
+particular, when $n$ is large, the middle layer dominates the graph
+(because if each clique is chosen with probability 1/2, on average,
+you'll pick very close to half the cliques).
+
+Each line between sets indicates a set which requires a strictly larger
+number of gates.  Unfortunately, at least according to this relation,
+the number of sets of cliques smaller than
+any of these upper bounds is less than $2^m$. This is because
+there are only $2^m$ ways to feed in 0's.
+ However, if a set doesn't cover an edge $e$ ,
+then that set is {\em below} a large number of sets in the lattice (namely,
+all of the sets which would lose a clique if you fed in a zero to $e$).
+
+Understanding the structure of $Z$ better might be useful.
+For instance, if we randomly traverse $Z$ ``upwards'' (starting from $\emptyset$),
+at each step, we reach a function which provably requires more gates. (Note,
+again, that this doesn't directly bound $CLIQUE$; almost all paths will stop
+at some {\em other} set of cliques which happens to cover all of the input edges!)
+
+$Z$ is a large graph, and fairly regular (although zeroing out an edge results
+in an irregular set of input edges, which seems to complicate reasoning about it).
+Still, it seems that tools from
+random graph theory should help approximate it \cite{bollobas1976cliques}.
+
+\begin{prob}
+\label{edgeZonkingApprox}
+Can we approximate properties of $Z$? For instance, if we take a random walk
+on $Z$, ``upwards'' starting from $\emptyset$,
+what is the expected number of cliques after $s$ steps?
+\end{prob}
+
+\subsubsection{Feeding in 1's as well as 0's}
+
+We could, of course, also restrict the circuit by feeding in 1's as well.
+
+\begin{defn}
+\label{PICKYCLIQUE}
+Let $K$ be the set of all possible
+$k$-vertex cliques, and let $A, B \subseteq K$.
+Let $m = {n \choose 2}$ be the number of edges in the input graph.
+
+$PICKYCLIQUE(A,B): \{0,1\}^m \rightarrow \{0,1\}$ is the function which
+is 1 iff any of the $K_k$s in $A$ is present, and none of the $K_k$s
+in $B$ are present.
+\end{defn}
+
+It seems that all of the $PICKYCLIQUE(A,B)$ functions are distinct, as well.
+This defines a slightly larger set of functions; unfortunately this doesn't
+seem to help much.
+
+\subsection{Attempting to apply Dilworth's theorem}
+
 If we consider $Z(A, B)$ as a relation, then it defines a meet-semilattice
 (lower semilattice) with 
 many distinct upper bounds.  Indeed, any pair of subsets which
@@ -306,62 +360,50 @@ of the relation $Z$) has a strictly increasing number of gates, and so the
 functions at each level of the chain are strictly increasing in average
 size. (However, this doesn't seem to bound the number of gates in CLIQUE.)
 
-Figure \ref{fig:Z} attempts to plot $Z(A,B)$. Using more vertices, or
-larger cliques, seems like it would quickly get unmanageable.
-Note also that this is ``not to scale'' in a variety of ways. In
-particular, when $n$ is large, the middle layer dominates the graph
-(because if each clique is chosen with probability 1/2, on average,
-you'll pick very close to half the cliques).
-
-Each line between sets indicates a set which requires a strictly larger number of gates.  Unfortunately, at least according to this relation,
-the number of sets of cliques smaller than
-any of these upper bounds is less than $2^{\# input edges}$.
-(For instance, the top levels are only forced to be higher than
-a tiny fraction of these sets.) However, if a set doesn't cover an edge $e$ ,
-then that set is {\em below} a large number of sets in the lattice (namely,
-all of the sets which would lose a clique if you fed in a zero to $e$).
-
-Note that the sets at any level are incomparable. (Proof: if you feed in
+Alternatively, note that the sets at any level are incomparable. (Proof: if you feed in
 a zero to a function $A$, and you get a different function $B$, then $B$
 detects fewer cliques than $A$, and so can't be at the same level.)
-In using Dilworth's Theorem, this provides a ready source of antichains.
+This would provide a ready source of antichains,
+for using Dilworth's Theorem.
 Furthermore, zeroing an edge
 can zonk at most ${n-2} \choose {k-2}$ cliques, so we can bound how
 many levels the edges of $Z$ jump. Unfortunately, it seems hard to use
 this to say anything useful about the particular chain which contains CLIQUE.
 
-\begin{figure}
-\centering
-\includegraphics[width=1\textwidth]{R/tri1.pdf}
-\caption{A given number of cliques can overlap maximally (left),
-or not overlap much (right).}
-\label{fig:overlappingTriangles}
-\end{figure}
+\subsection{Which sets of cliques are hard to find?}
+\label{sec:whichCliques}
+
+The hardness of finding a set of cliques
+depends not only on how many cliques are detected,
+but also on how they overlap.
 
 Triangles can be detected using matrix multiplication \cite{itai_finding_1977},
 and there are fast algorithms known for matrix multiplication
 \cite{strassen_gaussian_1969}
 \cite{williams_multiplying_2012}, so the set of all possible
-cliques on some set of vertices (Figure \ref{fig:overlappingTriangles}, left)
+cliques on some set of vertices, as in
+Figure \ref{fig:Hasse} (b),
  can be detected
-using fewer than one NAND gate per triangle (for large enough input graphs).
-
-On the other hand, if the triangles overlap less (as in
-Figure \ref{fig:overlappingTriangles}, right),
+using fewer than one NAND gate per triangle (in the limit,
+for large enough input graphs).
+On the other hand, if the triangles overlap less, as in
+Figure \ref{fig:Hasse} (f)),
 then to detect all of the triangles, we will definitely need at least one
 gate per triangle. We can see this by feeding in a 0 to some input
 unique to a triangle, applying Theorem \ref{edgeZonking}, and repeating.
 
-Consider the case of finding $k$-cliques on $n$ vertices.
-Possibly the most na\"ive strategy in this case is to pick a vertex $v_1$,
-and feed in 0's to edges, one at a time. We can repeat this
-(zonking at least one NAND gate as we go), until there
-$k-2$ edges remaining connected to $v_1$. At this point, $v_1$ can no
-longer be part of a clique. We feed in 0's to those edges (with no
-provable effect on the circuit size), and repeat with $v_2$...
-This strategy is simple, but only gives a bound a bit lower than
-the number of input edges.
-section{Using random restrictions}
+Thus, there is some dependence not only on how many cliques are found, but
+also how they're arranged. It seems that cliques which overlap more might
+be easier to find, but that's far from clear.
+
+\begin{prob}
+\label{lpRepair}
+Fix $n$, $k$, and $N$ as before, and pick $i$, with
+$0 < i < N$. What sets of cliques of size $i$
+require the most / least gates to find?
+\end{prob}
+
+\section{Using random restrictions}
 
 Random restrictions have been used in lower bounds of formula
 \cite{subbotovskaya1963comparison} and circuit \cite{hastad1987lower}
@@ -456,7 +498,10 @@ when an edge is disabled, the chip now has strictly fewer gates.
 Perhaps the chip-maker spent their entire budget on designing the
 optimal circuits, but then skimped on the wires connecting the chips?
 In that case, assuming the missing wire is treated as a 0, the chip still
-finds some cliques, and so might yet be sellable.
+finds some cliques, and so might yet be sellable
+\footnote{In some actual logic circuits, such as those
+using TTL, a disconnected input
+would ``float'' to be considered a 1. We plead artistic license.}.
 By construction of the warehouse, that means the faulty chip could be shifted,
 on a giant conveyor belt,
 toward the ``smaller'' (in number of gates) end of the warehouse.
@@ -550,7 +595,7 @@ Note the asymmetry of the situation. Using restrictions to show that
 $CLIQUE$ has high rank is difficult, as $CLIQUE$ isn't ``higher'' than
 many functions in $Z$. Each restriction step (corresponding to an edge in $Z$)
 shows that a function is
-``higher'', but only by some approximate amount.
+``higher'', but only relative to one function, drawn from a sea of $2^N$.
 On the other hand, at the other end of $Z$, we can unequivocally say
 that {\em some} functions have low rank (and are thus
 ``relatively easy'' to compute).
@@ -565,7 +610,8 @@ the average for all $N-1$ other functions (although admittedly
 by a stunningly miniscule amount).
 Similarly, the bound on finding one clique pushes up all the other functions.
 Thus, perhaps, we can use such upper bounds to ``rule out'' $CLIQUE$ from
-having low rank.
+having low rank. (The general strategy of deriving lower bounds from
+upper bounds has been called the ``flip'' \cite{aaronson_pnp}.)
 
 It's not clear, though, how well we can upper-bound the rank
 of finding other sets of functions...
@@ -599,10 +645,7 @@ E[rank(C_i)] \le 2^{n \choose k} - E[2^{|Z|}] - |C_i|/2
 This is implemented by {\tt add\_upper\_bound\_constraints}.
 
 This has the {\em small practical problem} that it involves
-looping over all $2^{n \choose k}$ functions. To reduce the computational
-effort, rather than zeroing out individual edges,
-we might zero out all edges incident to a vertex. This seems like it might reduce
-the amount of bookkeeping, but presumably would only yield a weaker upper bound.
+looping over all $2^{n \choose k}$ functions.
 
 \subsubsection{Average constraints}
 
@@ -662,8 +705,12 @@ that finding {\em more than half} of the cliques is harder than finding
 
 However, it fails to actually lower-bound $CLIQUE$.
 
-\subsubsection{Further thoughts on this model}
+\begin{prob}
+\label{lpRepair}
+Is there a way to modify this bound, to bound CLIQUE?
+\end{prob}
 
+How might this be improved?
 Note that the above bound only used the structure of the lattice $Z$ 
 (figure \ref{fig:Z}) to count gates ``above'' a given node.
 Since we're using NAND gates, every edge along a path from $CLIQUE$ to $\emptyset$
@@ -675,13 +722,22 @@ One complication of this bound is that zeroing out an input edge leaves a potent
 irregular graph of input edges. If instead, we were to zero out all the edges incident to a
 vertex $v$, then we simply end up with an input graph with one less vertex.
 (And, similarly, we remove the cliques which include $v$ from consideration.)
-This might simplify counting how many cliques ``remain'' at a given level.
+This should simplify counting how many cliques ``remain'' at a given level, and avoid
+looping through all $2^N$ subsets of cliques; but
+presumably it would give an even weaker bound.
+
+\begin{prob}
+\label{vertexZonkingCount}
+Consider the sets of $k$-vertex cliques in an $n$-vertex input graph.
+How many sets of cliques, of what size,
+are left after $z$ vertices have been zeroed out?
+\end{prob}
 
 We might also try counting gates instead of rank.
 All of the functions, including $CLIQUE$, are only directly
 ``above'' a {\em tiny} fraction of the functions
 in the lattice $Z$. However, possibly including the upper bound would force some
-things intermediate between $CLIQUE$ and $\emptyset$ to have many gates.
+functions intermediate between $CLIQUE$ and $\emptyset$ to require many gates.
 
 \section{Related work}
 
@@ -715,9 +771,6 @@ It is a modified form of Shannon's counting argument
 This suggests {\em approximate} bounds on functions {\em similar} to $k$-CLIQUE.
 Unfortunately, however, this is an approximate bound,
 and so doesn't bound the complexity of $k$-CLIQUE.
-
-If this worked, then by the contrapositive,
-\cite{fenner1996complexity} would give a concise list of some of the consequences...
 
 \section{Acknowledgements}
 

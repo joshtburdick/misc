@@ -70,7 +70,7 @@ Each of these functions, being different, must have a
 different circuit.
 
 If we fix a particular number of gates $g$, we can only construct a limited
-number of $m$-input circuits. How many depends on the type of gate (known as
+number of $m$-input circuits; how many depends on the type of gate (known as
 the {\em basis}).
 For instance,
 if we have $g$ unbounded-fan-in NAND gates available, then there are
@@ -130,8 +130,9 @@ and 0 otherwise. (Using this nomenclature,
 $k$-CLIQUE(n) = $BUGGYCLIQUE(K)$).
 \end{defn}
 
-Of course, many of these functions are quite similar (e.g. all but one of them
-output a 1 when you feed in all 1's). However, they're all slightly different.
+Of course, many of these functions are similar (e.g. all but one of them
+output a 1 when you feed in all 1's). However, they're all at least
+slightly different.
 
 \begin{thm}
 \label{buggyDistinct}
@@ -165,7 +166,7 @@ Because we don't know that the circuit which finds {\em all} of the
 cliques is one of these larger circuits! As far as what we've
 shown thus far goes, it could be harder to find some weird subset of the cliques.
 
-\subsection{Defining levels of CLIQUE}
+\subsection{Defining levels of $BUGGYCLIQUE$}
 
 It seems a reasonably intuitive guess that the hardness of
 computing $BUGGYCLIQUE(A)$ should be somehow related to
@@ -219,7 +220,7 @@ be difficult...)
 \subsection{Comparing sets of functions using restrictions}
 
 A standard method for showing lower bounds is to feed in 0's or
-1's to particular inputs, and see what function and/or circuit remain.
+1's to particular inputs, and see what function and/or circuit remains.
 Methods using such ``restrictions'' have been used in lower bounds of formula
 \cite{subbotovskaya1963comparison} and circuit \cite{hastad1987lower}
 complexity (see also the slides at \cite{rossmanRestrictions}).
@@ -306,7 +307,7 @@ number of gates.  Unfortunately, at least according to this relation,
 the number of sets of cliques smaller than
 any of these upper bounds is less than $2^m$. This is because
 there are only $2^m$ ways to feed in 0's.
- However, if a set doesn't cover an edge $e$ ,
+ However, if a set doesn't cover an edge $e$,
 then that set is {\em below} a large number of sets in the lattice (namely,
 all of the sets which would lose a clique if you fed in a zero to $e$).
 
@@ -331,9 +332,9 @@ what is the expected number of cliques after $s$ steps?
 \subsubsection{Feeding in 1's as well as 0's}
 
 We could, of course, also restrict the circuit by feeding in 1's as well.
-(For instance, feeding in 1's to all edges which include a vertex results
-in a circuit which finds $k-1$-vertex cliques on $n-1$ vertices.)
-We can also construct a function related to $BUGGYCLIQUE$ as follows:
+For instance, feeding in 1's to all edges which include a vertex results
+in a circuit which finds $k-1$-vertex cliques on $n-1$ vertices.
+We could also construct a function related to $BUGGYCLIQUE$ as follows:
 
 \begin{defn}
 \label{PICKYCLIQUE}
@@ -426,16 +427,9 @@ arrange all of the sets of cliques in nondecreasing order
 of $|\bigC(BUGGYCLIQUE(C))|$ (using unbounded fan-in NAND gates,
 breaking ties by some lexicographic order of circuits).
 
-Let $A \subset K$. The {\em rank} of $A$, $rank(A)$, is the zero-based
+Let $A \in K$. The {\em rank} of $A$, $rank(A)$, is the zero-based
 index of $A$ in this list.
 \end{defn}
-
-If we can lower-bound $rank(A)$, then we should be able to translate
-that into a
-lower bound on $|\bigC(BUGGYCLIQUE(A))|$. (Possibly, if we
-can only lower-bound $E[rank(A)]$, we may be able to get
-a bound in terms of number of gates using Jensen's inequality?
-Not clear.)
 
 We can imagine a miles-long linear warehouse of chips with the minimal
 circuit for each problem, sorted in terms of number of gates.
@@ -443,6 +437,9 @@ circuit for each problem, sorted in terms of number of gates.
 There are a {\em ton} of other functions (parity, primality, ``looks
 sort of like a bitmap of a cat'', etc.), but ignoring
 those should still leave a valid lower bound for the functions in $BUGGYCLIQUE$.)
+If we can lower-bound $rank(A)$, then we should be able to translate
+that into a
+lower bound on $|\bigC(BUGGYCLIQUE(A))|$.
 
 \subsection{How much smaller are ``restricted'' circuits, on average?}
 
@@ -542,9 +539,13 @@ The number of cliques ``hit'' will have a hypergeometric distribution,
 which is relatively tractable.
 
 However, unfortunately, the graphs which {\em remain} are no longer uniformly
-sampled from each level! For instance, most levels include {\em tons} of
+sampled from each level!
+(For example, zeroing out a random edge $e$ from $CLIQUE$
+leaves $m$ isomorphic sets of cliques which lack $e$; but there are many other
+sets with the same number of cliques, which still cover all $m$ input edges.)
+Most levels include {\em tons} of
 graphs which include all the input edges. The above procedure will not
-be sampling any of them.
+be sampling any of them, after the first edge is zeroed out.
 
 \subsection{Can we bound this using linear programming?}
 
@@ -746,7 +747,7 @@ functions intermediate between $CLIQUE$ and $\emptyset$ to require many gates.
 This strategy relies heavily on a modification of Shannon's original
 function-counting argument \cite{shannon_synthesis_1949},
 combined with random restrictions
-\cite{subbotovskaya1963comparison} \cite{hastad1987lower}.
+\cite{subbotovskaya1963comparison}\cite{hastad1987lower}.
 
 A related question is whether problems
 (such as $k$-SAT) are

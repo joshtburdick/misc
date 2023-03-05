@@ -108,11 +108,11 @@ vertices as well. I'll probably write ``finds'' here for now,
 even though it isn't exactly the right nomenclature.)
 
 As a concrete example,
-consider the set of ``buggy'' 6-clique detectors.
+consider the set of ``buggy'' 6-vertex clique detectors.
 Maybe the circuit correctly
 finds all the cliques. Or maybe it finds all of the cliques except $\{1,2,3,4,5,6\}$,
 or it misses half the cliques, or finds none (and always outputs 0), or maybe
-it only successfully finds $\{1,3,4,5,7,8\}$, et cetera.
+it only successfully finds, say, $\{1,3,4,5,7,8\}$ or $\{1,3,5,23,24,25\}$, et cetera.
 
 We define a variant of $k$-CLIQUE which only
 finds a subset of cliques.
@@ -202,7 +202,7 @@ there are ${N \choose {N/2}}$ functions, and so the counting
 argument gives a nontrivial lower bound for
 $E[|\bigC(BUGGYCLIQUE(K_{N \choose {N/2}}))|]$ (although
 without actually constructing even {\em one} difficult function).
-At the ``top'', again, there's only one $BUGGYCLIQUE(K) = k-CLIQUE$
+At the ``top'', again, there's only one $BUGGYCLIQUE(K_N) = k-CLIQUE$
 function,
 so the counting argument is, once again, useless.
 
@@ -213,7 +213,7 @@ is hard, at least sometimes, how much easier can finding {\em all}
 of them be? But that's only intuition, not proof.)
 If we could prove something in general, for all levels $i$, then at
 the top of the diagram, we'd be bounding just the function
-$BUGGYCLIQUE(K_i) = k-CLIQUE$. (This suggests that doing so would
+$BUGGYCLIQUE(K_N) = k-CLIQUE$. (This suggests that doing so would
 be difficult...)
 
 \subsection{Comparing sets of functions using restrictions}
@@ -223,8 +223,7 @@ A standard method for showing lower bounds is to feed in 0's or
 Methods using such ``restrictions'' have been used in lower bounds of formula
 \cite{subbotovskaya1963comparison} and circuit \cite{hastad1987lower}
 complexity (see also the slides at \cite{rossmanRestrictions}).
-Here, we apply random restrictions to a set of functions (and circuits),
-rather than just one function and circuit.
+Here, we apply random restrictions to a set of functions (and circuits).
 
 \begin{thm}
 \label{edgeZonking}
@@ -332,6 +331,9 @@ what is the expected number of cliques after $s$ steps?
 \subsubsection{Feeding in 1's as well as 0's}
 
 We could, of course, also restrict the circuit by feeding in 1's as well.
+(For instance, feeding in 1's to all edges which include a vertex results
+in a circuit which finds $k-1$-vertex cliques on $n-1$ vertices.)
+We can also construct a function related to $BUGGYCLIQUE$ as follows:
 
 \begin{defn}
 \label{PICKYCLIQUE}
@@ -344,9 +346,9 @@ is 1 iff any of the $K_k$s in $A$ is present, and none of the $K_k$s
 in $B$ are present.
 \end{defn}
 
-It seems that all of the $PICKYCLIQUE(A,B)$ functions are distinct, as well.
-This defines a slightly larger set of functions; unfortunately this doesn't
-seem to help much.
+It seems that all of the $PICKYCLIQUE(A,B)$ functions are distinct, as well;
+showing this requires feeding in 1's as well as 0's.
+We omit the proof, as unfortunately it doesn't seem to help much.
 
 \subsection{Attempting to apply Dilworth's theorem}
 
@@ -397,7 +399,7 @@ also how they're arranged. It seems that cliques which overlap more might
 be easier to find, but that's far from clear.
 
 \begin{prob}
-\label{lpRepair}
+\label{overlapEffect}
 Fix $n$, $k$, and $N$ as before, and pick $i$, with
 $0 < i < N$. What sets of cliques of size $i$
 require the most / least gates to find?
@@ -494,7 +496,7 @@ the inequality $rank(B) < rank(C)$ is strict.)
 \end{proof}
 
 In terms of the previous warehouse analogy, we can see that,
-when an edge is disabled, the chip now has strictly fewer gates.
+when an edge is disabled, the chip now probably has fewer gates.
 Perhaps the chip-maker spent their entire budget on designing the
 optimal circuits, but then skimped on the wires connecting the chips?
 In that case, assuming the missing wire is treated as a 0, the chip still

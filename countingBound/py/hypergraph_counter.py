@@ -77,6 +77,53 @@ class HypergraphCounter:
                 exact_counts[i][:n1] -= scipy.special.comb(i, j, exact=False) * exact_counts[j]
         return exact_counts
 
+class HypergraphCounter2:
+    """Counts hypergraphs in subsets of vertices.
+
+    This attempts to just use combinatorics and probability.
+    """
+    def __init__(self, n, k):
+        """Constructor.
+   
+        n: number of vertices in the larger graph
+        k: size of cliques (hyperedges) 
+        """
+        self.n = n
+        self.k = k
+        # this is the total number of sets of cliques possible (ignoring zonking)
+        self.num_clique_sets = scipy.special.comb(self.n, range(self.k+1), exact=True)
+
+    def count_hypergraphs_max_vertices(self):
+        """Counts hyperghraphs with _up to_ some number of vertices.
+
+        Returns: a dict h, with key v, an int in the range k..n,
+            representing the number of vertices.
+            h[v] is a numpy array of length ${v \choose k}$.
+            h[v][i] is the number of hypergraphs with up to
+                $v$ vertices, and exactly $i$ hyperedges.
+        """
+        # this will hold the vectors of counts, for each number of vertices
+        h = dict()
+        # loop through the number of vertices which are remaining
+        # (in the "un-zonked window")
+        for i in range(self.k, self.n+1):
+            # the maximum number of cliques, with that many vertices
+            max_cliques = comb(i, self.k, exact=True)
+            # this is useful as an array bound
+            n1 = max_cliques+1
+            # to count the sets in the "un-zonked window":
+            # first, the probability that a set of size j
+            # is entirely in the window
+            p = np.array([hypergeom(j, comb(self.n, self.k), j, max_cliques)
+                for j in range(n1)])
+            # number of possible "un-zonked windows"
+            num_windows = comb(self.n, i)
+            # then, for a given number of cliques, scale the number of sets
+            # of that size by "number of windows", and the probability
+            # of the set "getting through the window"
+            h[i] = num_windows * p * self.num_clique_sets[:n1]
+        return h
+
 def count_bits(x):
     """Counts number of bits set in a numpy vector."""
     # we assume numbers are "somewhat small" (if they were
@@ -152,8 +199,9 @@ if __name__ == '__main__':
     hc = HypergraphCounter(6, 3)
 
     print('exact-number-of-vertex counts:')
-    for x in hc.count_hypergraphs_exact_vertices().items():
-        print(x)
+    for (v, h) in hc.count_hypergraphs_exact_vertices().items():
+        h = h.astype(int).tolist()
+        print(f'{v}: {h}\n')
 
     print('up-to-some-number-of-vertex counts:')
     for (v, h) in hc.count_hypergraphs_max_vertices().items():

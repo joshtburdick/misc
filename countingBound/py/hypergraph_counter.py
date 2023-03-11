@@ -147,13 +147,16 @@ class SlowHypergraphCounter:
 # XXX a quick test
 if __name__ == '__main__':
     # this is a toy example, but is small enough to check by hand
-    hc = HypergraphCounter(4,2)
+    # hc = HypergraphCounter(4, 2)
+    # a slightoly larger example
+    hc = HypergraphCounter(6, 3)
 
     print('exact-number-of-vertex counts:')
     for x in hc.count_hypergraphs_exact_vertices().items():
         print(x)
 
     print('up-to-some-number-of-vertex counts:')
-    for x in hc.count_hypergraphs_max_vertices().items():
-        print(x)
+    for (v, h) in hc.count_hypergraphs_max_vertices().items():
+        h = h.astype(int).tolist()
+        print(f'{v}: {h}\n')
 

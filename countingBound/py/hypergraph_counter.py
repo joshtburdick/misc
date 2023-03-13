@@ -81,6 +81,7 @@ class HypergraphCounter2:
     """Counts hypergraphs in subsets of vertices.
 
     This attempts to just use combinatorics and probability.
+    It's also probably wrong.
     """
     def __init__(self, n, k):
         """Constructor.

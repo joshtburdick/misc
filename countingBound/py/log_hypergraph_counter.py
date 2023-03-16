@@ -10,12 +10,15 @@ import scipy.optimize
 import scipy.sparse
 import scipy.special
 
+def log_factorial(n):
+    """Natural log of factorial."""
+    return math.lgamma(n+1)
 
 def log_comb(n, k):
     """Computes log(n \choose k).
     
     """
-    return math.lgamma(n) - (math.lgamma(k) + math.lgamma(n-k)
+    return log_factorial(n) - (log_factorial(k) + log_factorial(n-k))
 
 class LogHypergraphCounter:
     """Counts hypergraphs in subsets of vertices (in log-space).
@@ -34,8 +37,6 @@ class LogHypergraphCounter:
         """
         self.n = n
         self.k = k
-
-
 
     def count_hypergraphs_max_vertices(self):
         """Counts hyperghraphs with _up to_ some number of vertices.
@@ -91,8 +92,9 @@ class LogHypergraphCounter:
 
 # XXX a quick test
 if __name__ == '__main__':
+    pdb.set_trace()
+
     # FIXME not yet implemented
-    return
     # this is a toy example, but is small enough to check by hand
     # hc = HypergraphCounter(4, 2)
     # a slightoly larger example

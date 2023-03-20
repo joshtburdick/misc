@@ -15,10 +15,21 @@ def log_factorial(n):
     return math.lgamma(n+1)
 
 def log_comb(n, k):
-    """Computes log(n \choose k).
-    
-    """
+    """Computes log(n \choose k)."""
     return log_factorial(n) - (log_factorial(k) + log_factorial(n-k))
+
+def log_sum_exp(a, b):
+    """Computes log( exp(a) + exp(b) ), where a and b are vectors.
+
+    Wrapper for logsumexp.
+    """
+    x = np.stack([a, b], axis=1)
+    return scipy.special.logsumexp(x, b=[1,1], axis=1)
+
+def log_diff_exp(b, a):
+    """Computes log( exp(b) - exp(a) ), where a and b are vectors."""
+    x = np.stack([b, a], axis=1)
+    return scipy.special.logsumexp(x, b=[1,-1], axis=1)
 
 class LogHypergraphCounter:
     """Counts hypergraphs in subsets of vertices (in log-space).
@@ -39,7 +50,7 @@ class LogHypergraphCounter:
         self.k = k
 
     def count_hypergraphs_max_vertices(self):
-        """Counts hyperghraphs with _up to_ some number of vertices.
+        """Counts hypergraphs with _up to_ some number of vertices.
 
         Returns: a dict h, with key v, an int in the range k..n,
             representing the number of vertices.
@@ -54,16 +65,16 @@ class LogHypergraphCounter:
         h = dict()
         # then, loop through the number of vertices
         for i in range(self.k, self.n+1):
-            # start with a count of 0
+            # start with a count of 0 (or -inf, in log-space)
             num_cliques = scipy.special.comb(i, self.k, exact=True)
-            h[i] = np.full([num_cliques + 1], 0.)
+            h[i] = np.full([num_cliques + 1], -np.inf)
             # add in number of hypergraphs with up to that many vertices
             for j in range(self.k, i+1):
                 n1 = exact_counts[j].shape[0]
-    # FIXME this should use numpy.logaddexp
-                h[i][:n1] += scipy.special.comb(self.n, j, exact=True) * exact_counts[j]
-            # lastly, count the empty hypergraph
-            h[i][0] = 1
+                h[i][:n1] = log_sum_exp(h[i][:n1],
+                    log_comb(self.n, j) + exact_counts[j])
+            # lastly, count the empty hypergraph (1, or 0 in log-space)
+            h[i][0] = 0.
         return h
 
     def count_hypergraphs_exact_vertices(self):
@@ -79,26 +90,26 @@ class LogHypergraphCounter:
             # start with count of hypergraphs (on all n vertices) with
             # _up to_ this many vertices
             num_cliques = scipy.special.comb(i, self.k, exact=True)
-            exact_counts[i] = np.array([scipy.special.comb(num_cliques, r, exact=False)
+            # note that this is in log-space
+            exact_counts[i] = np.array([log_comb(num_cliques, r)
                 for r in range(num_cliques + 1)])
             # also, don't count case with zero hypergraphs (as that's not
-            # specific to a particular vertex set)
+            # specific to a particular vertex set). Technically, this should
+            # be -inf, but I don't think it's used anyway.
             exact_counts[i][0] = 0
             # then, subtract off hypergraphs with fewer vertices (if any)
             for j in range(self.k, i):
                 n1 = exact_counts[j].shape[0]
-                exact_counts[i][:n1] -= scipy.special.comb(i, j, exact=False) * exact_counts[j]
+                exact_counts[i][:n1] = log_diff_exp(exact_counts[i][:n1],
+                    log_comb(i, j) + exact_counts[j])
         return exact_counts
 
 # XXX a quick test
 if __name__ == '__main__':
-    pdb.set_trace()
+    # pdb.set_trace()
 
-    # FIXME not yet implemented
-    # this is a toy example, but is small enough to check by hand
-    # hc = HypergraphCounter(4, 2)
-    # a slightoly larger example
-    hc = HypergraphCounter(6, 3)
+    # a small example
+    hc = LogHypergraphCounter(4, 2)
 
     print('exact-number-of-vertex counts:')
     for (v, h) in hc.count_hypergraphs_exact_vertices().items():

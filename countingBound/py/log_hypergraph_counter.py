@@ -49,6 +49,16 @@ class LogHypergraphCounter:
         self.n = n
         self.k = k
 
+    def lg_hypergraph_count_max_vertices(self):
+        """Gets lg(count) of hypergraphs with <= n vertices.
+
+        Note that this is log base 2.
+        """
+        h = self.count_hypergraphs_max_vertices()
+        # convert from "ln == log base e" to "log base 2"
+        h1 = {k, v / np.log(2.) for k, v in h}
+        return h1
+
     def count_hypergraphs_max_vertices(self):
         """Counts hypergraphs with _up to_ some number of vertices.
 

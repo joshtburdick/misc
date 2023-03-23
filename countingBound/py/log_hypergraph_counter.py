@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # Utilities for counting hypergraphs in subsets of vertices.
 
 import math
@@ -56,7 +55,7 @@ class LogHypergraphCounter:
         """
         h = self.count_hypergraphs_max_vertices()
         # convert from "ln == log base e" to "log base 2"
-        h1 = {k, v / np.log(2.) for k, v in h}
+        h1 = {(k, v / np.log(2.)) for k, v in h}
         return h1
 
     def count_hypergraphs_max_vertices(self):
@@ -119,15 +118,14 @@ if __name__ == '__main__':
     # pdb.set_trace()
 
     # a small example
-    hc = LogHypergraphCounter(4, 2)
+    # hc = LogHypergraphCounter(4, 2)
+    hc = LogHypergraphCounter(6, 3)
 
     print('exact-number-of-vertex counts:')
     for (v, h) in hc.count_hypergraphs_exact_vertices().items():
-        h = h.astype(int).tolist()
-        print(f'{v}: {h}\n')
+        print(f'{v}: {np.round(np.exp(h), 0).astype(int)}\n')
 
     print('up-to-some-number-of-vertex counts:')
     for (v, h) in hc.count_hypergraphs_max_vertices().items():
-        h = h.astype(int).tolist()
-        print(f'{v}: {h}\n')
+        print(f'{v}: {np.round(np.exp(h), 0).astype(int)}\n')
 

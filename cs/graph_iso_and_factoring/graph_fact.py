@@ -7,13 +7,12 @@
 import pdb
 
 import networkx
+import networkx.algorithms.isomorphism.vf2pp
 
 class GraphIsoFactor:
     """Constructs graphs to compare for factoring.
 
-
     """
-
 
     def __init__(self, primes):
         """Constructor.
@@ -21,6 +20,8 @@ class GraphIsoFactor:
         primes: list of primes to use
         """
         self.primes = primes
+        # precompute graph for 1
+        self.g1 = self.get_graph(1)
 
     def get_graph(self, x):
         """Makes a graph for x.
@@ -50,9 +51,9 @@ class GraphIsoFactor:
         """
         m = p1 * p2
         for i in range(1, m):
-            x1 = m % p1
-            x2 = m % p2
-            if x1 > 0 and x2 > 0:
+            x1 = i % p1
+            x2 = i % p2
+            if (x1 > 0) and (x2 > 0):
                 g.add_edge((end, p1, x1), (end, p1, p2, i))
                 g.add_edge((end, p2, x2), (end, p1, p2, i))
 
@@ -79,12 +80,24 @@ class GraphIsoFactor:
                 if a*b % m == x1:
                     g.add_edge(('A', p1, p2, a), ('B', p1, p2, b))
 
+    def print_factors_from_iso(self, iso):
+        """Prints the factors implied by an isomorphism."""
+        for end in ['A', 'B']:
+            print(end + ':')
+            for p in self.primes:
+                y = iso[(end, p, 1)]
+                print(f'{y} (mod {p})')
+        print('------')
+
+    def print_isos(self, x):
+        """Print all the isomorphisms."""
+        g = gif.get_graph(x)
+        for iso in networkx.algorithms.isomorphism.vf2pp.vf2pp_all_isomorphisms(self.g1, g):
+            self.print_factors_from_iso(iso)
+            print()
 
 if __name__ == '__main__':
-    n = 1
     gif = GraphIsoFactor([3,5,7])
-    g0 = gif.get_graph(1)
-    g1 = gif.get_graph(4)
-    pdb.set_trace()
+    gif.print_isos(2)
 
 

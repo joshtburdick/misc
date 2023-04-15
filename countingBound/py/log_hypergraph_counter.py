@@ -28,7 +28,9 @@ def log_sum_exp(a, b):
 def log_diff_exp(b, a):
     """Computes log( exp(b) - exp(a) ), where a and b are vectors."""
     x = np.stack([b, a], axis=1)
-    return scipy.special.logsumexp(x, b=[1,-1], axis=1)
+    d = scipy.special.logsumexp(x, b=[1,-1], axis=1)
+    pdb.set_trace()
+    return d
 
 class LogHypergraphCounter:
     """Counts hypergraphs in subsets of vertices (in log-space).
@@ -96,6 +98,7 @@ class LogHypergraphCounter:
         exact_counts = dict()
         # loop through number of vertices
         for i in range(self.k, self.n+1):
+            print(f'i = {i}')
             # start with count of hypergraphs (on all n vertices) with
             # _up to_ this many vertices
             num_cliques = scipy.special.comb(i, self.k, exact=True)
@@ -105,7 +108,7 @@ class LogHypergraphCounter:
             # also, don't count case with zero hypergraphs (as that's not
             # specific to a particular vertex set). Technically, this should
             # be -inf, but I don't think it's used anyway.
-            exact_counts[i][0] = 0
+            exact_counts[i][0] = -np.inf
             # then, subtract off hypergraphs with fewer vertices (if any)
             for j in range(self.k, i):
                 n1 = exact_counts[j].shape[0]
@@ -118,14 +121,16 @@ if __name__ == '__main__':
     # pdb.set_trace()
 
     # a small example
-    # hc = LogHypergraphCounter(4, 2)
     hc = LogHypergraphCounter(6, 3)
+    # hc = LogHypergraphCounter(7, 3)
 
     print('exact-number-of-vertex counts:')
     for (v, h) in hc.count_hypergraphs_exact_vertices().items():
-        print(f'{v}: {np.round(np.exp(h), 0).astype(int)}\n')
+        print(f'{v}: {h}\n')
+#        print(f'{v}: {np.round(np.exp(h), 0).astype(int)}\n')
 
     print('up-to-some-number-of-vertex counts:')
     for (v, h) in hc.count_hypergraphs_max_vertices().items():
-        print(f'{v}: {np.round(np.exp(h), 0).astype(int)}\n')
+        print(f'{v}: {h}\n')
+#        print(f'{v}: {np.round(np.exp(h), 0).astype(int)}\n')
 

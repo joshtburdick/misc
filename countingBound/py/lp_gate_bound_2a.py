@@ -242,9 +242,9 @@ if __name__ == '__main__':
     bound = LpBound(args.n, args.k)
     bound.add_vertex_zeroing_constraints()
 
-    # bound.add_total_cliques_counting_bound_constraints()
+    bound.add_total_cliques_counting_bound_constraints()
     # revised version of this
-    bound.add_counting_bound_2()
+    # bound.add_counting_bound_2()
 
     # possibly include the upper bound
     if args.include_upper_bound:

@@ -42,7 +42,7 @@ class LP_Helper:
         b: the corresponding bound (a float)
         Side effects: adds the constraint
         """
-        # print(str(A) + ' ' + op + ' ' + str(b))
+        print(str(A) + ' ' + op + ' ' + str(b))
         # converts from "list of coefficient" to a row of A
         def get_coefs(i, negate): 
             # this is arguably pushing limits for a list comprehension...

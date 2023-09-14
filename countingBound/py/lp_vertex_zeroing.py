@@ -13,6 +13,12 @@ import scipy.stats
 import lp_helper
 import hypergraph_counter
 
+def comb(n, k):
+    """Short name for comb().
+
+    Note that when n < k, this will return 1."""
+    return scipy.special.comb(n, k, exact=True)
+
 class LpVertexZeroing:
     """Attempt at bound by finding zeroable vertices, using brute force.
 
@@ -39,79 +45,35 @@ class LpVertexZeroing:
         self.num_functions = 2 ** self.num_cliques
         # wrapper for LP solver, with one variable per "level"
         self.lp = lp_helper.LP_Helper(range(self.num_cliques+1))
-        # counts of number of cliques with some number of vertices
-        self.counts = hypergraph_counter(n, k)
-
-    def count_zero_set(self, cliques_to_count):
-        """Adds everywhere that some cliques could be zeroed.
-
-        cliques_to_count: the cliques to count, as an int
-            representing a bitset
-        """
-        # find sets where those cliques would be missed
-        i = (self.S & cliques_to_count) == 0
-        # add those to Z
-        self.Z[i] = self.Z[i] | cliques_to_count
-
-    def cliques_hit_by_edges(self, edge):
-        """Gets the set of cliques hit by an edge.
-
-        edge: the edge (as a pair)
-        Returns: the cliques hit by that edge, as an int
-            with bits set according to self.clique_index.
-        """
-        edge1 = frozenset(edge)
-        # loop through the cliques
-        mask = 0
-        # loop through the cliques
-        for (clique, i) in self.clique_index.items():
-            # if the edge is in this clique, set the appropriate bit
-            if clique > edge1:
-                mask |= 2 ** i
-        return mask
-
-    def zero_edges(self):
-        # loop through the edges
-        for edge in itertools.combinations(range(self.n), 2):
-            # record which sets of cliques are "missed"
-            mask = self.cliques_hit_by_edges(edge)
-            self.count_zero_set(mask)
-
-    def zero_vertices(self):
-        """Presumably gives a worse (but easier to analyze) bound."""
-
-        pass
+        # counts of number of cliques with _exactly_ some number of vertices
+        counter = hypergraph_counter.HypergraphCounter(n, k)
+        self.hypergraphs_exact_vertices = counter.count_hypergraphs_exact_vertices()
 
     def add_upper_bound_constraints(self):
         """Adds constraints based on upper bounds from zeroing."""
 
-        FIXME
-
-        # count cliques in each set
-        set_size = count_bits(self.S)
-        # count "zeroable" cliques "above" each set
-        zeroable_size = count_bits(self.Z)
+        # compute upper bound, for each possible number of vertices:
+        # any cliques which hit an "unused" vertex are "above" the
+        # cliques which only use v vertices
+        upper_bound = np.array([
+            self.num_functions - (2 ** (self.num_cliques - comb(v, self.k)))
+            for v in range(self.n+1)])
         # loop through the "levels" (number of cliques in C)
         for i in range(self.num_cliques+1):
-            # find sets with this many cliques
-            j = (set_size == i)
-            # these should just be binomial coefficients
-            assert(sum(j)
-                == scipy.special.comb(self.num_cliques, i, exact=True) )
-            # get average number of zeroable sets "above" these
-            # (which may or may not include each of the zeroable cliques)
-            mean_zeroable = np.mean(2**zeroable_size[j] - 1)
-            # convert that to an upper bound on rank
-            mean_upper_bound = (self.num_functions-1) - mean_zeroable
-            # possibly print number of zeroable sets 
-            if False:
-                print('at level ' + str(i) + ', mean_zeroable = ' + str(mean_zeroable))
-            # add constraint that a function at this level...
+            # number of functions "at this level" (with this many cliques)
+            functions_at_level = comb(self.num_cliques, i)
+            # get weighted average of upper bound at this level
+            average_upper_bound = 0.
+            for v in range(self.k-1, self.n+1):
+                num_hypergraphs = self.hypergraphs_exact_vertices[v]
+                if num_hypergraphs.shape[0] > i:
+                    average_upper_bound += (num_hypergraphs[i] / functions_at_level) * upper_bound[v]
+            # add constraint at this level
             self.lp.add_constraint([(i, 1.)],
                 '<',
-                # ... has expected rank less than the number zeroable,
+                # ... has expected rank less than the upper bound,
                 # minus half the number of sets of this size
-                mean_upper_bound - ((np.sum(j)-1.) / 2.))
+                average_upper_bound)    #  - ((functions_at_level-1) / 2))
 
     def add_average_rank_constraint(self):
         """Adds equality constraint on average rank of all of the functions."""
@@ -126,12 +88,13 @@ class LpVertexZeroing:
 
         It's not clear whether it's more useful to bound each level i
         individually, or the average of the first i levels.
+        (Possibly they work out to the same thing?)
         """
         # this version bounds each level individually
         for i in range(self.num_cliques+1):
             self.lp.add_constraint([(i, 1.)],
                 '>',
-                scipy.special.comb(self.num_cliques, i, exact=True) / 2. - 1.)
+                (comb(self.num_cliques, i) - 1) / 2)
 
     def get_all_bounds(self):
         """Gets bounds for all the sets.
@@ -172,10 +135,9 @@ if __name__ == '__main__':
     # to try to minimize rank of CLIQUE
     # num_top_levels = int(sys.argv[3])
     num_top_levels = 1
-    bound = LpBruteForce1(n, k)
-    bound.add_average_rank_constraint()
-    bound.zero_edges()
+    bound = LpVertexZeroing(n, k)
     bound.add_upper_bound_constraints()
+    bound.add_average_rank_constraint()
     bound.add_counting_lower_bounds()
     b = bound.get_average_bound_at_top(num_top_levels)
     # pdb.set_trace()

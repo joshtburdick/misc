@@ -141,9 +141,10 @@ if __name__ == '__main__':
     bound.add_counting_lower_bounds()
     b = bound.get_average_bound_at_top(num_top_levels)
     # pdb.set_trace()
-    print('level\tbound')
+    print('Num. cliques    Expected rank')
     for i in range(bound.num_cliques+1):
-        print('\t'.join([str(i), str('%.2f' % b['x'][i])]))
+        print('\t\t'.join([str(i), str('%.2f' % b['x'][i])]))
+    #    print(f'{i:5} {.:{20}.{15}}')
     # for now, omitting the average
     # print()
     # print('bound of levels = ' + str(b['objective']))

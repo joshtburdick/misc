@@ -73,7 +73,7 @@ class LpVertexZeroing:
                 '<',
                 # ... has expected rank less than the upper bound,
                 # minus half the number of sets of this size
-                average_upper_bound)    #  - ((functions_at_level-1) / 2))
+                average_upper_bound - ((functions_at_level-1) / 2))
 
     def add_average_rank_constraint(self):
         """Adds equality constraint on average rank of all of the functions."""

@@ -409,6 +409,6 @@ def plot_Z_with_vertex_zeroing():
 
 if __name__ == '__main__':
     plot_zeroing_one_vertex()
-#    plot_Z_relation()
+    plot_Z_relation()
     plot_Z_with_vertex_zeroing()
 

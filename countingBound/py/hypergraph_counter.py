@@ -36,10 +36,11 @@ class HypergraphCounter:
         self.k = k
         self.debug_print = None
 
-    def count_hypergraphs_exact_vertices_1(self):
+    def count_hypergraphs_exact_vertices_subgraph(self):
         """Counts hypergraphs in smaller subgraphs.
 
-        ??? rename this?
+        FIXME rename this!
+
         Note that this only includes one subset of the vertices.
         (count_hypergraphs_exact_vertices() includes different labellings
         of all n vertices.)
@@ -80,7 +81,7 @@ class HypergraphCounter:
         """
         # to compute this, first compute number of hypergraphs with
         # exactly some number of vertices used
-        exact_counts = self.count_hypergraphs_exact_vertices_1()
+        exact_counts = self.count_hypergraphs_exact_vertices_subgraph()
         # this will hold the vectors of counts, for each number of vertices
         h = {self.k-1: np.array([1], dtype='object') }
         # then, loop through the number of vertices
@@ -204,7 +205,7 @@ if __name__ == '__main__':
     # hc = HypergraphCounter(30, 3)
 
     print('exact-number-of-vertex counts (in subgraphs):')
-    for (v, h) in hc.count_hypergraphs_exact_vertices_1().items():
+    for (v, h) in hc.count_hypergraphs_exact_vertices_subgraph().items():
         h = ' '.join([str(x) for x in h])
         print(f'{v}: {h}')
 

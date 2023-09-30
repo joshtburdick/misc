@@ -27,8 +27,8 @@ class LpVertexZeroing:
     def __init__(self, n, k):
         """Constructor gets graph info, and sets up variable names.
 
-        This will have one variable for each possible number of cliques
-        (or "level"). 
+        This will have one variable for each possible number of vertices,
+        and number of cliques (in graphs with that many vertices).
 
         n: number of vertices in the graph
         k: number of vertices in a clique (>= 3)
@@ -43,11 +43,62 @@ class LpVertexZeroing:
         self.num_cliques = scipy.special.comb(n, k, exact=True)
         # the number of functions
         self.num_functions = 2 ** self.num_cliques
-        # wrapper for LP solver, with one variable per "level"
-        self.lp = lp_helper.LP_Helper(range(self.num_cliques+1))
-        # counts of number of cliques with _exactly_ some number of vertices
+        # counts of number of cliques with up to some number of vertices
         counter = hypergraph_counter.HypergraphCounter(n, k)
-        self.hypergraphs_exact_vertices = counter.count_hypergraphs_exact_vertices()
+        self.hypergraphs_max_vertices = counter.count_hypergraphs_max_vertices()
+        # wrapper for LP solver, with one variable per "level"
+        vars = []
+        for num_vertices in range(k, n+1):
+            for num_cliques in range(comb(num_vertices, k)):
+                vars.append((num_vertices, num_cliques))
+        self.lp = lp_helper.LP_Helper(vars)
+
+    def add_zeroing_constraints(self):
+        """Adds constraints based on zeroing out vertices."""
+        # number of vertices in the larger graph
+        for num_vertices in range(self.k+1, self.n+1):
+            # number of cliques in the larger graph
+            for num_cliques in range(0, comb(num_vertices, self.k)):
+                # number of potential cliques which contain the vertex
+                cliques_with_vertex = comb(num_cliques-1, self.k-1)
+                # number of cliques zeroed is >= both:
+                # - zero, and
+                # - the total number of cliques, minus the number
+                #       which couldn't be hit by this vertex
+                min_cliques_zeroed = max(0, num_cliques - max_cliques_zeroed)
+                # also, number of cliques zeroed is <= both:
+                # - how many cliques are present, and
+                # - how many cliques could be hit by the vertex
+                max_cliques_zeroed = min(num_cliques, cliques_with_vertex) + 1)
+                # the probability of each number of cliques being hit
+                h = hypergeom(
+                    # number of possible cliques
+                    self.max_cliques,
+                    # number of those present
+                    num_cliques,
+                    # number of cliques which could intersect the vertex v
+                    max_cliques_zeroed)
+                # the coefficients 
+                A = [((num_vertices-1, num_cliques-z), h.pmf(z))
+                    for z in range(min_cliques_zeroed, max_cliques_zeroed+1)]
+                # average number of functions after the vertex is zeroed out
+                expected_num_smaller = sum([
+                    h.pmf(z) * self.hypergraphs_max_vertices[num_vertices-1][num_cliques-z]
+                    for z in range(min_cliques_zeroed, max_cliques_zeroed+1)])
+                # this is constraining the total number of gates at this "level"
+                # to equal the average, weighted by the probability of some
+                # number of cliques being zeroed out
+                self.add_constraint(A + [((num_vertices, num_cliques), -1.0)],
+                    '>',
+                    # the expected "gap" between these is half the
+                    # (expected) number of functions in the smaller set,
+                    # plus half the number in the larger set
+                    0.5 * (expected_num_smaller 
+                        + self.hypergraphs_max_vertices[num_vertices][num_cliques]))
+
+
+
+    ##### ??? not sure how these should be modified
 
     def add_upper_bound_constraints(self):
         """Adds constraints based on upper bounds from zeroing."""

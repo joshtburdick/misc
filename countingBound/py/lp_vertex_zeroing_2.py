@@ -95,7 +95,8 @@ class LpVertexZeroing:
                     # plus half the number in the larger set
                     0.5 * (expected_num_smaller 
                         + self.hypergraphs_max_vertices[num_vertices][num_cliques]))
-
+                # ??? does this depend on the number "zeroed", as well as the
+                # number "left over"?
 
 
     ##### ??? not sure how these should be modified

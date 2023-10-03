@@ -100,35 +100,30 @@ is present, and 0 otherwise. This is a classic
 NP-complete problem \cite{aaronson_pnp}.
 
 We now consider a ``buggy'' variant of the $k$-CLIQUE function,
-which only detects a subset of cliques. (Nomenclature note:
-technically, since
-we're only trying to output a 1 iff there's a clique, I should say
-``detects''; ``finding'' a clique would mean outputting its
-vertices as well. I'll probably write ``finds'' here for now,
-even though it isn't exactly the right nomenclature.)
-
-As a concrete example,
-consider the set of ``buggy'' 6-vertex clique detectors.
-Maybe the circuit correctly
-finds all the cliques. Or maybe it finds all of the cliques except $\{1,2,3,4,5,6\}$,
-or it misses half the cliques, or finds none (and always outputs 0), or maybe
-it only successfully finds, say, $\{1,3,4,5,7,8\}$ or $\{1,3,5,23,24,25\}$, et cetera.
-
-We define a variant of $k$-CLIQUE which only
-finds a subset of cliques.
+which only detects a subset of cliques.
 
 \begin{defn}
 \label{BUGGYCLIQUE}
-Let $K$ be the set of all possible
-$k$-vertex cliques, and let $A \subseteq K$.
-Let $m = {n \choose 2}$ be the number of edges in the input graph.
+Let $n$ be the number of vertices in the input graph, and
+let $m = {n \choose 2}$ be the number of edges in it.
+
+Let $A \subseteq {[n] \choose k}$ be a subset of the possible
+$k$-vertex cliques.
+
 $BUGGYCLIQUE(A): \{0,1\}^m \rightarrow \{0,1\}$ is the function which
 is 1 iff any of the $K_k$s in $A$ is present.
-That is, for each set $A$ of $K_k$s, $BUGGYCLIQUE(A)$
-contains a function which is 1 if the input contains any $K_k \in A$,
+That is, for each set of cliques $A$, $BUGGYCLIQUE(A)$
+contains a function which is 1 if the input contains any clique in $A$,
 and 0 otherwise. (Using this nomenclature,
-$k$-CLIQUE(n) = $BUGGYCLIQUE(K)$).
+$CLIQUE(n,k) = BUGGYCLIQUE({ [n] \choose k})$).
 \end{defn}
+
+As a concrete example, suppose our input graph has 15 vertices, and
+consider a ``buggy'' 6-vertex clique detector.
+Maybe the circuit correctly
+finds all the cliques. Or maybe it finds all of the cliques except $\{1,2,3,4,5,6\}$,
+or it misses half the cliques, or finds none (and always outputs 0), or maybe
+it only successfully finds, say, $\{1,3,4,5,7,8\}$ or $\{1,3,5,13,14,15\}$, et cetera.
 
 Of course, many of these functions are similar (e.g. all but one of them
 output a 1 when you feed in all 1's). However, they're all at least
@@ -146,7 +141,7 @@ with just the edges in $x$ set to 1 (and 0 everywhere else),
 while $BUGGYCLIQUE(B)$ outputs a 0; thus the functions differ
 on that input.
 
-There are $2^{|K|}$ many subsets of $K$,
+There are $2^{|K|}$ subsets of $K$,
 and by the above, each corresponds to a diffferent function.
 \end{proof}
 
@@ -172,26 +167,7 @@ It seems a reasonably intuitive guess that the hardness of
 computing $BUGGYCLIQUE(A)$ should be somehow related to
 $|A|$, which is simply the number of cliques it ``sees''.
 
-\begin{defn}
-\label{CLIQUE-level}
-Assume $n, k$ are fixed. For any $i$ such that
-$0 \le i \le |K|$, let $K_i$ be the set of all sets
-with exactly $i$ cliques. 
-\end{defn}
 
-We abuse notation slightly, and write
-
-\[
-BUGGYCLIQUE(K_i) = \{ BUGGYCLIQUE(i) : i \in K_i \}
-\]
-
-\begin{prob}
-\label{gatesPerLevel}
-Consider graphs with $n$ vertices.
-Let $0 \le i \le N$.
-How many gates are required to find a subset of size $i$ of the possible $N$
-cliques?
-\end{prob}
 
 Does the counting bound
 say anything about $E[|\bigC(BUGGYCLIQUE(K_i))|]$, for

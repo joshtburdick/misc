@@ -107,7 +107,6 @@ class CliqueFigure:
                 alpha=self.alpha,
                 joinstyle='round')
 
-
 def zero_out_edges(cliques):
     """
     Finds the cliques remaining, after zeroing out an edge.
@@ -168,7 +167,6 @@ if False:
         [frozenset([1,2,3]), frozenset([1,2,5])])
     print(z)
 
-
 def plot_zeroing_one_vertex():
     """Plots the effect of zeroing out one vertex.
 
@@ -216,13 +214,13 @@ def plot_zeroing_one_vertex():
 
     plt.savefig('zeroing_one_vertex.pdf', bbox_inches='tight')
 
-# Deprecated.
 def plot_Z_relation():
     """Plots the 'zeroing-one-edge' relation."""
-    plt.figure(figsize=(6,7))
+    plt.figure(figsize=(7,6))
     plt.axis('off')
     plt.xlim(-3, 3.5)
     plt.ylim(0, 4.5)
+    axs = plt.gca()
     def color1(h):
         return colorsys.hsv_to_rgb(h, 0.5, 0.5)
     colors = {
@@ -230,7 +228,7 @@ def plot_Z_relation():
         frozenset((0,1,3)):color1(1/4),
         frozenset((0,2,3)):color1(2/4),
         frozenset((1,2,3)):color1(3/4)}
-    cf = CliqueFigure(plt.gca(), 4, colors, 0)
+    cf = CliqueFigure(axs, 4, colors, 0)
     # lay out coordinates for each set; this will be keyed by set,
     # and its value will be coordinates
     set_location = {} 
@@ -250,6 +248,17 @@ def plot_Z_relation():
             location_1 = set_location[c]
             # p = curved_line(np.array([location, location_1]))
             # plt.plot(p[:,0], p[:,1], c='black', alpha=0.3)
+
+            axs.annotate('',
+                xy=location_1,           # [a['x'], a['y']],
+                xytext=location,     # [b['x'], b['y']],
+                arrowprops=dict(
+                    arrowstyle='->',
+                    connectionstyle='angle3,angleA=25,angleB=95',
+                    facecolor="black",
+                    edgecolor="black",
+                    alpha=0.25,
+                    linewidth=1))
 
     # plot the sets
     for (cliques, location) in set_location.items():
@@ -352,18 +361,17 @@ class ZeroingPlot:
                     break
 
 class ZeroingBlockDiagram:
-    """Plots a 'block' diagram of the effect of zeroing."""
+    """Plots a 'block' diagram of the effect of zeroing.
+
+    Not yet implemented.
+    """
     def __init__(self):
         self.max_n = 6
         self.k = 3
 
-
-
-
-
 def plot_Z_with_vertex_zeroing():
     """Plots Z, with vertices zeroed out."""
-    plt.figure(figsize=(6,8))
+    plt.figure(figsize=(8,6))
 
     # FIXME
     def color1(h):
@@ -408,7 +416,7 @@ def plot_Z_with_vertex_zeroing():
     plt.savefig('Z_with_vertex_zeroing.pdf', bbox_inches='tight')
 
 if __name__ == '__main__':
-    plot_zeroing_one_vertex()
+    # plot_zeroing_one_vertex()
     plot_Z_relation()
     plot_Z_with_vertex_zeroing()
 

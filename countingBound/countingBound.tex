@@ -28,7 +28,8 @@ Shannon's function-counting argument
 exponential circuit complexity, but doesn't provide a specific example
 of such a hard-to-compute function. A simple modification of that argument
 shows that detecting a randomly-chosen subset of the $k$-vertex cliques in an
-$n$-vertex graph requires, on average, $\Omega(n^{k/2})$ NAND gates.
+$n$-vertex graph requires, on average, $\Omega(n^{k/2})$ unbounded-fan-in
+NAND gates.
 Unfortunately,
 this doesn't directly bound the complexity of detecting {\em all} of the cliques;
 however, it seems like a related problem.
@@ -102,8 +103,7 @@ NP-complete problem \cite{aaronson_pnp}.
 We now consider a ``buggy'' variant of the $k$-CLIQUE function,
 which only detects a subset of cliques.
 
-\begin{defn}
-\label{BUGGYCLIQUE}
+\begin{defn} \label{BUGGYCLIQUE}
 Let $n$ be the number of vertices in the input graph, and
 let $m = {n \choose 2}$ be the number of edges in it.
 
@@ -131,17 +131,17 @@ slightly different.
 
 \begin{thm}
 \label{buggyDistinct}
-There are  $2^{|K|}$ distinct $BUGGYCLIQUE$ functions.
+There are $2^{n \choose k}$ distinct $BUGGYCLIQUE$ functions.
 \end{thm}
 \begin{proof}
 
-Let $A,B \subseteq K$, with $A \neq B$, and w.l.o.g.
+Let $A,B \subseteq {[n] \choose k}$, with $A \neq B$, and w.l.o.g.
 let $x \in A-B$. Then $BUGGYCLIQUE(A)$ outputs 1 on the input
 with just the edges in $x$ set to 1 (and 0 everywhere else),
 while $BUGGYCLIQUE(B)$ outputs a 0; thus the functions differ
 on that input.
 
-There are $2^{|K|}$ subsets of $K$,
+There are $2^{n \choose k}$ subsets of $K$,
 and by the above, each corresponds to a diffferent function.
 \end{proof}
 
@@ -163,34 +163,48 @@ shown thus far goes, it could be harder to find some weird subset of the cliques
 
 \subsection{Defining levels of $BUGGYCLIQUE$}
 
-It seems a reasonably intuitive guess that the hardness of
+It seems reasonably intuitive that the hardness of
 computing $BUGGYCLIQUE(A)$ should be somehow related to
 $|A|$, which is simply the number of cliques it ``sees''.
 
+\begin{defn}\label{de:circuit}
+Given a set of cliques $A \subseteq {[n] \choose k}$,
+we write $C_A$ for the smallest circuit (in number of gates)
+which detects only the cliques
+in $A$, with ties broken arbitrarily.
 
+We write $C_A$ for the number of gates in that circuit.
+\end{defn}
 
+Let $L = {n \choose k}$, and choose $i$ with $0 \le i \le L$.
+Suppose we randomly sample $A \subseteq {[n] \choose k}$, such that
+$|A| = i$.
 Does the counting bound
-say anything about $E[|\bigC(BUGGYCLIQUE(K_i))|]$, for
-some fixed $i$? Let $N = {n \choose k}$.
-At the ``bottom'', there's only one $BUGGYCLIQUE(\emptyset)$
-function, so the counting argument is useless.
-In the ``middle'',
-there are ${N \choose {N/2}}$ functions, and so the counting
-argument gives a nontrivial lower bound for
-$E[|\bigC(BUGGYCLIQUE(K_{N \choose {N/2}}))|]$ (although
-without actually constructing even {\em one} difficult function).
-At the ``top'', again, there's only one $BUGGYCLIQUE(K_N) = k-CLIQUE$
-function,
-so the counting argument is, once again, useless.
+say anything about $E[|C_A|]$?
 
-It would be nice if we could show that, as $i$ increases,
-$E[|\bigC(BUGGYCLIQUE(K_i))|]$ also increases.
+\begin{itemize}
+\item At the ``bottom'', where $|A| = 0$, there's only one $BUGGYCLIQUE(\emptyset)$
+function, so the counting argument is useless.
+
+\item In the ``middle'', where $|A| = L/2$,
+there are ${L \choose {L/2}}$ functions, and so the counting
+argument gives a nontrivial lower bound for
+$E[|C_A|]$ (although
+without actually constructing even {\em one} difficult function).
+
+\item At the ``top'', where $|A| = L$, there's only one function
+-- $k$-$CLIQUE$ --
+so the counting argument is, once again, useless.
+\end{itemize}
+
+It would be nice if we could show that, as $|A|$ increases,
+$E[|C_A|]$ also increases.
 (This {\em seems} intuitive -- if finding {\em half} of the cliques
 is hard, at least sometimes, how much easier can finding {\em all}
 of them be? But that's only intuition, not proof.)
 If we could prove something in general, for all levels $i$, then at
 the top of the diagram, we'd be bounding just the function
-$BUGGYCLIQUE(K_N) = k-CLIQUE$. (This suggests that doing so would
+$BUGGYCLIQUE({[n] \choose k})$ = $k$-$CLIQUE$. (This suggests that doing so would
 be difficult...)
 
 \subsection{Comparing sets of functions using restrictions}
@@ -202,24 +216,24 @@ Methods using such ``restrictions'' have been used in lower bounds of formula
 complexity (see also the slides at \cite{rossmanRestrictions}).
 Here, we apply random restrictions to a set of functions (and circuits).
 
+We use unbounded-fan-in NAND gates as a basis.
+This is because feeding in a 0 to a circuit consisting of only NAND
+gates results in a strictly smaller circuit.
+
 \begin{thm}
 \label{edgeZonking}
 Let $A \subsetneq B \subseteq K$, such that $A$ is what remains
 of $B$ after removing all cliques overlapping some edge $e$.
 Then, assuming we measure circuit size using NAND gates,
- $|\bigC(BUGGYCLIQUE(B))| > |\bigC(BUGGYCLIQUE(A))|$.
+ $|C_B)| > |C_A|$.
 \end{thm}
 \begin{proof}
 Feed in a 0 to $e$, which is in $B$; the remaining cliques are $A$.
 The resulting
 circuit computes $BUGGYCLIQUE(A)$, and so has size
-at least $|\bigC(BUGGYCLIQUE(A))|$. But at least one
+at least $|C_A|$. But at least one
 NAND gate has been removed by feeding in the 0.
 \end{proof}
-
-(NAND gates have the convenient property that feeding in a 0
-results in a strictly smaller circuit; many other gate ``bases'' would
-result in a circuit of smaller{\em or} equal size.)
 
 Figure \ref{fig:Hasse}
 sketches a Hasse diagram of possible subsets of cliques,
@@ -230,20 +244,22 @@ on six vertices, hopefully this provides some
 intuition.
 
 \begin{figure}
+\label{fig:Hasse}
 \centering
-\includegraphics[width=1\textwidth]{R/Hasse.pdf}
+\includegraphics[width=1\textwidth]{py/figure/Z_with_vertex_zeroing.pdf}
 \caption{Hasse diagram of BUGGYCLIQUE functions.
-(a-d) 
+(a)
 Detecting all the possible cliques in larger graphs will be
 increasingly difficult (although {\em how much} harder isn't clear).
-(e) 
-Detecting this set of cliques is definitely harder than (b),
-since we can convert from (e) to (b) by feeding in 0's to
-some set of edges.
-(f) Detecting a set of cliques which doesn't overlap much will be
+(b) For instance,
+detecting this set of cliques on four vertices
+is definitely harder than (a),
+since we can convert from (a) to (b) by feeding in 0's to
+some set of vertices.
+(c) Detecting a set of cliques which doesn't overlap much will be
 harder than detecting the same number of cliques, when they overlap
-maximally (as in (b)).}
-\label{fig:Hasse}
+maximally (as in (b), in sufficiently large graphs.
+}
 \end{figure}
 
 \subsection{The zeroing-out lattice $Z$}
@@ -260,11 +276,12 @@ feeding in a 0 to $e$.
 
 \begin{figure}
 \centering
-\includegraphics[width=1\textwidth]{py/figure/Z.png}
-\caption{$Z(A,B).$ Here, there are four possible $K_3$s
+\includegraphics[width=0.9\textwidth]{py/figure/Z.pdf}
+\caption{The zeroing-out lattice $Z(A,B).$
+Here, there are four possible $K_3$s
 (shown as different-colored triangles) on the four vertices.
 If zeroing some input edge $e$ of set $B$ results in set $A$, then
-there is a line from $B$ to $A$.
+there is an arrow from $B$ to $A$.
 }
 
 \label{fig:Z}
@@ -298,56 +315,11 @@ in an irregular set of input edges, which seems to complicate reasoning about it
 Still, it seems that tools from
 random graph theory should help approximate it \cite{bollobas1976cliques}.
 
-\begin{prob}
-\label{edgeZonkingApprox}
+\begin{prob} \label{edgeZonkingApprox}
 Can we approximate properties of $Z$? For instance, if we take a random walk
 on $Z$, ``upwards'' starting from $\emptyset$,
 what is the expected number of cliques after $s$ steps?
 \end{prob}
-
-\subsubsection{Feeding in 1's as well as 0's}
-
-We could, of course, also restrict the circuit by feeding in 1's as well.
-For instance, feeding in 1's to all edges which include a vertex results
-in a circuit which finds $k-1$-vertex cliques on $n-1$ vertices.
-We could also construct a function related to $BUGGYCLIQUE$ as follows:
-
-\begin{defn}
-\label{PICKYCLIQUE}
-Let $K$ be the set of all possible
-$k$-vertex cliques, and let $A, B \subseteq K$.
-Let $m = {n \choose 2}$ be the number of edges in the input graph.
-
-$PICKYCLIQUE(A,B): \{0,1\}^m \rightarrow \{0,1\}$ is the function which
-is 1 iff any of the $K_k$s in $A$ is present, and none of the $K_k$s
-in $B$ are present.
-\end{defn}
-
-It seems that all of the $PICKYCLIQUE(A,B)$ functions are distinct, as well;
-showing this requires feeding in 1's as well as 0's.
-We omit the proof, as unfortunately it doesn't seem to help much.
-
-\subsection{Attempting to apply Dilworth's theorem}
-
-If we consider $Z(A, B)$ as a relation, then it defines a meet-semilattice
-(lower semilattice) with 
-many distinct upper bounds.  Indeed, any pair of subsets which
-cover all of the input edges are an upper bound, all of which
-are incomparable. They thus form an antichain, and so Dilworth's Theorem
-implies that these could be formed into chains. Each chain (by construction
-of the relation $Z$) has a strictly increasing number of gates, and so the
-functions at each level of the chain are strictly increasing in average
-size. (However, this doesn't seem to bound the number of gates in CLIQUE.)
-
-Alternatively, note that the sets at any level are incomparable. (Proof: if you feed in
-a zero to a function $A$, and you get a different function $B$, then $B$
-detects fewer cliques than $A$, and so can't be at the same level.)
-This would provide a ready source of antichains,
-for using Dilworth's Theorem.
-Furthermore, zeroing an edge
-can zonk at most ${n-2} \choose {k-2}$ cliques, so we can bound how
-many levels the edges of $Z$ jump. Unfortunately, it seems hard to use
-this to say anything useful about the particular chain which contains CLIQUE.
 
 \subsection{Which sets of cliques are hard to find?}
 \label{sec:whichCliques}
@@ -366,7 +338,7 @@ Figure \ref{fig:Hasse} (b),
 using fewer than one NAND gate per triangle (in the limit,
 for large enough input graphs).
 On the other hand, if the triangles overlap less, as in
-Figure \ref{fig:Hasse} (f)),
+Figure \ref{fig:Hasse} (c)),
 then to detect all of the triangles, we will definitely need at least one
 gate per triangle. We can see this by feeding in a 0 to some input
 unique to a triangle, applying Theorem \ref{edgeZonking}, and repeating.
@@ -415,35 +387,17 @@ sort of like a bitmap of a cat'', etc.), but ignoring
 those should still leave a valid lower bound for the functions in $BUGGYCLIQUE$.)
 If we can lower-bound $rank(A)$, then we should be able to translate
 that into a
-lower bound on $|\bigC(BUGGYCLIQUE(A))|$.
+lower bound on $|C_A|$.
 
 \subsection{How much smaller are ``restricted'' circuits, on average?}
 
-\begin{thm}
-\label{vaguelyUpward}
-Let $C \subseteq K$ be a set of cliques chosen uniformly at random
-from $K$.
+We first consider the effect (on average) of feeding in a 0
+to a random circuit in $BUGGYCLIQUE$.
 
-Let $a = {n-2 \choose k-2}$ (this is the number of $k$-cliques
-intersecting a given edge).
-
-Then there is a function $f: 2^K \rightarrow 2^K$ such that
-\begin{itemize}
-
-\item $E[|C| - |f(C)|] = a/2$
-
-\item $E[rank(C) - rank(f(C))] \ge a/2$
-
-\end{itemize}
-
-\end{thm}
-\begin{proof}
-
-Pick a distinguished input edge $e$, and let $A \subseteq C$ be
-the set of cliques in $C$ which include $e$, and $B \subseteq C$ be
-the set of cliques in $C$ which don't include $e$.
-
-We define $f(C) = B$.
+Let $A \subsetneq {[n] \choose k}$ be a set of cliques,
+chosen uniformly at random.
+Let $a = {n-2 \choose k-2}$: this is the number of $k$-cliques
+intersecting a given edge.
 
 Now, take the circuit computing $BUGGYCLIQUE(C)$, and
 feed in a 0 to $e$. The resulting circuit computes
@@ -465,8 +419,6 @@ and $B$, implying at least that large a difference in rank.
 and $rank(B) = rank(C)$. However, provided $e$ is in some clique in $C$,
 then since we're feeding in a 0 to a NAND-gate circuit,
 the inequality $rank(B) < rank(C)$ is strict.)
-
-\end{proof}
 
 In terms of the previous warehouse analogy, we can see that,
 when an edge is disabled, the chip now probably has fewer gates.
@@ -490,49 +442,18 @@ average rank will decrease a lot.
 
 \subsubsection{Why this doesn't bound $k-CLIQUE$?}
 
-\ref{vaguelyUpward} seems to show that ``finding more cliques is
-at least a tiny bit harder on average.'' However, it only applies
+This argument seems to show that ``finding a larger number of cliques is
+harder, on average.'' However, it only applies
 on average.
-
-\subsection{Estimating the rank of functions, at each level}
-
-It seems intuitive that finding a larger fraction of the cliques
-should be harder.
-So, another idea is to try to show this using induction on $l$.
-As usual, the base case ($l=0$) is easy: finding zero cliques is easiest,
-so its rank is 0 (see Theorem \ref{zeroCliques}).
-
-The step case is not so straightforward, though. Suppose we've computed bounds for
-levels 0 through $l-1$ (thus, we're using some sort of strong induction.)
-In other words, we've lower-bounded $E[rank(K_i)]$, for $i \in [0,l-1]$.
-Can we lower-bound $E[rank(K_l)]$?
-Suppose we pick a set of cliques at level $l$, uniformly at random.
-If we then pick an edge $e$ uniformly at random, and remove the cliques
-which contain $e$, then the number of cliques removed will vary
-depending on the level. When $l=1$, we'll remove 0 or 1 cliques; when $l=N$,
-we'll remove all ${n-2 \choose k-2}$ cliques which contain $e$.
-The number of cliques ``hit'' will have a hypergeometric distribution,
-which is relatively tractable.
-
-However, unfortunately, the graphs which {\em remain} are no longer uniformly
-sampled from each level!
-(For example, zeroing out a random edge $e$ from $CLIQUE$
-leaves $m$ isomorphic sets of cliques which lack $e$; but there are many other
-sets with the same number of cliques, which still cover all $m$ input edges.)
-Most levels include {\em tons} of
-graphs which include all the input edges. The above procedure will not
-be sampling any of them, after the first edge is zeroed out.
 
 \subsection{Can we bound this using linear programming?}
 
 We now attempt to bound the expected rank of finding a set
-of cliques, as a function of the number of cliques.
+of cliques, as a function of the number of cliques, using
+linear programming.
 
 This is implemented in
-{\tt py/lp\_brute\_force\_1.py}. It uses a linear program, with
-one variable $C_i$ per number of cliques, from 0 to ${n \choose k}$.
-Each variable represents the average rank of the functions with
-that many cliques.
+{\tt py/lp\_vertex\_zeroing.py}. 
 
 \subsubsection{Some trivial rank upper bounds}
 
@@ -647,6 +568,7 @@ E[rank(C_i)] \ge ({n \choose i} - 1) / 2
 
 \subsubsection{Results}
 
+The linear program is implemented in {\tt py/lp\_vertex\_zeroing.py}.
 We set up the linear program, and asked it to minimize $E[C_{n \choose k}]$
 (in other words, finding all the cliques). We ran this with $n=6$, $k=3$
 (in other words, finding triangles in six-vertex graphs). In this case,

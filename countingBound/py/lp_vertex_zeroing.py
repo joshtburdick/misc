@@ -131,10 +131,8 @@ class LpVertexZeroing:
 if __name__ == '__main__':
     n = int(sys.argv[1])
     k = int(sys.argv[2])
-    # this used to be an arg; for now, just leaving it at 1,
-    # to try to minimize rank of CLIQUE
-    # num_top_levels = int(sys.argv[3])
-    num_top_levels = 1
+    num_top_levels = int(sys.argv[3])
+    # num_top_levels = 1
     bound = LpVertexZeroing(n, k)
     bound.add_upper_bound_constraints()
     bound.add_average_rank_constraint()

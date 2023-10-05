@@ -440,8 +440,6 @@ The expected reduction in the number of cliques is $a/2$; I'm not sure
 about the expected reduction in rank. Presumably near the middle, the
 average rank will decrease a lot.
 
-\subsubsection{Why this doesn't bound $k-CLIQUE$?}
-
 This argument seems to show that ``finding a larger number of cliques is
 harder, on average.'' However, it only applies
 on average.
@@ -451,9 +449,8 @@ on average.
 We now attempt to bound the expected rank of finding a set
 of cliques, as a function of the number of cliques, using
 linear programming.
-
-This is implemented in
-{\tt py/lp\_vertex\_zeroing.py}. 
+This first requires deriving some constraints on the
+relative ranks of sets of functions.
 
 \subsubsection{Some trivial rank upper bounds}
 
@@ -606,26 +603,19 @@ that finding {\em more than half} of the cliques is harder than finding
 
 However, it fails to actually lower-bound $CLIQUE$.
 
+
+
+
+
+In particular, when $n=6$ and $k=3$, this gives the bound that
+finding all $6 \choose 3$ possible cliques has rank at least
+42.
+
 \begin{prob}
 \label{lpRepair}
 Is there a way to modify this bound, to bound CLIQUE?
 \end{prob}
 
-How might this be improved?
-Note that the above bound only used the structure of the lattice $Z$ 
-(figure \ref{fig:Z}) to count gates ``above'' a given node.
-Since we're using NAND gates, every edge along a path from $CLIQUE$ to $\emptyset$
-implies a slightly smaller circuit. This doesn't, at first glance, help much, as
-$CLIQUE$ (and all of the other functions) are at a height less than the number of edges
-(in this example, 15).
-
-One complication of this bound is that zeroing out an input edge leaves a potentially
-irregular graph of input edges. If instead, we were to zero out all the edges incident to a
-vertex $v$, then we simply end up with an input graph with one less vertex.
-(And, similarly, we remove the cliques which include $v$ from consideration.)
-This should simplify counting how many cliques ``remain'' at a given level, and avoid
-looping through all $2^N$ subsets of cliques; but
-presumably it would give an even weaker bound.
 
 \begin{prob}
 \label{vertexZonkingCount}
@@ -634,11 +624,6 @@ How many sets of cliques, of what size,
 are left after $z$ vertices have been zeroed out?
 \end{prob}
 
-We might also try counting gates instead of rank.
-All of the functions, including $CLIQUE$, are only directly
-``above'' a {\em tiny} fraction of the functions
-in the lattice $Z$. However, possibly including the upper bound would force some
-functions intermediate between $CLIQUE$ and $\emptyset$ to require many gates.
 
 \section{Related work}
 

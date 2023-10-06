@@ -222,10 +222,10 @@ gates results in a strictly smaller circuit.
 
 \begin{thm}
 \label{edgeZonking}
-Let $A \subsetneq B \subseteq K$, such that $A$ is what remains
+Let $A \subsetneq B \subseteq {[n] \choose k}$, such that $A$ is what remains
 of $B$ after removing all cliques overlapping some edge $e$.
 Then, assuming we measure circuit size using NAND gates,
- $|C_B)| > |C_A|$.
+$|C_B)| > |C_A|$.
 \end{thm}
 \begin{proof}
 Feed in a 0 to $e$, which is in $B$; the remaining cliques are $A$.
@@ -235,9 +235,19 @@ at least $|C_A|$. But at least one
 NAND gate has been removed by feeding in the 0.
 \end{proof}
 
+Note that zeroing out an edge can, in general, leave an irregular
+set of edges to consider.
+Thus, rather than zeroing out individual edges,
+it may sometimes make more sense to zero out all of the
+edges incident to a given vertex. This gives a coarser lattice; however,
+it seems
+easier to think about, as each zeroing step yields a hypergraph
+with (at least) one less vertex.
+
 Figure \ref{fig:Hasse}
 sketches a Hasse diagram of possible subsets of cliques,
-which shows some of the implications of this ``zeroing'' argument.
+which shows some of the implications of this ``zeroing'' argument
+(zeroing out vertices rather than edges).
 Cliques are arguably difficult to draw in a two-dimensional space.
 Although we only draw a few subsets of three-vertex cliques
 on six vertices, hopefully this provides some
@@ -261,11 +271,6 @@ harder than detecting the same number of cliques, when they overlap
 maximally (as in (b), in sufficiently large graphs.
 }
 \end{figure}
-
-
-
-
-
 
 \subsection{The zeroing-out lattice $Z$}
 
@@ -366,6 +371,42 @@ $0 < i < N$. What sets of cliques of size $i$
 require the most / least gates to find?
 \end{prob}
 
+\subsection{Connection to natural proofs}
+
+A {\em natural proof}
+ is a type of argument which,
+if it succeeded, would also violate widely-believed beliefs about
+strong pseudorandom number generators
+\cite{razborov1994natural}.
+
+Is $BUGGYCLIQUE$ a natural property? Here, we consider the three key properties.
+We consider $k$ to be fixed for each of these.
+
+\begin{itemize}
+
+\item {\em Constructivity}:
+$BUGGYCLIQUE$ is computable in time polynomial in the size of
+the truth table of $f$.
+
+\item {\em Largeness}:
+$BUGGYCLIQUE$ includes $2^{n \choose k} / 2^{2^n}$ of the possible $n$-bit
+boolean functions. For large enough $n$, this will be fewer than $1 / 2^n$ of them,
+so $BUGGYCLIQUE$ doesn't satisfy largeness.
+
+\item {\em Usefulness}:
+Using a counting argument based on
+the definition of $BUGGYCLIQUE$ does show that
+half of the functions
+in $BUGGYCLIQUE$ require $\Theta(n^{k/2})$ gates to compute. But it doesn't say
+which half.
+
+\end{itemize}
+
+Thus, the property ``$f$ is a buggy clique detector'' doesn't seem to be
+a natural property. This is partly because it fails the ``largeness''
+test; this has been noted as one potential way around the
+``natural proofs'' barrier \cite{r_williams_blog_comment}.
+
 \section{Using random restrictions}
 
 Random restrictions have been used in lower bounds of formula
@@ -376,18 +417,19 @@ rather than just one function and circuit.
 
 \subsection{Counting functions by their ``rank'' in a list}
 
-This argument relies on measuring the size of a circuit,
-for a given basis. (Here, we assume unbounded fan-in
-NAND gates, but this doesn't seem crucial.)
+The most natural measure of a circuit's size is arguably the number of gates.
+However, these arguments will instead
+rely on measuring the sizes of circuits, relative to other circuits.
 
 \begin{defn}
 \label{Rank}
-For all $C \subseteq K$,
+For all $A \subseteq {[n] \choose k}$,
 arrange all of the sets of cliques in nondecreasing order
-of $|\bigC(BUGGYCLIQUE(C))|$ (using unbounded fan-in NAND gates,
+of $|C_A|$ (that is, the size of the smallest
+unbounded-fan-in NAND-gate circuit),
 breaking ties by some lexicographic order of circuits).
 
-Let $A \in K$. The {\em rank} of $A$, $rank(A)$, is the zero-based
+The {\em rank} of $A$, $rank(A)$, is the zero-based
 index of $A$ in this list.
 \end{defn}
 
@@ -406,31 +448,21 @@ lower bound on $|C_A|$.
 We first consider the effect (on average) of feeding in a 0
 to a random circuit in $BUGGYCLIQUE$.
 
-Let $A \subsetneq {[n] \choose k}$ be a set of cliques,
+Let $S \subseteq {[n] \choose k}$ be a set of cliques,
 chosen uniformly at random.
-Let $a = {n-2 \choose k-2}$: this is the number of $k$-cliques
-intersecting a given edge.
+Let $b = {n-2 \choose k-2}$: this is the number of $k$-cliques
+intersecting a given edge $e$. Let $B$ be the set of cliques
+which include $e$, and $A = S-B$ be the set of cliques remaining.
+On average, we'd expect that $|B| = b/2$.
 
-Now, take the circuit computing $BUGGYCLIQUE(C)$, and
-feed in a 0 to $e$. The resulting circuit computes
-$BUGGYCLIQUE(B)$. Note that $A$ could contain anywhere
-from 0 to $a$
-cliques, so since $C$ is chosen uniformly at random,
-$E[|A|] = a/2$.
+Let $C_S$ be the smallest circuit computing $BUGGYCLIQUE(A)$
+(and similarly for $C_A$). Since $B$ could be any of $2^b$ different
+sets of cliques, we'd expect that on average,
+$rank(S) - rank(A) = 2^{b-1}$.
 
-Furthermore, $|\bigC(B)| \le |\bigC(C)|$, because feeding in
-a zero to the circuit for $BUGGYCLIQUE(C)$ constructed a
-(possibly non-optimal) circuit for $BUGGYCLIQUE(B)$.
-Thus, $rank(B) \le rank(C)$.
-This means that
-$C$ is one of $a$ functions chosen uniformly at random,
-and so, on average, there are $a/2$ circuits between $C$
-and $B$, implying at least that large a difference in rank.
-
-(Note that if $e$ ``misses'' all of the cliques in $C$, then $B = C$
-and $rank(B) = rank(C)$. However, provided $e$ is in some clique in $C$,
-then since we're feeding in a 0 to a NAND-gate circuit,
-the inequality $rank(B) < rank(C)$ is strict.)
+(Note that if $e$ ``misses'' all of the cliques in $S$, then $A = S$
+and $rank(A) = rank(S)$. However, if $e$ is in some clique in $S$,
+then the inequality $rank(B) < rank(C)$ will be strict.)
 
 In terms of the previous warehouse analogy, we can see that,
 when an edge is disabled, the chip now probably has fewer gates.
@@ -447,14 +479,47 @@ toward the ``smaller'' (in number of gates) end of the warehouse.
 That means that the corresponding set of cliques is also
 in the ``smaller'' end of the warehouse.
 
-Note that these numbers both decrease, but not necessarily at the same rate.
-The expected reduction in the number of cliques is $a/2$; I'm not sure
-about the expected reduction in rank. Presumably near the middle, the
-average rank will decrease a lot.
-
 This argument seems to show that ``finding a larger number of cliques is
 harder, on average.'' However, it only applies
-on average.
+on average. Also, it seems hard to apply iteratively, as the set $A$ which
+remains is no longer ``randomly sampled'' -- it's definitely missing
+all the cliques which include $e$.
+
+\subsubsection{Zeroing out vertices}
+
+Thus, we make a similar argument, but zeroing out vertices instead.
+
+\begin{thm}
+\label{vertexZonking}
+Let $|V(A)|$ be the number of vertices incident to a hypergraph $V$
+(which is present in some hyperedge).
+Choose $i$ with $k \le i < n$.
+Let $A$ be a random hypergraph with $|V(A)| = i$, and
+$B$ be a random hypergraph with $|V(B)| = i+1$. Then
+$E[C_B] > E[C_A]$.
+\end{thm}
+\begin{proof}
+Consider a random choice of $A$, which uses $i$ vertices.
+Add a vertex $v$, with a set of cliques chosen uniformly at
+random. The resulting hypergraph $B$ uses $i+1$ vertices.
+Furthermore, $|C_B| > |C_A|$, because feeding in a zero to edges
+including $v$ would definitely ``zero out'' at least one
+vertex.
+
+Since we chose $A$ and $B$ at random, the inequality holds.
+\end{proof}
+
+This might superficially seem useful -- after all, $CLIQUE$
+``uses'' all of the vertices. However,
+it quickly becomes apparent that {\em most} random hypergraphs
+``use'' all the vertices!
+
+To me, though, it seems a bit noteworthy that, for most
+hypergraphs, zeroing out a random vertex may or may not
+``hit'' any hyperedge. Zeroing out vertices {\em in any order}
+from $CLIQUE$, however, will definitely hit at least one
+hyperedge (and remove at least one NAND gate). It seems
+hard to convert that into a bound on $CLIQUE$, though.
 
 \subsection{Can we bound this using linear programming?}
 
@@ -528,15 +593,17 @@ of finding other sets of functions...
 \subsubsection{Generalizing that upper bound}
 
 Given a set $A$ of cliques, we
-can find the set $E$ of edges which aren't present in any of those cliques.
-Let $B$ be any clique which does include some edge in $E$, and let
-$C = A \cup B$. If we feed in zeros to all edges to a circuit
-finding the cliques in $C$, we end up with a strictly smaller circuit 
-which finds the cliques in $A$.
+can find the set $V$ of vertices which aren't present in any of those cliques.
+Let $B$ be any clique which does include some edge in $V$, and let
+$S = A \cup B$. If we take a circuit solving $BUGGYCLIQUE(S)$,
+feed in zeros to edges incident to $V$, we end up with a strictly smaller circuit 
+which solves $BUGGYCLIQUE(A)$.
 
 Thus, for each level $i$, we loop through the sets of cliques in $C_i$.
-For each set $A \in C_i$, we find the edges $E$ which aren't hit by any clique, and then
-find $Z$, the set of cliques which {\em are} hit by an edge in $E$.
+
+For each set $A \in C_i$, we find the vertices
+$V$ which aren't hit by any clique, and then
+find $Z$, the set of cliques which {\em are} hit by a vertex in $V$.
 We then have that 
 
 \[
@@ -544,7 +611,8 @@ rank(A) \le 2^{n \choose k} - 2^{|Z|}
 \]
 
 We compute an upper bound for every $A \in C_i$, and then average these
-to get a bound on $rank(C_i)$. We use the fact that $C_i$ contains many
+to get a bound on $rank(C_i)$.
+ We use the fact that $C_i$ contains many
 functions to sharpen the upper bound.
 
 \[
@@ -552,9 +620,6 @@ E[rank(C_i)] \le 2^{n \choose k} - E[2^{|Z|}] - |C_i|/2
 \]
 
 This is implemented by {\tt add\_upper\_bound\_constraints}.
-
-This has the {\em small practical problem} that it involves
-looping over all $2^{n \choose k}$ functions.
 
 \subsubsection{Average constraints}
 
@@ -571,10 +636,6 @@ with exactly $i$ cliques. (This latter bound, implemented by
 {\tt add\_counting\_lower\_bounds}, only seemed to have much
 effect for $0 < i < {n \choose k}/2$; data not shown.)
 
-\[
-E[rank(C_i)] \ge ({n \choose i} - 1) / 2
-\]
-
 \subsubsection{Results}
 
 The linear program is implemented in {\tt py/lp\_vertex\_zeroing.py}.
@@ -585,28 +646,28 @@ the possible ranks range from $0$ to $2^{6 \choose 3}-1 = 2^{20}-1 = 1,048,575$.
 For each level, we get the following bounds:
 
 \begin{verbatim}
-level	bound
-0	0.00
-1	9.00
-2	94.00
-3	569.00
-4	2421.50
-5	7751.00
-6	19379.00
-7	38759.00
-8	62984.00
-9	83979.00
-10	524306.40
-11	964586.16
-12	985586.57
-13	1009813.80
-14	1029194.80
-15	1040823.27
-16	1046152.95
-17	1048005.50
-18	1048480.50
-19	1048565.50
-20	0.00
+Num. cliques    Expected rank
+0		0.00
+1		9.50
+2		94.50
+3		569.50
+4		2422.00
+5		7751.50
+6		19379.50
+7		38759.50
+8		62984.50
+9		83979.50
+10		524293.18
+11		964595.50
+12		985590.50
+13		1009815.50
+14		1029195.50
+15		1040823.50
+16		1046153.00
+17		1048005.50
+18		1048480.50
+19		1048565.50
+20		0.00
 \end{verbatim}
 
 Circumstantially speaking, this approach seems to at least suggest
@@ -615,27 +676,23 @@ that finding {\em more than half} of the cliques is harder than finding
 
 However, it fails to actually lower-bound $CLIQUE$.
 
+Note that we know that this is not optimal. This is because (by
+Theorem \ref{edgeZonking}
+ finding triangles in 6-vertex graphs is harder than
+finding no triangles, or finding triangles
+in 3, 4, or 5-vertex graphs. That is, the rank of $CLIQUE$ when $n=6$
+and $k=3$ is at least
 
+\[
+1 + {6 \choose 3} + {6 \choose 4} + {6 \choose 5} = 1 + 20 + 15 + 6 = 42
+\]
 
-
-
-In particular, when $n=6$ and $k=3$, this gives the bound that
-finding all $6 \choose 3$ possible cliques has rank at least
-42.
+This raises the question:
 
 \begin{prob}
 \label{lpRepair}
 Is there a way to modify this bound, to bound CLIQUE?
 \end{prob}
-
-
-\begin{prob}
-\label{vertexZonkingCount}
-Consider the sets of $k$-vertex cliques in an $n$-vertex input graph.
-How many sets of cliques, of what size,
-are left after $z$ vertices have been zeroed out?
-\end{prob}
-
 
 \section{Related work}
 

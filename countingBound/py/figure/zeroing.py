@@ -415,6 +415,10 @@ def plot_Z_with_vertex_zeroing():
     # add label
     plt.savefig('Z_with_vertex_zeroing.pdf', bbox_inches='tight')
 
+def plot_covering():
+    """Plots several coverings of vertices and edges."""
+    pass
+
 if __name__ == '__main__':
     # plot_zeroing_one_vertex()
     plot_Z_relation()

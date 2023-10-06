@@ -262,6 +262,11 @@ maximally (as in (b), in sufficiently large graphs.
 }
 \end{figure}
 
+
+
+
+
+
 \subsection{The zeroing-out lattice $Z$}
 
 \begin{defn}
@@ -295,12 +300,19 @@ particular, when $n$ is large, the middle layer dominates the graph
 (because if each clique is chosen with probability 1/2, on average,
 you'll pick very close to half the cliques).
 
+Note also that we consider the sets of cliques to be ``labelled''.
+That is, if two sets of cliques are isomorphic (identical except for
+the numbering of vertices), we consider them distinct.
+Thus, in the ``middle'', many of the sets of cliques are isomorphic,
+and so can be detected by isomorphic circuits, with the same 
+number of gates.
+
 Each line between sets indicates a set which requires a strictly larger
 number of gates.  Unfortunately, at least according to this relation,
 the number of sets of cliques smaller than
 any of these upper bounds is less than $2^m$. This is because
 there are only $2^m$ ways to feed in 0's.
- However, if a set doesn't cover an edge $e$,
+However, if a set doesn't cover an edge $e$,
 then that set is {\em below} a large number of sets in the lattice (namely,
 all of the sets which would lose a clique if you fed in a zero to $e$).
 

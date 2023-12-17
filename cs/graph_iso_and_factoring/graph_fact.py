@@ -4,9 +4,15 @@
 # write a program to check some examples, rather than drawing
 # graphs with pencil and paper.)
 
+# Not working, as it's not finding _any_ isomorphisms. E.g.:
+# % ./graph_fact.py 1 4 
+# 0
+
 import itertools
 import pdb
 import sys
+
+import numpy as np
 
 import networkx
 import networkx.algorithms.isomorphism.vf2pp
@@ -14,6 +20,10 @@ import networkx.algorithms.isomorphism.vf2pp
 class GraphIsoFactor:
     """Constructs graphs to compare for factoring.
 
+    This works mod a list of primes, and has two "ends", labeled 'A' and 'B'.
+    It has two sorts of vertices:
+    - (end, p1, p2, y): corresponds to x being congruent to y (mod p1*p2)
+    - (end, p, z): corresponds to x being congruent to z (mod p)
     """
 
     def __init__(self, primes):
@@ -24,6 +34,7 @@ class GraphIsoFactor:
         self.primes = sorted(primes)
         # precompute graph for 1
         # Deprecated: this doesn't seem useful after all.
+        # ??? maybe it is?
         # self.g1 = self.get_graph(1)
 
     def get_graph(self, x):
@@ -33,17 +44,13 @@ class GraphIsoFactor:
         """
         # initialize the graph
         g = networkx.Graph()
-        # add "end" edges
-        # first, loop through the "shared edges"
-        if True:
-          for p in self.primes:
-            # then loop through the remaining pairs of primes
-            primes1 = list(set(self.primes) - set([p]))
-            for (p1, p2) in itertools.combinations(primes1, 2):
-                self.add_end_CBIP(g, p, p1, p2, 'A')
-                self.add_end_CBIP(g, p, p1, p2, 'B')
+        # add ends: note that these don't depend on x
+        for end in ('A', 'B'):
+            self.add_end_cap(g, end)
+            for (p1, p2) in itertools.combinations(self.primes, 2):
+                self.add_end_grid(g, end, p1, p2)
         # add "middle" edges
-        for (p1, p2) in itertools.combinations(primes1, 2):
+        for (p1, p2) in itertools.combinations(self.primes, 2):
             self.add_middle(g, p1, p2, x)
         return g
 
@@ -87,6 +94,7 @@ class GraphIsoFactor:
     def add_end_clique(self, g, p, p1, p2, end):
         """Adds on a clique of end edges.
 
+        Deprecated.
         g: the graph to add to
         p: the prime that these have in common
         p1, p2: the other two primes to add an "end" for
@@ -103,13 +111,16 @@ class GraphIsoFactor:
                     g.add_edge(sort_p(end, p, p1, x1*p+i),
                         sort_p(end, p, p2, x2*p+i))
 
-    def add_end(self, end):
-        """Adds 'end' connections to A and B."""
+    def add_end_cap(self, g, end):
+        """Adds 'end' connections to A and B.
+
+        Possibly not needed?
+        """
         for p in self.primes:
             for x in range(1, p):
                 g.add_edge(end, (end, p, x))
 
-    def add_grid(self, end, p1, p2):
+    def add_end_grid(self, g, end, p1, p2):
         """Adds 'grid' of connections for a pair of primes."""
         def add_clique(vertices):
             """Utility to add a clique of edges."""
@@ -122,12 +133,12 @@ class GraphIsoFactor:
             for j in range(p2):
                 x[i, j] = (i * j) % m
         # add rows
-        for i in range(p1):
-            add_clique([end, p1, p2, y) for y in x[i,:]]
+        for i in range(1, p1):
+            add_clique([(end, p1, p2, y) for y in x[i,:]]
                 + [(end, p1, i)])
         # add columns
-        for j in range(p2):
-            add_clique([end, p1, p2, y) for y in x[:,j]]
+        for j in range(1, p2):
+            add_clique([(end, p1, p2, y) for y in x[:,j]]
                 + [(end, p2, j)])
 
     def add_middle(self, g, p1, p2, x):

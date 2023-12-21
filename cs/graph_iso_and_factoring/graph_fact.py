@@ -48,19 +48,21 @@ class GraphIsoFactor:
         for end in ('A', 'B'):
             self.add_end_cap(g, end)
             for (p1, p2) in itertools.combinations(self.primes, 2):
-                self.add_end_grid(g, end, p1, p2)
+#                self.add_end_grid(g, end, p1, p2)
+                self.add_end(g, end, p1, p2)
+                self.add_end_clique(g, end, p1, p2)
         # add "middle" edges
         for (p1, p2) in itertools.combinations(self.primes, 2):
             self.add_middle(g, p1, p2, x)
         return g
 
-    def add_end(self, g, p1, p2, end):
+    def add_end(self, g, end, p1, p2):
         """Adds on 'end-to-middle' edges.
 
         Deprecated: I don't think this gadget works.
         g: the graph to add to
-        p1, p2: the primes to add an "end" for
         end: the "end" to add on (either 'A' or 'B')
+        p1, p2: the primes to add an "end" for
         Side effects: adds 'end-to-middle' edges to g
         """
         m = p1 * p2
@@ -91,26 +93,6 @@ class GraphIsoFactor:
                     g.add_edge(sort_p(end, p, p1, x1*p+i),
                         sort_p(end, p, p2, x2*p+i))
 
-    def add_end_clique(self, g, p, p1, p2, end):
-        """Adds on a clique of end edges.
-
-        Deprecated.
-        g: the graph to add to
-        p: the prime that these have in common
-        p1, p2: the other two primes to add an "end" for
-        end: the "end" to add on (either 'A' or 'B')
-        Side effects: adds a CBIP of edges to g, of vertices
-            which are equivalent mod p.
-        """
-        def sort_p(end, p1, p2, x):
-            """Utility to put the primes in order."""
-            return (end, min(p1, p2), max(p1, p2), x)
-        for i in range(1, p):
-            for x1 in range(1, p1):
-                for x2 in range(1, p2):
-                    g.add_edge(sort_p(end, p, p1, x1*p+i),
-                        sort_p(end, p, p2, x2*p+i))
-
     def add_end_cap(self, g, end):
         """Adds 'end' connections to A and B.
 
@@ -119,6 +101,22 @@ class GraphIsoFactor:
         for p in self.primes:
             for x in range(1, p):
                 g.add_edge(end, (end, p, x))
+ 
+    def add_end_clique(self, g, end, p1, p2):
+        """Adds clique at one end, for a pair of primes.
+
+        This connects all the vertices in one "grid".
+        It's intended to force the end to only permute
+        the vertices in the grid.
+        """
+        # the vertices to add: numbers which are
+        # relatively prime to both p1 and p2
+        vertices = [(end, p1, p2, x)
+            for x in range(p1 * p2)
+            if x % p1 != 0 and x % p2 != 0]
+        # add all pairs of these
+        for pair in itertools.combinations(vertices, 2):
+            g.add_edge(pair[0], pair[1])
 
     def add_end_grid(self, g, end, p1, p2):
         """Adds 'grid' of connections for a pair of primes."""

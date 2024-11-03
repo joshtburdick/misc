@@ -63,7 +63,7 @@ class PuLP_Helper:
         # convert coefficients to format PuLP expects, multiplying
         # by LCM (so that, hopefully, all coefficients are integers)
         A_as_expr = pulp.lpSum([
-            lcm * a * self.vars[x] for (x, a) in A
+            (lcm * a) * self.vars[x] for (x, a) in A
             if a != 0])
         # also multiply b by the LCM
         if op == "<=":

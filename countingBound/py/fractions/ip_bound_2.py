@@ -140,7 +140,7 @@ class LpEdgeZeroing:
         for i in range(N+1-self.max_cliques_with_edge):
             for j in range(i, min(i+1+self.max_cliques_with_edge, N+1)):
                 # ??? is this right?
-                a[(i,j)] = comb(self.max_cliques_with_edge, j-i) / num_sets
+                a[(i,j)] = fractions.Fraction(comb(self.max_cliques_with_edge, j-i), num_sets)
         return a
 
     def step_probability(self, i, k):
@@ -152,7 +152,7 @@ class LpEdgeZeroing:
         """
         # loop through possible number of cliques remaining,
         # after zeroing out an edge
-        a = fractions.Fraction(0)
+        s = fractions.Fraction(0)
         # FIXME only looping over a subset of these isn't working
         # (but would be faster)
         # was: for j in range(max(0, i-self.max_cliques_with_edge)+1, i+1):
@@ -161,14 +161,14 @@ class LpEdgeZeroing:
         # OK, this is definitely wrong...
         # for j in range(self.max_cliques_with_edge+1):
             try:
-                a += self.z[(i,j)] * self.a[(j,k)]
+                s += self.z[(i,j)] * self.a[(j,k)]
             except:
                 # We treat missing values here as 0's, relying on
                 # the sparsity of Z and A here. (Thus, if one of these
                 # is missing, it shouldn't be a problem.)
                 # print(f"couldn't compute step {i} -> {j} -> {k}")
                 pass
-        return a
+        return s
 
     def add_level_constraints(self):
         """Adds constraints on functions at some "level"
@@ -226,6 +226,7 @@ class LpEdgeZeroing:
             A = [(("E", j), self.step_probability(i, j))
                 for j in range(self.num_possible_cliques+1)]
             A += [(("E", i), fractions.Fraction(-1))]
+            # pdb.set_trace()
             # print(A)
             # note that for these, we ignore the fact that zeroing out an edge
             # usually removes one gate

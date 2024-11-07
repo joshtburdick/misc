@@ -72,7 +72,7 @@ class PuLP_Helper:
         """
         self.prob += self.vars[var_to_minimize]
         # for debugging
-        # self.prob.writeLP("./bound.lp")
+        self.prob.writeLP("./bound.lp")
         r = self.prob.solve(pulp.GLPK(options=['--exact']))
         # problem had a solution
         if r == 1:

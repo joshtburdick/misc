@@ -15,9 +15,9 @@ import scipy.special
 import scipy.stats
 
 import gate_basis
-# import flexible_lp_helper
+import flexible_lp_helper
 import pulp_helper
-# import scip_helper
+import scip_helper
 
 # Wrapper for comb(), with exact arithmetic.
 def comb(n, k):
@@ -68,6 +68,7 @@ class LpEdgeZeroing:
                 # with some number of gates
                 self.num_gates_dist_vars += [(c, g)]
         # wrapper for LP solver
+        # FIXME: make this an option?
         # self.lp = scip_helper.SCIP_Helper(
         #     self.expected_num_gates_vars + self.num_gates_dist_vars)
         # self.lp = flexible_lp_helper.Flexible_LP_Helper(

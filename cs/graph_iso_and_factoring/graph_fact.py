@@ -48,9 +48,9 @@ class GraphIsoFactor:
         for end in ('A', 'B'):
             self.add_end_cap(g, end)
             for (p1, p2) in itertools.combinations(self.primes, 2):
-#                self.add_end_grid(g, end, p1, p2)
+                self.add_end_grid(g, end, p1, p2)
                 self.add_end(g, end, p1, p2)
-                self.add_end_clique(g, end, p1, p2)
+#                self.add_end_clique(g, end, p1, p2)
         # add "middle" edges
         for (p1, p2) in itertools.combinations(self.primes, 2):
             self.add_middle(g, p1, p2, x)
@@ -188,8 +188,10 @@ class GraphIsoFactor:
 
 if __name__ == '__main__':
     # gif = GraphIsoFactor([5,7,11])
-    gif = GraphIsoFactor([3, 5, 7])
-    x1 = int(sys.argv[1])
-    x2 = int(sys.argv[2])
-    gif.print_isos(x1, x2)
+    gif = GraphIsoFactor([3, 5])
+    # x1 = int(sys.argv[1])
+    # x2 = int(sys.argv[2])
+    # gif.print_isos(x1, x2)
+    # now, trying just printing all automorphisms of the "inverses of 1" graph
+    gif.print_isos(1, 1)
 

@@ -55,14 +55,23 @@ class PuLP_Helper:
         """
         if op not in ["<=", "=", ">="]:
             raise ValueError(f"unknown operator: {op}")
-        # convert coefficients to format PuLP expects
-        A_as_expr = pulp.lpSum([a * self.vars[x] for (x, a) in A])
+        # get least common multiple of denominators of A and b
+        coefs = [fractions.Fraction(a) for (_,a) in A]
+        denominators = [fractions.Fraction(x).denominator 
+            for x in coefs + [b]]
+        lcm = functools.reduce(math.lcm, denominators)
+        # convert coefficients to format PuLP expects, multiplying
+        # by LCM (so that, hopefully, all coefficients are integers)
+        A_as_expr = pulp.lpSum([
+            (lcm * a) * self.vars[x] for (x, a) in A
+            if a != 0])
+        # also multiply b by the LCM
         if op == "<=":
-            self.prob += A_as_expr <= b
+            self.prob += A_as_expr <= lcm * b
         if op == "=":
-            self.prob += A_as_expr == b
+            self.prob += A_as_expr == lcm * b
         if op == ">=":
-            self.prob += A_as_expr >= b
+            self.prob += A_as_expr >= lcm * b
 
     def solve_1(self, var_to_minimize):
         """Solves the linear system, for one variable.
@@ -92,7 +101,8 @@ class PuLP_Helper:
         """
         self.prob += self.vars[var_to_minimize]
         self.prob.writeLP("./bound.lp")
-        r = self.prob.solve(pulp.GLPK(options=['--exact']))
+        r = self.prob.solve(pulp.GLPK("/home/josh_t_burdick/local/bin/glpsol",
+                                      options=['--exact']))
         # r = self.prob.solve(pulp.GLPK())
         # problem had a solution
         print(f"Result r = {r}")

@@ -48,7 +48,7 @@ on average, requires $\Omega(n^{k/2})$ two-input NAND gates to compute.
 \subsection{A random walk on the zeroing-out lattice}
 
 Previously, we defined the zeroing-out lattice $Z$, in which all paths lead
-``down`` to $\empty$. Here, we consider a ``bouncing'' walk
+``down`` to $\emptyset$. Here, we consider a ``bouncing'' walk
 through $Z$, starting from an arbitrary set of cliques $A_t$.
 
 \begin{enumerate}
@@ -59,7 +59,8 @@ following a random arc ``down''. Call the resulting set $B_t$ (
 for ``bounce'').
 
 \item Add a random set of the possible cliques which include $e$,
-resulting in a larger set $A_{t+1}$.
+resulting in a larger set $A_{t+1}$. This corresponds to following
+a random arc ``up''.
 
 \item Repeat...
 
@@ -117,7 +118,7 @@ $e \subset A$ if some clique in $A$ contains the edge $e$.
 We define the set of one-edge neighbors $E$, as follows:
 
 \[
-E = \empty \cup \bigcup_e \{ X: e \subset X\}
+E = \emptyset \cup \bigcup_e \{ X: e \subset X\}
 \]
 
 \end{defn}
@@ -343,8 +344,8 @@ I'm not quite sure how to count this). (We refer to this as the
 x_0 = 1
 \]
 
-Why might we think that this is even {\em remotely} useful? (We are, after
-all, trying to bound $x_N$!)
+Why might we think that this is even {\em remotely} useful? We are, after
+all, trying to bound $x_N$...
 
 Well, we know that if we start at $c=0$, if a random walk takes us to
 $c \approx N/2$, then at that point, the counting bound implies that

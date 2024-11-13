@@ -6,7 +6,9 @@
 # - support other LP solvers?
 #   - if that happens, rename this?
 
+import collections
 import fractions
+import io
 import math
 import os
 import pdb
@@ -80,15 +82,50 @@ class SCIP_Helper:
         # print(constraint)
         self.constraints.append(constraint)
 
-    def solve(self, var_to_minimize, lp_filename="./bound.lp"):
+    def parse_scip_output(self, solution_file):
+        """Parses SCIP's output."""
+        with open(solution_file, "rt") as f:
+            line = f.readline()
+            if not re.match(r"solution status: optimal solution found", line):
+                return None
+            line = f.readline()
+            if not re.match(r"objective value:\s+(\w+)", line):
+                return None
+            # remaining lines are mostly of the form:
+            # x__E_10_          1   (obj:1)
+            # this dict will be indexed by "parseable variable name"
+            x_by_parseable_name = collections.defaultdict(float)
+            for line in f: 
+                m = re.match(r"(\w+)\s+(\S+) \t", line)
+                x_by_parseable_name[m.group(1)] = float(m.group(2))
+            pdb.set_trace()
+            x_by_name = {name: x_by_parseable_name[parseable_name]
+                for name, parseable_name in self.var_name.items()
+                if parseable_name in x_by_parseable_name
+            }
+            return x_by_name
+
+    def solve_1(self, objective, bounds=None):
         """Solves the linear system, for one variable.
+
+        objective: what to minimize (as a Numpy vector)
+        var_to_minimize: name of the variable to minimize
+        bounds: bounds on individual variables
+        Returns: the optimal value of the objective function,
+            or None if the problem was infeasible.
+        """
+        # may not use this...
+        raise NotImplementedError()
+
+    def solve(self, var_to_minimize, lp_filename="./bound.lp"):
+        """Solves the linear system.
 
         This assumes all variables are >= 0.
         FIXME add option to make all variables integers?
-
         """
+        print("in solve_1()")
         # construct the linear program
-        newline = "\n"   # ??? possibly python3.8 workaround?
+        newline = "\n"     # ??? possibly python3.8 workaround?
         lp_string = f"""
 Minimize
  obj: {self.var_name[var_to_minimize]}
@@ -104,33 +141,27 @@ End
         with open(lp_filename, "wt") as lp_file:
             lp_file.write(lp_string)
             lp_file.flush()
-            scip_output = subprocess.check_output([
-                "scip", "-f", lp_file.name], text=True)
-            # pdb.set_trace()
-            # print(scip_output)
-            # pdb.set_trace()
+            script = f"""
+read {lp_filename}
+optimize
+write solution bound_opt.txt
+quit
+"""
+            scip_output = subprocess.run(["scip"], text=True, input=script)
+            print(scip_output)
+            print("ran script")
+            return self.parse_scip_output("bound_opt.txt") 
+
+            ##### rest of this goes away...
             # parse line of the syntax, e.g.:
             # Primal Bound     : +1.22500000000000e+02   (in run 1, after 1 nodes, 0.02 seconds, depth 2, found by <locks>)
 #            m = re.search(".*Primal Bound\s+:[ ]*([^ ]+)[ ]+\(in run", scip_output)
 #  First Solution   : +0.00000000000000e+00   (in run 1, after 0 nodes, 0.01 seconds, depth 0, found by <relaxation>)
-            m = re.search(".*First Solution\s*:[ ]*([^ ]+)[ ]*\(in run.*", scip_output)
+            m = re.search(r".*First Solution\s*:[ ]*([^ ]+)[ ]*\(in run.*", scip_output)
             if not m:
                 return None
             print(m.group(1))
             bound = float(m.group(1))
         return bound
 
-    def solve_1(self, objective, bounds=None):
-        """Solves the linear system.
-
-        objective: what to minimize (as a Numpy vector)
-        var_to_minimize: name of the variable to minimize
-        bounds: bounds on individual variables
-        Returns: the vector of the minizing solution (if found),
-            as a Numpy vector.
-        FIXME: return a dict, indexed by variable name, of
-            all the variables, at the lower bound?
-        """
-        # for now, not bothering with this
-        raise NotImplementedError()
 

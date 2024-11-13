@@ -104,7 +104,11 @@ Let $Z$ be the previously-defined zeroing-out graph. We will write $Z'$ for
 the inverse of that graph (with arrows reversed).
 
 The bouncing walk $S$ is result of following one edge of $Z$, followed by one
-edge of $Z'$.
+edge of $Z'$. Formally, as a relation:
+
+\[
+S(a,c) \triangleq \exists b. R(a,b) \land R(b,c)
+\]
 
 \end{defn}
 
@@ -127,9 +131,18 @@ For any given set of cliques $A$, we can generate all the neighbors
 of $A$ by picking a set of cliques $X \in E$, and taking $A \oplus X$. This will
 add and remove some cliques from $A$, all of which include some edge $e$.
 Distinct choices of $X$ will yield distinct neighbors of $A$.
+Since we can choose an edge $e$, and then pick any subset of cliques which contains
+$e$, we have that
 
+\[
+|E| \le {n \choose 2} 2^{{n-2} \choose {k-2}}
+\]
+
+XORing with something from $E$ defines all of the neighbors of any set of cliques
+(FIXME reword this).
 Thus, we get that $S$ is a $d$-regular graph, with $d = |E|-1$.
-(I'm not sure if it's a known $d$-regular graph.) It seems too
+I'm not sure if it's a known $d$-regular graph.
+It seems too
 dense to be an expander, but does seem to be pretty strongly connected.
 
 \subsection{Modelling where the walk goes}

@@ -98,7 +98,6 @@ class SCIP_Helper:
             for line in f: 
                 m = re.match(r"(\w+)\s+(\S+) \t", line)
                 x_by_parseable_name[m.group(1)] = float(m.group(2))
-            pdb.set_trace()
             x_by_name = {name: x_by_parseable_name[parseable_name]
                 for name, parseable_name in self.var_name.items()
                 if parseable_name in x_by_parseable_name
@@ -123,7 +122,6 @@ class SCIP_Helper:
         This assumes all variables are >= 0.
         FIXME add option to make all variables integers?
         """
-        print("in solve_1()")
         # construct the linear program
         newline = "\n"     # ??? possibly python3.8 workaround?
         lp_string = f"""
@@ -147,9 +145,7 @@ optimize
 write solution bound_opt.txt
 quit
 """
-            scip_output = subprocess.run(["scip"], text=True, input=script)
-            print(scip_output)
-            print("ran script")
+            scip_output = subprocess.check_output(["scip"], text=True, input=script)
             return self.parse_scip_output("bound_opt.txt") 
 
             ##### rest of this goes away...
@@ -160,7 +156,6 @@ quit
             m = re.search(r".*First Solution\s*:[ ]*([^ ]+)[ ]*\(in run.*", scip_output)
             if not m:
                 return None
-            print(m.group(1))
             bound = float(m.group(1))
         return bound
 

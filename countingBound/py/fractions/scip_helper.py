@@ -50,7 +50,7 @@ class SCIP_Helper:
     def as_int(self, x):
         """Utility converting a fraction to an integer."""
         x = fractions.Fraction(x)
-        if x.is_integer() and x.denominator==1:
+        if x.denominator==1:
             return x.numerator
         return None
 

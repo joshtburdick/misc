@@ -413,10 +413,10 @@ input wires, can implement $2^{5 \choose 3}$ different
 functions.)
 
 On larger instances, the LP crashes. This seems to be because even
-though GLPK theoretically can solve problems with fractions involving
-numbers like $10^{100}$, in practice, the parser has problems reading
-them in. (We have modified GLPK's parser to accept numbers with $10^6$
-digits, but haven't modified the LP to use them.)
+solvers (such as GLPK and the exact version of SOPLEX) can
+theoretically can solve problems with fractions involving
+numbers like $10^{100}$, in practice, these haven't worked
+(for differing reasons).
 
 This raises the following open question:
 
@@ -428,20 +428,22 @@ What bound would this give for CLIQUE, if the LP {\em didn't} crash?
 
 One appealing thing about this approach is that it gives a
 bound for clique in any event. Even if the bound weren't
-superpolynomial, if it were even superlinear, that {\em would} be
-exciting.
+superpolynomial, in the unlikely event that were even superlinear,
+that {\em would} be exciting.
 
-It seems worth emphasizing, then, that currently this gives a bound
-of 1 unbounded fan-in NAND gate.
+It seems worth {\em strongly} emphasizing, then, that currently this gives a bound
+of 1 unbounded fan-in NAND gate...
 
 \section{Acknowledgements}
 
 The emphasis on random walks was partly inspired by Luca Trevisan's
-blog, {\em in theory} \cite{luca_trevisan_blog_random_walks_1}
-which contained many insights, along with a fair amount of levity.
+blog, {\em in theory} \cite{luca_trevisan_blog_random_walks_1}.
+That blog included his insights into current research questions, and
+his experience as a gay theoretical computer science researcher.
+It also included a fair amount of levity.
 As many complexity commentators have noted, he will be missed.
 
-\bibliography{../references}
+\bibliography{references}
 \bibliographystyle{unsrt}
 
 \end{document}

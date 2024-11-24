@@ -19,8 +19,6 @@ public class SimplexSolver {
 
     /**
      * The tableau, indexed by row, then column.
-     *
-     * We assume that the first row corresponds to the objective function.
      */
     public Map<Integer, Map<Integer, BigFraction>> t;
 
@@ -29,9 +27,10 @@ public class SimplexSolver {
      *
      * @param columnNames  names of the columns
      */
-    public Tableau(Vector<String> columnNames) {
-    }
+    public SimplexSolver(Vector<String> columnNames) {
 
+
+    }
 
 
 

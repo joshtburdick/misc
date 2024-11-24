@@ -15,12 +15,10 @@ import java.util.Vector;
 public class SimplexSolver {
 
     /** Names of columns. */
-    private Map<String, Integer> columnNames;
+    private Map<String, Integer> columnNames = new HashMap<String, Integer>();
 
-    /**
-     * The tableau, indexed by row, then column.
-     */
-    public Map<Integer, Map<Integer, BigFraction>> t;
+    /** The tableau. */
+    private Tableau tableau;
 
     /**
      * Constructor.
@@ -28,10 +26,13 @@ public class SimplexSolver {
      * @param columnNames  names of the columns
      */
     public SimplexSolver(Vector<String> columnNames) {
+        // number the columns
+        int i = 0;
+        for (String name : columnNames)
+            this.columnNames.put(name, i++);
 
 
     }
-
 
 
 

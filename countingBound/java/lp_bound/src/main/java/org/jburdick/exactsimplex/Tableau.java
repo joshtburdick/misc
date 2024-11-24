@@ -11,26 +11,21 @@ import java.util.Vector;
  */
 public class Tableau {
 
-    /** Names of columns. */
-    private Map<String, Integer> columnNames;
-
-    /**
-     * The tableau, indexed by row, then column.
+    /** The tableau, indexed by row, then column.
      *
-     * We assume that the first row corresponds to the objective function.
+     * The last of each are indexed with -1.
      */
-    public Map<Integer, Map<Integer, BigFraction>> t;
+    public HashMap<Integer, HashMap<Integer, BigFraction>> t;
 
-    /**
-     * Constructor.
-     *
-     * @param columnNames  names of the columns
-     */
-    public Tableau(Vector<String> columnNames) {
+    /** Constructor. */
+    public Tableau() {
+        this.t = new HashMap<Integer, HashMap<Integer, BigFraction>>();
     }
 
+    /** Adds one row. */
+    public void addRow(HashMap<Integer, BigFraction> x) {
 
 
-
+    }
 
 }

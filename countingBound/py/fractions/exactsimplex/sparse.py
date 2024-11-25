@@ -1,4 +1,8 @@
-'''Sparse version of simplex LP solver.'''
+'''Sparse version of simplex LP solver.
+
+A row will be represented by a Dict<Int, Fraction>.
+The tableau will be represented by a Dict<Int, Dict<Int, Fraction>>,
+'''
 
 
 import heapq
@@ -60,13 +64,17 @@ def standardForm(cost, greaterThans=[], gtThreshold=[], lessThans=[], ltThreshol
 
 
 def dot(a,b):
-   return sum(x*y for x,y in zip(a,b))
+    columns = set(a.keys()).union(set(b.keys()))
+    return sum(a[j] * b[j] for j in columns)
 
 def column(A, j):
-   return [row[j] for row in A]
+    """Returns j'th column of A, as a list."""
+    return [(row[j] if j in row else 0)
+        for row in A]
 
-def transpose(A):
-   return [column(A, j) for j in range(len(A[0]))]
+# deprecated; try to omit this?
+# def transpose(A):
+#    return [column(A, j) for j in range(len(A[0]))]
 
 def isPivotCol(col):
    return (len([c for c in col if c == 0]) == len(col) - 1) and sum(col) == 1
@@ -78,10 +86,15 @@ def variableValueForPivotColumn(tableau, column):
 # assume the last m columns of A are the slack variables; the initial basis is
 # the set of slack variables
 def initialTableau(c, A, b):
-   tableau = [row[:] + [x] for row, x in zip(A, b)]
-   tableau.append([ci for ci in c] + [0])
-   return tableau
-
+# was:
+#   tableau = [row[:] + [x] for row, x in zip(A, b)]
+#   tableau.append([ci for ci in c] + [0])
+#   return tableau
+    tableau = A
+    for (i, x) in b.items():
+        tableau[i][-1] = x
+    tableau[-1] = c
+    tableau[-1][-1] = 0
 
 def primalSolution(tableau):
    # the pivot columns denote which variables are used

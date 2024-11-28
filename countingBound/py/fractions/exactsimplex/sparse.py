@@ -1,7 +1,7 @@
 '''Sparse version of simplex LP solver.
 
-A row will be represented by a Dict<Int, Fraction>.
-The tableau will be represented by a Dict<Int, Dict<Int, Fraction>>,
+A row will be represented by a Dict<Int, Fraction>, as it were.
+The tableau will be represented by a Dict<Int, Dict<Int, Fraction>>.
 '''
 
 
@@ -67,25 +67,46 @@ def dot(a,b):
     columns = set(a.keys()).union(set(b.keys()))
     return sum(a[j] * b[j] for j in columns)
 
-def column(A, j):
-    """Returns j'th column of A, as a list."""
+def column_orig(A, j):
+    """Returns j'th column of A, as a list (with 0's for missing entries).
+    FIXME this doesn't work so well for sparse matrices"""
     return [(row[j] if j in row else 0)
-        for row in A]
+        for j in A]
+
+def column(A, j):
+    """Returns j'th column of A, as a list of entries.
+
+    ??? should this return a dict?"""
+    column = [(i, row[j])
+        for (i, row) in A.items()
+        if j in row]
 
 # deprecated; try to omit this?
 # def transpose(A):
 #    return [column(A, j) for j in range(len(A[0]))]
 
-def isPivotCol(col):
+def isPivotCol_orig(col):
    return (len([c for c in col if c == 0]) == len(col) - 1) and sum(col) == 1
+def isPivotCol(col):
+    return len(col)==1 and col[0][1]==1
 
-def variableValueForPivotColumn(tableau, column):
-   pivotRow = [i for (i, x) in enumerate(column) if x == 1][0]
-   return tableau[pivotRow][-1]
 
-# assume the last m columns of A are the slack variables; the initial basis is
-# the set of slack variables
+def variableValueForPivotColumn_1(tableau, column):
+    pivotRow1 = [i for (i, x) in enumerate(column) if x == 1]
+    assert(len(pivotRow1)==1)
+    pivotRow = pivotRow1[0]
+    return tableau[pivotRow][-1]
+
+
 def initialTableau(c, A, b):
+    """Constructs the initial tableau.
+
+    c: the objective function, as a dict (indexed by column) of fractions
+    A: the tableau of the matrix, as a dict of dict of fractions
+    b: the constraints, as a dict (indexed by row) of fractions
+    assume the last m columns of A are the slack variables; the initial basis is
+    the set of slack variables
+    """
 # was:
 #   tableau = [row[:] + [x] for row, x in zip(A, b)]
 #   tableau.append([ci for ci in c] + [0])
@@ -97,15 +118,17 @@ def initialTableau(c, A, b):
     tableau[-1][-1] = 0
 
 def primalSolution(tableau):
-   # the pivot columns denote which variables are used
-   columns = transpose(tableau)
-   indices = [j for j, col in enumerate(columns[:-1]) if isPivotCol(col)]
-   return [(colIndex, variableValueForPivotColumn(tableau, columns[colIndex]))
-            for colIndex in indices]
+    # the pivot columns denote which variables are used
+    columns = transpose(tableau)
 
+    indices = [j for j, col in enumerate(columns[:-1]) if isPivotCol(col)]
+
+
+    return [(colIndex, variableValueForPivotColumn(tableau, columns[colIndex]))
+        for colIndex in indices]
 
 def objectiveValue(tableau):
-   return -(tableau[-1][-1])
+    return -(tableau[-1][-1])
 
 
 def canImprove(tableau):

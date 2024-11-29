@@ -80,6 +80,7 @@ def column(A, j):
     column = [(i, row[j])
         for (i, row) in A.items()
         if j in row]
+    return column
 
 # deprecated; try to omit this?
 # def transpose(A):
@@ -88,8 +89,8 @@ def column(A, j):
 def isPivotCol_orig(col):
    return (len([c for c in col if c == 0]) == len(col) - 1) and sum(col) == 1
 def isPivotCol(col):
-    return len(col)==1 and col[0][1]==1
-
+    """Pivot columns have only a 1 (in some row), and aren't column -1."""
+    return len(col)==1 and col[0][1]==1 and col[0][0]!=-1
 
 def variableValueForPivotColumn_1(tableau, column):
     pivotRow1 = [i for (i, x) in enumerate(column) if x == 1]
@@ -97,6 +98,16 @@ def variableValueForPivotColumn_1(tableau, column):
     pivotRow = pivotRow1[0]
     return tableau[pivotRow][-1]
 
+def variableValueForPivotColumn(tableau, j):
+    """If we know j is a pivot column, gets
+        the variable in the row which contains a 1.
+    """
+    col = column(tableau, j)
+    if len(col)==1 and col[0][1]==1:
+        i = col[0][0]
+        return tableau[i][-1]
+    else:
+        return None
 
 def initialTableau(c, A, b):
     """Constructs the initial tableau.
@@ -107,10 +118,6 @@ def initialTableau(c, A, b):
     assume the last m columns of A are the slack variables; the initial basis is
     the set of slack variables
     """
-# was:
-#   tableau = [row[:] + [x] for row, x in zip(A, b)]
-#   tableau.append([ci for ci in c] + [0])
-#   return tableau
     tableau = A
     for (i, x) in b.items():
         tableau[i][-1] = x
@@ -119,64 +126,75 @@ def initialTableau(c, A, b):
 
 def primalSolution(tableau):
     # the pivot columns denote which variables are used
-    columns = transpose(tableau)
-
-    indices = [j for j, col in enumerate(columns[:-1]) if isPivotCol(col)]
-
-
-    return [(colIndex, variableValueForPivotColumn(tableau, columns[colIndex]))
+    # columns = transpose(tableau)
+    # indices = [j for j, col in enumerate(columns[:-1]) if isPivotCol(col)]
+    columns_list = [set(r.keys()) for r in tableau.values()]
+    columns = functools.reduce(lambda a, b: a.union(b), columns_list)
+    indices = [j for j in all_columns
+        if isPivotCol(j)]
+    # ??? make this a dict?
+    return [(colIndex, variableValueForPivotColumn(tableau, colIndex))
         for colIndex in indices]
 
 def objectiveValue(tableau):
     return -(tableau[-1][-1])
 
-
 def canImprove(tableau):
-   lastRow = tableau[-1]
-   return any(x > 0 for x in lastRow[:-1])
-
+    lastRow = [a for (a,j) in tableau[-1]
+        if j != -1]
+    return any([x>0 for x in lastRow])
 
 # this can be slightly faster
 def moreThanOneMin(L):
-   if len(L) <= 1:
-      return False
-
-   x,y = heapq.nsmallest(2, L, key=lambda x: x[1])
-   return x == y
+    if len(L) <= 1:
+        return False
+    x,y = heapq.nsmallest(2, L, key=lambda x: x[1])
+    return x == y
 
 
 def findPivotIndex(tableau):
-   # pick minimum positive index of the last row
-   column_choices = [(i,x) for (i,x) in enumerate(tableau[-1][:-1]) if x > 0]
-   column = min(column_choices, key=lambda a: a[1])[0]
+    # pick minimum positive index of the last row
+    column_choices = [(j,x) for (j,x) in tableau[-1].items()
+        if x>0 and j!=-1]
+    j = min(column_choices, key=lambda a: a[1])[0]
 
-   # check if unbounded
-   if all(row[column] <= 0 for row in tableau):
-      raise Exception('Linear program is unbounded.')
+    # check if unbounded
+    column_values = column(tableau, j)
+    if all(column_values <= 0):
+        raise Exception('Linear program is unbounded.')
 
-   # check for degeneracy: more than one minimizer of the quotient
-   quotients = [(i, r[-1] / r[column])
-      for i,r in enumerate(tableau[:-1]) if r[column] > 0]
+    # check for degeneracy: more than one minimizer of the quotient
+    quotients = [(i, r[-1] / r[j])
+        for (i,r) in tableau.items()
+        if j in r and r[j]>0]
+    if moreThanOneMin(quotients):
+        raise Exception('Linear program is degenerate.')
 
-   if moreThanOneMin(quotients):
-      raise Exception('Linear program is degenerate.')
+    # pick row index minimizing the quotient
+    i = min(quotients, key=lambda x: x[1])[0]
 
-   # pick row index minimizing the quotient
-   row = min(quotients, key=lambda x: x[1])[0]
-
-   return row, column
+    return i, j
 
 
 def pivotAbout(tableau, pivot):
-   i,j = pivot
+    i,j = pivot
 
-   pivotDenom = tableau[i][j]
-   tableau[i] = [x / pivotDenom for x in tableau[i]]
+    # rescale row containing pivot, so that tableau[i][j] := 1
+    pivotDenom = tableau[i][j]
+    tableau[i] = [x / pivotDenom for x in tableau[i]]
 
-   for k,row in enumerate(tableau):
-      if k != i:
-         pivotRowMultiple = [y * tableau[k][j] for y in tableau[i]]
-         tableau[k] = [x - y for x,y in zip(tableau[k], pivotRowMultiple)]
+    # subtract off the rescaled row, so that for the other rows,
+    # the j'th column is 0
+    # ??? can we just loop over rows in which column j is nonempty?
+    for i1,row in enumerate(tableau):
+        if i1 != i and j in row:
+            # was:
+            # pivotRowMultiple = [y * tableau[k][j] for y in tableau[i]]
+            # tableau[k] = [x - y for x,y in zip(tableau[k], pivotRowMultiple)]
+            scale = tableau[i1][j]
+            for j1 in row:
+                if j1 in tableau[i]:
+                    tableau[i1][j1] -= scale * tableau[i][j1]
 
 
 '''

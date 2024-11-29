@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# test, from the original code, except using fractions
+# test of sparse version, using problem from the original code
 
 import fractions
 
@@ -7,7 +7,7 @@ import fractions
 import sys
 sys.path.append("./")
 
-from exactsimplex.simplex import simplex
+from exactsimplex.import simplex
 
 def list_to_fractions(x):
     return list(map(fractions.Fraction, x))

@@ -151,6 +151,11 @@ def moreThanOneMin(L):
     x,y = heapq.nsmallest(2, L, key=lambda x: x[1])
     return x == y
 
+def sparsifyRows(tableau):
+    """Removes 0's from rows."""
+    def sparsify1(row):
+        return {j:x for (j,x) in row.items() if j==-1 or x!=0 }
+    return {i:sparsify1(row) for (i,row) in tableau.items() }
 
 def findPivotIndex(tableau):
     # pick minimum positive index of the last row
@@ -165,7 +170,7 @@ def findPivotIndex(tableau):
     # check for degeneracy: more than one minimizer of the quotient
     quotients = [(i, r[-1] / r[j])
         for (i,r) in tableau.items()
-        if i!=-1 and j in r and r[j]>0]
+        if i!=-1 and -1 in r and j in r and r[j]>0]
     if moreThanOneMin(quotients):
         raise Exception('Linear program is degenerate.')
 
@@ -222,5 +227,7 @@ def simplex(c, A, b):
       for row in tableau.items():
          print(row)
       print()
+
+   tableau = sparsifyRows(tableau)
 
    return tableau, primalSolution(tableau), objectiveValue(tableau)

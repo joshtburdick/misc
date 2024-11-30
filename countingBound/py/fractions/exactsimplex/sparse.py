@@ -152,10 +152,11 @@ def moreThanOneMin(L):
     return x == y
 
 def sparsifyRows(tableau):
-    """Removes 0's from rows."""
+    """Removes 0's from rows (except for row or column -1)."""
     def sparsify1(row):
         return {j:x for (j,x) in row.items() if j==-1 or x!=0 }
-    return {i:sparsify1(row) for (i,row) in tableau.items() }
+    return {i: (sparsify1(row) if i!=-1 else row)
+        for (i,row) in tableau.items()}
 
 def findPivotIndex(tableau):
     # pick minimum positive index of the last row
@@ -220,7 +221,7 @@ def simplex(c, A, b):
    print()
 
    while canImprove(tableau):
-      pivot = findPivotIndex(tableau)
+      pivot = findPivotIndex(sparsifyRows(tableau))
       print("Next pivot index is=%d,%d \n" % pivot)
       pivotAbout(tableau, pivot)
       print("Tableau after pivot:")

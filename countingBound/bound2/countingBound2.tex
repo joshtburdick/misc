@@ -287,10 +287,17 @@ Note that this has a sharp maximal peak at $c = N/2$.
 
 We now consider how the number of sets ($|A_t|$), and
 the number of gates needed to detect them ($|C_{A_t}|$),
-vary, with each step. (For simplicity, we only consider
-using unbounded fan-in NAND gates for now. We plan to
-also use 2-input NAND gates in the future, as that's a
-more commonly-used basis, and the changes needed are minor.)
+vary, with each step.
+
+We only consider using unbounded fan-in NAND gates.
+This is because adding one such NAND gate suffices to detect an
+addtional clique, and we frequently will need to construct circuits which detect
+some additional cliques.
+Although unbounded-fan-in circuits have been considered
+\cite{wegener1991complexity}
+\cite{allender1994depth}, various sorts of 2-input gates are arguably
+more frequently used in circuit complexity. (Many of the results here
+seem adaptable to work with 2-input gates.)
 
 First, what can we say about $|A_t|$, the number of sets?
 Consider a given starting set, $A_t$.

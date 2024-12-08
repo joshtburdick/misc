@@ -216,6 +216,7 @@ def pivotAbout(tableau, pivot):
 '''
 def simplex(c, A, b):
    tableau = initialTableau(c, A, b)
+   tableau = sparsifyRows(tableau)
    print("Initial tableau:")
    for row in tableau.items():
       print(row)
@@ -225,7 +226,7 @@ def simplex(c, A, b):
       pivot = findPivotIndex(sparsifyRows(tableau))
       print("Next pivot index is=%d,%d \n" % pivot)
       pivotAbout(tableau, pivot)
-      # tableau = sparsifyRows(tableau)
+      tableau = sparsifyRows(tableau)
       print("Tableau after pivot:")
       for row in tableau.items():
          print(row)

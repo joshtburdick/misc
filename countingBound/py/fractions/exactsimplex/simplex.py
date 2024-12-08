@@ -119,6 +119,7 @@ def findPivotIndex(tableau):
    # check for degeneracy: more than one minimizer of the quotient
    quotients = [(i, r[-1] / r[column])
       for i,r in enumerate(tableau[:-1]) if r[column] > 0]
+   print(f"column = {column}, quotients = {quotients}")
 
    if moreThanOneMin(quotients):
       raise Exception('Linear program is degenerate.')

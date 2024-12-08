@@ -168,10 +168,11 @@ def findPivotIndex(tableau):
     if all([x <= 0 for (i,x) in column(tableau, j)]):
         raise Exception('Linear program is unbounded.')
 
-    # check for degeneracy: more than one minimizer of the quotient
+    # compute quotients
     quotients = [(i, r[-1] / r[j])
         for (i,r) in tableau.items()
-        if i!=-1 and -1 in r and j in r and r[j]>0]
+        if i!=-1 and j in r and r[j]>0]
+    # check for degeneracy: more than one minimizer of the quotient
     if moreThanOneMin(quotients):
         raise Exception('Linear program is degenerate.')
 

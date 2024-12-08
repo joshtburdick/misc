@@ -79,7 +79,7 @@ def column(A, j):
     ??? should this return a dict?"""
     column = [(i, row[j])
         for (i, row) in A.items()
-        if j in row]
+        if j in row and row[j]!=0]
     return column
 
 # deprecated; try to omit this?
@@ -224,11 +224,12 @@ def simplex(c, A, b):
       pivot = findPivotIndex(sparsifyRows(tableau))
       print("Next pivot index is=%d,%d \n" % pivot)
       pivotAbout(tableau, pivot)
+      # tableau = sparsifyRows(tableau)
       print("Tableau after pivot:")
       for row in tableau.items():
          print(row)
       print()
 
-   tableau = sparsifyRows(tableau)
+#    tableau = sparsifyRows(tableau)
 
    return tableau, primalSolution(tableau), objectiveValue(tableau)

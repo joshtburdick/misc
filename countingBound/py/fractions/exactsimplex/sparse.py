@@ -199,9 +199,13 @@ def pivotAbout(tableau, pivot):
             # pivotRowMultiple = [y * tableau[k][j] for y in tableau[i]]
             # tableau[k] = [x - y for x,y in zip(tableau[k], pivotRowMultiple)]
             scale = tableau[i1][j]
-            for j1 in row:
+            # note that we need to consider every column in which _either_
+            # row i, or row i1, is non-zero
+            for j1 in set(row).union(set(tableau[i])):
+                x = tableau[i1][j1] if j1 in tableau[i1] else 0
                 if j1 in tableau[i]:
-                    tableau[i1][j1] -= scale * tableau[i][j1]
+                    x -= scale * tableau[i][j1]
+                tableau[i1][j1] = x
 
 
 '''
@@ -223,7 +227,7 @@ def simplex(c, A, b):
    print()
 
    while canImprove(tableau):
-      pivot = findPivotIndex(sparsifyRows(tableau))
+      pivot = findPivotIndex(tableau)
       print("Next pivot index is=%d,%d \n" % pivot)
       pivotAbout(tableau, pivot)
       tableau = sparsifyRows(tableau)
@@ -232,6 +236,6 @@ def simplex(c, A, b):
          print(row)
       print()
 
-#    tableau = sparsifyRows(tableau)
+      tableau = sparsifyRows(tableau)
 
    return tableau, primalSolution(tableau), objectiveValue(tableau)

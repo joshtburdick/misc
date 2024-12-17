@@ -62,6 +62,12 @@ def standardForm(cost, greaterThans=[], gtThreshold=[], lessThans=[], ltThreshol
 
    return newCost, constraints, threshold
 
+def num_entries(a):
+    """Number of entries in a sparse matrix, represented as above.
+
+    This is for tracking memory usage.
+    """
+    return sum([len(x) for x in a.values()])
 
 def dot(a,b):
     columns = set(a.keys()).union(set(b.keys()))
@@ -218,24 +224,37 @@ def pivotAbout(tableau, pivot):
 
    providing the optimal solution x* and the value of the objective function
 '''
-def simplex(c, A, b):
+def simplex(c, A, b, verbosity=0):
    tableau = initialTableau(c, A, b)
    tableau = sparsifyRows(tableau)
-   print("Initial tableau:")
-   for row in tableau.items():
-      print(row)
-   print()
+   if verbosity >= 1:
+       print("Initial tableau:")
+       for row in tableau.items():
+          print(row)
+       print()
+   iter = 0
+   print("iter\tojective\tn. tableau entries")
+   print("\t".join([str(iter),
+        str(float(tableau[-1][-1])),
+        str(num_entries(tableau))]))
 
    while canImprove(tableau):
       pivot = findPivotIndex(tableau)
-      print("Next pivot index is=%d,%d \n" % pivot)
+      if verbosity >= 2:
+         print("Next pivot index is=%d,%d \n" % pivot)
       pivotAbout(tableau, pivot)
       tableau = sparsifyRows(tableau)
-      print("Tableau after pivot:")
-      for row in tableau.items():
-         print(row)
-      print()
-
+      if verbosity >= 2:
+          print("Tableau after pivot:")
+          for row in tableau.items():
+             print(row)
+          print()
       tableau = sparsifyRows(tableau)
+
+      iter += 1
+      print("\t".join([str(iter),
+         str(float(tableau[-1][-1])),
+         str(num_entries(tableau))]))
+
 
    return tableau, primalSolution(tableau), objectiveValue(tableau)

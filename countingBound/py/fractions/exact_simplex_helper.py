@@ -34,48 +34,49 @@ class ExactSimplexHelper:
         # The number of slack variables, which will be prefixed with __slack
         self.n_slack_vars = 0
 
+    def allocate_slack_var(self):
+        """Allocates a new slack variable."""
+        i = self.n_slack_vars
+        self.var_index[f"__slack{i}"] = i
+        self.n_slack_vars += 1
+        return i
+
     def add_constraint(self, A, op, b):
         """Adds one row to the constraints.
 
         A: a list of (index, coefficient) pairs, where "index" is
             a key (of any hashable Python type) in var_index
-        op: either '<', '<=', '=', '>=', or '>': the type of constraint
+        op: either '<=', '=', or '>=': the type of constraint
         b: the corresponding bound
         Side effects: adds the constraint
         """
+        if op not in ["<=", "=", ">="]:
+            raise ValueError(f"Unknown operator: {op}")
         # print(str(A) + ' ' + op + ' ' + str(b))
-        def negate_coefs(A):
-            """Negates coefficients in a list."""
-            return [(a,-x) for (a,x) in A]
-        # for some operators, simply add the constraint
-        if op in ["<=", "=", ">="]:
-            self.constraints.append({
-                "A": A,
-                "op": op,
-                "b": b
-            })
-            return
-        # for other operators, need negation (although I'm not sure
-        # these will be used)
-        if op in [">", "<"]:
-            self.constraints.append({
-                "A": negate_coefficients(A),
-                "op": ">=" if op=="<" else "<=",
-                "b": -b
-            })
-            return
-        raise ValueError(f"Unknown operator: {op}")
+        # build up the row, starting with A 
+        row = {self.var_index(name): x for (name, x) in A}
+        # add slack vars if necessary
+        if op == "<=":
+            row[ self.allocate_slack_var() ] = 1
+        if op == ">=":
+            row[ self.allocate_slack_var() ] = -1
+        # add bound
+        row[-1] = b
+        # add row to tableau
+        self.tableau[ len(self.tableau) ] = row
+
 
     def solve(self, var_to_minimize, bounds=None):
         """Solves the linear system, minimizing one variable.
 
         Note that this ignores the bounds.
         """
-        # construct a vector with a 1. only at the variable
-        # to minimize (and 0. everywhere else)
-        c = [fractions.Fraction(0)] * len(self.var_index)
-        c[ self.var_index[var_to_minimize] ] = fractions.Fraction(1)
-        opt_val, opt_vec = self.solve_1(c)
+        # add "last" row for objective function; since we're
+        # minimizing, put -1 for the variable in question
+        self.tableau[-1] = {
+            self.var_index[var_to_minimize]: -1, -1: 0 }
+        # run the simplex algorithm
+        FIXME
         # check whether problem was infeasible
         if opt_val is None:
             return None

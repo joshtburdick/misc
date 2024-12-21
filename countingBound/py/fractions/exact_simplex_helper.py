@@ -38,7 +38,7 @@ class ExactSimplexHelper:
     def allocate_slack_var(self):
         """Allocates a new slack variable."""
         i = self.n_slack_vars
-        self.var_index[f"__slack{i}"] = i
+        self.var_index[f"__slack{i}"] = len(self.var_index)
         self.n_slack_vars += 1
         return i
 
@@ -55,7 +55,8 @@ class ExactSimplexHelper:
             raise ValueError(f"Unknown operator: {op}")
         # print(str(A) + ' ' + op + ' ' + str(b))
         # build up the row, starting with A 
-        row = {self.var_index[name]: x for (name, x) in A}
+        row = {self.var_index[name]:
+            fractions.Fraction(x) for (name, x) in A}
         # add slack vars if necessary
         if op == "<=":
             row[ self.allocate_slack_var() ] = 1
@@ -64,7 +65,7 @@ class ExactSimplexHelper:
         # add row to A, and add to b
         i = len(self.A)
         self.A[i] = row
-        self.b[i] = b
+        self.b[i] = fractions.Fraction(b)
 
     def solve(self, var_to_minimize, bounds=None):
         """Solves the linear system, minimizing one variable.
@@ -74,10 +75,11 @@ class ExactSimplexHelper:
         # the (sparse) objective function; since we're
         # minimizing, put -1 for the variable in question
         c = { self.var_index[var_to_minimize]: -1 }
+        pdb.set_trace()
         # run the simplex algorithm
         t, s, v = exactsimplex.sparse.simplex(c, self.A, self.b)
         # FIXME simplex should check for infeasible problems
-        opt_vec = {var: s[i]
+        opt_vec = {var: (s[i] if i in s else 0)
             for (var, i) in self.var_index.items()}
         return opt_vec
 

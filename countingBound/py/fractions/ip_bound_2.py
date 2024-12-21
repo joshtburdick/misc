@@ -18,6 +18,7 @@ import gate_basis
 import flexible_lp_helper
 import pulp_helper
 import scip_helper
+import exact_simplex_helper
 
 # Wrapper for comb(), with exact arithmetic.
 def comb(n, k):
@@ -69,12 +70,14 @@ class LpEdgeZeroing:
                 self.num_gates_dist_vars += [(c, g)]
         # wrapper for LP solver
         # FIXME: make this an option?
-        self.lp = scip_helper.SCIP_Helper(
-            self.expected_num_gates_vars + self.num_gates_dist_vars)
+        # self.lp = scip_helper.SCIP_Helper(
+        #     self.expected_num_gates_vars + self.num_gates_dist_vars)
         # self.lp = flexible_lp_helper.Flexible_LP_Helper(
         #      self.expected_num_gates_vars + self.num_gates_dist_vars)
         # self.lp = pulp_helper.PuLP_Helper(
         #      self.expected_num_gates_vars + self.num_gates_dist_vars)
+        self.lp = exact_simplex_helper.ExactSimplexHelper(
+            self.expected_num_gates_vars + self.num_gates_dist_vars)
         # number of possible cliques
         self.num_possible_cliques = comb(n, k)
         # number of cliques which include an arbitrary edge: this

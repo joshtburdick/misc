@@ -19,8 +19,8 @@ def lol_to_fractions(x):
 if __name__ == "__main__":
    # minimizing sum of these
    c = list_to_fractions([-1, -1])
-   A = lol_to_fractions([[1, 5], [5, 1]])
-   b = list_to_fractions([1, 1])
+   A = lol_to_fractions([[1, 5], [2, 1]])
+   b = list_to_fractions([-100, -100])
 
    # add slack variables by hand
    A[0] += [1,0]
@@ -28,6 +28,7 @@ if __name__ == "__main__":
    c += [0,0]
 
    t, s, v = simplex(c, A, b)
+   print(t)
    print(s)
    print(v)
 

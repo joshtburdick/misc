@@ -32,6 +32,10 @@ if __name__ == "__main__":
     # A[3] += [0,0,0,-1]  # is this the objective function?
     # c += [0,0,0,0]
 
+    print(f"A =\n{A}")
+    print(f"b =\n{b}")
+    print(f"c =\n{c}")
+
     t, s, v = simplex(c, A, b)
     print(s)
     print(v)

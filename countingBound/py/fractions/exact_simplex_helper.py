@@ -37,8 +37,8 @@ class ExactSimplexHelper:
 
     def allocate_slack_var(self):
         """Allocates a new slack variable."""
-        i = self.n_slack_vars
-        self.var_index[f"__slack{i}"] = len(self.var_index)
+        i = len(self.var_index)
+        self.var_index[f"__slack{self.n_slack_vars}"] = i
         self.n_slack_vars += 1
         return i
 
@@ -67,14 +67,15 @@ class ExactSimplexHelper:
         self.A[i] = row
         self.b[i] = fractions.Fraction(b)
 
-    def solve(self, var_to_minimize, bounds=None):
-        """Solves the linear system, minimizing one variable.
+    def solve(self, var_to_optimize, bounds=None, minimize=True):
+        """Solves the linear system, optimizing for one variable.
 
-        Note that this ignores the bounds.
+        var_to_optimize: name of var to minimize or maximize
+        bounds: the bounds (currently ignored)
+        minimize: if True, minimize; otherwise maximize
         """
-        # the (sparse) objective function; since we're
-        # minimizing, put -1 for the variable in question
-        c = { self.var_index[var_to_minimize]: -1 }
+        # the (sparse) objective function
+        c = { self.var_index[var_to_optimize]: (-1 if minimize else 1) }
         pdb.set_trace()
         # run the simplex algorithm
         t, s, v = exactsimplex.sparse.simplex(c, self.A, self.b)

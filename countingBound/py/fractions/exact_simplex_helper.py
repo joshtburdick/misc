@@ -76,13 +76,8 @@ class ExactSimplexHelper:
         """
         # the (sparse) objective function
         c = { self.var_index[var_to_optimize]: (-1 if minimize else 1) }
-        pdb.set_trace()
-        # run the simplex algorithm
-        t, s, v = exactsimplex.sparse.simplex(c, self.A, self.b)
-        # FIXME simplex should check for infeasible problems
-        opt_vec = {var: (s[i] if i in s else 0)
-            for (var, i) in self.var_index.items()}
-        return opt_vec
+        return self.solve_1(c)
+
 
     def solve_1(self, objective):
         """Solves the linear system.
@@ -94,5 +89,14 @@ class ExactSimplexHelper:
         FIXME: return a dict, indexed by variable name, of
             all the variables, at the lower bound?
         """
-        raise NotImplementedError()
+        # convert from var. names to indices
+        c = {self.var_index[name]: fractions.Fraction(x)
+            for (name, x) in objective}
+        # run the simplex algorithm
+        t, s, v = exactsimplex.sparse.simplex(c, self.A, self.b)
+        # FIXME should check for errors
+        opt_vec = {var: (s[i] if i in s else 0)
+            for (var, i) in self.var_index.items()}
+        return opt_vec
+
 

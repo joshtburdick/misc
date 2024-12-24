@@ -235,7 +235,7 @@ def simplex(c, A, b, verbosity=0):
    iter = 0
    print("iter\tobjective\tn. tableau entries")
    print("\t".join([str(iter),
-        str(float(tableau[-1][-1])),
+        str(float(-tableau[-1][-1])),
         str(num_entries(tableau))]))
 
    while canImprove(tableau):
@@ -253,7 +253,7 @@ def simplex(c, A, b, verbosity=0):
 
       iter += 1
       print("\t".join([str(iter),
-         str(float(tableau[-1][-1])),
+         str(-float(tableau[-1][-1])),
          str(num_entries(tableau))]))
 
 

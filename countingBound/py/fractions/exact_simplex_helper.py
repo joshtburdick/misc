@@ -75,7 +75,7 @@ class ExactSimplexHelper:
         minimize: if True, minimize; otherwise maximize
         """
         # the (sparse) objective function
-        c = { self.var_index[var_to_optimize]: (-1 if minimize else 1) }
+        c = [(var_to_optimize, (-1 if minimize else 1))]
         return self.solve_1(c)
 
 
@@ -91,7 +91,7 @@ class ExactSimplexHelper:
         """
         # convert from var. names to indices
         c = {self.var_index[name]: fractions.Fraction(x)
-            for (name, x) in objective}
+            for (name, x) in objective }
         # run the simplex algorithm
         t, s, v = exactsimplex.sparse.simplex(c, self.A, self.b)
         # FIXME should check for errors

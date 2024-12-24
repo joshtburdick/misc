@@ -39,3 +39,33 @@ class TestExactSimplexHelper(unittest.TestCase):
         r = h.solve_1([("x", 300), ("y", 250), ("z", 450)])
         print(r)
 
+    def test_from_wiki_1(self):
+        """From https://en.wikipedia.org/wiki/Simplex_algorithm . """
+        h = exact_simplex_helper.ExactSimplexHelper(["x", "y", "z"])
+        h.add_constraint([("x", 3), ("y", 2), ("z", 1)], "<=", 10)
+        h.add_constraint([("x", 2), ("y", 5), ("z", 3)], "<=", 15)
+        # we're minimizing this, so we negate these coefficients
+        r = h.solve_1([("x", 2), ("y", 3), ("z", 4)])
+        # print(r)
+        self.assertEqual(r["x"], 0)
+        self.assertEqual(r["y"], 0)
+        self.assertEqual(r["z"], 5)
+
+    def test_from_wiki_1_tweaked(self):
+        """Modified from the above.
+
+        I had been thinking that the initial solution had to have
+        all variables >= 0. This doesn't seem to be the case (it's
+        just that the _slack_ variables have to be >= 0).
+        """
+        h = exact_simplex_helper.ExactSimplexHelper(["x", "y", "z"])
+        h.add_constraint([("x", 3), ("y", 2), ("z", 1)], "<=", 10)
+        h.add_constraint([("x", 2), ("y", 5), ("z", 3)], "<=", 15)
+        h.add_constraint([("x", 1)], ">=", 1)
+        h.add_constraint([("y", 1)], ">=", 1)
+        h.add_constraint([("z", 1)], ">=", 1)
+        # we're minimizing this, so we negate these coefficients
+        r = h.solve_1([("x", 2), ("y", 3), ("z", 4)])
+        print(r)
+
+

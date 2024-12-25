@@ -2,6 +2,8 @@
 
 import unittest
 
+import fractions
+
 import exact_simplex_helper
 
 class TestExactSimplexHelper(unittest.TestCase):
@@ -68,4 +70,19 @@ class TestExactSimplexHelper(unittest.TestCase):
         r = h.solve_1([("x", 2), ("y", 3), ("z", 4)])
         print(r)
 
+    def test_crossed_lines(self):
+        """Test based on multiple lines.
+
+        This prints x = y = 0 as a solution, which is incorrect.
+        But this may reproduece the previously-seen problem...
+        """
+        print("-------- start crossed lines test")
+        h = exact_simplex_helper.ExactSimplexHelper(["x", "y"])
+        h.add_constraint([("x", 4), ("y", 1)], ">=", 4)
+        h.add_constraint([("x", fractions.Fraction(3,2)), ("y", 2)], ">=", 3)
+        h.add_constraint([("x", fractions.Fraction(2,3)), ("y", 3)], ">=", 2)
+        h.add_constraint([("x", fractions.Fraction(1,4)), ("y", 4)], ">=", 1)
+        r = h.solve_1([("x", -1), ("y", -1)])
+        print(r)
+        print("-------- end crossed lines test")
 

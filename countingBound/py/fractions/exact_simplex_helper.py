@@ -17,7 +17,7 @@ class ExactSimplexHelper:
 
     This also handles converting the LP to canonical form.
     """
-    def __init__(self, var_names, verbosity=0):
+    def __init__(self, var_names, verbosity=1):
         """ Constructor.
    
         var_names: names of the variables
@@ -94,7 +94,10 @@ class ExactSimplexHelper:
         c = {self.var_index[name]: fractions.Fraction(x)
             for (name, x) in objective }
         if self.verbosity >= 1:
-            print(f"A =\n{self.A}")
+            print(f"var_index = {self.var_index}")
+            print(f"A =")
+            for r in self.A.items():
+                print(r)
             print(f"b =\n{self.b}")
             print(f"c =\n{c}")
         # run the simplex algorithm

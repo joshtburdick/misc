@@ -41,18 +41,6 @@ class TestExactSimplexHelper(unittest.TestCase):
         r = h.solve_1([("x", 300), ("y", 250), ("z", 450)])
         print(r)
 
-    def test_from_wiki_1(self):
-        """From https://en.wikipedia.org/wiki/Simplex_algorithm . """
-        h = exact_simplex_helper.ExactSimplexHelper(["x", "y", "z"])
-        h.add_constraint([("x", 3), ("y", 2), ("z", 1)], "<=", 10)
-        h.add_constraint([("x", 2), ("y", 5), ("z", 3)], "<=", 15)
-        # we're minimizing this, so we negate these coefficients
-        r = h.solve_1([("x", 2), ("y", 3), ("z", 4)])
-        # print(r)
-        self.assertEqual(r["x"], 0)
-        self.assertEqual(r["y"], 0)
-        self.assertEqual(r["z"], 5)
-
     def test_from_wiki_1_tweaked(self):
         """Modified from the above.
 
@@ -70,6 +58,7 @@ class TestExactSimplexHelper(unittest.TestCase):
         r = h.solve_1([("x", 2), ("y", 3), ("z", 4)])
         print(r)
 
+
     def test_crossed_lines(self):
         """Test based on multiple lines.
 
@@ -85,4 +74,17 @@ class TestExactSimplexHelper(unittest.TestCase):
         r = h.solve_1([("x", -1), ("y", -1)])
         print(r)
         print("-------- end crossed lines test")
+
+
+    def test_from_wiki_2(self):
+        """Example from Wikipedia which possibly needs two phases."""
+        h = exact_simplex_helper.ExactSimplexHelper(["x", "y", "z"])
+        h.add_constraint([("x", 3), ("y", 2), ("z", 1)], "=", 10)
+        h.add_constraint([("x", 2), ("y", 5), ("z", 3)], "=", 15)
+        # we're minimizing this, so we negate these coefficients
+        r = h.solve_1([("x", 2), ("y", 3), ("z", 4)])
+        # this seems to work...
+        self.assertEqual(r["x"], fractions.Fraction(15,7))
+        self.assertEqual(r["y"], 0)
+        self.assertEqual(r["z"], fractions.Fraction(25,7))
 

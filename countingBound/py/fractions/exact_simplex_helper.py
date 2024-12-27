@@ -102,6 +102,7 @@ class ExactSimplexHelper:
             print(f"c =\n{c}")
         # run the simplex algorithm
         t, s, v = exactsimplex.sparse.simplex(c, self.A, self.b)
+        # pdb.set_trace()
         # FIXME should check for errors
         opt_vec = {var: (s[i] if i in s else 0)
             for (var, i) in self.var_index.items()}

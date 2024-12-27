@@ -88,3 +88,30 @@ class TestExactSimplexHelper(unittest.TestCase):
         self.assertEqual(r["y"], 0)
         self.assertEqual(r["z"], fractions.Fraction(25,7))
 
+
+    def test_silly_1(self):
+        """A really silly test."""
+        print("in test_silly_1:")
+        h = exact_simplex_helper.ExactSimplexHelper(["x"])
+        h.add_constraint([("x", 1)], ">=", 1)
+        # we're minimizing this, so we negate these coefficients
+        r = h.solve_1([("x", -1)])
+        print(r)
+        # currently doesn't work
+        # self.assertEqual(r["x"], fractions.Fraction(15,7))
+
+
+    def test_silly_2(self):
+        """Another really silly test."""
+        print("in test_silly_2:")
+        h = exact_simplex_helper.ExactSimplexHelper(["x"])
+        h.add_constraint([("x", 1)], "=", 1)
+        # we're minimizing this, so we negate these coefficients
+        r = h.solve_1([("x", -1)])
+        print(r)
+        # currently doesn't work
+        # self.assertEqual(r["x"], fractions.Fraction(15,7))
+
+
+
+

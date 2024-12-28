@@ -97,8 +97,8 @@ class TestExactSimplexHelper(unittest.TestCase):
         # we're minimizing this, so we negate these coefficients
         r = h.solve_1([("x", -1)])
         print(r)
-        # currently doesn't work
-        # self.assertEqual(r["x"], fractions.Fraction(15,7))
+        # what the result should be
+        self.assertEqual(r["x"], 1)
 
 
     def test_silly_2(self):
@@ -109,8 +109,8 @@ class TestExactSimplexHelper(unittest.TestCase):
         # we're minimizing this, so we negate these coefficients
         r = h.solve_1([("x", -1)])
         print(r)
-        # currently doesn't work
-        # self.assertEqual(r["x"], fractions.Fraction(15,7))
+        # what the result should be
+        self.assertEqual(r["x"], 1)
 
 
 

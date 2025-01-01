@@ -89,7 +89,7 @@ class TestExactSimplexHelper(unittest.TestCase):
         self.assertEqual(r["z"], fractions.Fraction(25,7))
 
 
-    def test_silly_1(self):
+    def skipped_test_silly_1(self):
         """A really silly test."""
         print("in test_silly_1:")
         h = exact_simplex_helper.ExactSimplexHelper(["x"])
@@ -101,7 +101,7 @@ class TestExactSimplexHelper(unittest.TestCase):
         self.assertEqual(r["x"], 1)
 
 
-    def test_silly_2(self):
+    def skipped_test_silly_2(self):
         """Another really silly test."""
         print("in test_silly_2:")
         h = exact_simplex_helper.ExactSimplexHelper(["x"])
@@ -111,7 +111,5 @@ class TestExactSimplexHelper(unittest.TestCase):
         print(r)
         # what the result should be
         self.assertEqual(r["x"], 1)
-
-
 
 

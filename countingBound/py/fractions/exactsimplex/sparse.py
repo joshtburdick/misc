@@ -215,17 +215,11 @@ def pivotAbout(tableau, pivot):
 
 
 '''
-   simplex: [float], [[float]], [float] -> [float], float
-   Solve the given standard-form linear program:
+   The simplex algorithm, as a function from tableau => tableau".
 
-      max <c,x>
-      s.t. Ax = b
-           x >= 0
-
-   providing the optimal solution x* and the value of the objective function
+   This seems possibly convenient for the two-phase simplex algorithm.
 '''
-def simplex(c, A, b, verbosity=0):
-   tableau = initialTableau(c, A, b)
+def tableauSimplex(tableau, verbosity=0):
    tableau = sparsifyRows(tableau)
    if verbosity >= 1:
        print("Initial tableau:")
@@ -256,5 +250,26 @@ def simplex(c, A, b, verbosity=0):
          str(-float(tableau[-1][-1])),
          str(num_entries(tableau))]))
 
+   return tableau
+
+
+'''
+   simplex: [float], [[float]], [float] -> [float], float
+   Solve the given standard-form linear program:
+
+      max <c,x>
+      s.t. Ax = b
+           x >= 0
+
+   providing the optimal solution x* and the value of the objective function
+
+   This only does one phase of the simplex algorithm.
+'''
+def simplex(c, A, b, verbosity=0):
+   tableau = initialTableau(c, A, b)
+   tableau = tableauSimplex(tableau, verbosity=verbosity)
 
    return tableau, primalSolution(tableau), objectiveValue(tableau)
+
+
+

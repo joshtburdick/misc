@@ -263,7 +263,7 @@ def tableauSimplex(tableau, verbosity=0):
 
    providing the optimal solution x* and the value of the objective function
 
-   This only does one phase of the simplex algorithm.
+   Note that this only does one phase of the simplex algorithm.
 '''
 def simplex(c, A, b, verbosity=0):
    tableau = initialTableau(c, A, b)
@@ -271,5 +271,48 @@ def simplex(c, A, b, verbosity=0):
 
    return tableau, primalSolution(tableau), objectiveValue(tableau)
 
+
+'''
+    Solve the given linear program, using the two-phase simplex algorithm.
+
+    This is like simplex(), but uses the two-phase simplex algorithm,
+    and so should be able to find an initial feasible solution.
+
+    Attempting to follow description at
+        https://en.wikipedia.org/wiki/Simplex_algorithm
+'''
+    # start with the initial simplex
+    tableau = initialTableau(c, A, b)
+
+    # first phase: add artificial variables
+    # (first, renumber current objective from -1 to -2)
+    tableau = renumber(tableau, -1, -2)
+    artificial_vars = set()
+    # FIXME base this on the number of variables?
+    artificial_var_index = 1000000
+
+    for (i, row) in tableau.items():
+        row[artificial_var_index][-1] = 1
+    artificial_vars.add(artificial_var_index)
+    artificial_var_index += 1
+    tableau[-1] = { j: 1 for j in artificial_var_index }
+    tableau[-1][-1] = 0
+
+    tableau = tableauSimplex(tableau, verbosity=verbosity)
+
+    # FIXME check for feasibility
+
+    # second phase
+    # first, remove artificial variables (hopefully they're not needed)
+    tableau.pop(-1)
+    for (i, row) in tableau.items():
+        for j in row:
+            if j in artificial_vars:
+                row.pop(j)
+    tableau = renumber(tableau, -2, -1)
+
+    tableau = tableauSimplex(tableau, verbosity=verbosity)
+
+    return tableau, primalSolution(tableau), objectiveValue(tableau)
 
 

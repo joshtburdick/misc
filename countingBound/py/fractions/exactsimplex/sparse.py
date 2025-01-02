@@ -286,7 +286,10 @@ def simplex(c, A, b, verbosity=0):
 
     # first phase: add artificial variables
     # (first, renumber current objective from -1 to -2)
-    tableau = renumber(tableau, -1, -2)
+    for (i, row) in tableau.items():
+        row[-2] = row.pop(-1)
+    tableau[-2] = tableau.pop(-1)
+
     artificial_vars = set()
     # FIXME base this on the number of variables?
     artificial_var_index = 1000000
@@ -309,7 +312,9 @@ def simplex(c, A, b, verbosity=0):
         for j in row:
             if j in artificial_vars:
                 row.pop(j)
-    tableau = renumber(tableau, -2, -1)
+    for (i, row) in tableau.items():
+        row[-1] = row.pop(-2)
+    tableau[-1] = tableau.pop(-2)
 
     tableau = tableauSimplex(tableau, verbosity=verbosity)
 

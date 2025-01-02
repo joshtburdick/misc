@@ -281,6 +281,7 @@ def simplex(c, A, b, verbosity=0):
     Attempting to follow description at
         https://en.wikipedia.org/wiki/Simplex_algorithm
 '''
+def simplex_two_phase(c, A, b, verbosity=0):
     # start with the initial simplex
     tableau = initialTableau(c, A, b)
 
@@ -294,12 +295,16 @@ def simplex(c, A, b, verbosity=0):
     # FIXME base this on the number of variables?
     artificial_var_index = 1000000
 
-    for (i, row) in tableau.items():
-        row[artificial_var_index][-1] = 1
+    # this is the objective function for finding an initial feasible sol'n
+    tableau[-1] = { artificial_var_index: 1 }
     artificial_vars.add(artificial_var_index)
     artificial_var_index += 1
-    tableau[-1] = { j: 1 for j in artificial_var_index }
     tableau[-1][-1] = 0
+    for (i, row) in tableau.items():
+        tableau[-1][artificial_var_index] = -1
+        row[artificial_var_index] = 1
+        artificial_vars.add(artificial_var_index)
+        artificial_var_index += 1
 
     tableau = tableauSimplex(tableau, verbosity=verbosity)
 

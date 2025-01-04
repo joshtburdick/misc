@@ -215,7 +215,7 @@ def pivotAbout(tableau, pivot):
 
 
 '''
-   The simplex algorithm, as a function from tableau => tableau".
+   The simplex algorithm, as a function from "tableau => tableau".
 
    This seems possibly convenient for the two-phase simplex algorithm.
 '''
@@ -287,8 +287,8 @@ def simplex_two_phase(c, A, b, verbosity=0):
 
     # first phase: add artificial variables
     # (first, renumber current objective from -1 to -2)
-    for (i, row) in tableau.items():
-        row[-2] = row.pop(-1)
+    # for (i, row) in tableau.items():
+    #     row[-2] = row.pop(-1)
     tableau[-2] = tableau.pop(-1)
 
     artificial_vars = set()
@@ -296,17 +296,21 @@ def simplex_two_phase(c, A, b, verbosity=0):
     artificial_var_index = 1000000
 
     # this is the objective function for finding an initial feasible sol'n
-    tableau[-1] = { artificial_var_index: 1 }
-    artificial_vars.add(artificial_var_index)
-    artificial_var_index += 1
-    tableau[-1][-1] = 0
+    tableau[-1] = { -1: 0 }
+    # artificial_vars.add(artificial_var_index)
+    # artificial_var_index += 1
     for (i, row) in tableau.items():
+        # -1 and -2 are objective functions; don't add artificial vars. for them
+        if i < 0:
+            continue
         tableau[-1][artificial_var_index] = -1
         row[artificial_var_index] = 1
         artificial_vars.add(artificial_var_index)
         artificial_var_index += 1
 
+
     tableau = tableauSimplex(tableau, verbosity=verbosity)
+    # pdb.set_trace()
 
     # FIXME check for feasibility
 
@@ -314,11 +318,11 @@ def simplex_two_phase(c, A, b, verbosity=0):
     # first, remove artificial variables (hopefully they're not needed)
     tableau.pop(-1)
     for (i, row) in tableau.items():
-        for j in row:
-            if j in artificial_vars:
+        for j in artificial_vars:
+            if j in row:
                 row.pop(j)
-    for (i, row) in tableau.items():
-        row[-1] = row.pop(-2)
+    # for (i, row) in tableau.items():
+    #     row[-1] = row.pop(-2)
     tableau[-1] = tableau.pop(-2)
 
     tableau = tableauSimplex(tableau, verbosity=verbosity)

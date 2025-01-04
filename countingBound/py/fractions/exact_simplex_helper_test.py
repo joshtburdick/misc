@@ -19,7 +19,7 @@ class TestExactSimplexHelper(unittest.TestCase):
         print(r)
 
 
-    def skip_test2(self):
+    def _test2(self):
         """??? not sure why this one is failing? """
         h = exact_simplex_helper.ExactSimplexHelper(["x1", "x2", "y"])
         h.add_constraint([("x1", 1), ("x2", 5)], "<=", 10)

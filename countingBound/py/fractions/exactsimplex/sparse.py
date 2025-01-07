@@ -279,9 +279,60 @@ def simplex(c, A, b, verbosity=0):
     and so should be able to find an initial feasible solution.
 
     Attempting to follow description at
-        https://en.wikipedia.org/wiki/Simplex_algorithm
+        https://sites.math.washington.edu/~burke/crs/407/notes/section3-18.pdf
 '''
 def simplex_two_phase(c, A, b, verbosity=0):
+    # start with the initial simplex
+    tableau = initialTableau(c, A, b)
+
+    # first, renumber current objective from -1 to -2
+    tableau[-2] = tableau.pop(-1)
+
+    # first phase: add variable to optimize 
+    # FIXME base this on the number of variables?
+    phase_1_objective = 1000000
+    tableau[-1] = { phase_1_objective: -1, -1: 0 }
+    # artificial_vars.add(artificial_var_index)
+    # artificial_var_index += 1
+    for (i, row) in tableau.items():
+        # -1 and -2 are objective functions; don't add artificial vars. for them
+        if i < 0:
+            continue
+        row[phase_1_objective] = -1
+
+    # pdb.set_trace()
+    tableau = tableauSimplex(tableau, verbosity=verbosity)
+    # pdb.set_trace()
+
+    # FIXME check for feasibility
+    # if objectiveValue(tableau) > 0:
+    #     raise ...Exception("infeasible")
+
+    # second phase
+    # first, remove phase 1 objective (which should no longer be needed)
+    tableau.pop(-1)
+    for (i, row) in tableau.items():
+        try:
+            row.pop(phase_1_objective)
+        except KeyError:
+            pass
+    # restore the original objective
+    tableau[-1] = tableau.pop(-2)
+
+    tableau = tableauSimplex(tableau, verbosity=verbosity)
+
+    return tableau, primalSolution(tableau), objectiveValue(tableau)
+
+'''
+    Solve the given linear program, using the two-phase simplex algorithm.
+
+    This is like simplex(), but uses the two-phase simplex algorithm,
+    and so should be able to find an initial feasible solution.
+
+    Attempting to follow description at
+        https://en.wikipedia.org/wiki/Simplex_algorithm
+'''
+def simplex_two_phase_v1(c, A, b, verbosity=0):
     # start with the initial simplex
     tableau = initialTableau(c, A, b)
 

@@ -86,8 +86,7 @@ class ExactSimplexHelper:
         objective: what to minimize (as a Numpy vector)
         var_to_minimize: name of the variable to minimize
         Returns: the vector of the minizing solution (if found),
-            as a Numpy vector.
-        FIXME: return a dict, indexed by variable name, of
+            as a Numpy vector.  FIXME: return a dict, indexed by variable name, of
             all the variables, at the lower bound?
         """
         # convert from var. names to indices

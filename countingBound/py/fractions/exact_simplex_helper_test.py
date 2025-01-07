@@ -89,6 +89,23 @@ class TestExactSimplexHelper(unittest.TestCase):
         self.assertEqual(r["z"], fractions.Fraction(25,7))
 
 
+    def test_two_phase(self):
+        """
+        Two-phase example from
+        https://sites.math.washington.edu/~burke/crs/407/notes/section3-18.pdf
+        """
+        h = exact_simplex_helper.ExactSimplexHelper(["x1", "x2", "x3"])
+        h.add_constraint([("x1", 2), ("x2", -1), ("x3", 2)], "<=", 4)
+        h.add_constraint([("x1", 2), ("x2", -3), ("x3", 1)], "<=", -5)
+        h.add_constraint([("x1", -1), ("x2", 1), ("x3", -2)], "<=", -1)
+        # here, we're maximizing
+        r = h.solve_1([("x1", 1), ("x2", -1), ("x3", 1)])
+        print(r)
+        self.assertEqual(r["x1"], 0)
+        self.assertEqual(r["x2"], fractions.Fraction(14,5))
+        self.assertEqual(r["x3"], fractions.Fraction(17,5))
+
+
     def skipped_test_silly_1(self):
         """A really silly test."""
         print("in test_silly_1:")

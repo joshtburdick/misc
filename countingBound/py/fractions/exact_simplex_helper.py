@@ -55,6 +55,14 @@ class ExactSimplexHelper:
         if op not in ["<=", "=", ">="]:
             raise ValueError(f"Unknown operator: {op}")
         # print(str(A) + ' ' + op + ' ' + str(b))
+
+        # following Burke textbook, for equalities, add "<=" and ">=" ?
+        # if op == "=":
+        #     self.add_constraint(A, "<=", b)
+        #     self.add_constraint(A, ">=", b)
+        #     return
+
+        # at this point, op is either "<=" or ">="
         # build up the row, starting with A 
         row = {self.var_index[name]:
             fractions.Fraction(x) for (name, x) in A}
@@ -67,6 +75,7 @@ class ExactSimplexHelper:
         i = len(self.A)
         self.A[i] = row
         self.b[i] = fractions.Fraction(b)
+
 
     def solve(self, var_to_optimize, bounds=None, minimize=True):
         """Solves the linear system, optimizing for one variable.

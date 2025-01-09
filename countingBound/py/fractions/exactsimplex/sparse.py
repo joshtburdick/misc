@@ -2,6 +2,12 @@
 
 A row will be represented by a Dict<Int, Fraction>, as it were.
 The tableau will be represented by a Dict<Int, Dict<Int, Fraction>>.
+
+This works in some cases, but not others.
+
+It sometimes seems to fail on cases in which phase 1 isn't necessary.
+Also, the objective function isn't always increasing (or decreasing),
+which suggests a bug.
 '''
 
 import functools
@@ -9,7 +15,7 @@ import heapq
 import pdb
 
 '''
-   Return a rectangular identity matrix with the specified diagonal entiries, possibly
+   Return a rectangular identity matrix with the specified diagonal entries, possibly
    starting in the middle.
 '''
 def identity(numRows, numCols, val=1, rowStart=0):
@@ -247,7 +253,7 @@ def tableauSimplex(tableau, verbosity=0):
 
       iter += 1
       print("\t".join([str(iter),
-         str(-float(tableau[-1][-1])),
+         str(objectiveValue(tableau)),
          str(num_entries(tableau))]))
 
    return tableau
@@ -376,7 +382,11 @@ def simplex_two_phase_v1(c, A, b, verbosity=0):
                 x += row[j]
             tableau[-1][j] = x
 
+    # pdb.set_trace()
+    print(f"before phase1: objective = {objectiveValue(tableau)}")
     tableau = tableauSimplex(tableau, verbosity=verbosity)
+    print(f"after phase1: objective = {objectiveValue(tableau)}")
+    # pdb.set_trace()
 
     # FIXME check for feasibility
 

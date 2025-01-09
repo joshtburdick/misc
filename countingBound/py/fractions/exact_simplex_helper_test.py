@@ -1,4 +1,5 @@
 # Some small tests.
+# Those starting with _test currently don't work (and so are skipped).
 
 import unittest
 
@@ -41,11 +42,10 @@ class TestExactSimplexHelper(unittest.TestCase):
         print(r)
 
     def _test_from_wiki_1_tweaked(self):
-        """Modified from the above.
+        """Modified example from Wikipedia.
 
         I had been thinking that the initial solution had to have
-        all variables >= 0. This doesn't seem to be the case (it's
-        just that the _slack_ variables have to be >= 0).
+        all variables >= 0. This doesn't seem to always be the case.
         """
         h = exact_simplex_helper.ExactSimplexHelper(["x", "y", "z"])
         h.add_constraint([("x", 3), ("y", 2), ("z", 1)], "<=", 10)

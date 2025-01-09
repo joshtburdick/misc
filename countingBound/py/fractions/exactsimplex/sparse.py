@@ -300,9 +300,9 @@ def simplex_two_phase(c, A, b, verbosity=0):
             continue
         row[phase_1_objective] = -1
 
-    # pdb.set_trace()
+    pdb.set_trace()
     tableau = tableauSimplex(tableau, verbosity=verbosity)
-    # pdb.set_trace()
+    pdb.set_trace()
 
     # FIXME check for feasibility
     # if objectiveValue(tableau) > 0:
@@ -359,9 +359,24 @@ def simplex_two_phase_v1(c, A, b, verbosity=0):
         artificial_vars.add(artificial_var_index)
         artificial_var_index += 1
 
+    # based on Wiki, it appears that the objective function needs to be tweaked first
+    # (possibly this should be fused with the loop above?)
+    for (i, row) in tableau.items():
+        # again, skip objective functions
+        if i < 0:
+            continue
+        # only consider rows which contain an artificial var
+        if not artificial_vars.intersection(row):
+            continue
+        # at this point, the row must contain an artificial var (which presumably =1);
+        # add it to row -1 (the first phase objective function) 
+        for j in set(row).union(set(tableau[-1])):
+            x = tableau[-1][j] if j in tableau[-1] else 0
+            if j in row:
+                x += row[j]
+            tableau[-1][j] = x
 
     tableau = tableauSimplex(tableau, verbosity=verbosity)
-    # pdb.set_trace()
 
     # FIXME check for feasibility
 

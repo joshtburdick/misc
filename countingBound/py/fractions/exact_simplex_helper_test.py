@@ -8,7 +8,8 @@ import exact_simplex_helper
 
 class TestExactSimplexHelper(unittest.TestCase):
 
-    def test1(self):
+
+    def _test1(self):
         """Example from explication."""
         h = exact_simplex_helper.ExactSimplexHelper(["x1", "x2"])
         h.add_constraint([("x1", 1), ("x2", 2)], "<=", 4)
@@ -19,7 +20,7 @@ class TestExactSimplexHelper(unittest.TestCase):
         print(r)
 
 
-    def _test2(self):
+    def test2(self):
         """??? not sure why this one is failing? """
         h = exact_simplex_helper.ExactSimplexHelper(["x1", "x2", "y"])
         h.add_constraint([("x1", 1), ("x2", 5)], "<=", 10)
@@ -29,19 +30,17 @@ class TestExactSimplexHelper(unittest.TestCase):
         print(r)
 
 
-    def test3(self):
+    def _test3(self):
         """Attempt to adapt example from original code."""
         h = exact_simplex_helper.ExactSimplexHelper(["x", "y", "z"])
         h.add_constraint([("x", 15), ("y", 20), ("z", 25)], "<=", 1200)
         h.add_constraint([("x", 35), ("y", 60), ("z", 60)], "<=", 3000)
         h.add_constraint([("x", 20), ("y", 30), ("z", 25)], "<=", 1500)
         h.add_constraint([("y", 250)], ">=", 500)
-        # FIXME the objective function isn't just one variable
-        # c = list_to_fractions([300, 250, 450,  0,0,0,0])
         r = h.solve_1([("x", 300), ("y", 250), ("z", 450)])
         print(r)
 
-    def test_from_wiki_1_tweaked(self):
+    def _test_from_wiki_1_tweaked(self):
         """Modified from the above.
 
         I had been thinking that the initial solution had to have
@@ -73,10 +72,11 @@ class TestExactSimplexHelper(unittest.TestCase):
         h.add_constraint([("x", fractions.Fraction(1,4)), ("y", 4)], ">=", 1)
         r = h.solve_1([("x", -1), ("y", -1)])
         print(r)
+        print("FIXME check if solution is correct")
         print("-------- end crossed lines test")
 
 
-    def test_from_wiki_2(self):
+    def _test_from_wiki_2(self):
         """Example from Wikipedia which possibly needs two phases."""
         h = exact_simplex_helper.ExactSimplexHelper(["x", "y", "z"])
         h.add_constraint([("x", 3), ("y", 2), ("z", 1)], "=", 10)
@@ -106,7 +106,7 @@ class TestExactSimplexHelper(unittest.TestCase):
         self.assertEqual(r["x3"], fractions.Fraction(17,5))
 
 
-    def skipped_test_silly_1(self):
+    def test_silly_1(self):
         """A really silly test."""
         print("in test_silly_1:")
         h = exact_simplex_helper.ExactSimplexHelper(["x"])
@@ -115,10 +115,10 @@ class TestExactSimplexHelper(unittest.TestCase):
         r = h.solve_1([("x", -1)])
         print(r)
         # what the result should be
-#        self.assertEqual(r["x"], 1)
+        self.assertEqual(r["x"], 1)
 
 
-    def skipped_test_silly_2(self):
+    def test_silly_2(self):
         """Another really silly test."""
         print("in test_silly_2:")
         h = exact_simplex_helper.ExactSimplexHelper(["x"])

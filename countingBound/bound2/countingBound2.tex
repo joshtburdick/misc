@@ -3,6 +3,7 @@
 \usepackage{fullpage}
 \usepackage{graphicx}
 \usepackage{hyperref}
+\usepackage{url}
 \usepackage{booktabs}
 
 \theoremstyle{definition}
@@ -17,7 +18,7 @@
 \newcommand{\bigC}[0]{\mathcal{C}}
 \begin{document}
 \emergencystretch 3em
-\title{A lower bound from a random walk? (DRAFT)  }
+\title{A lower bound from a random walk? (DRAFT)}
 
 \author{Josh Burdick}
 
@@ -71,7 +72,7 @@ One step of this is depicted in Figure \ref{fig:boing}.
 Luca Trevisan's blog discussed ways of understanding a hypergraph by
 considering a random walk on a related graph
 \cite{luca_trevisan_blog_random_walks_1}.
-What we discuss here seems different, but related:
+What we discuss here is different, but seems somewhat related:
 we are looking at a random walk on a graph whose vertices are
 hypergraphs.
 
@@ -91,7 +92,6 @@ Adding a random set of cliques back results in $A_{t+1}$.
 \end{figure}
 
 \subsection{Graph-theoretic properties of the walk}
-
 Note that ``one-step reachability'' in the bouncing walk is symmetric;
 one step can be an arbitrary modification of which cliques which hit
 an edge $e$ are included.
@@ -131,11 +131,13 @@ For any given set of cliques $A$, we can generate all the neighbors
 of $A$ by picking a set of cliques $X \in E$, and taking $A \oplus X$. This will
 add and remove some cliques from $A$, all of which include some edge $e$.
 Distinct choices of $X$ will yield distinct neighbors of $A$.
-Since we can choose an edge $e$, and then pick any subset of cliques which contains
-$e$, we have that
+We can enumerate these by picking an edge $e$, 
+and then picking any subset of cliques which contains $e$. (This overcounts
+elements in $E$, but not by that much; most random sets of cliques won't be
+covered by a single edge $e$.) Thus, we have the following bounds for $|E|$:
 
 \[
-|E| \le {n \choose 2} 2^{{n-2} \choose {k-2}}
+2^{{n-2} \choose {k-2}} \le |E| \le {n \choose 2} 2^{{n-2} \choose {k-2}}
 \]
 
 XORing with something from $E$ defines all of the neighbors of any set of cliques
@@ -424,6 +426,12 @@ theoretically can solve problems with fractions involving
 numbers like $10^{100}$, in practice, these haven't worked
 (for differing reasons).
 
+More recently, I have tried to modify the Python code from
+Jeremy Kun's tutorial about the simplex algorithm \cite{kun_lp_simplex}.
+Although replacing double-precision with Python {\tt fractions.Fraction}
+objects works, the resulting code isn't working, for this particular
+problem.
+
 This raises the following open question:
 
 \begin{prob}
@@ -442,12 +450,15 @@ of 1 unbounded fan-in NAND gate...
 
 \section{Acknowledgements}
 
-The emphasis on random walks was partly inspired by Luca Trevisan's
-blog, {\em in theory} \cite{luca_trevisan_blog_random_walks_1}.
-That blog included his insights into current research questions, and
-his experience as a gay theoretical computer science researcher.
-It also included a fair amount of levity.
-As many complexity commentators have noted, he will be missed.
+The emphasis on random walks was partly inspired by the late Luca Trevisan's
+blog, {\em in theory};
+as many complexity commentators have noted, he will be missed.
+The author would also like to thank the authors and maintainers of
+several other entertaining and relevant blogs, including but
+not limited to: the Computational Complexity blog
+(Lance Fortnow and William Gasarch),
+G\"odel's Lost Letter (Richard Lipton and Ken Regan),
+and Shtetl-Optimized (Scott Aaronson).
 
 \bibliography{references}
 \bibliographystyle{unsrt}

@@ -316,9 +316,9 @@ def simplex_two_phase(c, A, b, verbosity=0):
     tableau = tableauSimplex(tableau, verbosity=verbosity)
     pdb.set_trace()
 
-    # FIXME check for feasibility
-    # if objectiveValue(tableau) > 0:
-    #     raise ...Exception("infeasible")
+    # check for feasibility
+    if objectiveValue(tableau) > 0:
+       raise ValueError("problem is infeasible")
 
     # second phase
     # first, remove phase 1 objective (which should no longer be needed)

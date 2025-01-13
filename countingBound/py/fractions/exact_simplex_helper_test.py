@@ -10,7 +10,7 @@ import exact_simplex_helper
 class TestExactSimplexHelper(unittest.TestCase):
 
 
-    def _test1(self):
+    def test1(self):
         """Example from explication."""
         h = exact_simplex_helper.ExactSimplexHelper(["x1", "x2"])
         h.add_constraint([("x1", 1), ("x2", 2)], "<=", 4)
@@ -31,7 +31,7 @@ class TestExactSimplexHelper(unittest.TestCase):
         print(r)
 
 
-    def _test3(self):
+    def test3(self):
         """Attempt to adapt example from original code."""
         h = exact_simplex_helper.ExactSimplexHelper(["x", "y", "z"])
         h.add_constraint([("x", 15), ("y", 20), ("z", 25)], "<=", 1200)
@@ -41,7 +41,7 @@ class TestExactSimplexHelper(unittest.TestCase):
         r = h.solve_1([("x", 300), ("y", 250), ("z", 450)])
         print(r)
 
-    def _test_from_wiki_1_tweaked(self):
+    def test_from_wiki_1_tweaked(self):
         """Modified example from Wikipedia.
 
         I had been thinking that the initial solution had to have

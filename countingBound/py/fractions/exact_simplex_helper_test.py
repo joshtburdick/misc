@@ -76,14 +76,15 @@ class TestExactSimplexHelper(unittest.TestCase):
         print("-------- end crossed lines test")
 
 
-    def _test_from_wiki_2(self):
+    def test_from_wiki_2(self):
         """Example from Wikipedia which possibly needs two phases."""
+        print("in test_from_wiki_2()...")
         h = exact_simplex_helper.ExactSimplexHelper(["x", "y", "z"])
+        h.verbosity = 3
         h.add_constraint([("x", 3), ("y", 2), ("z", 1)], "=", 10)
         h.add_constraint([("x", 2), ("y", 5), ("z", 3)], "=", 15)
         # we're minimizing this, so we negate these coefficients
         r = h.solve_1([("x", 2), ("y", 3), ("z", 4)])
-        # this seems to work...
         self.assertEqual(r["x"], fractions.Fraction(15,7))
         self.assertEqual(r["y"], 0)
         self.assertEqual(r["z"], fractions.Fraction(25,7))

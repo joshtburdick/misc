@@ -173,7 +173,7 @@ def sparsifyRows(tableau):
 def findPivotIndex(tableau):
     # pick minimum positive index of the last row
     column_choices = [(j,x) for (j,x) in tableau[-1].items()
-        if x>0 and j!=-1]
+        if x>0 and j>=0]
     j = min(column_choices, key=lambda a: a[1])[0]
 
     # check if unbounded
@@ -183,7 +183,7 @@ def findPivotIndex(tableau):
     # compute quotients
     quotients = [(i, r[-1] / r[j])
         for (i,r) in tableau.items()
-        if i!=-1 and j in r and r[j]>0]
+        if i>=0 and j in r and r[j]>0]
     # check for degeneracy: more than one minimizer of the quotient
     if moreThanOneMin(quotients):
         raise Exception('Linear program is degenerate.')
@@ -233,12 +233,17 @@ def tableauSimplex(tableau, verbosity=0):
           print(row)
        print()
    iter = 0
-   print("iter\tobjective\tn. tableau entries")
+   print("iter\tobjective\tfloat(objective)\tn. tableau entries")
    print("\t".join([str(iter),
+        str(-tableau[-1][-1]),
         str(float(-tableau[-1][-1])),
         str(num_entries(tableau))]))
 
    while canImprove(tableau):
+      if verbosity >= 3:
+         print(f"tableau =")
+         for x in tableau.items():
+            print(x)
       pivot = findPivotIndex(tableau)
       if verbosity >= 2:
          print("Next pivot index is=%d,%d \n" % pivot)
@@ -254,6 +259,7 @@ def tableauSimplex(tableau, verbosity=0):
       iter += 1
       print("\t".join([str(iter),
          str(objectiveValue(tableau)),
+         str(float(objectiveValue(tableau))),
          str(num_entries(tableau))]))
 
    return tableau

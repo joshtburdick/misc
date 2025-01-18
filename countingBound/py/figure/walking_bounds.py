@@ -47,13 +47,44 @@ class BouncePlot:
 
         return {
             "U_t0": U_t0,
-            "V_t1": np.stack([V_t1_x, V_t1_y_lo, V_t1_y_hi]),
-            "U_t2": np.stack([U_t2_x, U_t2_y_lo, U_t2_y_hi]),
+            "V_t1": np.stack([V_t1_x, V_t1_y_lo, V_t1_y_hi], axis=1),
+            "U_t2": np.stack([U_t2_x, U_t2_y_lo, U_t2_y_hi], axis=1),
         }
 
+    def plot_lines(self, axs, p, hue, alpha=0.4):
+        """Plot lines.
+
+        axs: Axes object to draw on
+        p: endpoints, as a numpy array with three columns
+        hue: the hue
+        """
+        rgb = matplotlib.colors.hsv_to_rgb(np.array([hue, 1, 1]))
+ 
+        lines = matplotlib.collections.LineCollection(
+            [p[:,[0,1]], p[:,[0,2]]],
+             colors=np.concat([rgb, np.array([alpha])]))
+        axs.add_collection(lines)
+
+
+    def plot_bounce(self, axs, x_proportion, num_samples=100):
+        """Plots starting with some number of cliques."""
+        # XXX connect lines showing trajectories of individual samples?
+        x = int(self.N * x_proportion)
+        s = self.sample_step((x, 0), num_samples=num_samples)
+        axs.scatter(x, 0, c="black", s=3, alpha=1)
+        self.plot_lines(axs, s["V_t1"], 1/6, alpha=0.3)
+        self.plot_lines(axs, s["U_t2"], 1/3, alpha=0.3)
+
+
+
+
+plt.figure(figsize=(6,3))
 bp = BouncePlot(10, 3)
 
-z = bp.sample_step((30, 0), num_samples=3)
+for p in [0.1, 0.5, 0.8]:
+    bp.plot_bounce(plt.gca(), p)
 
-pdb.set_trace()
+plt.savefig("walking_bounds_0.pdf")
+
+
 

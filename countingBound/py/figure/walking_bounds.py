@@ -59,10 +59,14 @@ class BouncePlot:
         hue: the hue
         """
         rgb = matplotlib.colors.hsv_to_rgb(np.array([hue, 1, 1]))
+
+        # reshape points
+        p1 = [ [(p[i,0], p[i,1]), (p[i,0], p[i,2])]
+            for i in range(p.shape[0]) ]
+        # pdb.set_trace()
  
         lines = matplotlib.collections.LineCollection(
-            [p[:,[0,1]], p[:,[0,2]]],
-             colors=np.concat([rgb, np.array([alpha])]))
+             p1, colors=np.concat([rgb, np.array([alpha])]))
         axs.add_collection(lines)
 
 
@@ -79,12 +83,11 @@ class BouncePlot:
 
 
 plt.figure(figsize=(6,3))
-bp = BouncePlot(10, 3)
+bp = BouncePlot(12, 5)
 
-for p in [0.1, 0.5, 0.8]:
+for p in [0, 0.25, 0.5, 0.75, 1]:
     bp.plot_bounce(plt.gca(), p)
 
 plt.savefig("walking_bounds_0.pdf")
-
 
 

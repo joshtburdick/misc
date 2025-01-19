@@ -22,7 +22,7 @@ class BouncePlot:
         self.k = k
         # number of possible cliques
         self.N = scipy.special.comb(n, k)
-        # number of cliques "hit" by zeroing out an edge
+        # number of cliques possibly "hit" by zeroing out an edge
         self.h = scipy.special.comb(n-2, k-2)
         self.rng = np.random.default_rng(12345)
 
@@ -55,7 +55,6 @@ class BouncePlot:
         """Plot lines.
 
         FIXME
-        - y-axis should include all of the lines
         - show lines between sampling from a given starting point?
 
         axs: Axes object to draw on
@@ -87,14 +86,13 @@ class BouncePlot:
         self.plot_lines(axs, s["U_t2"], 1/3, alpha=0.01)
 
 
-
-plt.figure(figsize=(6,3))
-bp = BouncePlot(15, 5)
+plt.figure(figsize=(6,4))
+bp = BouncePlot(12, 5)
 
 for p in [0, 0.25, 0.5, 0.75, 1]:
     bp.plot_bounce(plt.gca(), p)
 
+plt.margins(0.02)
 plt.tight_layout()
 plt.savefig("walking_bounds_0.pdf")
-
 

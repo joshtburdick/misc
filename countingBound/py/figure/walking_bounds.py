@@ -42,7 +42,7 @@ class BouncePlot:
         # bounce "up"
         num_added = self.rng.binomial(self.h, 0.5, num_samples)
         U_t2_x = V_t1_x + num_added
-        U_t2_y_lo = V_t1_y_lo + num_added
+        U_t2_y_lo = V_t1_y_lo
         U_t2_y_hi = V_t1_y_hi + num_added
 
         return {
@@ -54,11 +54,15 @@ class BouncePlot:
     def plot_lines(self, axs, p, hue, alpha=0.4):
         """Plot lines.
 
+        FIXME
+        - y-axis should include all of the lines
+        - show lines between sampling from a given starting point?
+
         axs: Axes object to draw on
         p: endpoints, as a numpy array with three columns
         hue: the hue
         """
-        rgb = matplotlib.colors.hsv_to_rgb(np.array([hue, 1, 1]))
+        rgb = matplotlib.colors.hsv_to_rgb(np.array([hue, 1, 0.75]))
 
         # reshape points
         p1 = [ [(p[i,0], p[i,1]), (p[i,0], p[i,2])]
@@ -70,24 +74,27 @@ class BouncePlot:
         axs.add_collection(lines)
 
 
-    def plot_bounce(self, axs, x_proportion, num_samples=100):
+    def plot_bounce(self, axs, x_proportion, num_samples=500):
         """Plots starting with some number of cliques."""
         # XXX connect lines showing trajectories of individual samples?
         x = int(self.N * x_proportion)
         s = self.sample_step((x, 0), num_samples=num_samples)
-        axs.scatter(x, 0, c="black", s=3, alpha=1)
-        self.plot_lines(axs, s["V_t1"], 1/6, alpha=0.3)
-        self.plot_lines(axs, s["U_t2"], 1/3, alpha=0.3)
-
+        # pdb.set_trace()
+        axs.scatter(x, 0,
+            color=matplotlib.colors.hsv_to_rgb(np.array([0, 1, 0.75])),
+            s=3, alpha=1)
+        self.plot_lines(axs, s["V_t1"], 1/6, alpha=0.01)
+        self.plot_lines(axs, s["U_t2"], 1/3, alpha=0.01)
 
 
 
 plt.figure(figsize=(6,3))
-bp = BouncePlot(12, 5)
+bp = BouncePlot(15, 5)
 
 for p in [0, 0.25, 0.5, 0.75, 1]:
     bp.plot_bounce(plt.gca(), p)
 
+plt.tight_layout()
 plt.savefig("walking_bounds_0.pdf")
 
 

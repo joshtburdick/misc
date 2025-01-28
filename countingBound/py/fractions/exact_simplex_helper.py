@@ -68,12 +68,14 @@ class ExactSimplexHelper:
         row = {self.var_index[name]:
             fractions.Fraction(x) for (name, x) in A}
         # add slack vars if necessary
+        if op == "<=":
+            row[ self.allocate_slack_var() ] = 1
         if op == ">=":
             row[ self.allocate_slack_var() ] = -1
 
-        # ??? make sure b is >= 0? (I'm not sure this is needed, or works.
-        # However, including it seems to avoid a blowup in the phase 1
-        # objective function, which then goes > 0...
+        # ??? make sure b is >= 0? Wikipedia's description of the two-phase
+        # suggests this needs to be done before adding "artificial variables".
+        # However, including it breaks a unit test.
         # if b < 0:
         #     A = {i: -x for (i,x) in A}
         #     b = -b
@@ -81,7 +83,7 @@ class ExactSimplexHelper:
         # add row to A, and add to b
         i = len(self.A)
         self.A[i] = row
-        self.b[i] = b
+        self.b[i] = fractions.Fraction(b)
 
 
     def solve(self, var_to_optimize, bounds=None, minimize=True):

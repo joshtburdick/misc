@@ -227,6 +227,15 @@ def pivotAbout(tableau, pivot):
 '''
 def tableauSimplex(tableau, verbosity=0):
    tableau = sparsifyRows(tableau)
+
+   # ??? possibly make sure non-objective row has b >= 0
+   if True:
+    for i, row in tableau.items():
+        if i < 0:
+            continue
+        if row[-1] < 0:
+            row = {j: -x for j, x in row.items()} 
+
    if verbosity >= 1:
        print("Initial tableau:")
        for row in tableau.items():

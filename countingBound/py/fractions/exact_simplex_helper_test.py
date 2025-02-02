@@ -92,8 +92,7 @@ class TestExactSimplexHelper(unittest.TestCase):
 
     def test_two_phase(self):
         """
-        Two-phase example from
-        https://sites.math.washington.edu/~burke/crs/407/notes/section3-18.pdf
+        Two-phase example from https://sites.math.washington.edu/~burke/crs/407/notes/section3-18.pdf
         """
         h = exact_simplex_helper.ExactSimplexHelper(["x1", "x2", "x3"])
         h.add_constraint([("x1", 2), ("x2", -1), ("x3", 2)], "<=", 4)

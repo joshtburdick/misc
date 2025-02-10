@@ -58,6 +58,7 @@ class ExactSimplexHelper:
         # print(str(A) + ' ' + op + ' ' + str(b))
 
         # following Burke textbook, for equalities, add "<=" and ">=" ?
+        # (this breaks two unit tests...)
         # if op == "=":
         #     self.add_constraint(A, "<=", b)
         #     self.add_constraint(A, ">=", b)

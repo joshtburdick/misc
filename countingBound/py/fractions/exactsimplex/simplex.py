@@ -1,4 +1,7 @@
 
+# Also referring to
+# https://github.com/scipy/scipy/blob/v1.15.1/scipy/optimize/_linprog_simplex.py
+
 import heapq
 
 

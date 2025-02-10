@@ -75,7 +75,9 @@ class ExactSimplexHelper:
 
         # ??? make sure b is >= 0? Wikipedia's description of the two-phase
         # suggests this needs to be done before adding "artificial variables".
-        # However, including it breaks a unit test.
+        # However, including it breaks a unit test...
+        # Currently, thinking that this is dealt with adequately in
+        # exactsimplex.sparse.tableauSimplex().
         # if b < 0:
         #     A = {i: -x for (i,x) in A}
         #     b = -b

@@ -10,6 +10,7 @@ Also, the objective function isn't always increasing (or decreasing),
 which suggests a bug.
 '''
 
+import copy
 import functools
 import heapq
 import pdb
@@ -219,6 +220,21 @@ def pivotAbout(tableau, pivot):
                     x -= scale * tableau[i][j1]
                 tableau[i1][j1] = x
 
+'''
+    Checks that a tableau is valid.
+'''
+def isValidTableau(tableau):
+    # check that b >= 0
+    for i,row in tableau.items():
+        if i<0:
+            continue
+        if row[-1] < 0:
+            return False
+    # check number of basis columns
+    # FIXME
+    return True
+
+
 
 '''
    The simplex algorithm, as a function from "tableau => tableau".
@@ -228,19 +244,24 @@ def pivotAbout(tableau, pivot):
 def tableauSimplex(tableau, verbosity=0):
    tableau = sparsifyRows(tableau)
 
-   # ??? possibly make sure non-objective row has b >= 0
+   # make sure every non-objective row has b >= 0
    if True:
-    for i, row in tableau.items():
+     for i, row in tableau.items():
         if i < 0:
             continue
         if row[-1] < 0:
-            row = {j: -x for j, x in row.items()} 
+            # this doesn't actually update the tableau!
+            # row = {j: -x for j, x in row.items()} 
+            # this works; but then the solver sometimes crashes...
+            tableau[i] = {j: -x for j, x in row.items()} 
+   # pdb.set_trace()
 
    if verbosity >= 1:
        print("Initial tableau:")
        for row in tableau.items():
           print(row)
        print()
+   # if not isValidTableau(tableau):
    iter = 0
    print("iter\tobjective\tfloat(objective)\tn. tableau entries")
    print("\t".join([str(iter),
@@ -249,6 +270,8 @@ def tableauSimplex(tableau, verbosity=0):
         str(num_entries(tableau))]))
 
    while canImprove(tableau):
+      # copy tableau beforehand (for debugging)
+      tableau_before = copy.deepcopy(tableau)
       if verbosity >= 3:
          print(f"tableau =")
          for x in tableau.items():
@@ -258,12 +281,18 @@ def tableauSimplex(tableau, verbosity=0):
          print("Next pivot index is=%d,%d \n" % pivot)
       pivotAbout(tableau, pivot)
       tableau = sparsifyRows(tableau)
+
+      # check tableau
+      if not isValidTableau(tableau):
+        pdb.set_trace()
+
       if verbosity >= 2:
           print("Tableau after pivot:")
           for row in tableau.items():
              print(row)
           print()
-      tableau = sparsifyRows(tableau)
+
+      # tableau = sparsifyRows(tableau)
 
       iter += 1
       print("\t".join([str(iter),

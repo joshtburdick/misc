@@ -121,8 +121,8 @@ class ExactSimplexHelper:
             print(f"b =\n{self.b}")
             print(f"c =\n{c}")
         # run the simplex algorithm
-        # t, s, v = exactsimplex.sparse.simplex(c, self.A, self.b)
-        t, s, v = exactsimplex.sparse.simplex_two_phase_v1(c, self.A, self.b, verbosity=self.verbosity)
+        t, s, v = exactsimplex.sparse.simplex(c, self.A, self.b)
+        # t, s, v = exactsimplex.sparse.simplex_two_phase_v1(c, self.A, self.b, verbosity=self.verbosity)
         # pdb.set_trace()
         # FIXME should check for errors
         opt_vec = {var: (s[i] if i in s else 0)

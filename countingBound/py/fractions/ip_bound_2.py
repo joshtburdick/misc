@@ -74,10 +74,10 @@ class LpEdgeZeroing:
         #     self.expected_num_gates_vars + self.num_gates_dist_vars)
         # self.lp = flexible_lp_helper.Flexible_LP_Helper(
         #      self.expected_num_gates_vars + self.num_gates_dist_vars)
-        # self.lp = pulp_helper.PuLP_Helper(
-        #      self.expected_num_gates_vars + self.num_gates_dist_vars)
-        self.lp = exact_simplex_helper.ExactSimplexHelper(
-            self.expected_num_gates_vars + self.num_gates_dist_vars)
+        self.lp = pulp_helper.PuLP_Helper(
+             self.expected_num_gates_vars + self.num_gates_dist_vars)
+        # self.lp = exact_simplex_helper.ExactSimplexHelper(
+        #     self.expected_num_gates_vars + self.num_gates_dist_vars)
         # number of possible cliques
         self.num_possible_cliques = comb(n, k)
         # number of cliques which include an arbitrary edge: this
@@ -211,6 +211,22 @@ class LpEdgeZeroing:
                 [((c, g), 1)
                     for c in range(self.num_possible_cliques+1)],
                 '<=', num_functions[g] + self.random_eps())
+
+    def get_step_bounds(self):
+        """Gets the vectors of change in number of gates at each step.
+
+        `num_added[i]` is the expected number of cliques which _were just added_ to obtain
+        a set of `i` cliques, in the "up" step.
+
+        Somewhat symmetrically, `num_hit[i]` is the number of cliques which were "hit" in the
+        "down" step, obtaining a set of `i` cliques. Since we're counting this "after" the bounce,
+        the numbers are "blurred" by the transition matrix.
+        """
+        num_added = [fractions.Fraction(self.num_cliques_with_edge * i, self.num_possible_cliques)
+            for i in range(self.num_possible_cliques + 1)]
+        num_hit = [-sum([self.step_probability(i, j) * num_added(j) for j in range(self.num_possible_cliques+1)])
+            for i in range(self.num_possible_cliques+1)]
+        return (num_hit, num_added)
 
     def add_step_constraints(self, lower_bound=True, upper_bound=True):
         """Adds 'step' constraints, for tweaking one edge.

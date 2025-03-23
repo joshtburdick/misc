@@ -1,7 +1,18 @@
 """Simplex method for  linear programming
 
-Originally from scipy 1.11.0 . Heavily modified by Josh Burdick to use
-fractions.Fraction arithmetic.
+Based on scipy.optimize._linprog_simplex scipy 1.11.0 .
+Heavily modified by Josh Burdick to be sparse, and use fractions.Fraction arithmetic.
+
+Most of the comments have been replaced with notes relating to the sparse
+implementation; see the original scipy.optimize._linprog_simplex module
+for those.
+
+The tableau is represented by a dict, indexed by row number (an int),
+and containing rows as columns. Each row, in turn, is represented by
+a dict with ints as keys and fractions.Fraction objects as values.
+
+
+Original top-level comment:
 
 The *simplex* method uses a traditional, full-tableau implementation of
 Dantzig's simplex algorithm [1]_, [2]_ (*not* the Nelder-Mead simplex).
@@ -39,48 +50,16 @@ from scipy.optimize._linprog_util import _postsolve
 # import this to compare with original functions
 # scipy.optimize._linprog_simplex
 
-def _pivot_col(T, tol=1e-9, bland=False):
+def _pivot_col(T, bland=False):
     """
     Given a linear programming simplex tableau, determine the column
     of the variable to enter the basis.
 
-    Parameters
-    ----------
-    T : 2-D array
-        A 2-D array representing the simplex tableau, T, corresponding to the
-        linear programming problem. It should have the form:
-
-        [[A[0, 0], A[0, 1], ..., A[0, n_total], b[0]],
-         [A[1, 0], A[1, 1], ..., A[1, n_total], b[1]],
-         .
-         .
-         .
-         [A[m, 0], A[m, 1], ..., A[m, n_total], b[m]],
-         [c[0],   c[1], ...,   c[n_total],    0]]
-
-        for a Phase 2 problem, or the form:
-
-        [[A[0, 0], A[0, 1], ..., A[0, n_total], b[0]],
-         [A[1, 0], A[1, 1], ..., A[1, n_total], b[1]],
-         .
-         .
-         .
-         [A[m, 0], A[m, 1], ..., A[m, n_total], b[m]],
-         [c[0],   c[1], ...,   c[n_total],   0],
-         [c'[0],  c'[1], ...,  c'[n_total],  0]]
-
-         for a Phase 1 problem (a problem in which a basic feasible solution is
-         sought prior to maximizing the actual objective. ``T`` is modified in
-         place by ``_solve_simplex``.
-    tol : float
-        Elements in the objective row larger than -tol will not be considered
-        for pivoting. Nominally this value is zero, but numerical issues
-        cause a tolerance about zero to be necessary.
+    T: the tableau, as a 2-D sparse array
     bland : bool
         If True, use Bland's rule for selection of the column (select the
         first column with a negative coefficient in the objective row,
         regardless of magnitude).
-
     Returns
     -------
     status: bool
@@ -91,16 +70,25 @@ def _pivot_col(T, tol=1e-9, bland=False):
         The index of the column of the pivot element.
         If status is False, col will be returned as nan.
     """
-    ma = np.ma.masked_where(T[-1, :-1] >= -tol, T[-1, :-1], copy=False)
-    if ma.count() == 0:
+    # this presumably isn't needed, with Fractions
+    # ma = np.ma.masked_where(T[-1, :-1] >= -tol, T[-1, :-1], copy=False)
+
+    # get last row entries which are negative
+    last_row = [(j, x) for (j,x) in T[-1].items()
+        if j != -1 and x < 0]
+    if len(last_row) == 0:
         return False, np.nan
+
     if bland:
-        # ma.mask is sometimes 0d
-        return True, np.nonzero(np.logical_not(np.atleast_1d(ma.mask)))[0][0]
-    return True, np.ma.nonzero(ma == ma.min())[0][0]
+        # get smallest index (of all the negative entry)
+        last_row.sort(key = lambda item: item[0])
+        return True, last_row[0][0]
+    # otherwise, get index of most negative entry
+    last_row.sort(key = lambda item: item[1])
+    return True, last_row[0][0]
 
 
-def _pivot_row(T, basis, pivcol, phase, tol=1e-9, bland=False):
+def _pivot_row(T, basis, pivcol, phase, bland=False):
     """
     Given a linear programming simplex tableau, determine the row for the
     pivot operation.

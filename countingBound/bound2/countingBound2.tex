@@ -172,46 +172,32 @@ a binomial distribution. We have that
 |A_{t+1} - B_t| \sim \text{Binomial}(h, 2)
 \]
 
-We now write $L$ and $U$ for the $n=5, k=3$.
 
-\begin{verbatim}
-L =
-[[1.    0.    0.    0.    0.    0.    0.    0.   ]
- [0.3   0.7   0.    0.    0.    0.    0.    0.   ]
- [0.067 0.467 0.467 0.    0.    0.    0.    0.   ]
- [0.008 0.175 0.525 0.292 0.    0.    0.    0.   ]
- [0.    0.033 0.3   0.5   0.167 0.    0.    0.   ]
- [0.    0.    0.083 0.417 0.417 0.083 0.    0.   ]
- [0.    0.    0.    0.167 0.5   0.3   0.033 0.   ]
- [0.    0.    0.    0.    0.292 0.525 0.175 0.008]
- [0.    0.    0.    0.    0.    0.467 0.467 0.067]
- [0.    0.    0.    0.    0.    0.    0.7   0.3  ]
- [0.    0.    0.    0.    0.    0.    0.    1.   ]]
 
-U =
-[[0.125 0.375 0.375 0.125 0.    0.    0.    0.    0.    0.    0.   ]
- [0.    0.125 0.375 0.375 0.125 0.    0.    0.    0.    0.    0.   ]
- [0.    0.    0.125 0.375 0.375 0.125 0.    0.    0.    0.    0.   ]
- [0.    0.    0.    0.125 0.375 0.375 0.125 0.    0.    0.    0.   ]
- [0.    0.    0.    0.    0.125 0.375 0.375 0.125 0.    0.    0.   ]
- [0.    0.    0.    0.    0.    0.125 0.375 0.375 0.125 0.    0.   ]
- [0.    0.    0.    0.    0.    0.    0.125 0.375 0.375 0.125 0.   ]
- [0.    0.    0.    0.    0.    0.    0.    0.125 0.375 0.375 0.125]]
-\end{verbatim}
 
-We let $S = LU$ be the transition probability after both of these steps.
-If we pick a set of cliques $A$ uniformly at random,
-then the number of cliques, $|A|$, has a binomial distribution.
-We can check that this distribution
-is the stationary distribution of $S$:
+\begin{figure}
 
-\begin{verbatim}
-binomial coefficients x =
-[  1  10  45 120 210 252 210 120  45  10   1]
+\centering
 
-x * L * U =
-[  1.  10.  45. 120. 210. 252. 210. 120.  45.  10.   1.]
-\end{verbatim}
+\includegraphics[width=0.8\textwidth]{walking_bounds_0.pdf}
+
+\caption{
+Example steps in the bouncing walk, for $n=14, k=4$; 
+note that the number of possible cliques $N = {14 \choose 4} = 1,001$.
+ Starting from an initial set of cliques ($U_t$, black dot),
+a random edge $e$ is chosen. (Note that $e$ could, in general,
+``hit'' anywhere from 0 to ${12 \choose 2} = 66$ cliques.)
+ All cliques containing $e$ are removed, yielding $V_t$ (red region).
+Then, a random set of cliques containing $e$ is added back, resulting in $U_{t+1}$ (blue region).
+The shading of the regions represents the relative likelihood of different possibilities;
+lines indicate bounds on where the walk could go.
+The height of the regions reflects the uncertainty in the number
+of gates, after a bounce; note that the $y$-axis is relative to the initial number of gates.
+}
+\label{fig:walk}
+
+\end{figure}
+
 
 \section{A bound using integer programming?}
 

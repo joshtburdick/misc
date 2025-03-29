@@ -154,17 +154,25 @@ We have two steps, in which cliques are first removed, then added.
 We denote transition matrices for these two steps by $L$ and $U$, respectively.
 As before, let $N = {n \choose k}$.
 We also define the number of cliques which potentially could be ``hit'' by
-zeroing out an edge as $h = {{n-2} \choose {k-2}}$.
+zeroing out an edge as $H = {{n-2} \choose {k-2}}$.
 
 In the first step, when edge $e$ is zeroed out, the number of cliques removed has
 a hypergeometric distribution. (This is because $|A_t|$ of the $N$ possible cliques
 are present, and we're ``hitting'' $h$ of those when we zero out $e$.)
+Symmetrically, when we ``bounce'' up, the number of cliques added has
+a hypergeometric distribution.
 
 \[
-|A_t - B_t| \sim \text{Hypergeometric}(N, |A_t|, h)
+|A_t - B_t| \sim \text{Hypergeometric}(N, |A_t|, H)
 \]
 
-In the second step, we know that {\em no} cliques contain $e$. The number of
+\[
+|A_{t+1} - B_t| \sim \text{Hypergeometric}(N, |A_{t+1}|, H)
+\]
+
+
+
+However, in the second step, before the bounce up, we know that {\em no} cliques contain $e$. The number of
 cliques we might add (each chosen uniformly with probability 0.5) has 
 a binomial distribution. We have that
 

@@ -13,12 +13,9 @@ if [ $1 == "all" ]; then
     # (for now, figures have been generated already)
     ./zeroing.py
     cd ../../bound2 
-#    mkdir -p py/bounds
-    # XXX don't know which version of this to use
-#    (cd py; ./lp_gate_bound_4.py 10 5 > bounds/bounds_10_5.csv)
-    # (cd py; ./lp_gate_bound_6.py 7 3 5 > bounds/bounds_7_3.csv)
-#    (cd py; ./boundsTable.py)
-#    (cd py; ./bound_plot.py)
+    mkdir -p ../py/fractions/bounds
+    pwd
+    (cd ../py/fractions; ./ip_bound_2.py 7 3 3 --result-file bounds/bounds_7_3_3.csv; ./bound_plot.py)
 fi
 
 pdflatex countingBound2.tex

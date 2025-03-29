@@ -25,9 +25,17 @@
 \maketitle
 
 \begin{abstract}
-The study of random walks on graphs has a long history (FIXME make this less vague).
-Here, we define a random walk, and try to use it to
-give a lower bound on CLIQUE.
+
+Shannon's counting argument \cite{shannon_counting} shows that many functions are hard to compute.
+However, it is nonconstructive, and so doesn't explicitly state a
+hard-to-compute function. Attempts have been made to apply counting arguments to other problems
+such as CLIQUE \cite{buggyclique}, without success.
+Random walks have yielded some surprising results.
+Here, we define a random walk on sets of cliques, and state a integer programming
+problem which appears to bound the circuit complexity of CLIQUE. We show solutions
+of that problem (for {\em tiny} cases -- $n=7, k=3$). We then speculate on obtaining
+bounds from that IP phrasing, without explicitly solving.
+
 \end{abstract}
 
 \newpage
@@ -68,13 +76,6 @@ a random arc ``up''.
 \end{enumerate}
 
 One step of this is depicted in Figure \ref{fig:boing}.
-
-Luca Trevisan's blog discussed ways of understanding a hypergraph by
-considering a random walk on a related graph
-\cite{luca_trevisan_blog_random_walks_1}.
-What we discuss here is different, but seems somewhat related:
-we are looking at a random walk on a graph whose vertices are
-hypergraphs.
 
 \begin{figure}
 

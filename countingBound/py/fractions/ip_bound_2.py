@@ -18,7 +18,7 @@ import gate_basis
 import flexible_lp_helper
 import pulp_helper
 import scip_helper
-import exact_simplex_helper
+# import exact_simplex_helper
 
 # Wrapper for comb(), with exact arithmetic.
 def comb(n, k):
@@ -222,9 +222,9 @@ class LpEdgeZeroing:
         "down" step, obtaining a set of `i` cliques. Since we're counting this "after" the bounce,
         the numbers are "blurred" by the transition matrix.
         """
-        num_added = [fractions.Fraction(self.num_cliques_with_edge * i, self.num_possible_cliques)
+        num_added = [fractions.Fraction(self.max_cliques_with_edge * i, self.num_possible_cliques)
             for i in range(self.num_possible_cliques + 1)]
-        num_hit = [-sum([self.step_probability(i, j) * num_added(j) for j in range(self.num_possible_cliques+1)])
+        num_hit = [-sum([self.step_probability(i, j) * num_added[j] for j in range(self.num_possible_cliques+1)])
             for i in range(self.num_possible_cliques+1)]
         return (num_hit, num_added)
 
@@ -238,7 +238,9 @@ class LpEdgeZeroing:
         upper_bound: if True, then include the upper bound.
         """
         N = self.num_possible_cliques
-        for i in range(N+1):
+        (num_hit, num_added) = self.get_step_bounds()
+        # pdb.set_trace()
+        for i in range(self.num_possible_cliques+1):
 #            A = [(("E", j), self.step_probability(i, j))
 #                for j in range(max(0, i-self.max_cliques_with_edge),
 #                    min(i+self.max_cliques_with_edge, N)+1)]
@@ -247,17 +249,14 @@ class LpEdgeZeroing:
                 for j in range(self.num_possible_cliques+1)]
             A += [(("E", i), fractions.Fraction(-1))]
             # pdb.set_trace()
-            # print(A)
             # note that for these, we ignore the fact that zeroing out an edge
             # usually removes one gate
             if lower_bound:
-                # note that the lower bound for A_{i+1} is actually _less_ than A_i !
+                # note that the lower bound for x is actually _less_ than A_i !
                 # ummm... it is still a lower bound. uh... it's not clear that this will help.
-                self.lp.add_constraint(A, ">=",
-                    - (fractions.Fraction(i, self.num_possible_cliques) * self.max_cliques_with_edge) + fractions.Fraction(0))
+                self.lp.add_constraint(A, ">=", num_hit[i])
             if upper_bound:
-                self.lp.add_constraint(A, "<=",
-                    fractions.Fraction(self.max_cliques_with_edge, 2)+fractions.Fraction(0))
+                self.lp.add_constraint(A, "<=", num_added[i])
 
     def add_no_cliques_constraint(self):
         """Adds trivial constraint, on finding no cliques."""
@@ -360,6 +359,8 @@ def parse_args():
     parser.add_argument("--write-transition-matrices",
         help="Dump transition matrices to a file, for debugging",
         action="store_true")
+    parser.add_argument("--result-file",
+        help="Write result to indicated file (rather than stdout)")
     return parser.parse_args()
 
 if __name__ == '__main__':
@@ -381,5 +382,9 @@ if __name__ == '__main__':
         get_bounds(n, k, max_gates, 'Counting, step, and no cliques',
             True, True, True, True)
     ])
-    bounds.to_csv(sys.stdout, index=False)
+    if args.result_file:
+        with open(args.result_file, "wt") as f:
+            bounds.to_csv(f, index=False)
+    else:
+        bounds.to_csv(sys.stdout, index=False)
 

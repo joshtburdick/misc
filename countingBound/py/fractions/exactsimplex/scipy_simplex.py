@@ -80,7 +80,7 @@ def _pivot_col(T, bland=False):
         return False, np.nan
 
     if bland:
-        # get smallest index (of all the negative entry)
+        # get smallest index (of all the negative entries)
         last_row.sort(key = lambda item: item[0])
         return True, last_row[0][0]
     # otherwise, get index of most negative entry
@@ -92,6 +92,8 @@ def _pivot_row(T, basis, pivcol, phase, bland=False):
     """
     Given a linear programming simplex tableau, determine the row for the
     pivot operation.
+
+
 
     Parameters
     ----------
@@ -148,6 +150,12 @@ def _pivot_row(T, basis, pivcol, phase, bland=False):
         k = 2
     else:
         k = 1
+
+    def get_column(j):
+        """Gets non-objective rows of a column."""
+
+
+
     ma = np.ma.masked_where(T[:-k, pivcol] <= tol, T[:-k, pivcol], copy=False)
     if ma.count() == 0:
         return False, np.nan

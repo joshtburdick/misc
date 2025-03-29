@@ -15,6 +15,8 @@ import scipy.interpolate
 import scipy.special
 import scipy.stats
 
+# plt.rcParams["text.usetex"] = True
+
 class BouncePlot:
 
     def __init__(self, n, k):
@@ -44,18 +46,26 @@ class BouncePlot:
 
         max_h = min(U_t0[0], self.h)
         # note that we duplicate the last point, to streamline drawing connecting lines
-        V_t1_bounds = np.stack([U_t0 - (max_h, max_h), U_t0 - (max_h, 0), U_t0, U_t0])
+        # ??? maybe not needed
+        V_t1_bounds = np.stack([U_t0, U_t0 - (max_h, max_h), U_t0 - (max_h, 0)])
 
         # bounce "up"
         num_added = self.rng.binomial(self.h, 0.5, num_samples)
         U_t2_x = V_t1_x + num_added
         U_t2_y_lo = V_t1_y_lo
         U_t2_y_hi = V_t1_y_hi + num_added
+        U_t2_max_x = min(self.N, U_t0[0]+self.h)
+        # amount which this could go "to the right" of the starting point
+        # (which is bounded by the left and right edges of the plot)
+        dx = min(min(self.h, self.N - U_t0[0]), U_t0[0])
+        # XXX this is finicky, and possibly incorrect
         U_t2_bounds = np.stack([
-            V_t1_bounds[0,:],
             V_t1_bounds[1,:],
-            V_t1_bounds[1,:] + (self.h, self.h),
-            V_t1_bounds[0,:] + (self.h, 0)])
+            V_t1_bounds[2,:],
+            V_t1_bounds[2,:] + (self.h, self.h),
+            V_t1_bounds[2,:] + (self.h + dx, self.h),
+            V_t1_bounds[1,:] + (self.h + dx, dx),
+            V_t1_bounds[1,:] + (self.h, 0)])
 
         return {
             "U_t0": U_t0,
@@ -87,26 +97,38 @@ class BouncePlot:
         axs.add_collection(lines)
 
 
-    def plot_bounce(self, axs, x_proportion, num_samples=500):
+    def plot_bounce(self, axs, x_proportion, num_samples=100):
         """Plots starting with some number of cliques."""
         # XXX connect lines showing trajectories of individual samples?
         x = int(self.N * x_proportion)
         s = self.sample_step((x, 0), num_samples=num_samples)
         # pdb.set_trace()
-        axs.scatter(x, 0,
-            color=matplotlib.colors.hsv_to_rgb(np.array([0, 1, 0.75])),
-            s=3, alpha=1)
-        self.plot_lines(axs, s["V_t1"], 1/6, alpha=0.01)
-        self.plot_lines(axs, s["U_t2"], 1/3, alpha=0.01)
+        axs.scatter(x, 0, color="black", s=8, alpha=1)
+        alpha = 0.02
+        self.plot_lines(axs, s["V_t1"], 0, alpha=alpha)
+        self.plot_lines(axs, s["U_t2"], 2/3, alpha=alpha)
 
+        # plot possible regions
+        axs.fill(
+            s["V_t1_bounds"][:,0],
+            s["V_t1_bounds"][:,1],
+            facecolor="#ff000020", edgecolor="#ff0000ff", linewidth=0.025)
+        axs.fill(
+            s["U_t2_bounds"][:,0],
+            s["U_t2_bounds"][:,1],
+            facecolor="#0000ff20", edgecolor="#0000ffff", linewidth=0.025)
+        axs.set_xlabel("Number of cliques")
+        axs.set_ylabel("Relative number of gates")
 
-plt.figure(figsize=(6,4))
-bp = BouncePlot(12, 5)
+# FIXME force this to have 1:1 aspect ratio?
+plt.figure(figsize=(8,3))
+# bp = BouncePlot(12, 5)
+bp = BouncePlot(14, 4)
 
 for p in [0, 0.25, 0.5, 0.75, 1]:
     bp.plot_bounce(plt.gca(), p)
 
 plt.margins(0.02)
 plt.tight_layout()
-plt.savefig("walking_bounds_0.pdf")
+plt.savefig("../../bound2/walking_bounds_0.pdf")
 

@@ -7,6 +7,7 @@ import colorsys
 import itertools
 import pdb
 import random
+import sys
 
 import matplotlib
 import matplotlib.pyplot as plt
@@ -94,8 +95,8 @@ class CliqueFigure:
             self.axs.text(
                 np.array(center)[0],
                 np.array(center)[1],
-                '$\emptyset$',
-                fontsize=14, ha='center', va='center')
+                '$\\emptyset$',
+                fontsize=10, ha='center', va='center')
             return
         for s in cliques:
             v = radius * self.vertex[:,list(s)] + np.array([center]).T
@@ -167,6 +168,85 @@ if False:
         [frozenset([1,2,3]), frozenset([1,2,5])])
     print(z)
 
+def plot_bounce():
+    """Plots one 'bounce', down and up.
+
+    """
+    # hopefully this will make the figure reproducible
+    random.seed(0)
+    # edge to be zeroed out
+    zeroed_edge = (2,3)
+
+    # get sets which the edge hits, and misses
+    hit_sets = frozenset([c for c in cliques if frozenset(zeroed_edge) <= c])
+    missed_sets = frozenset(cliques) - hit_sets
+
+    # construct the sets: first the set after "zeroing"...
+    b_t = frozenset(random.sample(sorted(missed_sets), 3))
+    # ... then the "before" and "after" sets
+    # XXX these are actually now the "extra" cliques, which are
+    # zeroed out or added, respectively
+    a_t = frozenset(random.sample(sorted(hit_sets), 3))
+    a_t_plus_1 = frozenset(random.sample(sorted(hit_sets), 2))
+
+    # set up figure
+    plt.figure(figsize=(4,2.5))
+    plt.axis('off')
+    # plt.xlim(-0.3,1.3)
+    # plt.ylim(-0.3,1.3)
+
+    # utility to set all cliques to one color
+    # FIXME maybe simpler if each clique had its own alpha?
+    def all_colors(c):
+        return {s: c for s in cliques}
+
+    cf = CliqueFigure(plt.gca(), n, all_colors(colorsys.hsv_to_rgb(0,0,0.25)), 0)
+    radius = 0.4
+
+    # draw cliques
+    x1 = np.array([[0.75, 0], [0.25, 1]]).T
+    x = np.array([[-1.5, 0, 1.5],
+        [len(a_t)+len(b_t), len(b_t), len(a_t_plus_1)+len(b_t)]])
+    x[1,:] *= 0.6
+
+    # first, draw b_t more lightly
+    cf.alpha = 0.25
+    for i in range(3):
+        cf.plot_cliques(radius, x[:,i], b_t)
+    # then, add cliques from a_t and a_t_plus_1, darker
+    cf.alpha = 0.5
+    cf.colors = all_colors(colorsys.hsv_to_rgb(0,0.75,0.5))
+    cf.plot_cliques(radius, x[:,0], a_t)
+    cf.colors = all_colors(colorsys.hsv_to_rgb(2/3,0.75,0.5))
+    cf.plot_cliques(radius, x[:,2], a_t_plus_1)
+
+    def draw_arrow(i, j):
+        """Draws an arrow from set i to set j."""
+        plt.gca().annotate('',
+            xy=x[:,j],
+            xytext=x[:,i],
+            arrowprops=dict(
+                arrowstyle='->',
+                connectionstyle='angle3,angleA=-20,angleB=70',
+                # relpos=(0,0),
+                facecolor="#00000080",
+                edgecolor="#00000080"))
+    draw_arrow(0, 1)
+    draw_arrow(1, 2)
+
+    # label them
+    plt.text(x[0,0] - 0.5, x[1,0], '$A_t$', fontsize=16, ha='right', va='center')
+    plt.text(x[0,1] - 0.5, x[1,1], '$B_t$', fontsize=16, ha='right', va='center')
+    plt.text(x[0,2] - 0.5, x[1,2], '$A_{t+1}$', fontsize=16, ha='right', va='center')
+
+    # plot lines showing which edges were zeroed out
+    for i in range(3):
+        v = cf.get_vertices(radius, x[:,i])
+        ends = v[:,zeroed_edge]
+        plt.plot(ends[0,:], ends[1,:], '-', c='black', lw=1.5, alpha=0.8)
+
+    plt.savefig('../../bound2/bounce.pdf', bbox_inches='tight')
+
 def plot_zeroing_one_vertex():
     """Plots the effect of zeroing out one vertex.
 
@@ -191,6 +271,7 @@ def plot_zeroing_one_vertex():
     x = np.array([[0.75, 0], [0.25, 1]]).T
     cf.plot_cliques(radius, x[:,1], g)
     cf.plot_cliques(radius, x[:,0], zeroed_g)
+
     plt.gca().annotate('',
         xy=x[:,0],
         xytext=x[:,1],
@@ -212,6 +293,7 @@ def plot_zeroing_one_vertex():
             ends = v[:,[zeroed_vertex,i]]
             plt.plot(ends[0,:], ends[1,:], '-', c='red', alpha=0.5)
 
+    # plt.savefig('zeroing_one_vertex.pdf', bbox_inches='tight')
     plt.savefig('zeroing_one_vertex.pdf', bbox_inches='tight')
 
 def plot_Z_relation():
@@ -363,7 +445,7 @@ class ZeroingPlot:
 class ZeroingBlockDiagram:
     """Plots a 'block' diagram of the effect of zeroing.
 
-    Not yet implemented.
+    Not yet implemented. Indeed, deprecated...
     """
     def __init__(self):
         self.max_n = 6
@@ -420,7 +502,9 @@ def plot_covering():
     pass
 
 if __name__ == '__main__':
-    # plot_zeroing_one_vertex()
+    plot_bounce()
+    sys.exit(0)
+    plot_zeroing_one_vertex()
     plot_Z_relation()
     plot_Z_with_vertex_zeroing()
 

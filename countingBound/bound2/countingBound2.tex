@@ -61,7 +61,7 @@ to do this using a random walk.
 \subsection{Definition of the walk}
 
 Previously, we defined the zeroing-out lattice $Z$, in which all paths lead
-``down`` to $\emptyset$. Here, we consider a ``bouncing'' walk
+``down'' to $\emptyset$. Here, we consider a ``bouncing'' walk
 through $Z$, starting from an arbitrary set of cliques $A_t$.
 
 \begin{enumerate}
@@ -213,6 +213,14 @@ Although $B$ is not a $d$-regular graph, it is related to $A$, which is $d$-regu
 \subsubsection{Number of gates}
 
 What can we say about how each step changes the number of gates? Here, the situation is murkier.
+First, we define notation for circuit size:
+
+\begin{defn} \label{defn:circuitSize}
+
+Define $C_A$ to be the smallest circuit (by number of gates)
+which detects the set of cliques $A$. ($|C_A|$ is the number of gates in that circuit.)
+
+\end{defn}
 
 Let $x_i$ be the expected number of gates needed to detect a set of $i$ cliques, chosen
 uniformly at random. We will need to consider the number of cliques which are ``hit'' by
@@ -241,7 +249,21 @@ On the ``up'' step,
 if we end up with $i$ cliques, then we know that the expected number of gates added is no more than $h_i$,
 and so, in total, we need no more than $Bx+h$ gates.
 
-Thus, we have the following bound (where $\le$ applies element-wise across the vectors):
+As a concrete example, consider Figure \ref{fig:boing}. Since three cliques were removed in the ``down''
+step, we have a lower bound:
+
+\[
+|C_{A_{t+1}}| \ge |C_{B_t}| \ge |C_{A_t}| - 3
+\]
+
+And, since two cliques were added in the ``up'' step, we have an upper bound:
+
+\[
+|C_{A_{t+1}}| \le |C_{B_t}| + 2 \le |C_{A_t}| + 2
+\]
+
+If we compute these bounds over all the possible sizes of $|A_t|$, 
+we have the following bound (where $\le$ applies element-wise across the vectors):
 
 \begin{equation}
 \label{eq:stepBound}
@@ -255,7 +277,7 @@ has been dubbed ``ironic complexity.''
 \cite{aaronson_pnp}
 
 These seem to bound $x$ to be somewhat near an eigenvector of $B$. This isn't a very sharp bound.
-However, note that for fixed $k$, as $n$ increases, it gets sharper (as $N$ increases faster than $H$).
+However, note that for fixed $k$, as $n$ increases, it gets sharper (as $N = {n \choose k}$ increases faster than $H = {{n-2} \choose {k-2}}$).
 
 We can plot the effect of one step of this walk, in terms of number of cliques, and number of gates (Figure \ref{fig:walk}).
 Note that there is much more uncertainty in the number of gates. However, this does suggest that the
@@ -270,11 +292,11 @@ number of gates needed is {\em somewhat} related to the number of cliques detect
 \caption{
 Example steps in the bouncing walk, for $n=14, k=4$; 
 note that the number of possible cliques $N = {14 \choose 4} = 1,001$.
- Starting from an initial set of cliques ($U_t$, black dot),
+ Starting from an initial set of cliques ($A_t$, black dot),
 a random edge $e$ is chosen. (Note that $e$ could, in general,
 ``hit'' anywhere from 0 to ${12 \choose 2} = 66$ cliques.)
- All cliques containing $e$ are removed, yielding $V_t$ (red region).
-Then, a random set of cliques containing $e$ is added back, resulting in $U_{t+1}$ (blue region).
+ All cliques containing $e$ are removed, yielding $B_t$ (red region).
+Then, a random set of cliques containing $e$ is added back, resulting in $A_{t+1}$ (blue region).
 The shading of the regions represents the relative likelihood of different possibilities;
 lines indicate bounds on where the walk could go.
 The height of the regions reflects the uncertainty in the number
@@ -379,11 +401,11 @@ Well, we know that if we start at $c=0$ cliques, if a random walk takes us to
 $c \approx N/2$ cliques, then at that point, the counting bound implies that
 (on average), we'll need a large-ish number of gates to detect those $c$ cliques.
 The walking bound limits how much the number of gates can fluctuate
-in getting there. Thus, forcing $x_0=1$ ``drags down'' the left-hand side of the graph.
+in getting there. Thus, forcing $x_0=1$ should ``drag down'' the left-hand side of the graph.
 
 My intuition is that functions with smaller numbers for $c$ would
 tend to ``fill up'' the space available for functions with smaller numbers of gates.
-(Recall that using fewer gates, there isn't much ``space'' for many functions.)
+(Recall that when we use fewer gates, we reduce the number of functions we can implement.)
 Hopefully this would ``rule out'' things in the right-hand side of the graph (such as CLIQUE)
 from having a small number of gates.
 

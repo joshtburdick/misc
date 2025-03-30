@@ -159,26 +159,68 @@ zeroing out an edge as $H = {{n-2} \choose {k-2}}$.
 In the first step, when edge $e$ is zeroed out, the number of cliques removed has
 a hypergeometric distribution. (This is because $|A_t|$ of the $N$ possible cliques
 are present, and we're ``hitting'' $h$ of those when we zero out $e$.)
-Symmetrically, when we ``bounce'' up, the number of cliques added has
-a hypergeometric distribution.
 
 \[
 |A_t - B_t| \sim \text{Hypergeometric}(N, |A_t|, H)
 \]
 
+Symmetrically, when we ``bounce'' up, the number of cliques added has
+a hypergeometric distribution.
+
 \[
 |A_{t+1} - B_t| \sim \text{Hypergeometric}(N, |A_{t+1}|, H)
 \]
 
-
-
 However, in the second step, before the bounce up, we know that {\em no} cliques contain $e$. The number of
 cliques we might add (each chosen uniformly with probability 0.5) has 
-a binomial distribution. We have that
+a binomial distribution. Thus, we also have that
 
 \[
-|A_{t+1} - B_t| \sim \text{Binomial}(h, 2)
+|A_{t+1} - B_t| \sim \text{Binomial}(H, 2)
 \]
+
+\subsubsection{Number of cliques}
+
+Let $A$ be the $2^N{\times}2^N$ adjacency matrix corresponding to the one-step graph $S$.
+We know that $A$ is $d$-regular.
+It seems convenient to group together rows and columns of $A$,
+which correspond to sets of cliques of the same size.
+
+\begin{defn} \label{defn:levels}
+
+Let $L$ be a $N{\times}2^N$ matrix with columns $j$ corresponding to sets of cliques $A$, such that
+$L_{ij} = 1$ iff the $j$th vertex contains $i$ cliques.
+
+\end{defn}
+
+Let $L^{\dagger}$ be the Moore-Penrose pseudoinverse of $L$.
+We can then define the transition matrix for the walk, with sets of cliques of the same size grouped together.
+
+\begin{defn} \label{defn:B}
+
+Define
+$B = L^{\dagger}AL$. This gives the one-step transition probabilities for the walk: $B_{ij}$ is the
+probability of going from a set of $i$ cliques to a set of $j$ cliques.
+
+\end{defn}
+
+This seems like a fairly convenient way to summarize how the walk changes the number of cliques.
+Although $B$ is not a $d$-regular graph, it is related to $A$, which is $d$-regular.
+
+\subsubsection{Number of gates}
+
+
+
+
+
+
+
+\begin{defn} \label{defn:sequenceVector}
+Define the vector $s = \frac{H}{N}(0, 1, 2, ... N)$.
+\end{defn}
+
+
+
 
 
 
@@ -214,9 +256,6 @@ writing what we know as a mixed integer program (IP), and then bounding it
 using the LP relaxation. Previously, we used an LP \cite{buggyclique}.
 (Alternatively, we could solve the IP; however, that seems likely to
 be computationally difficult and/or complicated.)
-
-(FIXME variable names may need re-thinking; I don't know what
-conventions are common in stating integer programs.)
 
 \subsection{Variables and objective function}
 

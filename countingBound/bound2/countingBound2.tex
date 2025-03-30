@@ -245,7 +245,7 @@ and so, in total, we need no more than $Bx+h$ gates.
 Thus, we have the following bound (where $\le$ applies element-wise across the vectors):
 
 \begin{equation}
-\label{eq:matrixBounds}
+\label{eq:stepBound}
 B(x - h) \le x \le Bx + h
 \end{equation}
 
@@ -255,10 +255,12 @@ The recurring idea, of lower bounds relying on upper bounds,
 has been dubbed ``ironic complexity.''
 \cite{aaronson_pnp}
 
-These seem to bound $x$ to be somewhat near an eigenvector of $B$.
+These seem to bound $x$ to be somewhat near an eigenvector of $B$. This isn't a very sharp bound.
+However, note that for fixed $k$, as $n$ increases, it gets sharper (as $N$ increases faster than $H$).
 
 We can plot the effect of one step of this walk, in terms of number of cliques, and number of gates \ref{fig:walk}.
-Note that there is much more uncertainty in the number of gates.
+Note that there is much more uncertainty in the number of gates. However, this does suggest that the
+number of gates needed is {\em somewhat} related to the number of cliques detected.
 
 \begin{figure}
 
@@ -355,71 +357,9 @@ Note that this has a sharp maximal peak at $c = N/2$.
 
 \subsection{The walking bound}
 
-We now consider how the number of sets ($|A_t|$), and
-the number of gates needed to detect them ($|C_{A_t}|$),
-vary, with each step.
-
-We only consider using unbounded fan-in NAND gates.
-This is because adding one such NAND gate suffices to detect an
-addtional clique, and we frequently will need to construct circuits which detect
-some additional cliques.
-Although unbounded-fan-in circuits have been studied
-\cite{wegener1991complexity}\cite{allender1994depth}, various sorts of 2-input gates are arguably
-more frequently used in circuit complexity. (Many of the results here
-seem adaptable to work with 2-input gates.)
-
-First, what can we say about $|A_t|$, the number of sets?
-Consider a given starting set, $A_t$.
-After a step ``down'' (with $N$ and $h$ defined as before),
-the expected change in the number of cliques is:
-
-\[
-E[|A_t - B_t|] = \frac{|A_t|}{N}h
-\]
-
-After a ``bounce'' up, the corresponding expected change is:
-
-\[
-E[|A_{t+1} - B_t|] = \frac{1}{2}h
-\]
-
-What about the number of gates, $|C_{A_t}|$? For this quantity,
-the situation is murkier.
-
-On the ``down'' step, some number of gates might be eliminated.
-If $A$ is large enough, then we're likely to hit at least one gate,
-but for simplicity, we don't assume that this happens.
-We know, however, that we didn't eliminate more than $|A_t - B_t|$
-gates. (If we had, then we could construct a smaller $C_{A_t}$,
-by starting with $C_{B_t}$, and ORing it with $|A_t - B_t|$
-NAND gates.)
-
-On the ``up'' step, somewhat symmetrically, we probably will
-need more gates. However, we definitely can get away with
-adding $|A_{t+1} - B_t|$ NAND gates to $C_{B_t}$.
-
-Combining all of these, we have the following bounds on how much the
-expected number of gates fluctuates, at each step of the random walk:
-
-\[
--\frac{i}{N}h \le E[ |C_{A_{t+1}}| - |C_{A_t}| | |A_t|=i ] \le \frac{1}{2}h
-\]
-
-Intuitively, this suggests that the number
-of gates needed is a somewhat ``smooth'' function of the
-number of cliques in the circuit.
-
-This isn't a very sharp bound. However, it applies across the entire
-range of $i$, from 0 to $N$. Also, for fixed $k$, as $n$ increases,
-it gets sharper.
-
-For each possible initial number of cliques $i$, with $0 \le i \le N$,
-we can use the transition matrix $S$ to express this change in the
-number of gates. We then add upper and lower bounds for that $i$.
-
-\[
-E[ |C_{A_{t+1}}| - |C_{A_t}| | |A_t|=i ] = (\sum_j S_{ij} x_j) - x_i
-\]
+We can also add the walking bound (equation \ref{eq:stepBound}), which bounds how much
+one ``step'' of the walk can affect the number of gates.
+We compute the matrix $B$, the vector $h$, and then add a constraint for each element of $x_i$.
 
 \subsection{Bound on finding zero cliques}
 

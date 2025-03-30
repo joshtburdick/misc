@@ -26,11 +26,10 @@
 
 \begin{abstract}
 
-Shannon's counting argument \cite{shannon_counting} shows that many functions are hard to compute.
+Shannon's counting argument \cite{shannon_synthesis_1949} shows that many functions are hard to compute.
 However, it is nonconstructive, and so doesn't explicitly state a
 hard-to-compute function. Attempts have been made to apply counting arguments to other problems
 such as CLIQUE \cite{buggyclique}, without success.
-Random walks have yielded some surprising results.
 Here, we define a random walk on a $d$-regular graph whose vertices are
 sets of cliques. We state a (huge) integer programming
 problem which appears to bound the circuit complexity of CLIQUE. We show solutions
@@ -99,7 +98,7 @@ Adding a random set of cliques back results in $A_{t+1}$.
 
 \subsection{Graph-theoretic properties of the walk}
 Note that ``one-step reachability'' in the bouncing walk is symmetric;
-one step can be an arbitrary modification of which cliques which hit
+one step can be an arbitrary modification of which cliques containing 
 an edge $e$ are included.
 Thus, we can construct a new undirected graph, $S$, with an edge between every
 pair of sets of cliques reachable in one step.
@@ -155,7 +154,6 @@ dense to be an expander, but does seem to be pretty strongly connected.
 \subsection{Modelling where the walk goes}
 
 We have two steps, in which cliques are first removed, then added.
-We denote transition matrices for these two steps by $L$ and $U$, respectively.
 As before, let $N = {n \choose k}$.
 We also define the number of cliques which potentially could be ``hit'' by
 zeroing out an edge as $H = {{n-2} \choose {k-2}}$.
@@ -163,16 +161,17 @@ zeroing out an edge as $H = {{n-2} \choose {k-2}}$.
 In the first step, when edge $e$ is zeroed out, the number of cliques removed has
 a hypergeometric distribution. (This is because $|A_t|$ of the $N$ possible cliques
 are present, and we're ``hitting'' $h$ of those when we zero out $e$.)
+Thus, for a given $|A_t|$:
 
 \[
-|A_t - B_t| \sim \text{Hypergeometric}(N, |A_t|, H)
+P(|A_t - B_t|=d||A_t|) = \text{Hypergeometric}(d; N, |A_t|, H)
 \]
 
 Symmetrically, when we ``bounce'' up, the number of cliques added has
 a hypergeometric distribution.
 
 \[
-|A_{t+1} - B_t| \sim \text{Hypergeometric}(N, |A_{t+1}|, H)
+P(|A_{t+1} - B_t|=d||A_{t+1}|) = \text{Hypergeometric}(d; N, |A_{t+1}|, H)
 \]
 
 However, in the second step, before the bounce up, we know that {\em no} cliques contain $e$. The number of
@@ -180,7 +179,7 @@ cliques we might add (each chosen uniformly with probability 0.5) has
 a binomial distribution. Thus, we also have that
 
 \[
-|A_{t+1} - B_t| \sim \text{Binomial}(H, 0.5)
+P(|A_{t+1} - B_t|=d||B_t|) = \text{Binomial}(d; H, 0.5)
 \]
 
 \subsubsection{Number of cliques}
@@ -258,7 +257,7 @@ has been dubbed ``ironic complexity.''
 These seem to bound $x$ to be somewhat near an eigenvector of $B$. This isn't a very sharp bound.
 However, note that for fixed $k$, as $n$ increases, it gets sharper (as $N$ increases faster than $H$).
 
-We can plot the effect of one step of this walk, in terms of number of cliques, and number of gates \ref{fig:walk}.
+We can plot the effect of one step of this walk, in terms of number of cliques, and number of gates (Figure \ref{fig:walk}).
 Note that there is much more uncertainty in the number of gates. However, this does suggest that the
 number of gates needed is {\em somewhat} related to the number of cliques detected.
 
@@ -266,7 +265,7 @@ number of gates needed is {\em somewhat} related to the number of cliques detect
 
 \centering
 
-\includegraphics[width=0.8\textwidth]{walking_bounds_0.pdf}
+\includegraphics[width=1\textwidth]{walking_bounds_0.pdf}
 
 \caption{
 Example steps in the bouncing walk, for $n=14, k=4$; 
@@ -333,7 +332,7 @@ of input edges for an $n$-vertex graph.
 We have the counting argument: the number of $m$-input functions
 constructable using $g$ gates is bounded. (This number increases
 quickly as a function of $g$, but nonetheless is bounded.)
-Here, we only consider unbounded-fan-in NAND gate circuits. For
+Here, we only consider unbounded fan-in NAND gate circuits. For
 this sort of circuit, we have the bound:
 
 \[
@@ -376,29 +375,24 @@ x_0 = 1
 Why might we think that this is even {\em remotely} useful? We are, after
 all, trying to bound $x_N$...
 
-Well, we know that if we start at $c=0$, if a random walk takes us to
-$c \approx N/2$, then at that point, the counting bound implies that
+Well, we know that if we start at $c=0$ cliques, if a random walk takes us to
+$c \approx N/2$ cliques, then at that point, the counting bound implies that
 (on average), we'll need a large-ish number of gates to detect those $c$ cliques.
 The walking bound limits how much the number of gates can fluctuate
-in getting there. Thus, forcing $x_0=1$ ``drags down'' the lower half of $Z$.
+in getting there. Thus, forcing $x_0=1$ ``drags down'' the left-hand side of the graph.
 
 My intuition is that functions with smaller numbers for $c$ would
 tend to ``fill up'' the space available for functions with smaller numbers of gates.
 (Recall that using fewer gates, there isn't much ``space'' for many functions.)
-Hopefully this would ``rule out'' things in the upper half of $Z$ (such as CLIQUE)
+Hopefully this would ``rule out'' things in the right-hand side of the graph (such as CLIQUE)
 from having a small number of gates.
 
 \section{Results}
 
-Results so far are {\em incredibly} preliminary. We bound $x_N$
-(that is, the expected number of gates needed to find all the cliques),
-using the LP relaxation of the IP. We have tried using several
-LP solvers which support exact rational solutions,
-including SCIP, a pure-Python package called {\tt flexible\_lp},
-and the GNU Linear Programming Kit (GLPK). Results here are
-using GLPK. Thus far, we have only considered unbounded-fan-in
+We solved the LP relaxation of the IP problem (using GLPK \cite{glpk})
+for a {\em tiny} instance, $n=7, k=3$, and allowing up to 3 (unbounded fan-in)
 NAND gates.
-
+Figure \ref{fig:bounds0} shows results thus far.
 Note that unlike previous related bounds, here we {\em only} solve minimizing
 $x_N$, and plot the resulting bounds $x_j$, at that solution. The
 goal here is to see what the LP considers a possible scenario, when
@@ -419,26 +413,16 @@ minimizing $x_N$.
 
 \end{figure}
 
-Figure \ref{fig:bounds0} shows results thus far.
-Parts of this plot make sense. For instance, when the
-step and ``no cliques'' constraints are included, the
-plot goes somewhat smoothly up from $(0,1)$. (The counting
-bound is flat, but presumably this is because
-that one unbounded-fan-in NAND gate, with ${5 \choose 2}$
-input wires, can implement $2^{5 \choose 3}$ different
-functions.)
+In general, there could be many possible solutions to the LP, which
+limits how much we can draw conclusions from this plot.
+However, parts of this plot make sense: 
+when the ``step'' and ``no cliques''
+constraints are added (green line), the largest number of gates is shifted
+slightly to the right (towards a larger number of cliques).
 
-On larger instances, the LP crashes. This seems to be because even
-solvers (such as GLPK and the exact version of SOPLEX) can
-theoretically can solve problems with fractions involving
-numbers like $10^{100}$, in practice, these haven't worked
-(for differing reasons).
-
-More recently, I have tried to modify the Python code from
-Jeremy Kun's tutorial about the simplex algorithm \cite{kun_lp_simplex}.
-Although replacing double-precision with Python {\tt fractions.Fraction}
-objects works, the resulting code isn't working, for this particular
-problem.
+On larger instances, the LP crashes (using several different solvers). This
+is presumably partly because the numbers in the IP add up to $2^{n \choose k}$,
+which grows very quickly.
 
 This raises the following open question:
 
@@ -448,13 +432,9 @@ What bound would this give for CLIQUE, if the LP {\em didn't} crash?
 
 \section{Conclusion}
 
-One appealing thing about this approach is that it gives a
-bound for clique in any event. Even if the bound weren't
-superpolynomial, in the unlikely event that were even superlinear,
-that {\em would} be exciting.
-
-It seems worth {\em strongly} emphasizing, then, that currently this gives a bound
-of 1 unbounded fan-in NAND gate...
+We attempt to bound the circuit complexity of CLIQUE using an integer program.
+Currently, this gives a bound
+of 1 unbounded fan-in NAND gate for CLIQUE...
 
 \section{Acknowledgements}
 

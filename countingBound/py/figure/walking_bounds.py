@@ -121,7 +121,7 @@ class BouncePlot:
         axs.set_ylabel("Relative number of gates")
 
 # FIXME force this to have 1:1 aspect ratio?
-plt.figure(figsize=(8,3))
+plt.figure(figsize=(8,2.5))
 # bp = BouncePlot(12, 5)
 bp = BouncePlot(14, 4)
 

@@ -31,10 +31,10 @@ However, it is nonconstructive, and so doesn't explicitly state a
 hard-to-compute function. Attempts have been made to apply counting arguments to other problems
 such as CLIQUE \cite{buggyclique}, without success.
 Random walks have yielded some surprising results.
-Here, we define a random walk on sets of cliques, and state a integer programming
+Here, we define a random walk on a $d$-regular graph whose vertices are
+sets of cliques. We state a (huge) integer programming
 problem which appears to bound the circuit complexity of CLIQUE. We show solutions
-of that problem (for {\em tiny} cases -- $n=7, k=3$). We then speculate on obtaining
-bounds from that IP phrasing, without explicitly solving.
+of that problem (for {\em tiny} cases -- $n=7, k=3$).
 
 \end{abstract}
 
@@ -45,7 +45,7 @@ bounds from that IP phrasing, without explicitly solving.
 \vspace{5mm}
 
 
-\section{A Counting Bound} \label{se:countingBound}
+\section{A random walk on hypergraphs} \label{se:countingBound}
 
 Previously, we considered the set of functions BUGGYCLIQUE, which
 only detect a subset of the possible cliques \cite{buggyclique}.
@@ -54,7 +54,12 @@ function-counting argument \cite{shannon_synthesis_1949},
 we showed that a function randomly chosen from BUGGYCLIQUE,
 on average, requires $\Omega(n^{k/2})$ two-input NAND gates to compute.
 
-\subsection{A random walk on the zeroing-out lattice}
+However, that argument didn't give any bound on the complexity of CLIQUE.
+It seems that connecting the number of cliques detected by a BUGGYCLIQUE
+function, and the number of gates it uses, might be useful. We attempt
+to do this using a random walk.
+
+\subsection{Definition of the walk}
 
 Previously, we defined the zeroing-out lattice $Z$, in which all paths lead
 ``down`` to $\emptyset$. Here, we consider a ``bouncing'' walk
@@ -141,8 +146,7 @@ covered by a single edge $e$.) Thus, we have the following bounds for $|E|$:
 2^{{n-2} \choose {k-2}} \le |E| \le {n \choose 2} 2^{{n-2} \choose {k-2}}
 \]
 
-XORing with something from $E$ defines all of the neighbors of any set of cliques
-(FIXME reword this).
+XORing with something from $E$ defines all of the neighbors of any set of cliques.
 Thus, we get that $S$ is a $d$-regular graph, with $d = |E|-1$.
 I'm not sure if it's a known $d$-regular graph.
 It seems too
@@ -176,7 +180,7 @@ cliques we might add (each chosen uniformly with probability 0.5) has
 a binomial distribution. Thus, we also have that
 
 \[
-|A_{t+1} - B_t| \sim \text{Binomial}(H, 2)
+|A_{t+1} - B_t| \sim \text{Binomial}(H, 0.5)
 \]
 
 \subsubsection{Number of cliques}
@@ -204,26 +208,57 @@ probability of going from a set of $i$ cliques to a set of $j$ cliques.
 
 \end{defn}
 
-This seems like a fairly convenient way to summarize how the walk changes the number of cliques.
+This summarizes how the walk changes the number of cliques.
 Although $B$ is not a $d$-regular graph, it is related to $A$, which is $d$-regular.
 
 \subsubsection{Number of gates}
 
+What can we say about how each step changes the number of gates? Here, the situation is murkier.
 
-
-
-
-
+Let $x_i$ be the expected number of gates needed to detect a set of $i$ cliques, chosen
+uniformly at random. We will need to consider the number of cliques which are ``hit'' by
+a random edge.
 
 \begin{defn} \label{defn:sequenceVector}
-Define the vector $s = \frac{H}{N}(0, 1, 2, ... N)$.
+
+Define the vector $h = \frac{H}{N}(0, 1, 2, ... N)$.
+
+$h_i$ is the expected number of cliques which would be ``hit'' by zeroing out a random edge
+from a set of $i$ cliques (based on its hypergeometric distribution).
+Symmetrically, $h_i$ is the expected number of cliques which {\em were just added}, to obtain a
+set of $i$ cliques.
+
 \end{defn}
 
+First, we obtain a lower bound on the number of gates after one step.
+On the ``down'' step, the expected number of gates ``hit'' is no more than $h$,
+and so the expected number of gates remaining is at least $x - h$.
+We can't say anything about the number of gates needed to detect additional cliques (in the bounce ``up''), and so we have:
+the number of gates after a ``bounce'' is at least $B(x-h)$.
 
+To obtain an upper bound: On the ``down'' step, some number of gates is hit (we don't know how many).
+After the bounce, the number of gates is $Bx$.
+On the ``up'' step,
+if we end up with $i$ cliques, then we know that the expected number of gates added is no more than $h_i$,
+and so, in total, we need no more than $Bx+h$ gates.
 
+Thus, we have the following bound (where $\le$ applies element-wise across the vectors):
 
+\begin{equation}
+\label{eq:matrixBounds}
+B(x - h) \le x \le Bx + h
+\end{equation}
 
+Note that we have an {\em upper} bound on $x$, as well
+as a lower bound.
+The recurring idea, of lower bounds relying on upper bounds,
+has been dubbed ``ironic complexity.''
+\cite{aaronson_pnp}
 
+These seem to bound $x$ to be somewhat near an eigenvector of $B$.
+
+We can plot the effect of one step of this walk, in terms of number of cliques, and number of gates \ref{fig:walk}.
+Note that there is much more uncertainty in the number of gates.
 
 \begin{figure}
 
@@ -296,13 +331,12 @@ of input edges for an $n$-vertex graph.
 We have the counting argument: the number of $m$-input functions
 constructable using $g$ gates is bounded. (This number increases
 quickly as a function of $g$, but nonetheless is bounded.)
+Here, we only consider unbounded-fan-in NAND gate circuits. For
+this sort of circuit, we have the bound:
 
 \[
-\sum_c w_{c,g} \le \text{some fast-growing function of }g
+\sum_c w_{c,g} \le 2^{\sum_{i=0}^{g-1} m+i}
 \]
-
-FIXME include table of these numbers for, e.g., 6-input circuits,
-for $1 \le g \le 5$.
 
 We might think of the set of functions as filling a conical
 martini glass. If we consider the $z$ axis to be ``number of gates'',

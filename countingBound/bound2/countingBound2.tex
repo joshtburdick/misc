@@ -191,8 +191,8 @@ which correspond to sets of cliques of the same size.
 
 \begin{defn} \label{defn:levels}
 
-Let $L$ be a $2^N{\times}N$ matrix with rows $i$ corresponding to sets of cliques $A$, such that
-$L_{ij} = 1$ iff the $i$th vertex in $A$ contains $j$ cliques.
+Let $L$ be a $2^N{\times}N$ matrix with rows $i$ corresponding to sets of cliques (indexed arbitrarily), such that
+$L_{ij} = 1$ iff the $i$th set contains $j$ cliques. (Here, we assume that column indices are 0-based.)
 
 \end{defn}
 
@@ -223,12 +223,13 @@ which detects the set of cliques $A$. ($|C_A|$ is the number of gates in that ci
 \end{defn}
 
 Let $x_i$ be the expected number of gates needed to detect a set of $i$ cliques, chosen
-uniformly at random. We will need to consider the number of cliques which are ``hit'' by
+uniformly at random. (We use 0-based indexing for $x$.)
+ We will need to consider the number of cliques which are ``hit'' by
 a random edge.
 
 \begin{defn} \label{defn:sequenceVector}
 
-Define the vector $h = \frac{H}{N}(0, 1, 2, ... N)$.
+Define the vector $h = \frac{H}{N}(0, 1, 2, ... N)$. (Again, note that we use 0-based indexing.)
 
 $h_i$ is the expected number of cliques which would be ``hit'' by zeroing out a random edge
 from a set of $i$ cliques (based on its hypergeometric distribution).

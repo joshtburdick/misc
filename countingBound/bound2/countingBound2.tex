@@ -66,14 +66,14 @@ through $Z$, starting from an arbitrary set of cliques $A_t$.
 
 \begin{enumerate}
 
-\item Feed in a 0 to a randomly-chosen edge $e$ of $C(A_t)$. 
+\item Pick an edge $e$ randomly, and remove all cliques which include it from $A_t$. 
 This corresponds to
-following a random arc ``down''. Call the resulting set $B_t$ (
+following a random arc of $Z$ ``down''. Call the resulting set $B_t$ (
 for ``bounce'').
 
 \item Add a random set of the possible cliques which include $e$,
 resulting in a larger set $A_{t+1}$. This corresponds to following
-a random arc ``up''.
+a random arc of $Z$ ``up''.
 
 \item Repeat...
 

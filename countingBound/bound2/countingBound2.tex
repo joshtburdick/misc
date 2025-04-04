@@ -88,7 +88,7 @@ One step of this is depicted in Figure \ref{fig:boing}.
 
 \caption{
 One step of the walk. Starting from $A_t$, the cliques containing 
-to a randomly-chosen edge are removed, resulting in $B_t$.
+a randomly-chosen edge are removed, resulting in $B_t$.
 Adding a random set of cliques back results in $A_{t+1}$.
 }
 \label{fig:boing}
@@ -227,10 +227,39 @@ which detects the set of cliques $A$. ($|C_A|$ is the number of gates in that ci
 
 \end{defn}
 
-Let $x_i$ be the expected number of gates needed to detect a set of $i$ cliques, chosen
-uniformly at random. (We use 0-based indexing for $x$.)
- We will need to consider the number of cliques which are ``hit'' by
-a random edge.
+\subsubsection{An example}
+
+We first consider what bounds we have for the number of gates,
+on one example of a ``bouncing step'' (Figure \ref{fig:boing}).
+Here, three cliques were removed in the ``down'' step. Feeding in a 0
+to $e$ can't have removed more than three gates, since that many gates would suffice
+to convert a circuit detecting $B_t$ into a circuit detecting $A_t$.
+So we have a lower bound:
+
+\[
+|C_{A_{t+1}}| \ge |C_{B_t}| \ge |C_{A_t}| - 3
+\]
+
+And, since two cliques were added in the ``up'' step (requiring no more than two
+additional gates to detect), we have an upper bound:
+
+\[
+|C_{A_{t+1}}| \le |C_{B_t}| + 2 \le |C_{A_t}| + 2
+\]
+
+(Note that using NAND gates, we know that if at least one clique is ``hit'', then
+at least one fewer NAND gate is needed. However, this doesn't seem to help much,
+and so for simplicity, we ignore this.)
+
+\subsubsection{Bounds for all sets of cliques}
+
+We now attempt to apply that bounding strategy, across all the sets of cliques.
+As before, we group the sets of cliques by size.
+
+Let $x_i$ be the expected number of gates needed to detect a set
+of $i$ cliques, chosen uniformly at random. (We use 0-based indexing
+for $x$.) We will need to consider the number of cliques which are ``hit''
+by a random edge.
 
 \begin{defn} \label{defn:sequenceVector}
 
@@ -264,32 +293,11 @@ B(x - h) \le x \le Bx + h
 
 Note that we have an {\em upper} bound on $x$, as well
 as a lower bound. Upper bounds have been useful in proving lower bounds;
-this recurring theme has been dubbed ``ironic complexity.''
-\cite{aaronson_pnp}
+this recurring theme has been dubbed ``ironic complexity''
+\cite{aaronson_pnp}.
 
 These seem to bound $x$ to be somewhat near an eigenvector of $B$. This isn't a very sharp bound.
 However, note that for fixed $k$, as $n$ increases, it gets sharper (as $N = {n \choose k}$ increases faster than $H = {{n-2} \choose {k-2}}$).
-
-\subsubsection{An example}
-
-As a concrete example of what the walk does on a particular set of cliques,
-consider Figure \ref{fig:boing}. Since three cliques were removed in the ``down''
-step, we have a lower bound:
-
-\[
-|C_{A_{t+1}}| \ge |C_{B_t}| \ge |C_{A_t}| - 3
-\]
-
-And, since two cliques were added in the ``up'' step, we have an upper bound:
-
-\[
-|C_{A_{t+1}}| \le |C_{B_t}| + 2 \le |C_{A_t}| + 2
-\]
-
-(Note that using NAND gates, we know that if at least one clique is ``hit'', then
-at least one fewer NAND gate is needed. However, this doesn't seem to help much,
-and so for simplicity, we ignore this.)
-
 
 \subsection{Plotting the walk}
 
@@ -484,15 +492,14 @@ to obtain a lower bound.
 
 \section{Acknowledgements}
 
-The emphasis on random walks was partly inspired by the late Luca Trevisan's
-blog, {\em in theory};
-as many complexity commentators have noted, he will be missed.
-The author would also like to thank the authors and maintainers of
-several other entertaining and relevant blogs, including but
-not limited to: the Computational Complexity blog
-(Lance Fortnow and William Gasarch),
-G\"odel's Lost Letter (Richard Lipton and Ken Regan),
-and Shtetl-Optimized (Scott Aaronson).
+The emphasis on random walks was partly inspired by the late Luca
+Trevisan's blog, {\em in theory}; as many complexity commentators
+have noted, he will be missed. The author would also like to thank
+the authors and maintainers of several other entertaining and
+relevant blogs, including but not limited to: the Computational
+Complexity blog (Lance Fortnow and William Gasarch), Emanuele Viola's
+blog Thoughts, G\"odel's Lost Letter (Richard Lipton and Ken Regan),
+and Shtetl-Optimized (Scott Aaronson),
 
 \bibliography{references}
 \bibliographystyle{unsrt}

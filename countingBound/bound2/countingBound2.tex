@@ -18,9 +18,9 @@
 \newcommand{\bigC}[0]{\mathcal{C}}
 \begin{document}
 \emergencystretch 3em
-\title{A lower bound from a random walk? (DRAFT)}
+\title{A lower bound from a random walk?}
 
-\author{Josh Burdick}
+\author{Josh Burdick ({\tt josh.t.burdick@gmail.com})}
 
 \maketitle
 
@@ -68,8 +68,7 @@ through $Z$, starting from an arbitrary set of cliques $A_t$.
 
 \item Pick an edge $e$ randomly, and remove all cliques which include it from $A_t$. 
 This corresponds to
-following a random arc of $Z$ ``down''. Call the resulting set $B_t$ (
-for ``bounce'').
+following a random arc of $Z$ ``down''. Call the resulting set $B_t$ (for ``bounce'').
 
 \item Add a random set of the possible cliques which include $e$,
 resulting in a larger set $A_{t+1}$. This corresponds to following
@@ -150,6 +149,7 @@ Thus, we get that $S$ is a $d$-regular graph, with $d = |E|-1$.
 I'm not sure if it's a known $d$-regular graph.
 It seems too
 dense to be an expander, but does seem to be pretty strongly connected.
+$d$-regular graphs have some convenient properties (see e.g. \cite{nilli1991second}).
 
 \subsection{Modelling where the walk goes}
 
@@ -164,14 +164,14 @@ are present, and we're ``hitting'' $h$ of those when we zero out $e$.)
 Thus, for a given $|A_t|$:
 
 \[
-P(|A_t - B_t|=d||A_t|) = \text{Hypergeometric}(d; N, |A_t|, H)
+P(|A_t - B_t|=d|\hspace{1mm}|A_t|) = \text{Hypergeometric}(d; N, |A_t|, H)
 \]
 
 Symmetrically, when we ``bounce'' up, the number of cliques added has
 a hypergeometric distribution.
 
 \[
-P(|A_{t+1} - B_t|=d||A_{t+1}|) = \text{Hypergeometric}(d; N, |A_{t+1}|, H)
+P(|A_{t+1} - B_t|=d|\hspace{1mm}|A_{t+1}|) = \text{Hypergeometric}(d; N, |A_{t+1}|, H)
 \]
 
 However, in the second step, before the bounce up, we know that {\em no} cliques contain $e$. The number of
@@ -179,7 +179,7 @@ cliques we might add (each chosen uniformly with probability 0.5) has
 a binomial distribution. Thus, we also have that
 
 \[
-P(|A_{t+1} - B_t|=d||B_t|) = \text{Binomial}(d; H, 0.5)
+P(|A_{t+1} - B_t|=d|\hspace{1mm}|B_t|) = \text{Binomial}(d; H, 0.5)
 \]
 
 \subsubsection{Number of cliques}
@@ -213,11 +213,16 @@ Although $B$ is not a $d$-regular graph, it is related to $A$, which is $d$-regu
 \subsubsection{Number of gates}
 
 What can we say about how each step changes the number of gates? Here, the situation is murkier.
-First, we define notation for circuit size:
+
+First, we define notation for circuit size. 
+We only consider using unbounded fan-in NAND gates. (Although
+2-input gates are arguably more commonly used in circuit complexity,
+unbounded fan-in circuits have been used
+\cite{wegener1991complexity}\cite{allender1994depth}.)
 
 \begin{defn} \label{defn:circuitSize}
 
-Define $C_A$ to be the smallest circuit (by number of gates)
+Define $C_A$ to be the smallest circuit (by number of unbounded fan-in NAND gates)
 which detects the set of cliques $A$. ($|C_A|$ is the number of gates in that circuit.)
 
 \end{defn}
@@ -229,7 +234,7 @@ a random edge.
 
 \begin{defn} \label{defn:sequenceVector}
 
-Define the vector $h = \frac{H}{N}(0, 1, 2, ... N)$. (Again, note that we use 0-based indexing.)
+Define the vector $h = \frac{H}{N}(0, 1, 2, ... N)$. (Again, we use 0-based indexing.)
 
 $h_i$ is the expected number of cliques which would be ``hit'' by zeroing out a random edge
 from a set of $i$ cliques (based on its hypergeometric distribution).
@@ -250,7 +255,25 @@ On the ``up'' step,
 if we end up with $i$ cliques, then we know that the expected number of gates added is no more than $h_i$,
 and so, in total, we need no more than $Bx+h$ gates.
 
-As a concrete example, consider Figure \ref{fig:boing}. Since three cliques were removed in the ``down''
+Thus, we have the following bound (where $\le$ applies element-wise across the vectors):
+
+\begin{equation}
+\label{eq:stepBound}
+B(x - h) \le x \le Bx + h
+\end{equation}
+
+Note that we have an {\em upper} bound on $x$, as well
+as a lower bound. Upper bounds have been useful in proving lower bounds;
+this recurring theme has been dubbed ``ironic complexity.''
+\cite{aaronson_pnp}
+
+These seem to bound $x$ to be somewhat near an eigenvector of $B$. This isn't a very sharp bound.
+However, note that for fixed $k$, as $n$ increases, it gets sharper (as $N = {n \choose k}$ increases faster than $H = {{n-2} \choose {k-2}}$).
+
+\subsubsection{An example}
+
+As a concrete example of what the walk does on a particular set of cliques,
+consider Figure \ref{fig:boing}. Since three cliques were removed in the ``down''
 step, we have a lower bound:
 
 \[
@@ -263,25 +286,17 @@ And, since two cliques were added in the ``up'' step, we have an upper bound:
 |C_{A_{t+1}}| \le |C_{B_t}| + 2 \le |C_{A_t}| + 2
 \]
 
-If we compute these bounds over all the possible sizes of $|A_t|$, 
-we have the following bound (where $\le$ applies element-wise across the vectors):
+(Note that using NAND gates, we know that if at least one clique is ``hit'', then
+at least one fewer NAND gate is needed. However, this doesn't seem to help much,
+and so for simplicity, we ignore this.)
 
-\begin{equation}
-\label{eq:stepBound}
-B(x - h) \le x \le Bx + h
-\end{equation}
 
-Note that we have an {\em upper} bound on $x$, as well
-as a lower bound.
-The recurring idea, of lower bounds relying on upper bounds,
-has been dubbed ``ironic complexity.''
-\cite{aaronson_pnp}
-
-These seem to bound $x$ to be somewhat near an eigenvector of $B$. This isn't a very sharp bound.
-However, note that for fixed $k$, as $n$ increases, it gets sharper (as $N = {n \choose k}$ increases faster than $H = {{n-2} \choose {k-2}}$).
+\subsection{Plotting the walk}
 
 We can plot the effect of one step of this walk, in terms of number of cliques, and number of gates (Figure \ref{fig:walk}).
-Note that there is much more uncertainty in the number of gates. However, this does suggest that the
+Note that there is much more uncertainty in the number of gates than the number of cliques. Also, the
+uncertainty is higher
+for larger sets of cliques.  However, this does suggest that the
 number of gates needed is {\em somewhat} related to the number of cliques detected.
 
 \begin{figure}
@@ -295,7 +310,7 @@ Example steps in the bouncing walk, for $n=14, k=4$;
 note that the number of possible cliques $N = {14 \choose 4} = 1,001$.
  Starting from an initial set of cliques ($A_t$, black dot),
 a random edge $e$ is chosen. (Note that $e$ could, in general,
-``hit'' anywhere from 0 to ${12 \choose 2} = 66$ cliques.)
+``hit'' anywhere from 0 to $H = {12 \choose 2} = 66$ cliques.)
  All cliques containing $e$ are removed, yielding $B_t$ (red region).
 Then, a random set of cliques containing $e$ is added back, resulting in $A_{t+1}$ (blue region).
 The shading of the regions represents the relative likelihood of different possibilities;
@@ -388,8 +403,8 @@ We compute the matrix $B$, the vector $h$, and then add a constraint for each el
 We also have a slightly comical upper bound:
 to detect zero cliques, we simply always
 output a 0. We can implement this with one NAND gate (or possibly zero;
-I'm not quite sure how to count this). (We refer to this as the
-``no cliques'' constraint.) We have:
+I'm not quite sure how to count this). We refer to this as the
+``no cliques'' constraint. We have:
 
 \[
 x_0 = 1
@@ -425,7 +440,7 @@ minimizing the number of gates for CLIQUE.
 
 \centering
 
-\includegraphics[width=0.8\textwidth]{bounds\_7\_3\_3.pdf}
+\includegraphics[width=0.9\textwidth]{bounds\_7\_3\_3.pdf}
 
 \caption{
 Bounds with $n=7$ and $k=3$, including different sets of constraints.
@@ -458,6 +473,14 @@ What bound would this give for CLIQUE, if the LP {\em didn't} crash?
 We attempt to bound the circuit complexity of CLIQUE using an integer program.
 Currently, this gives a bound
 of 1 unbounded fan-in NAND gate for CLIQUE...
+
+Solving the integer program directly seems impractical, as it has well over
+${n \choose k}$ variables. This raises the question of whether we can prove
+anything about the IP, without explicitly solving it.
+The walk which we defined is on a $d$-regular graph, and we have some bounds on
+how much the number of cliques (and number of gates needed to detect them)
+changes on each step. However, we haven't been able to use these properties
+to obtain a lower bound.
 
 \section{Acknowledgements}
 

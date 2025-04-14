@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 # Convenient interface (hopefully) for using the `exactsimplex` library.
 
-This is a gratuitous test, to make sure the CI action is running.
-
 import math
 import pdb
 import sys

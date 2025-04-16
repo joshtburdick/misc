@@ -18,7 +18,7 @@
 \newcommand{\bigC}[0]{\mathcal{C}}
 \begin{document}
 \emergencystretch 3em
-\title{A lower bound from a random walk?}
+\title{A lower bound from a random walk? (DRAFT)}
 
 \author{Josh Burdick ({\tt josh.t.burdick@gmail.com})}
 
@@ -55,7 +55,7 @@ on average, requires $\Omega(n^{k/2})$ two-input NAND gates to compute.
 
 However, that argument didn't give any bound on the complexity of CLIQUE.
 It seems that connecting the number of cliques detected by a BUGGYCLIQUE
-function, and the number of gates it uses, might be useful. We attempt
+function, and the number of gates it uses, might be useful. We try
 to do this using a random walk.
 
 \subsection{Definition of the walk}
@@ -135,21 +135,32 @@ For any given set of cliques $A$, we can generate all the neighbors
 of $A$ by picking a set of cliques $X \in E$, and taking $A \oplus X$. This will
 add and remove some cliques from $A$, all of which include some edge $e$.
 Distinct choices of $X$ will yield distinct neighbors of $A$.
-We can enumerate elements of $E$ by picking an edge $e$, 
-and then picking any subset of cliques which contains $e$. (This overcounts
-elements in $E$, but not by that much; most random sets of cliques won't be
-covered by a single edge $e$.) Thus, we have the following bounds for $|E|$:
-
-\[
-2^{{n-2} \choose {k-2}} \le |E| \le {n \choose 2} 2^{{n-2} \choose {k-2}}
-\]
 
 XORing with something from $E$ defines all of the neighbors of any set of cliques.
 Thus, we get that $S$ is a $d$-regular graph, with $d = |E|-1$.
 I'm not sure if it's a known $d$-regular graph.
 It seems too
 dense to be an expander, but does seem to be pretty strongly connected.
-$d$-regular graphs have some convenient properties (see e.g. \cite{nilli1991second}).
+$d$-regular graphs have some convenient properties (see e.g.
+\cite{quenell1994spectral}).
+
+\subsubsection{Degree}
+
+What is the degree of the vertices in the walk?
+We can enumerate elements of $E$ by picking an edge $e$, 
+and then picking any subset of cliques which contains $e$. (This overcounts
+elements in $E$, but not by that much; most random sets of cliques won't be
+covered by a single edge $e$.)
+
+Thus, we have the following bounds for $|E|$:
+
+\[
+2^{{n-2} \choose {k-2}} \le |E| \le {n \choose 2} 2^{{n-2} \choose {k-2}}
+\]
+
+\subsubsection{Diameter}
+
+How far apart can two vertices be?
 
 \subsection{Modelling where the walk goes}
 
@@ -254,7 +265,13 @@ and so for simplicity, we ignore this.)
 \subsubsection{Bounds for all sets of cliques}
 
 We now attempt to apply that bounding strategy, across all the sets of cliques.
-As before, we group the sets of cliques by size.
+
+(Idea: instead of grouping by size, just define $g_{0..2^N}$ to be the size of each circuit.
+Let $R$ be a matrix which reverses a vector, and define $x = g + Rg$. Then,
+on each bounce, the total number of cliques lost, and gained, is bounded by $H$.
+It's likely $H/2$, but we can ignore that for simplicity.)
+
+As before, we group the sets of cliques by size. (or not...)
 
 Let $x_i$ be the expected number of gates needed to detect a set
 of $i$ cliques, chosen uniformly at random. (We use 0-based indexing
@@ -296,8 +313,29 @@ as a lower bound. Upper bounds have been useful in proving lower bounds;
 this recurring theme has been dubbed ``ironic complexity''
 \cite{aaronson_pnp}.
 
-These seem to bound $x$ to be somewhat near an eigenvector of $B$. This isn't a very sharp bound.
+These seem to bound $x$ to be somewhat near an eigenvector of $B$, with an eigenvalue of 1.
+(This isn't a very sharp bound.
 However, note that for fixed $k$, as $n$ increases, it gets sharper (as $N = {n \choose k}$ increases faster than $H = {{n-2} \choose {k-2}}$).
+
+We can rewrite this as
+\[
+Ax + r = x
+\]
+for some $r$ with $|r|_\infty \le H$.
+
+
+\subsection{Eigenvalues in the neighborhood of $x$}
+
+One way to measure how close a vector is to an eigenvalue is the Rayleigh quotient.
+
+\begin{eqnarray*}
+\frac{x^TAx}{x^Tx} & = & \frac{x^T(x - r)}{x^Tx} \\
+& = & 1 - \frac{x^Tr}{x^Tx}
+\end{eqnarray*}
+
+We know that the largest eigenvalue of $A$ is 1, so the Rayleigh quotient can only
+approach that.
+
 
 \subsection{Plotting the walk}
 

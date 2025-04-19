@@ -313,29 +313,15 @@ as a lower bound. Upper bounds have been useful in proving lower bounds;
 this recurring theme has been dubbed ``ironic complexity''
 \cite{aaronson_pnp}.
 
-These seem to bound $x$ to be somewhat near an eigenvector of $B$, with an eigenvalue of 1.
-(This isn't a very sharp bound.
-However, note that for fixed $k$, as $n$ increases, it gets sharper (as $N = {n \choose k}$ increases faster than $H = {{n-2} \choose {k-2}}$).
+This isn't a very sharp bound.
+It is true that, for fixed $k$, as $n$ increases, this bound increases more slowly than $N$ (as $N = {n \choose k}$ increases faster than $H = {{n-2} \choose {k-2}}$). However, the lower bound based on
+counting is only around $\Omega(\sqrt{N})$, so it's not clear that this is useful.
 
-We can rewrite this as
-\[
-Ax + r = x
-\]
-for some $r$ with $|r|_\infty \le H$.
-
-
-\subsection{Eigenvalues in the neighborhood of $x$}
-
-One way to measure how close a vector is to an eigenvalue is the Rayleigh quotient.
-
-\begin{eqnarray*}
-\frac{x^TAx}{x^Tx} & = & \frac{x^T(x - r)}{x^Tx} \\
-& = & 1 - \frac{x^Tr}{x^Tx}
-\end{eqnarray*}
-
-We know that the largest eigenvalue of $A$ is 1, so the Rayleigh quotient can only
-approach that.
-
+(Another observation: we can rewrite this as $Bx + r = x$,
+for some $r$ with $|r|_\infty \le H$. This seems to bound $x$ to be somewhat near
+an eigenvector of $B$, with an eigenvalue of 1. Unfortunately, however,
+$|r|_\infty$ is going to dwarf the lower bound
+from counting, so this doesn't help.)
 
 \subsection{Plotting the walk}
 

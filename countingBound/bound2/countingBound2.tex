@@ -490,9 +490,13 @@ when the ``step'' and ``no cliques''
 constraints are added (green line), the largest number of gates is shifted
 slightly to the right (towards a larger number of cliques).
 
-On larger instances, the LP crashes (using several different solvers). This
-is presumably partly because the numbers in the IP add up to $2^{n \choose k}$,
+On larger instances, the LP crashes (using several different solvers). 
+I had thought that this was because the numbers in the IP add up to $2^{n \choose k}$,
 which grows very quickly.
+
+However, several implementations are returning ``not feasible'', which
+suggests that the constraints are incorrect. (Of these constraints, the
+``step'' constraint seems the most dubious to me.)
 
 This raises the following open question:
 

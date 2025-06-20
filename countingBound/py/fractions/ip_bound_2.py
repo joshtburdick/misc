@@ -230,7 +230,7 @@ class LpEdgeZeroing:
         num_added = [fractions.Fraction(self.max_cliques_with_edge * i, self.num_possible_cliques)
             for i in range(self.num_possible_cliques + 1)]
         num_hit = [-sum([self.step_probability(i, j) * num_added[j] for j in range(self.num_possible_cliques+1)])
-            for i in range(self.num_possible_cliques+1)]
+            for i in range(self.num_possible_cliques + 1)]
         return (num_hit, num_added)
 
     def add_step_constraints(self, lower_bound=True, upper_bound=True):
@@ -250,9 +250,9 @@ class LpEdgeZeroing:
 #                for j in range(max(0, i-self.max_cliques_with_edge),
 #                    min(i+self.max_cliques_with_edge, N)+1)]
 # XXX for now, just including the entire row of LU
-            A = [(("E", j), self.step_probability(i, j))
+            A = [(("E", j), -self.step_probability(i, j))
                 for j in range(self.num_possible_cliques+1)]
-            A += [(("E", i), fractions.Fraction(-1))]
+            A += [(("E", i), fractions.Fraction(1))]
             # pdb.set_trace()
             # note that for these, we ignore the fact that zeroing out an edge
             # usually removes one gate

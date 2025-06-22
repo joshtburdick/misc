@@ -518,7 +518,10 @@ to obtain a lower bound.
 \cite{goldreich2025counting} relates the complexity of
 counting the number of cliques in a graph ({\em mod} 2; that is, the parity
 of the number of cliques) to
-detecting (at least one) cliques. 
+detecting (at least one) cliques. Considering ``buggy'' versions of this
+might also be useful, since we can XOR together the parity of two sets of
+cliques, to get the parity of those sets XORed together. (This idea is sketched
+in {\tt ip\_parity\_bound.py}).
 
 \section{Acknowledgements}
 

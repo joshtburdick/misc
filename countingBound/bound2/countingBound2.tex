@@ -472,37 +472,34 @@ minimizing the number of gates for CLIQUE.
 
 \centering
 
-\includegraphics[width=0.9\textwidth]{bounds\_7\_3\_3.pdf}
+\includegraphics[width=0.9\textwidth]{bounds\_13\_3\_6.pdf}
 
-\caption{
-Bounds with $n=7$ and $k=3$, including different sets of constraints.
-Note that this plot shows results for all the variables, when
-minimizing $x_N$.
-}
+\caption{ Bounds with $n=13$ and $k=3$ (with up to six gates),
+including different sets of constraints.  Note that this plot shows
+results for all the variables, when minimizing $x_N$.}
 \label{fig:bounds0}
 
 \end{figure}
 
 In general, there could be many possible solutions to the LP, which
-limits how much we can draw conclusions from this plot.
-However, parts of this plot make sense: 
-when the ``step'' and ``no cliques''
-constraints are added (green line), the largest number of gates is shifted
-slightly to the right (towards a larger number of cliques).
+limits how much we can draw conclusions from this plot.  However,
+parts of this plot make sense: when the ``step'' and ``no cliques''
+constraints are added (green line), the largest number of gates is
+shifted slightly to the right (towards a larger number of cliques).
+Admittedly, the bound using only ``counting'' is often higher than
+either of these.
 
-On larger instances, the LP crashes (using several different solvers). 
-I had thought that this was because the numbers in the IP add up to $2^{n \choose k}$,
-which grows very quickly.
-
-However, several implementations are returning ``not feasible'', which
-suggests that the constraints are incorrect. (Of these constraints, the
-``step'' constraint seems the most dubious to me.)
+In any case, the bound for ``all the cliques'' is still only 1.  On
+larger instances, the LP crashes (at least using GLPK; it looks
+like the problem is converting a fraction to a floating-point number,
+for printing).
 
 This raises the following open question:
 
 \begin{prob}
 What bound would this give for CLIQUE, if the LP {\em didn't} crash?
 \end{prob}
+
 
 \section{Conclusion}
 
@@ -517,6 +514,11 @@ The walk which we defined is on a $d$-regular graph, and we have some bounds on
 how much the number of cliques (and number of gates needed to detect them)
 changes on each step. However, we haven't been able to use these properties
 to obtain a lower bound.
+
+\cite{goldreich2025counting} relates the complexity of
+counting the number of cliques in a graph ({\em mod} 2; that is, the parity
+of the number of cliques) to
+detecting (at least one) cliques. 
 
 \section{Acknowledgements}
 

@@ -11,7 +11,7 @@ import seaborn as sns
 from matplotlib.ticker import MaxNLocator
 
 # output_dir = 'bound_plot/'
-output_dir = '../../bound2/'
+output_dir = '../../../bound2/'
 
 def plot_bounds(bound_file, output_file):
     """Plots bounds from one file."""
@@ -38,6 +38,7 @@ def plot_bounds(bound_file, output_file):
     #   other color possibilites:
     #        palette="YlGnBu")
     #        palette=["#a04040e0", "#40a000e0", "#20202080"])
+    sns.move_legend(plt.gca(), "center")
     plt.tight_layout()
     plt.savefig(output_file)
 

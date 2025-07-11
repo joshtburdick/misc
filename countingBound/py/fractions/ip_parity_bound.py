@@ -126,19 +126,15 @@ class LpParity:
 
         """
         N = self.num_possible_cliques
+        # loop through pairs of sizes we could combine
         for i in range(self.num_possible_cliques+1):
             for j in range(i, self.num_possible_cliques+1):
-                # add bound for j-i cliques
-                self.lp.add_constraint(
-                    [(("E", j-i), 1), (("E", i), -1), (("E", j), -1)],
-                    "<=",
-                    1)
-                # if i+j is small enough, add bound for i+j cliques
-                if i+j <= self.num_possible_cliques:
+                # loop through the sizes obtainable by XORing them together
+                for xor in range(j-i, min(j+i, self.num_possible_cliques)+1, 2):
                     self.lp.add_constraint(
-                        [(("E", i+j), 1), (("E", i), -1), (("E", j), -1)],
+                        [(("E", xor), 1), (("E", i), -1), (("E", j), -1)],
                         "<=",
-                        1)
+                        4)
 
     def add_no_cliques_constraint(self):
         """Adds trivial constraint, on finding no cliques."""

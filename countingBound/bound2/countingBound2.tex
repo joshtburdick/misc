@@ -160,7 +160,12 @@ Thus, we have the following bounds for $|E|$:
 
 \subsubsection{Diameter}
 
-How far apart can two vertices be?
+How far apart can two vertices be? WLOG, we can just consider how many ``steps''
+are needed to get from zero cliques to all $N$. Trivially, ${n \choose 2}$ steps
+suffice (since that includes all the edges).
+As a lower bound: each ``step'' can only potentially flip up to
+${n-2 \choose k-2}$ edges. So we'll need at least ${n \choose k} / {n-2 \choose k-2}$
+steps.
 
 \subsection{Modelling where the walk goes}
 
@@ -501,6 +506,61 @@ What bound would this give for CLIQUE, if the LP {\em didn't} crash?
 \end{prob}
 
 
+\section{Bounding the {\em parity} of the number of cliques}
+
+Another problem related to CLIQUE is 
+counting the number of cliques in a graph ({\em mod} 2; that is, the parity
+of the number of cliques) to
+detecting (at least one) cliques.
+\cite{goldreich2025counting} shows that the complexity of this (presumably harder)
+problem is between detecting cliques and counting cliques. If it's a harder
+problem, then it should be (probably infinitesimally) easier to prove lower bounds
+about it...
+
+We might also consider ``buggy'' versions of this (counting the parity of only
+some subset of the possible cliques). This gives $2^N$ distinct functions (by
+essentially the same argument as for $BUGGYCLIQUE$).
+
+A nice feature of this problem is that we can combine circuits using XOR.
+Suppose we have sets of cliques $A$ and $B$, and corresponding minimal circuits
+computing $CLIQUE-PARITY$ for $A$ and $B$. If $A$ and $B$ are distinct, then
+XORing the circuits together computes $CLIQUE-PARITY(A \cup B)$. If $A \subset B$,
+then XORing the circuits together computes $CLIQUE-PARITY(B-A)$. $A$ and $B$ might
+also overlap, in which case the cliques in $A \cap B$ ``cancel out''.
+
+\begin{figure}
+
+\centering
+
+\includegraphics[width=0.9\textwidth]{ip_parity_nand_8_3_9.pdf}
+
+\caption{ Bounds for $CLIQUE-PARITY$ with $n=8$ and $k=3$ (with up to nine gates),
+including different sets of constraints.  Again, this plot shows
+results for all the variables, when minimizing $x_N$.}
+\label{fig:bounds0}
+
+\end{figure}
+
+This idea is implemented in {\tt ip\_parity\_bound.py}), using 2-input NAND gates.
+We have the following constraints (again, writing $x_i$ for the expected number
+of gates needed to compute the parity of a set of $i$ cliques).
+
+\begin{itemize}
+
+\item {\bf Counting}: The counting bound (as before)
+
+\item {\bf Combining}: For all $i, j$, with $0 \le i < j \le N$, for
+all $k$ in $(j-i), (j-i)+2, (j-i)+4, ... N$, $x_k \le x_i + x_j + 4$ (since
+computing XOR requires four NAND gates).
+
+\item {\bf ``No cliques''}: Finding zero cliques requires one NAND gate.
+
+\end{itemize}
+
+This gives a bound of two gates, for computing the parity of
+the number of cliques. For larger problems, again, the LP solver runs into
+numerical problems.
+
 \section{Conclusion}
 
 We attempt to bound the circuit complexity of CLIQUE using an integer program.
@@ -514,14 +574,6 @@ The walk which we defined is on a $d$-regular graph, and we have some bounds on
 how much the number of cliques (and number of gates needed to detect them)
 changes on each step. However, we haven't been able to use these properties
 to obtain a lower bound.
-
-\cite{goldreich2025counting} relates the complexity of
-counting the number of cliques in a graph ({\em mod} 2; that is, the parity
-of the number of cliques) to
-detecting (at least one) cliques. Considering ``buggy'' versions of this
-might also be useful, since we can XOR together the parity of two sets of
-cliques, to get the parity of those sets XORed together. (This idea is sketched
-in {\tt ip\_parity\_bound.py}).
 
 \section{Acknowledgements}
 

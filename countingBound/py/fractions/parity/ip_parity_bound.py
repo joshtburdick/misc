@@ -8,6 +8,8 @@ import math
 import pdb
 import sys
 
+sys.path.append("..")   # XXX
+
 import numpy as np
 import pandas
 import scipy.special
@@ -140,6 +142,16 @@ class LpParity:
         """Adds trivial constraint, on finding no cliques."""
         # ... that is, finding zero cliques requires one NAND gate
         self.lp.add_constraint([(("E", 0), 1)], "=", 1)
+
+
+    def add_one_clique_constraint(self):
+        """Adds contstraint on finding one clique."""
+        # FIXME actually call this (although for n=8, k=3, num_gates=9,
+        # this doesn't seem to make a difference)
+        self.lp.add_constraint([(("E", 1), 1)],
+            "<=",
+            # number of 2-input NAND gates to cover one clique
+            2 * (comb(k,2)-1))
 
     def get_all_bounds(self):
         """Gets bounds for each possible number of cliques.

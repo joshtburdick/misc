@@ -102,7 +102,7 @@ class TwoInputNandBasis:
             # - an input
             # - a previous gate
             # - the constant 1 (thus changing a two-input NAND to a NOT)
-            f[g] = comb(num_inputs + (g-1) + 1, 2) * f[g-1]
+            f[g] = comb(num_inputs + (g-1) + 1, 2, exact=True) * f[g-1]
         # FIXME double-check this
         return f
        

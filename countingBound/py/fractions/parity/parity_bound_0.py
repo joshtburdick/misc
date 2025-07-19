@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # Bound for clique parity, without using an LP.
+# This doesn't seem to be working.
 
 import argparse
 import fractions
@@ -84,8 +85,9 @@ class CliqueParity:
             np.zeros(num_gates_for_clique_parity + 4, dtype=object),
             self.upper_bound])
         large_bound = large_bound[ : (self.max_gates+1) ]
-        pdb.set_trace()
         diff = self.num_possible_functions - (self.upper_bound + large_bound)
+        # print(diff)
+        # pdb.set_trace()
         return np.min(diff)
 
     def num_gates_upper_bound(self, num_cliques):

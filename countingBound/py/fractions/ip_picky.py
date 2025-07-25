@@ -161,7 +161,7 @@ class LpPicky:
                 # we can implement PICKYCLIQUE(i,j) by detecting a set of
                 # i cliques, then using that AND NOT a set of j cliques
                 self.lp.add_constraint(
-                    [(("E",i,j), -1), (("E",i,0), 1), (("E",j,0), 1)],
+                    [(("E",i,j), 1), (("E",i,0), -1), (("E",j,0), -1)],
                     "<=",
                     3)    # FIXME the "AND NOT" number of gates should depend on the basis
 

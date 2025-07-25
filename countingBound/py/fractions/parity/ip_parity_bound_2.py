@@ -206,9 +206,16 @@ def parse_args():
     parser.add_argument("--dump-lp",
         help="Dump LP problem statement to a file",
         action="store_true")
+    parser.add_argument("--max-gates-search",
+        help="Search for smallest number of gates which doesn't crash",
+        action="store_true")
     parser.add_argument("--result-file",
         help="Write result to indicated file (rather than stdout)")
     return parser.parse_args()
+
+
+
+
 
 if __name__ == '__main__':
     args = parse_args()
@@ -216,16 +223,24 @@ if __name__ == '__main__':
     k = args.k
     max_gates = args.max_gates
 
-    bounds = pandas.concat([
-        get_bounds(n, k, max_gates, 'Counting', True, False, False),
-        get_bounds(n, k, max_gates, 'Counting and small', True, True, False),
-        get_bounds(n, k, max_gates, 'Counting and large', True, False, True),
-        get_bounds(n, k, max_gates, 'Counting, small and large',
-            True, True, True)
-    ])
-    if args.result_file:
-        with open(args.result_file, "wt") as f:
-            bounds.to_csv(f, index=False)
-    else:
-        bounds.to_csv(sys.stdout, index=False)
+    gate_range = range(args.max_gates, 10000) if args.max_gates_search else [args.max_gates]
+
+    for max_gates in gate_range:
+        try:
+            bounds = pandas.concat([
+                get_bounds(n, k, max_gates, 'Counting', True, False, False),
+                get_bounds(n, k, max_gates, 'Counting and small', True, True, False),
+                get_bounds(n, k, max_gates, 'Counting and large', True, False, True),
+                get_bounds(n, k, max_gates, 'Counting, small and large',
+                    True, True, True)
+            ])
+            if args.result_file:
+                with open(args.result_file, "wt") as f:
+                    bounds.to_csv(f, index=False)
+            else:
+                bounds.to_csv(sys.stdout, index=False)
+            print(f"***** wrote bound with max_gates={max_gates}")
+            sys.exit(0)
+        except TypeError:
+            print(f"***** failed with max_gates={max_gates}; retrying")
 

@@ -54,7 +54,11 @@ class UnboundedFanInNandBasis:
         # the "-1" here is because this is the average, not the max.
         g = np.sqrt(2*lg_num_functions + b*b) - b - 1
         return g
-       
+
+    def and_upper_bound(self, num_inputs):
+        """Upper bound on computing AND of some number of inputs."""
+        return 2
+
     def or_upper_bound(self):
         """Upper bound on computing OR of two functions.
 

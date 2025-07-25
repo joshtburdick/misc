@@ -1,0 +1,262 @@
+#!/usr/bin/env python3
+# Revised IP bound, using the "picky" version of BUGGYCLIQUE.
+
+import argparse
+import fractions
+import itertools
+import math
+import pdb
+import sys
+
+import numpy as np
+import pandas
+import scipy.special
+import scipy.stats
+
+import gate_basis
+import flexible_lp_helper
+import pulp_helper
+import scip_helper
+# import exact_simplex_helper
+import simplex_algorithm_helper
+
+# Wrapper for comb(), with exact arithmetic.
+def comb(n, k):
+    return scipy.special.comb(n, k, exact=True)
+
+# Hypergeometric distribution, returning an exact fractions.Fraction .
+def hyperg_frac(N, K, n, k):
+    # based on https://en.wikipedia.org/wiki/Hypergeometric_distribution
+    # note that we don't try to optimize this
+    return fractions.Fraction(
+        comb(K, k) * comb(N-K, n-k),
+        comb(N, n))
+
+class LpPicky:
+    """Attempt at bound using PICKYCLIQUE.
+    """
+
+    def __init__(self, n, k, max_gates):
+        """Constructor gets graph info, and sets up variable names.
+
+        This will have two groups of variables:
+        - tuples of the form ("E", c_total, c_no) where:
+            - "c_total" is the number of cliques which must be present for a 1,
+              with 0 <= c_yes <= N
+            - "c_no" is the number of cliques which, if present, force a 0 output,
+              with 0 <= c_no_ < c_total
+            - Each variable will be the expected number of gates in
+            the sets of size "c_total" and "c_no".
+        - tuples of the form (c_total, c_no, g), where
+            - "c_total" and "c_no" are the numbers of cliques (as above)
+            - "g" is the number of gates
+            - Each variable will be the number of sets of "c" cliques,
+              having "g" gates.
+        n: number of vertices in the graph
+        k: number of vertices in a clique (>= 3)
+        max_gates: maximum number of gates to include
+        """
+        self.n = n
+        self.k = k
+        if k < 3:
+            raise ValueError('k must be >= 3')
+        self.max_gates = max_gates
+
+        self.expected_num_gates_vars = []
+        self.num_gates_dist_vars = []
+        # ??? possibly omit the "no cliques" function?
+        # number of "yes" cliques (at least one of which must be present
+        # for a 1 to be output)
+        for i in range(self.num_possible_cliques + 1):
+            # number of "no" cliques (which if present, force a 0 output, even if a
+            # "yes" clique is present); note that this must be strictly less than
+            # the total number of cliques)
+            for j in range(i):
+                # variables for expected number of gates, for each number of cliques
+                self.expected_num_gates_vars += [("E", i, j)]
+                for g in range(1, max_gates+1):
+                    # variables for counts of numbers of functions
+                    # with some number of gates
+                    self.num_gates_dist_vars += [(i, j, g)]
+
+        # wrapper for LP solver
+        # FIXME: make this an option?
+        # self.lp = scip_helper.SCIP_Helper(
+        #     self.expected_num_gates_vars + self.num_gates_dist_vars)
+        # self.lp = flexible_lp_helper.Flexible_LP_Helper(
+        #      self.expected_num_gates_vars + self.num_gates_dist_vars)
+        self.lp = pulp_helper.PuLP_Helper(
+             self.expected_num_gates_vars + self.num_gates_dist_vars)
+        # self.lp = exact_simplex_helper.ExactSimplexHelper(
+        #     self.expected_num_gates_vars + self.num_gates_dist_vars)
+
+        # self.lp = simplex_algorithm_helper.SimplexAlgorithmHelper(
+        #      self.expected_num_gates_vars + self.num_gates_dist_vars, verbosity=0)
+
+        # number of possible cliques
+        self.num_possible_cliques = comb(n, k)
+        # number of cliques which include an arbitrary edge: this
+        # is both the maximum removed by zeroing, and the maximum added
+        # this goes away
+        # self.max_cliques_with_edge = comb(n-2, k-2)
+
+        # FIXME make this an option?
+        self.basis = gate_basis.UnboundedFanInNandBasis()
+        # self.basis = gate_basis.TwoInputNandBasis()
+
+        # for debugging: directory in which to save LP problem files
+        self.lp_save_dir = None
+
+    def add_level_constraints(self):
+        """Adds constraints on functions at some "level"
+
+        By "level", we mean "number of cliques".
+
+        The constraints (both of which are equalities) are:
+        - on the total number of functions at that "level", and
+        - connecting the counts with that "level"'s expected gate count
+        """
+        # loop through number of cliques
+        for i in range(self.num_possible_cliques+1):
+            for j in range(i-1):
+                # we compute this by:
+                # - "choosing a set of cliques we look at ('yes' or 'no')",
+                # - then "choosing a subset of those which are 'no'"
+                num_functions = (comb(self.num_possible_cliques, i)
+                    * comb(i, j))
+                # add constraint that these sum to the number of functions
+                self.lp.add_constraint(
+                    [((i, j, g), 1) for g in range(1, self.max_gates+1)],
+                    '=', num_functions)
+                # add constraint defining expected number of gates
+                A = [((i, j, g), g)
+                    for g in range(1, self.max_gates+1)]
+                self.lp.add_constraint(A + [(("E", i, j), -num_functions)],
+                    '=', 0)
+
+    def add_counting_bound(self):
+        """Adds counting bounds, for a given number of gates.
+
+        This is a lower bound on the number of functions with
+        some number of gates.
+        """
+        # number of possible functions for each possible number of gates
+        # (with number of inputs based on number of vertices)
+        num_functions = self.basis.num_functions(comb(self.n, 2), self.max_gates+1)
+        # upper-bound "total number of functions with this many gates"
+        for g in range(1, self.max_gates+1):
+            # this list comprehension admittedly borders on baroque
+            self.lp.add_constraint(
+                [((i, j, g), 1)
+                    for i in range(self.num_possible_cliques+1) for j in range(i)],
+                '<=', num_functions[g])
+
+    def add_picky_bound(self):
+        """Adds upper bound on computing 'picky' sets of functions.
+        """
+        N = self.num_possible_cliques
+        for i in range(self.num_possible_cliques+1):
+            for j in range(i):
+                # we can implement PICKYCLIQUE(i,j) by detecting a set of
+                # i cliques, then using that AND NOT a set of j cliques
+                self.lp.add_constraint(
+                    [(("E",i,j), -1), (("E",i,0), 1), (("E",j,0), 1)],
+                    "<=",
+                    3)    # FIXME the "AND NOT" number of gates should depend on the basis
+
+    def add_naive_upper_bound(self):
+        """Adds naive upper bound."""
+        # finding zero cliques requires one NAND gate
+        # (??? how to count this is a bit unclear)
+        self.lp.add_constraint([(("E", 0), 1)], "=", 1)
+        # add bound for finding one or more cliques
+        for num_cliques in range(self.num_possible_cliques+1):
+            # FIXME should depend on basis
+            num_gates = num_cliques + 1
+            if num_gates <= self.max_gates:
+                self.lp.add_constraint([("E", num_cliques, 0)], "<=", num_gates)
+            else:
+                # stop when we hit the maximum number of gates being considered
+                return
+
+    def get_all_bounds(self):
+        """Gets bounds for each possible number of cliques.
+
+        This is the bounds for each possible number of cliques,
+        in the scenario that the number of gates for
+        CLIQUE is minimized.
+        """
+        # solve, minimizing number of gates for CLIQUE
+        r = self.lp.solve(("E", self.num_possible_cliques))
+        if not r:
+            return None
+        # XXX for now, just getting counts for BUGGYCLIQUE
+        # (with no 'no's)
+        n_cliques = range(self.num_possible_cliques+1)
+        bounds = [[("E", num_cliques, 0)]
+            for num_cliques in range(self.num_possible_cliques+1)]
+        return pandas.DataFrame({
+            'Num. vertices': self.n,
+            'Num. cliques': n_cliques,
+            'Min. gates': bounds})
+
+def get_bounds(n, k, max_gates, constraints_label,
+        use_counting_bound,
+        use_no_cliques_bound):
+    """Gets bounds with some set of constraints.
+
+    n, k, max_gates: problem size
+    constraints_label: label to use for this set of constraints
+    use_counting_bound, use_picky_bound, use_upper_bound:
+        whether to use each of these groups of constraints
+    """
+    # ??? track resource usage?
+    sys.stderr.write(f'[bounding with n={n}, k={k}, max_gates={max_gates}, label={constraints_label}]\n')
+    bound = LpEdgeZeroing(n, k, max_gates)
+    bound.add_level_constraints()
+    if use_counting_bound:
+        bound.add_counting_bound()
+    if use_picky_bound:
+        bound.add_picky_bound()
+    if use_upper_bound:
+        bound.add_naive_upper_bound()
+    # pdb.set_trace()
+    b = bound.get_all_bounds()
+    b['Constraints'] = constraints_label
+    return b.iloc[:,[3,0,1,2]]
+
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description='Bounds circuit size for detecting subsets of cliques.')
+    parser.add_argument("n", type=int,
+        help="Number of vertices")
+    parser.add_argument("k", type=int,
+        help="Size of clique")
+    parser.add_argument("max_gates", type=int,
+        help="Maximum number of gates to consider (if this is too"
+            " small, thr problem will be infeasible)")
+    parser.add_argument("--dump-lp",
+        help="Dump LP problem statement to a file",
+        action="store_true")
+    parser.add_argument("--result-file",
+        help="Write result to indicated file (rather than stdout)")
+    return parser.parse_args()
+
+if __name__ == '__main__':
+    args = parse_args()
+    n = args.n
+    k = args.k
+    max_gates = args.max_gates
+
+    # output_file = sys.argv[3]
+    bounds = pandas.concat([
+        get_bounds(n, k, max_gates, 'Counting', True, False, False),
+        get_bounds(n, k, max_gates, 'Counting and picky', True, True, False),
+        get_bounds(n, k, max_gates, 'Counting, picky, and upper bound', True, True, True),
+    ])
+    if args.result_file:
+        with open(args.result_file, "wt") as f:
+            bounds.to_csv(f, index=False)
+    else:
+        bounds.to_csv(sys.stdout, index=False)
+

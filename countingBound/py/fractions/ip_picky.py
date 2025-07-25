@@ -61,6 +61,7 @@ class LpPicky:
         if k < 3:
             raise ValueError('k must be >= 3')
         self.max_gates = max_gates
+        self.num_possible_cliques = comb(n, k)
 
         self.expected_num_gates_vars = []
         self.num_gates_dist_vars = []
@@ -71,7 +72,7 @@ class LpPicky:
             # number of "no" cliques (which if present, force a 0 output, even if a
             # "yes" clique is present); note that this must be strictly less than
             # the total number of cliques)
-            for j in range(i):
+            for j in [0] if i==0 else range(i):
                 # variables for expected number of gates, for each number of cliques
                 self.expected_num_gates_vars += [("E", i, j)]
                 for g in range(1, max_gates+1):
@@ -168,13 +169,13 @@ class LpPicky:
         """Adds naive upper bound."""
         # finding zero cliques requires one NAND gate
         # (??? how to count this is a bit unclear)
-        self.lp.add_constraint([(("E", 0), 1)], "=", 1)
+        self.lp.add_constraint([(("E", 0, 0), 1)], "=", 1)
         # add bound for finding one or more cliques
         for num_cliques in range(self.num_possible_cliques+1):
             # FIXME should depend on basis
             num_gates = num_cliques + 1
             if num_gates <= self.max_gates:
-                self.lp.add_constraint([("E", num_cliques, 0)], "<=", num_gates)
+                self.lp.add_constraint([(("E",num_cliques,0), 1)], "<=", num_gates)
             else:
                 # stop when we hit the maximum number of gates being considered
                 return
@@ -187,13 +188,13 @@ class LpPicky:
         CLIQUE is minimized.
         """
         # solve, minimizing number of gates for CLIQUE
-        r = self.lp.solve(("E", self.num_possible_cliques))
+        r = self.lp.solve(("E", self.num_possible_cliques, 0))
         if not r:
             return None
         # XXX for now, just getting counts for BUGGYCLIQUE
         # (with no 'no's)
         n_cliques = range(self.num_possible_cliques+1)
-        bounds = [[("E", num_cliques, 0)]
+        bounds = [r[("E", num_cliques, 0)]
             for num_cliques in range(self.num_possible_cliques+1)]
         return pandas.DataFrame({
             'Num. vertices': self.n,
@@ -201,8 +202,7 @@ class LpPicky:
             'Min. gates': bounds})
 
 def get_bounds(n, k, max_gates, constraints_label,
-        use_counting_bound,
-        use_no_cliques_bound):
+        use_counting_bound, use_picky_bound, use_upper_bound):
     """Gets bounds with some set of constraints.
 
     n, k, max_gates: problem size
@@ -212,7 +212,7 @@ def get_bounds(n, k, max_gates, constraints_label,
     """
     # ??? track resource usage?
     sys.stderr.write(f'[bounding with n={n}, k={k}, max_gates={max_gates}, label={constraints_label}]\n')
-    bound = LpEdgeZeroing(n, k, max_gates)
+    bound = LpPicky(n, k, max_gates)
     bound.add_level_constraints()
     if use_counting_bound:
         bound.add_counting_bound()
@@ -220,7 +220,6 @@ def get_bounds(n, k, max_gates, constraints_label,
         bound.add_picky_bound()
     if use_upper_bound:
         bound.add_naive_upper_bound()
-    # pdb.set_trace()
     b = bound.get_all_bounds()
     b['Constraints'] = constraints_label
     return b.iloc[:,[3,0,1,2]]

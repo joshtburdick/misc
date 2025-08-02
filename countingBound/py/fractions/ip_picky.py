@@ -82,17 +82,8 @@ class LpPicky:
 
         # wrapper for LP solver
         # FIXME: make this an option?
-        # self.lp = scip_helper.SCIP_Helper(
-        #     self.expected_num_gates_vars + self.num_gates_dist_vars)
-        # self.lp = flexible_lp_helper.Flexible_LP_Helper(
-        #      self.expected_num_gates_vars + self.num_gates_dist_vars)
         self.lp = pulp_helper.PuLP_Helper(
              self.expected_num_gates_vars + self.num_gates_dist_vars)
-        # self.lp = exact_simplex_helper.ExactSimplexHelper(
-        #     self.expected_num_gates_vars + self.num_gates_dist_vars)
-
-        # self.lp = simplex_algorithm_helper.SimplexAlgorithmHelper(
-        #      self.expected_num_gates_vars + self.num_gates_dist_vars, verbosity=0)
 
         # number of possible cliques
         self.num_possible_cliques = comb(n, k)

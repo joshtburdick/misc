@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 # Revised IP bound, using the "picky" version of BUGGYCLIQUE.
 
+# FIXME
+# - index by num. "yes" and num. "no", rather than num. "total" and num. "no"?
+# - add "less efficient" bounds?
+
 import argparse
 import fractions
 import itertools
@@ -14,11 +18,7 @@ import scipy.special
 import scipy.stats
 
 import gate_basis
-import flexible_lp_helper
 import pulp_helper
-import scip_helper
-# import exact_simplex_helper
-import simplex_algorithm_helper
 
 # Wrapper for comb(), with exact arithmetic.
 def comb(n, k):
@@ -152,8 +152,21 @@ class LpPicky:
                     for i in range(self.num_possible_cliques+1) for j in range(i)],
                 '<=', num_functions[g])
 
+    def add_buggy_bound(self):
+        """Adds upper bound on computing 'buggy' sets of functions.
+
+        We can implement BUGGYCLIQUE(A+B) using a circuit for
+        PICKYCLIQUE(A, B), and a circuit for BUGGYCLIQUE(D),
+        where B <= D <= A.
+        """
+        pass   # FIXME
+
     def add_picky_bound(self):
         """Adds upper bound on computing 'picky' sets of functions.
+
+        We can implement PICKYCLIQUE(A,B) using a circuit for
+        BUGGYCLIQUE(D), and a circuit for BUGGYCLIQUE(B),
+        where B <= D <= A.
         """
         N = self.num_possible_cliques
         for i in range(self.num_possible_cliques+1):

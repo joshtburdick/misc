@@ -101,7 +101,7 @@ class PuLP_Helper:
         """
         self.prob += self.vars[var_to_minimize]
         self.prob.writeLP("./bound.lp")
-        r = self.prob.solve(pulp.GLPK("/Users/joshuaburdick/local/bin/glpsol",
+        r = self.prob.solve(pulp.GLPK("glpsol",
                                       options=['--exact']))
         # r = self.prob.solve(pulp.GLPK())
         # problem had a solution

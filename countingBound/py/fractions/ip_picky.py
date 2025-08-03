@@ -107,9 +107,9 @@ class LpPicky:
         - on the total number of functions at that "level", and
         - connecting the counts with that "level"'s expected gate count
         """
-        # loop through number of cliques
-        for i in range(self.num_possible_cliques+1):
-            for j in range(i-1):
+        # loop through number of "yes" and "no" cliques
+        for i in range(1, self.num_possible_cliques+1):
+            for j in range( self.num_possible_cliques + 1 - i ):
                 # we compute this by:
                 # - choosing a set of "yes" cliques, then
                 # - choosing a set of "no" cliques, from those which remain
@@ -150,7 +150,7 @@ class LpPicky:
         PICKYCLIQUE(A,B) OR BUGGYCLIQUE(D), where B <= D <= A+B.
         """
         for i in range(1, self.num_possible_cliques + 1):
-            for j in range(self.num_possible_cliques + 1 - i):
+            for j in range(1, self.num_possible_cliques + 1 - i):
                 for k in range(j, i+j+1):
                     self.lp.add_constraint(
                         [(("E",i+j,0), 1), (("E",i,j), -1), (("E",k,0), -1)],
@@ -167,7 +167,7 @@ class LpPicky:
         BUGGYCLIQUE(D) AND NOT BUGGYCLIQUE(B), where A <= D <= A+B.
         """
         for i in range(1, self.num_possible_cliques + 1):
-            for j in range(self.num_possible_cliques + 1 - i):
+            for j in range(1, self.num_possible_cliques + 1 - i):
                 for k in range(i, i+j+1):
                     self.lp.add_constraint(
                         [(("E",i,j), 1), (("E",k,0), -1), (("E",j,0), -1)],
@@ -200,7 +200,7 @@ class LpPicky:
             return None
         # XXX for now, just getting counts for BUGGYCLIQUE
         # (with 0 'no's)
-        n_cliques = range(self.num_possible_cliques+1)
+        n_cliques = range(1, self.num_possible_cliques+1)
         bounds = [r[("E", num_cliques, 0)]
             for num_cliques in range(1, self.num_possible_cliques+1)]
         return pandas.DataFrame({
@@ -209,7 +209,7 @@ class LpPicky:
             'Min. gates': bounds})
 
 def get_bounds(n, k, max_gates, constraints_label,
-        use_counting_bound, use_picky_bound, use_upper_bound):
+        use_counting_bound, use_buggy_bound, use_picky_bound, use_upper_bound):
     """Gets bounds with some set of constraints.
 
     n, k, max_gates: problem size
@@ -224,7 +224,7 @@ def get_bounds(n, k, max_gates, constraints_label,
     if use_counting_bound:
         bound.add_counting_bound()
     if use_buggy_bound:
-        bound.add_picky_bound()
+        bound.add_buggy_bound()
     if use_picky_bound:
         bound.add_picky_bound()
     if use_upper_bound:

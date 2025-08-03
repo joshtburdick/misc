@@ -40,7 +40,7 @@ class LpPicky:
 
     Note that when A and B are sets (of cliques), we write:
     - "A + B" for A union B, and
-    - "A <= B" for "A is a subset of B"
+    - "A <= B" for "A is a (not necessarily proper) subset of B"
     """
 
     def __init__(self, n, k, max_gates):
@@ -99,7 +99,7 @@ class LpPicky:
         self.lp_save_dir = None
 
     def add_level_constraints(self):
-        """Adds constraints on functions at some "level"
+        """Adds constraints on functions at some "level".
 
         By "level", we mean "number of cliques".
 
@@ -133,48 +133,52 @@ class LpPicky:
         """
         # number of possible functions for each possible number of gates
         # (with number of inputs based on number of vertices)
-        num_functions = self.basis.num_functions(comb(self.n, 2), self.max_gates+1)
+        num_possible_functions = self.basis.num_functions(comb(self.n, 2), self.max_gates+1)
         # upper-bound "total number of functions with this many gates"
         for g in range(1, self.max_gates+1):
-            # this list comprehension admittedly borders on baroque
+            # this list comprehension is admittedly baroque
             self.lp.add_constraint(
                 [((i, j, g), 1)
-                    for i in range(self.num_possible_cliques+1) for j in range(i)],
-                '<=', num_functions[g])
+                    for i in range(1, self.num_possible_cliques + 1)
+                    for j in range(self.num_possible_cliques + 1 - i)],
+                '<=', num_possible_functions[g])
 
     def add_buggy_bound(self):
         """Adds upper bound on computing 'buggy' sets of functions.
 
-        We can implement BUGGYCLIQUE(A+B) using a circuit for
-        PICKYCLIQUE(A, B), and a circuit for BUGGYCLIQUE(D),
-        where B <= D <= A.
+        We can implement BUGGYCLIQUE(A+B) by combining circuits:
+        PICKYCLIQUE(A,B) OR BUGGYCLIQUE(D), where B <= D <= A+B.
         """
-        pass   # FIXME
+        for i in range(1, self.num_possible_cliques + 1):
+            for j in range(self.num_possible_cliques + 1 - i):
+                for k in range(j, i+j+1):
+                    self.lp.add_constraint(
+                        [(("E",i+j,0), 1), (("E",i,j), -1), (("E",k,0), -1)],
+                        "<=",
+                        # Note that for unbounded fan-in, "OR" can be implemented
+                        # by combining all of the inputs to the last gate in
+                        # each circuit.
+                        -1)    # FIXME the "OR" cost should depend on the basis
 
     def add_picky_bound(self):
         """Adds upper bound on computing 'picky' sets of functions.
 
-        We can implement PICKYCLIQUE(A,B) using a circuit for
-        BUGGYCLIQUE(D), and a circuit for BUGGYCLIQUE(B),
-        where B <= D <= A.
+        We can implement PICKYCLIQUE(A,B) by combining circuits:
+        BUGGYCLIQUE(D) AND NOT BUGGYCLIQUE(B), where A <= D <= A+B.
         """
-        N = self.num_possible_cliques
-        for i in range(self.num_possible_cliques+1):
-            for j in range(i):
-                # we can implement PICKYCLIQUE(i,j) by detecting a set of
-                # i cliques, then using that AND NOT a set of j cliques
-                self.lp.add_constraint(
-                    [(("E",i,j), 1), (("E",i,0), -1), (("E",j,0), -1)],
-                    "<=",
-                    3)    # FIXME the "AND NOT" number of gates should depend on the basis
+        for i in range(1, self.num_possible_cliques + 1):
+            for j in range(self.num_possible_cliques + 1 - i):
+                for k in range(i, i+j+1):
+                    self.lp.add_constraint(
+                        [(("E",i,j), 1), (("E",k,0), -1), (("E",j,0), -1)],
+                        "<=",
+                        3)    # FIXME the "AND NOT" cost should depend on the basis
+                        # FIXME double check "AND NOT" cost?
 
     def add_naive_upper_bound(self):
         """Adds naive upper bound."""
-        # finding zero cliques requires one NAND gate
-        # (??? how to count this is a bit unclear)
-        self.lp.add_constraint([(("E", 0, 0), 1)], "=", 1)
         # add bound for finding one or more cliques
-        for num_cliques in range(self.num_possible_cliques+1):
+        for num_cliques in range(1, self.num_possible_cliques+1):
             # FIXME should depend on basis
             num_gates = num_cliques + 1
             if num_gates <= self.max_gates:
@@ -195,10 +199,10 @@ class LpPicky:
         if not r:
             return None
         # XXX for now, just getting counts for BUGGYCLIQUE
-        # (with no 'no's)
+        # (with 0 'no's)
         n_cliques = range(self.num_possible_cliques+1)
         bounds = [r[("E", num_cliques, 0)]
-            for num_cliques in range(self.num_possible_cliques+1)]
+            for num_cliques in range(1, self.num_possible_cliques+1)]
         return pandas.DataFrame({
             'Num. vertices': self.n,
             'Num. cliques': n_cliques,
@@ -210,7 +214,7 @@ def get_bounds(n, k, max_gates, constraints_label,
 
     n, k, max_gates: problem size
     constraints_label: label to use for this set of constraints
-    use_counting_bound, use_picky_bound, use_upper_bound:
+    use_counting_bound, use_buggy_bound, use_picky_bound, use_upper_bound:
         whether to use each of these groups of constraints
     """
     # ??? track resource usage?
@@ -219,6 +223,8 @@ def get_bounds(n, k, max_gates, constraints_label,
     bound.add_level_constraints()
     if use_counting_bound:
         bound.add_counting_bound()
+    if use_buggy_bound:
+        bound.add_picky_bound()
     if use_picky_bound:
         bound.add_picky_bound()
     if use_upper_bound:
@@ -252,9 +258,9 @@ if __name__ == '__main__':
 
     # output_file = sys.argv[3]
     bounds = pandas.concat([
-        get_bounds(n, k, max_gates, 'Counting', True, False, False),
-        get_bounds(n, k, max_gates, 'Counting and picky', True, True, False),
-        get_bounds(n, k, max_gates, 'Counting, picky, and upper bound', True, True, True),
+        get_bounds(n, k, max_gates, 'Counting', True, False, False, False),
+        get_bounds(n, k, max_gates, 'Counting, buggy, and picky', True, True, True, False),
+        get_bounds(n, k, max_gates, 'Counting, buggy, picky, and upper bound', True, True, True, True),
     ])
     if args.result_file:
         with open(args.result_file, "wt") as f:

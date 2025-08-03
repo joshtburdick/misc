@@ -4,6 +4,9 @@
 # FIXME
 # - index by num. "yes" and num. "no", rather than num. "total" and num. "no"?
 # - add "less efficient" bounds?
+# - possibly add_level_constraints() should only include the total number of functions,
+#   and add_counting_bound() should be the number of functions which are present?
+#   (Mostly, both will be used anyway, so it doesn't necessarily matter that much.)
 
 import argparse
 import fractions
@@ -34,24 +37,28 @@ def hyperg_frac(N, K, n, k):
 
 class LpPicky:
     """Attempt at bound using PICKYCLIQUE.
+
+    Note that when A and B are sets (of cliques), we write:
+    - "A + B" for A union B, and
+    - "A <= B" for "A is a subset of B"
     """
 
     def __init__(self, n, k, max_gates):
         """Constructor gets graph info, and sets up variable names.
 
         This will have two groups of variables:
-        - tuples of the form ("E", c_total, c_no) where:
-            - "c_total" is the number of cliques which must be present for a 1,
-              with 0 <= c_yes <= N
-            - "c_no" is the number of cliques which, if present, force a 0 output,
-              with 0 <= c_no_ < c_total
+        - tuples of the form `("E", c_yes, c_no)` where:
+            - c_yes is the number of cliques which must be present for a 1;
+              1 <= c_yes <= N (note that we require at least 1 clique to be a "yes")
+            - c_no is the number of cliques which, if present, force a 0 output;
+              0 <= c_no < N - c_yes
             - Each variable will be the expected number of gates in
-            the sets of size "c_total" and "c_no".
-        - tuples of the form (c_total, c_no, g), where
-            - "c_total" and "c_no" are the numbers of cliques (as above)
-            - "g" is the number of gates
-            - Each variable will be the number of sets of "c" cliques,
-              having "g" gates.
+              the sets of size `c_yes` and `c_no`.
+        - tuples of the form `(c_yes, c_no, g)`, where
+            - c_yes and c_no are the numbers of cliques (as above)
+            - g is the number of gates
+            - Each variable will be the number of circuits having g gates, which
+              detect c_yes cliques, AND NOT c_no cliques
         n: number of vertices in the graph
         k: number of vertices in a clique (>= 3)
         max_gates: maximum number of gates to include
@@ -61,18 +68,17 @@ class LpPicky:
         if k < 3:
             raise ValueError('k must be >= 3')
         self.max_gates = max_gates
+        # number of possible cliques
         self.num_possible_cliques = comb(n, k)
 
         self.expected_num_gates_vars = []
         self.num_gates_dist_vars = []
-        # ??? possibly omit the "no cliques" function?
         # number of "yes" cliques (at least one of which must be present
         # for a 1 to be output)
-        for i in range(self.num_possible_cliques + 1):
-            # number of "no" cliques (which if present, force a 0 output, even if a
-            # "yes" clique is present); note that this must be strictly less than
-            # the total number of cliques)
-            for j in [0] if i==0 else range(i):
+        for i in range(1, self.num_possible_cliques + 1):
+            # number of "no" cliques which, if present, force a 0 output
+            # (even if a "yes" clique is present)
+            for j in range( self.num_possible_cliques + 1 - i ):
                 # variables for expected number of gates, for each number of cliques
                 self.expected_num_gates_vars += [("E", i, j)]
                 for g in range(1, max_gates+1):
@@ -84,13 +90,6 @@ class LpPicky:
         # FIXME: make this an option?
         self.lp = pulp_helper.PuLP_Helper(
              self.expected_num_gates_vars + self.num_gates_dist_vars)
-
-        # number of possible cliques
-        self.num_possible_cliques = comb(n, k)
-        # number of cliques which include an arbitrary edge: this
-        # is both the maximum removed by zeroing, and the maximum added
-        # this goes away
-        # self.max_cliques_with_edge = comb(n-2, k-2)
 
         # FIXME make this an option?
         self.basis = gate_basis.UnboundedFanInNandBasis()
@@ -112,10 +111,10 @@ class LpPicky:
         for i in range(self.num_possible_cliques+1):
             for j in range(i-1):
                 # we compute this by:
-                # - "choosing a set of cliques we look at ('yes' or 'no')",
-                # - then "choosing a subset of those which are 'no'"
+                # - choosing a set of "yes" cliques, then
+                # - choosing a set of "no" cliques, from those which remain
                 num_functions = (comb(self.num_possible_cliques, i)
-                    * comb(i, j))
+                    * comb(self.num_possible_cliques - i, j))
                 # add constraint that these sum to the number of functions
                 self.lp.add_constraint(
                     [((i, j, g), 1) for g in range(1, self.max_gates+1)],

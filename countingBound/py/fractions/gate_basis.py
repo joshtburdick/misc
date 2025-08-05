@@ -66,10 +66,14 @@ class UnboundedFanInNandBasis:
         relative to the sum of the sizes of the two
         corresponding circuits.
         """
-        # For unbounded fan-in, I think we save one gate.
-        # However, this seems to be broken when one circuit
-        # is the constant 0.
-        return -1. 
+        # For unbounded fan-in, I think we save one gate (because we can
+        # combine all the wires going into each output gate, feed them into
+        # one of the output gates, and discard the other)
+        return -1 
+
+    def not_upper_bound(self):
+        """Upper bound on computing NOT."""
+        return 1
 
     def zonked_gates(self):
         """Number of gates zonked by feeding in a zero to one vertex."""
@@ -109,6 +113,11 @@ class TwoInputNandBasis:
             f[g] = comb(num_inputs + (g-1) + 1, 2, exact=True) * f[g-1]
         # FIXME double-check this
         return f
+
+    def and_upper_bound(self):
+        """Upper bound on computing AND of two functions."""
+        # we can use a NAND, and then invert the output
+        return 2
        
     def or_upper_bound(self):
         """Upper bound on computing OR of two functions.
@@ -117,6 +126,10 @@ class TwoInputNandBasis:
             relative to their sum.
         """
         return 3
+
+    def not_upper_bound(self):
+        """Upper bound on negating a function."""
+        return 1
 
     def zonked_gates(self):
         """Number of gates zonked by feeding in a zero to one vertex."""

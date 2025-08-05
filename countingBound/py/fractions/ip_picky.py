@@ -92,8 +92,8 @@ class LpPicky:
              self.expected_num_gates_vars + self.num_gates_dist_vars)
 
         # FIXME make this an option?
-        self.basis = gate_basis.UnboundedFanInNandBasis()
-        # self.basis = gate_basis.TwoInputNandBasis()
+        # self.basis = gate_basis.UnboundedFanInNandBasis()
+        self.basis = gate_basis.TwoInputNandBasis()
 
         # for debugging: directory in which to save LP problem files
         self.lp_save_dir = None
@@ -155,10 +155,7 @@ class LpPicky:
                     self.lp.add_constraint(
                         [(("E",i+j,0), 1), (("E",i,j), -1), (("E",k,0), -1)],
                         "<=",
-                        # Note that for unbounded fan-in, "OR" can be implemented
-                        # by combining all of the inputs to the last gate in
-                        # each circuit.
-                        -1)    # FIXME the "OR" cost should depend on the basis
+                        self.basis.or_upper_bound())
 
     def add_picky_bound(self):
         """Adds upper bound on computing 'picky' sets of functions.
@@ -172,15 +169,15 @@ class LpPicky:
                     self.lp.add_constraint(
                         [(("E",i,j), 1), (("E",k,0), -1), (("E",j,0), -1)],
                         "<=",
-                        3)    # FIXME the "AND NOT" cost should depend on the basis
+                        self.basis.and_upper_bound() + self.basis.not_upper_bound())
                         # FIXME double check "AND NOT" cost?
 
     def add_naive_upper_bound(self):
         """Adds naive upper bound."""
         # add bound for finding one or more cliques
         for num_cliques in range(1, self.num_possible_cliques+1):
-            # FIXME should depend on basis
-            num_gates = num_cliques + 1
+            num_gates = self.basis.or_of_and_upper_bound(
+                comb(self.n, 2), num_cliques)
             if num_gates <= self.max_gates:
                 self.lp.add_constraint([(("E",num_cliques,0), 1)], "<=", num_gates)
             else:

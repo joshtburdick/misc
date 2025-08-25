@@ -72,11 +72,10 @@ class LpPicky:
 		for function_type in ["buggy", "picky"]:
 			min_cliques = 1 if function_type=="buggy" else 2
         	for i in range(min_cliques, self.num_possible_cliques + 1):
-                # variables for expected number of gates, for each number of cliques
+                # expected number of gates, for each number of cliques
                 self.expected_num_gates_vars += [(function_type, i, "E")]
                 for g in range(1, max_gates+1):
-                    # variables for counts of numbers of functions
-                    # with some number of gates
+                    # counts of numbers of functions with some number of gates
                     self.num_gates_dist_vars += [(function_type, i, g)]
 
         # wrapper for LP solver
@@ -91,8 +90,8 @@ class LpPicky:
         # for debugging: directory in which to save LP problem files
         self.lp_save_dir = None
 
-    def add_level_constraints(self):
-        """Adds constraints on functions at some "level".
+    def add_num_functions_constraints(self):
+        """Adds constraints on number of functions at some "level".
 
         By "level", we mean "number of cliques".
 
@@ -100,25 +99,34 @@ class LpPicky:
         - on the total number of functions at that "level", and
         - connecting the counts with that "level"'s expected gate count
         """
+		# adds constraints for one set of functions
+		def add_constraints(function_type, num_cliques):
+			# add constraint defining expected number of gates
+			A = [((function_type, num_cliques, g), g)
+				for g in range(1, self.max_gates+1)]
+			self.lp.add_constraint(A + [(("E", i, j), -num_functions)],
+				'=', 0)
+
+			FIXME
+			# we compute this by:
+			# - choosing a set of "yes" cliques, then
+			# - choosing a set of "no" cliques, from those which remain
+			num_functions = (comb(self.num_possible_cliques, i)
+				* comb(self.num_possible_cliques -
+    def add_counting_bound(self):
+
+			# add constraint that these sum to the number of functions
+			self.lp.add_constraint(
+				[((function_type, num_cliques, g), 1) for g in range(1, self.max_gates+1)],
+				'=', num_functions)
+
+
+
         # loop through number of "yes" and "no" cliques
         for i in range(1, self.num_possible_cliques+1):
-            for j in range( self.num_possible_cliques + 1 - i ):
-                # we compute this by:
-                # - choosing a set of "yes" cliques, then
-                # - choosing a set of "no" cliques, from those which remain
-                num_functions = (comb(self.num_possible_cliques, i)
-                    * comb(self.num_possible_cliques - i, j))
-                # add constraint that these sum to the number of functions
-                self.lp.add_constraint(
-                    [((i, j, g), 1) for g in range(1, self.max_gates+1)],
-                    '=', num_functions)
-                # add constraint defining expected number of gates
-                A = [((i, j, g), g)
-                    for g in range(1, self.max_gates+1)]
-                self.lp.add_constraint(A + [(("E", i, j), -num_functions)],
-                    '=', 0)
 
-    def add_counting_bound(self):
+
+
         """Adds counting bounds, for a given number of gates.
 
         This is a lower bound on the number of functions with
@@ -129,6 +137,10 @@ class LpPicky:
         num_possible_functions = self.basis.num_functions(comb(self.n, 2), self.max_gates+1)
         # upper-bound "total number of functions with this many gates"
         for g in range(1, self.max_gates+1):
+			A = ([("buggy", i, g) for i in range(1, self.num_possible_cliques+1)]
+				+ [("picky", i, g) for i in range(2, self.num_possible_cliques+1)])
+
+
             # this list comprehension is admittedly baroque
             self.lp.add_constraint(
                 [((i, j, g), 1)
@@ -141,6 +153,8 @@ class LpPicky:
 
         We can implement BUGGYCLIQUE(A+B) by combining circuits:
         PICKYCLIQUE(A,B) OR BUGGYCLIQUE(D), where B <= D <= A+B.
+
+		Here, we average over all the different sets A, weighted by their counts.
         """
         for i in range(1, self.num_possible_cliques + 1):
             for j in range(1, self.num_possible_cliques + 1 - i):

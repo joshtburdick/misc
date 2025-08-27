@@ -1,11 +1,6 @@
 #!/usr/bin/env python3
 # Revised IP bound, using the "picky" version of BUGGYCLIQUE, but smaller.
 
-# FIXME
-# - possibly add_level_constraints() should only include the total number of functions,
-#   and add_counting_bound() should be the number of functions which are present?
-#   (Mostly, both will be used anyway, so it doesn't necessarily matter that much.)
-
 import argparse
 import fractions
 import itertools
@@ -100,33 +95,26 @@ class LpPicky:
         - connecting the counts with that "level"'s expected gate count
         """
 		# adds constraints for one set of functions
-		def add_constraints(function_type, num_cliques):
+		def add_constraints(function_type, num_cliques, num_functions):
 			# add constraint defining expected number of gates
 			A = [((function_type, num_cliques, g), g)
 				for g in range(1, self.max_gates+1)]
-			self.lp.add_constraint(A + [(("E", i, j), -num_functions)],
+			self.lp.add_constraint(A + [((function_type, num_cliques, "E"), -num_functions)],
 				'=', 0)
-
-			FIXME
-			# we compute this by:
-			# - choosing a set of "yes" cliques, then
-			# - choosing a set of "no" cliques, from those which remain
-			num_functions = (comb(self.num_possible_cliques, i)
-				* comb(self.num_possible_cliques -
-    def add_counting_bound(self):
-
 			# add constraint that these sum to the number of functions
 			self.lp.add_constraint(
 				[((function_type, num_cliques, g), 1) for g in range(1, self.max_gates+1)],
 				'=', num_functions)
 
+		for i in range(1, self.num_possible_cliques+1):
+			# number of ways to pick i cliques
+			add_constraints("buggy", i, comb(self.num_possible_cliques, i))
+		for i in range(2, self.num_possible_cliques+1):
+			# number of ways to pick i cliques, times the number of ways of labelling them
+			# YES or NO (except not all NO)
+			add_constraints("picky", i, comb(self.num_possible_cliques, i) * (2**i-1))
 
-
-        # loop through number of "yes" and "no" cliques
-        for i in range(1, self.num_possible_cliques+1):
-
-
-
+    def add_counting_bound(self):
         """Adds counting bounds, for a given number of gates.
 
         This is a lower bound on the number of functions with
@@ -139,14 +127,7 @@ class LpPicky:
         for g in range(1, self.max_gates+1):
 			A = ([("buggy", i, g) for i in range(1, self.num_possible_cliques+1)]
 				+ [("picky", i, g) for i in range(2, self.num_possible_cliques+1)])
-
-
-            # this list comprehension is admittedly baroque
-            self.lp.add_constraint(
-                [((i, j, g), 1)
-                    for i in range(1, self.num_possible_cliques + 1)
-                    for j in range(self.num_possible_cliques + 1 - i)],
-                '<=', num_possible_functions[g])
+            self.lp.add_constraint(A, '<=', num_possible_functions[g])
 
     def add_buggy_bound(self):
         """Adds upper bound on computing 'buggy' sets of functions.

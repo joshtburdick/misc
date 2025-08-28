@@ -137,13 +137,12 @@ class LpPicky:
 
 		Here, we average over all the different sets A, weighted by their counts.
         """
-        for i in range(1, self.num_possible_cliques + 1):
-            for j in range(1, self.num_possible_cliques + 1 - i):
-                for k in range(j, i+j+1):
-                    self.lp.add_constraint(
-                        [(("E",i+j,0), 1), (("E",i,j), -1), (("E",k,0), -1)],
-                        "<=",
-                        self.basis.or_upper_bound())
+        for i in range(2, self.num_possible_cliques + 1):
+			self.lp.add_constraint(
+				[(("buggy",j,"E"), comb(i, j)) for j in range(1, i)]
+				+ [(("buggy",i,"E"), 2**i), (("picky",i,"E"), -2**i)],
+				"<=",
+				self.basis.or_upper_bound())
 
     def add_picky_bound(self):
         """Adds upper bound on computing 'picky' sets of functions.
@@ -151,17 +150,16 @@ class LpPicky:
         We can implement PICKYCLIQUE(A,B) by combining circuits:
         BUGGYCLIQUE(D) AND NOT BUGGYCLIQUE(B), where A <= D <= A+B.
         """
-        for i in range(1, self.num_possible_cliques + 1):
-            for j in range(1, self.num_possible_cliques + 1 - i):
-                for k in range(i, i+j+1):
-                    self.lp.add_constraint(
-                        [(("E",i,j), 1), (("E",k,0), -1), (("E",j,0), -1)],
-                        "<=",
-                        self.basis.and_upper_bound() + self.basis.not_upper_bound())
-                        # FIXME double check "AND NOT" cost?
+        for i in range(2, self.num_possible_cliques + 1):
+			self.lp.add_constraint(
+				[(("buggy",j,"E"), comb(i, j)) for j in range(1, i)]
+				+ [(("picky",i,"E"), 2**i), (("buggy",i,"E"), -2**i)],
+				"<=",
+				self.basis.and_upper_bound() + self.basis.not_upper_bound())
+				# FIXME double check "AND NOT" cost?
 
     def add_naive_upper_bound(self):
-        """Adds naive upper bound."""
+        """Adds naive upper bound for finding smallish numbers of cliques."""
         # add bound for finding one or more cliques
         for num_cliques in range(1, self.num_possible_cliques+1):
             num_gates = self.basis.or_of_and_upper_bound(

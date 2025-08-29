@@ -64,9 +64,9 @@ class LpPicky:
         self.expected_num_gates_vars = []
         self.num_gates_dist_vars = []
 
-		for function_type in ["buggy", "picky"]:
-			min_cliques = 1 if function_type=="buggy" else 2
-        	for i in range(min_cliques, self.num_possible_cliques + 1):
+        for function_type in ["buggy", "picky"]:
+            min_cliques = 1 if function_type=="buggy" else 2
+            for i in range(min_cliques, self.num_possible_cliques + 1):
                 # expected number of gates, for each number of cliques
                 self.expected_num_gates_vars += [(function_type, i, "E")]
                 for g in range(1, max_gates+1):
@@ -94,25 +94,25 @@ class LpPicky:
         - on the total number of functions at that "level", and
         - connecting the counts with that "level"'s expected gate count
         """
-		# adds constraints for one set of functions
-		def add_constraints(function_type, num_cliques, num_functions):
-			# add constraint defining expected number of gates
-			A = [((function_type, num_cliques, g), g)
-				for g in range(1, self.max_gates+1)]
-			self.lp.add_constraint(A + [((function_type, num_cliques, "E"), -num_functions)],
-				'=', 0)
-			# add constraint that these sum to the number of functions
-			self.lp.add_constraint(
-				[((function_type, num_cliques, g), 1) for g in range(1, self.max_gates+1)],
-				'=', num_functions)
+        # adds constraints for one set of functions
+        def add_constraints(function_type, num_cliques, num_functions):
+            # add constraint defining expected number of gates
+            A = [((function_type, num_cliques, g), g)
+                for g in range(1, self.max_gates+1)]
+            self.lp.add_constraint(A + [((function_type, num_cliques, "E"), -num_functions)],
+                '=', 0)
+            # add constraint that these sum to the number of functions
+            self.lp.add_constraint(
+                [((function_type, num_cliques, g), 1) for g in range(1, self.max_gates+1)],
+                '=', num_functions)
 
-		for i in range(1, self.num_possible_cliques+1):
-			# number of ways to pick i cliques
-			add_constraints("buggy", i, comb(self.num_possible_cliques, i))
-		for i in range(2, self.num_possible_cliques+1):
-			# number of ways to pick i cliques, times the number of ways of labelling them
-			# YES or NO (except not all NO)
-			add_constraints("picky", i, comb(self.num_possible_cliques, i) * (2**i-1))
+        for i in range(1, self.num_possible_cliques+1):
+            # number of ways to pick i cliques
+            add_constraints("buggy", i, comb(self.num_possible_cliques, i))
+        for i in range(2, self.num_possible_cliques+1):
+            # number of ways to pick i cliques, times the number of ways of labelling them
+            # YES or NO (except not all NO)
+            add_constraints("picky", i, comb(self.num_possible_cliques, i) * (2**i-1))
 
     def add_counting_bound(self):
         """Adds counting bounds, for a given number of gates.
@@ -125,8 +125,8 @@ class LpPicky:
         num_possible_functions = self.basis.num_functions(comb(self.n, 2), self.max_gates+1)
         # upper-bound "total number of functions with this many gates"
         for g in range(1, self.max_gates+1):
-			A = ([("buggy", i, g) for i in range(1, self.num_possible_cliques+1)]
-				+ [("picky", i, g) for i in range(2, self.num_possible_cliques+1)])
+            A = ([("buggy", i, g) for i in range(1, self.num_possible_cliques+1)]
+                + [("picky", i, g) for i in range(2, self.num_possible_cliques+1)])
             self.lp.add_constraint(A, '<=', num_possible_functions[g])
 
     def add_buggy_bound(self):
@@ -135,14 +135,14 @@ class LpPicky:
         We can implement BUGGYCLIQUE(A+B) by combining circuits:
         PICKYCLIQUE(A,B) OR BUGGYCLIQUE(D), where B <= D <= A+B.
 
-		Here, we average over all the different sets A, weighted by their counts.
+        Here, we average over all the different sets A, weighted by their counts.
         """
         for i in range(2, self.num_possible_cliques + 1):
-			self.lp.add_constraint(
-				[(("buggy",j,"E"), comb(i, j)) for j in range(1, i)]
-				+ [(("buggy",i,"E"), 2**i), (("picky",i,"E"), -2**i)],
-				"<=",
-				self.basis.or_upper_bound())
+            self.lp.add_constraint(
+                [(("buggy",j,"E"), comb(i, j)) for j in range(1, i)]
+                + [(("buggy",i,"E"), 2**i), (("picky",i,"E"), -2**i)],
+                "<=",
+                self.basis.or_upper_bound())
 
     def add_picky_bound(self):
         """Adds upper bound on computing 'picky' sets of functions.
@@ -151,12 +151,12 @@ class LpPicky:
         BUGGYCLIQUE(D) AND NOT BUGGYCLIQUE(B), where A <= D <= A+B.
         """
         for i in range(2, self.num_possible_cliques + 1):
-			self.lp.add_constraint(
-				[(("buggy",j,"E"), comb(i, j)) for j in range(1, i)]
-				+ [(("picky",i,"E"), 2**i), (("buggy",i,"E"), -2**i)],
-				"<=",
-				self.basis.and_upper_bound() + self.basis.not_upper_bound())
-				# FIXME double check "AND NOT" cost?
+            self.lp.add_constraint(
+                [(("buggy",j,"E"), comb(i, j)) for j in range(1, i)]
+                + [(("picky",i,"E"), 2**i), (("buggy",i,"E"), -2**i)],
+                "<=",
+                self.basis.and_upper_bound() + self.basis.not_upper_bound())
+                # FIXME double check "AND NOT" cost?
 
     def add_naive_upper_bound(self):
         """Adds naive upper bound for finding smallish numbers of cliques."""

@@ -125,8 +125,8 @@ class LpPicky:
         num_possible_functions = self.basis.num_functions(comb(self.n, 2), self.max_gates+1)
         # upper-bound "total number of functions with this many gates"
         for g in range(1, self.max_gates+1):
-            A = ([("buggy", i, g) for i in range(1, self.num_possible_cliques+1)]
-                + [("picky", i, g) for i in range(2, self.num_possible_cliques+1)])
+            A = ([(("buggy", i, g), 1) for i in range(1, self.num_possible_cliques+1)]
+                + [(("picky", i, g), 1) for i in range(2, self.num_possible_cliques+1)])
             self.lp.add_constraint(A, '<=', num_possible_functions[g])
 
     def add_buggy_bound(self):
@@ -138,9 +138,13 @@ class LpPicky:
         Here, we average over all the different sets A, weighted by their counts.
         """
         for i in range(2, self.num_possible_cliques + 1):
+            # Number of "buggy" functions in this case, which is not all or none
+            # of the relevant cliques. We scale everything by this amount to
+            # avoid fractions (which sometimes toasts the solver).
+            num_buggy = 2**i - 2
             self.lp.add_constraint(
-                [(("buggy",j,"E"), comb(i, j)) for j in range(1, i)]
-                + [(("buggy",i,"E"), 2**i), (("picky",i,"E"), -2**i)],
+                [(("buggy",i,"E"), num_buggy), (("picky",i,"E"), -num_buggy)]
+                + [(("buggy",j,"E"), -comb(i, j)) for j in range(1, i)],
                 "<=",
                 self.basis.or_upper_bound())
 
@@ -151,9 +155,10 @@ class LpPicky:
         BUGGYCLIQUE(D) AND NOT BUGGYCLIQUE(B), where A <= D <= A+B.
         """
         for i in range(2, self.num_possible_cliques + 1):
+            num_buggy = 2**i - 2
             self.lp.add_constraint(
-                [(("buggy",j,"E"), comb(i, j)) for j in range(1, i)]
-                + [(("picky",i,"E"), 2**i), (("buggy",i,"E"), -2**i)],
+                [(("picky",i,"E"), num_buggy), (("buggy",i,"E"), -num_buggy)]
+                + [(("buggy",j,"E"), -comb(i, j)) for j in range(1, i)],
                 "<=",
                 self.basis.and_upper_bound() + self.basis.not_upper_bound())
                 # FIXME double check "AND NOT" cost?
@@ -165,7 +170,8 @@ class LpPicky:
             num_gates = self.basis.or_of_and_upper_bound(
                 comb(self.n, 2), num_cliques)
             if num_gates <= self.max_gates:
-                self.lp.add_constraint([(("E",num_cliques,0), 1)], "<=", num_gates)
+                self.lp.add_constraint([(("buggy",num_cliques,"E"), 1)],
+                    "<=", num_gates)
             else:
                 # stop when we hit the maximum number of gates being considered
                 return
@@ -178,14 +184,13 @@ class LpPicky:
         CLIQUE is minimized.
         """
         # solve, minimizing number of gates for CLIQUE
-        r = self.lp.solve(("E", self.num_possible_cliques, 0))
+        r = self.lp.solve(("buggy", self.num_possible_cliques, "E"))
         if not r:
             return None
         # XXX for now, just getting counts for BUGGYCLIQUE
-        # (with 0 'no's)
         n_cliques = range(1, self.num_possible_cliques+1)
-        bounds = [r[("E", num_cliques, 0)]
-            for num_cliques in range(1, self.num_possible_cliques+1)]
+        bounds = [r[("buggy", num_cliques, "E")]
+            for num_cliques in n_cliques]
         return pandas.DataFrame({
             'Num. vertices': self.n,
             'Num. cliques': n_cliques,
@@ -203,7 +208,7 @@ def get_bounds(n, k, max_gates, constraints_label,
     # ??? track resource usage?
     sys.stderr.write(f'[bounding with n={n}, k={k}, max_gates={max_gates}, label={constraints_label}]\n')
     bound = LpPicky(n, k, max_gates)
-    bound.add_level_constraints()
+    bound.add_num_functions_constraints()
     if use_counting_bound:
         bound.add_counting_bound()
     if use_buggy_bound:

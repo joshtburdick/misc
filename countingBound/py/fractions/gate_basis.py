@@ -55,12 +55,12 @@ class UnboundedFanInNandBasis:
         g = np.sqrt(2*lg_num_functions + b*b) - b - 1
         return g
 
-    def and_upper_bound(self):
-        """Upper bound on computing AND of two functions."""
+    def and_upper_bound(self, num_inputs=2):
+        """Upper bound on computing AND of some number of functions."""
         return 2
 
-    def or_upper_bound(self):
-        """Upper bound on computing OR of two functions.
+    def or_upper_bound(self, num_inputs=2):
+        """Upper bound on computing OR of some number of functions.
 
         If A and B are the sets of cliques, then this is
         relative to the sum of the sizes of the two
@@ -82,6 +82,10 @@ class UnboundedFanInNandBasis:
         then ORs the results together.
         """
         return num_or + 1
+
+    def xor_upper_bound(self):
+        """Upper bound on XORing two functions."""
+        return 4
 
     def zonked_gates(self):
         """Number of gates zonked by feeding in a zero to one vertex."""
@@ -122,19 +126,20 @@ class TwoInputNandBasis:
         # FIXME double-check this
         return f
 
-    def and_upper_bound(self):
-        """Upper bound on computing AND of two functions."""
-        # we can use a NAND, and then invert the output
-        return 2
+    def and_upper_bound(self, num_inputs=2):
+        """Upper bound on computing AND of some number of functions."""
+        # To AND two things together, we can use a NAND, and then invert
+        # the output. For more functions, we repeat.
+        return 2 * (num_inputs-1)
        
-    def or_upper_bound(self):
-        """Upper bound on computing OR of two functions.
+    def or_upper_bound(self, num_inputs=2):
+        """Upper bound on computing OR of some number of functions.
 
         Returns: upper bound on number of gates to compute OR of two circuits,
             relative to their sum.
         """
-        # invert the two inputs, then use a NAND
-        return 3
+        # invert the two inputs, then use a NAND, repeatedly
+        return 3 * (num_inputs-1)
 
     def not_upper_bound(self):
         """Upper bound on negating a function."""
@@ -150,6 +155,10 @@ class TwoInputNandBasis:
         # ??? I think that, since the AND circuits all end with inverters,
         # we can just drop the final inverters, and use NAND gates to compute OR ?
         return num_or * gates_for_and + (num_or - 1)
+
+    def xor_upper_bound(self):
+        """Upper bound on XORing two functions."""
+        return 4
 
     def zonked_gates(self):
         """Number of gates zonked by feeding in a zero to one vertex."""

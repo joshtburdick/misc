@@ -140,6 +140,9 @@ class LpParity:
         """Adds trivial constraint, on finding no cliques."""
         # ... that is, finding zero cliques requires one NAND gate
         self.lp.add_constraint([(("E", 0), 1)], "=", 1)
+        # also add bound for XORing exactly one clique
+        self.lp.add_constraint([(("E", 1), 1)], "<=",
+            self.basis.or_of_and_upper_bound(comb(self.k, 2), 1))
 
     def get_all_bounds(self):
         """Gets bounds for each possible number of cliques.

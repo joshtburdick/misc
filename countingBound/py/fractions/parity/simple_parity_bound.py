@@ -47,12 +47,35 @@ class SimpleParity:
         if k < 3:
             raise ValueError('k must be >= 3')
         self.max_gates = max_gates
-
+        self.num_input_edges = comb(n, 2)
         # number of possible cliques
         self.num_possible_cliques = comb(n, k)
-
+        # ??? make this an arg?
         self.basis = gate_basis.TwoInputNandBasis()
-        self.rng = np.random.default_rng()
+        # vector of counts of functions, using the naive upper bound
+        self.function_count_low = FIXME
+        # vector of counts of functions, using the naive upper bound,
+        # _and_ a circuit for CLIQUE-parity for _all_ the cliques;
+        # that circuit has index 0 in this vector
+        self.function_count_high = FIXME
+
+
+
+
+
+    def get_function_counts(self, upper_half):
+        """Gets function counts per gate, for 0..N/2 cliques.
+
+        Returns: a vector of length"""
+
+
+    def get_function_counts_large_using_all(self):
+        """Gets function counts, for N/2+1..N gates, using a CLIQUE-PARITY circuit.
+
+
+        """
+        FIXME
+
 
     def try_bound(self, max_gates):
         """Tests whether a circuit for clique parity would run into the counting bound.

@@ -62,18 +62,22 @@ class SimpleParity:
         """Gets function counts per gate, for 0..N/2 cliques.
 
         """
+        N = self.num_possible_cliques
         counts = np.zeros(self.max_gates+1, dtype=object)
         # 0 is the (hypothetical) number of gates in CLIQUE-PARITY
-        counts[0] = comb(N, N)    # == 1; just emphasizing the reasoning here :)
+        # ??? possibly omit this, as it seems to always make the difference 0?
+        counts[1] = comb(N, N)    # == 1; just emphasizing the reasoning here :)
         # i is the number of cliques included
         # i here will be the number of cliques being _removed_ from all of them,
         # by XORing with CLIQUE-PARITY.
-        for i in range(1, self.N//2):
+        for i in range(1, N//2):
             # we need to check for i cliques, and XOR them together
-            num_gates = i*self.gate_basis.and_cost(self.num_input_edges) + (i-1)*self.gate_basis.xor_cost()
+            num_gates = (i*self.basis.and_upper_bound(self.num_input_edges)
+                + (i-1)*self.basis.xor_upper_bound())
             if num_gates > self.max_gates:
                 return counts
-            counts[ num_gates ] = comb(N, self.N//2 - i)
+            counts[ num_gates ] = comb(N, N//2 - i)
+        return counts
 
     def get_function_counts_high_using_all(self):
         """Gets function counts, for N/2+1..N cliques, using a CLIQUE-PARITY circuit.
@@ -89,12 +93,12 @@ class SimpleParity:
         counts[0] = 1
         # i here will be the number of cliques being _removed_ from all of them,
         # by XORing with CLIQUE-PARITY.
-        for i in range(1, self.N//2):
+        for i in range(1, self.num_possible_cliques//2):
             # we need to check for i cliques, and XOR them together, _and_ with CLIQUE-PARITY
-            num_gates = i*self.gate_basis.and_cost(self.num_input_edges) + i*self.gate_basis.xor_cost()
+            num_gates = i*self.basis.and_upper_bound(self.num_input_edges) + i*self.basis.xor_upper_bound()
             if num_gates > self.max_gates:
                 return counts
-            counts[ num_gates ] = comb(N, i)
+            counts[ num_gates ] = comb(self.num_possible_cliques, i)
         return counts
 
     def try_bound(self, num_gates):
@@ -111,17 +115,24 @@ class SimpleParity:
         # Get the counting bound for the number of possible functions constructable
         # using _up to_ a given number of gates.
         num_constructable_functions = self.basis.num_functions(
-            comb(self.n, 2), self.max_gates+1)
+            comb(self.n, 2), self.max_gates)
+        print("num constructable functions:")
+        print(num_constructable_functions)
+        print()
+
         num_constructable_functions_total = num_constructable_functions.cumsum()
         # Number of functions 
-        num_functions = (self.function_counts_low()
-            + np.pad(self.function_counts_high(), num_gates)[ : (self.max_gates+1) ])
+        num_functions = (self.function_counts_low
+            + np.pad(self.function_counts_high, num_gates)[ : (self.max_gates+1) ])
         num_functions_total = num_functions.cumsum()
+        print("num functions:")
+        print(num_functions)
+        print()
 
         # Find the minimum distance between these
         # ??? return the number of gates at which this is smallest?
         diff = num_constructable_functions_total - num_functions_total
-        return np.min(diff)
+        return np.min(diff[1:])
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -149,8 +160,8 @@ if __name__ == '__main__':
     b = SimpleParity(args.n, args.k, args.max_gates)
 
 
-    for i in range(1, 5):
-        print(b.try_bound(i))
+    for i in range(0, 5):
+        print(f"i = {i}  diff = {b.try_bound(i)}")
         
 
 

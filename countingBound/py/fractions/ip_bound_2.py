@@ -263,9 +263,16 @@ class LpEdgeZeroing:
             if upper_bound:
                 self.lp.add_constraint(A, "<=", num_added[i])
 
+    def add_simple_step_constraint(self):
+        """Adds 'simple' step upper bound, on finding one more clique."""
+        for i in range(self.num_possible_cliques):
+            self.lp.add_constraint(
+                [(("E", i+1), 1), (("E", i), -1)],
+                "<=", 1)
+
     def add_no_cliques_constraint(self):
         """Adds trivial constraint, on finding no cliques."""
-        # ... that is, finding zero cliques requires one NAND gate
+        # ... that is, finding zero cliques requires one nand gate
         self.lp.add_constraint([(("E", 0), 1)], "=", 1)
 
     def get_all_bounds(self):
@@ -344,6 +351,8 @@ def get_bounds(n, k, max_gates, constraints_label,
         bound.add_step_constraints(use_lower_bound, use_upper_bound)
     if use_no_cliques_bound:
         bound.add_no_cliques_constraint()
+        # XXX this is somewhat misnamed
+        bound.add_simple_step_constraint()
     # pdb.set_trace()
     b = bound.get_all_bounds()
     b['Constraints'] = constraints_label

@@ -98,7 +98,7 @@ class LpVertexZeroing:
             w = f / num_functions
             self.lp.add_constraint(
                 [((v, c), w[c]) for c in range(f.shape[0])],
-                '=',
+                '<=',
                 (num_functions-1) / 2.)
 
     def add_zeroing_upper_bound(self):
@@ -249,8 +249,8 @@ if __name__ == '__main__':
 
     # FIXME add constraints based on options?
     # ??? do we need the "base case" of only one clique?
-    bound.add_average_rank_constraints()
-    bound.add_zeroing_upper_bound()
+    # bound.add_average_rank_constraints()
+    # bound.add_zeroing_upper_bound()
     bound.add_vertex_zeroing_constraints()
 
     # get bound

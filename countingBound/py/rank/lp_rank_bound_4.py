@@ -12,6 +12,7 @@ import argparse
 import pdb
 import sys
 
+import fractions
 import itertools
 import numpy as np
 import scipy.special
@@ -163,14 +164,21 @@ class LpVertexZeroing:
                 # the probability of some number of cliques being hit
                 # (again, assuming that only v vertices are "in use" by
                 # the hyperedges)
-                p_zonk = scipy.stats.hypergeom(comb(v, k),
-                    C_size,
-                    num_cliques_hitting_vertex)
+                # was:
+                # p_zonk = scipy.stats.hypergeom(comb(v, k),
+                #     C_size,
+                #     num_cliques_hitting_vertex)
+                def p_zonk(x):
+                    print(f"v={v} k={k} C_size={C_size} num_={num_cliques_hitting_vertex} x={x}")
+                    return hyperg_frac(comb(v, k),
+                        C_size,
+                        num_cliques_hitting_vertex,
+                        x)
                 # the probability of at least one clique being hit
                 # (if this happens, we get to "re-roll", so we assume it doesn't)
                 # Note that since this we assume at least one clique is hit,
                 # we normalize by this probability.
-                p_at_least_one_hit = 1. - p_zonk.pmf(0)
+                p_at_least_one_hit = 1 - p_zonk(0)
                 # ??? does this give the same answer?
                 # p_at_least_one_hit = np.array([p_zonk.pmf(z1) for z1 in z]).sum()
 
@@ -179,11 +187,14 @@ class LpVertexZeroing:
                 # - the expected rank of what's left in A, after zonking,
                 # - half the expected number of functions in A
                 # - plus half the number of functions in B
-                A = [((v, C_size), 1.)]
-                A += [((v-1, C_size-j), -p_zonk.pmf(j) / p_at_least_one_hit)
+                A = [((v, C_size), 1)]
+                print(f"B_size={B_size}")
+                A += [((v-1, C_size-j), -p_zonk(j) / p_at_least_one_hit)
                     for j in B_size]
                 # note that this is the _expected_ number of functions in A
-                A_num_functions = ( p_zonk.pmf(B_size) * self.counts_max_vertices[v-1][A_size] ).sum() / p_at_least_one_hit
+                # FIXME rename this?
+                p_zonk_1 = np.array([p_zonk(b) for b in B_size])
+                A_num_functions = ( p_zonk_1 * self.counts_max_vertices[v-1][A_size] ).sum() / p_at_least_one_hit
                 # the number of functions (or, "sets of cliques") in B
                 # ??? is this right?
                 B_num_functions = self.counts_max_vertices[v][ C_size ]

@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
-# Attempt based on zeroing out vertices.
+# Attempt at bounding rank, based on zeroing out vertices.
 # FIXME
-# - add sharper upper bounds, based on number of vertices zeroed out
-#   (??? is this still needed?)
+# - use exact rational solver
+# - include averages of higher levels
+# - use argparse?
+# - add sharper upper bounds, based on number of vertices zeroed out?
+#   (??? is this still needed? add_vertex_zeroing_constraints()
+#   implements this, but doesn't seem to have any effect)
 
 import argparse
 import pdb
@@ -21,6 +25,14 @@ import lp_helper
 # Wrapper for comb(), with exact arithmetic.
 def comb(n, k):
     return scipy.special.comb(n, k, exact=True)
+
+# Hypergeometric distribution, with exact arithmetic.
+def hyperg_frac(N, K, n, k):
+    # based on https://en.wikipedia.org/wiki/Hypergeometric_distribution
+    # note that we don't try to optimize this
+    return fractions.Fraction(
+        comb(K, k) * comb(N-K, n-k),
+        comb(N, n))
 
 class LpVertexZeroing:
     """Attempt at bound by zeroing out vertices.

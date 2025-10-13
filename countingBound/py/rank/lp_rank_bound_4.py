@@ -17,10 +17,12 @@ import numpy as np
 import scipy.special
 import scipy.stats
 
-sys.path.append("..")   # XXX
+sys.path.append("../")            # XXX
+sys.path.append("../fractions/")  # XXX
 
 import hypergraph_counter
 import lp_helper
+import pulp_helper
 
 # Wrapper for comb(), with exact arithmetic.
 def comb(n, k):
@@ -43,7 +45,7 @@ class LpVertexZeroing:
 
         This will have a variable labelled (v, c) where:
             v is the number of vertices, with k <= v <= n
-            c is the number of cliques, with 0 <= c <= {n \choose v}
+            c is the number of cliques, with 0 <= c <= {n choose v}
         Each variable (currently) will be the expected rank of functions
         with _up to_ v vertices.
 
@@ -63,7 +65,8 @@ class LpVertexZeroing:
         for v in range(k, n+1):
             for c in range(0, comb(v, k) + 1):
                 vars += [(v, c)]
-        self.lp = lp_helper.LP_Helper(vars)
+        # self.lp = lp_helper.LP_Helper(vars)
+        self.lp = pulp_helper.PuLP_Helper(vars)
         # precompute numbers of hypergraphs with different numbers of vertices
         counter = hypergraph_counter.HypergraphCounter(n, k)
         # this is the number which use _up to_ some number of vertices
@@ -117,7 +120,7 @@ class LpVertexZeroing:
                 # pdb.set_trace()
                 self.lp.add_constraint(
                     [((v, c), 1.)],
-                    '<',
+                    '<=',
                     num_functions)
 
     def add_vertex_zeroing_constraints(self):
@@ -131,7 +134,7 @@ class LpVertexZeroing:
         # add case when v == self.k
         # FIXME: this doesn't seem sufficient...
         self.lp.add_constraint([((self.k, 1), 1.)],
-            '>',
+            '>=',
             comb(self.n, self.k)/2 + 0.5)
 
         # loop through number of vertices in larger graph
@@ -185,7 +188,7 @@ class LpVertexZeroing:
                 # ??? is this right?
                 B_num_functions = self.counts_max_vertices[v][ C_size ]
                 # pdb.set_trace()
-                self.lp.add_constraint(A, '>',
+                self.lp.add_constraint(A, '>=',
                     # Since we presumably "hit" a clique, the number of "new"
                     # functions is the number which include all the vertices.
                     (A_num_functions + B_num_functions) / 2.)

@@ -69,7 +69,8 @@ class LpVertexZeroing:
                 # also, number of cliques zeroed is <= both:
                 # - how many cliques are present, and
                 # - how many cliques could be hit by the vertex
-                max_cliques_zeroed = min(num_cliques, cliques_with_vertex) + 1)
+                # max_cliques_zeroed = min(num_cliques, cliques_with_vertex + 1)
+                max_cliques_zeroed = min(num_cliques, cliques_with_vertex)
                 # the probability of each number of cliques being hit
                 h = hypergeom(
                     # number of possible cliques

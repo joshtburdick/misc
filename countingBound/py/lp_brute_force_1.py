@@ -192,7 +192,6 @@ if __name__ == '__main__':
     print('level\tbound')
     for i in range(bound.num_cliques+1):
         print('\t'.join([str(i), str('%.2f' % b['x'][i])]))
-    # for now, omitting the average
-    # print()
-    # print('bound of levels = ' + str(b['objective']))
+    print()
+    print('bound of levels = ' + str(b['objective']))
 

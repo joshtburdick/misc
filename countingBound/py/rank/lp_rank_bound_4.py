@@ -18,6 +18,8 @@ import numpy as np
 import scipy.special
 import scipy.stats
 
+import pandas
+
 sys.path.append("../")            # XXX
 sys.path.append("../fractions/")  # XXX
 
@@ -98,7 +100,7 @@ class LpVertexZeroing:
             w = f / num_functions
             self.lp.add_constraint(
                 [((v, c), w[c]) for c in range(f.shape[0])],
-                '>=',
+                '=',
                 (num_functions-1) / 2.)
 
     def add_zeroing_upper_bound(self):
@@ -118,7 +120,6 @@ class LpVertexZeroing:
             # which (I think) should make this an upper bound;
             # however, this isn't quite clear
             for c in range(0, f.shape[0]):
-                # pdb.set_trace()
                 self.lp.add_constraint(
                     [((v, c), 1.)],
                     '<=',
@@ -132,14 +133,17 @@ class LpVertexZeroing:
         B: the cliques zeroed by feeding in zeros to a vertex of C
         A: the cliques which are left over
         """
+
         # add case when v == self.k
-        # FIXME: this doesn't seem sufficient...
-        self.lp.add_constraint([((self.k, 1), 1.)],
-            '<=',
-            comb(self.n, self.k)/2 + 0.5)
+        # FIXME: not sure this is sufficient...
+        self.lp.add_constraint([((self.k, 1), 1)],
+            '>=',
+            comb(self.n, self.k)/2 + 1/2)
 
         # loop through number of vertices in larger graph
         for v in range(self.k+1, self.n+1):
+            # add "zero cliques" constraint
+            self.lp.add_constraint([((v, 0), 1)], "=", 0)
             # loop through number of cliques in that graph
             # (note that the trivial bound when C_size==0 is implied by the
             # overall "box" constraints on all the variables)
@@ -198,7 +202,6 @@ class LpVertexZeroing:
                 # the number of functions (or, "sets of cliques") in B
                 # ??? is this right?
                 B_num_functions = self.counts_max_vertices[v][ C_size ]
-                # pdb.set_trace()
                 self.lp.add_constraint(A, '>=',
                     # Since we presumably "hit" a clique, the number of "new"
                     # functions is the number which include all the vertices.
@@ -208,9 +211,6 @@ class LpVertexZeroing:
     def get_bounds_1(self):
         """Gets bounds, with all of the vertices.
 
-        Deprecated (this seems to be very under-determined, and
-        it's not clear what these numbers mean).
-
         Note that this is only minimizing the bound for any number
         of cliques, and all of the vertices.
         However, it returns bounds for any number of cliques or vertices
@@ -219,9 +219,14 @@ class LpVertexZeroing:
         s = (self.n, self.num_cliques)
         x = self.lp.solve(s, bounds=(0, self.num_functions-1))
         # get bounds for all the vertices, and any number of cliques
-        b = np.array([x[(self.n, c)]
-            for c in range(self.num_cliques+1)])
-        return b
+        bounds = [{
+                "Num. cliques": c,
+                "Expected rank": x[(self.n, c)]
+            }
+            for c in range(self.num_cliques+1)
+        ]
+
+        return pandas.DataFrame(bounds)
 
     def get_bounds(self):
         """Gets bounds, for each number of vertices.
@@ -254,8 +259,11 @@ if __name__ == '__main__':
     bound.add_vertex_zeroing_constraints()
 
     # get bound
-    b = bound.get_bounds()
+    b = bound.get_bounds_1()
+    print(b)
+    sys.exit(0)
 
+    b = bound.get_bounds()
     # print all the bounds, for "all the vertices"
     print('Num. cliques    Expected rank')
     for i in range(bound.num_cliques+1):

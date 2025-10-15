@@ -98,7 +98,7 @@ class LpVertexZeroing:
             w = f / num_functions
             self.lp.add_constraint(
                 [((v, c), w[c]) for c in range(f.shape[0])],
-                '<=',
+                '>=',
                 (num_functions-1) / 2.)
 
     def add_zeroing_upper_bound(self):
@@ -135,7 +135,7 @@ class LpVertexZeroing:
         # add case when v == self.k
         # FIXME: this doesn't seem sufficient...
         self.lp.add_constraint([((self.k, 1), 1.)],
-            '>=',
+            '<=',
             comb(self.n, self.k)/2 + 0.5)
 
         # loop through number of vertices in larger graph

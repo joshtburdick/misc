@@ -60,6 +60,7 @@ class LpVertexZeroing:
         if k < 3:
             raise ValueError('k must be >= 3')
         # the number of possible cliques
+        # FIXME rename to "max_cliques"?
         self.num_cliques = comb(n, k)
         # the total number of functions
         self.num_functions = 2 ** self.num_cliques
@@ -92,15 +93,15 @@ class LpVertexZeroing:
         for v in range(self.k, self.n+1):
             # get counts of functions, for _up to_ this many vertices
             f = self.counts_max_vertices[v]
-            # the number of functions, which implies the bound:
-            # both a lower bound (from counting), and an upper bound
-            # (because there are vertex-zeroed functions "above" all of these)
+            # the number of functions, which implies a lower bound (from counting);
+            # I no longer think it implies an upper bound
+            # (of vertex-zeroed functions "above" all of these)
             num_functions = f.sum()
             # bound the weighted average of these
             w = f / num_functions
             self.lp.add_constraint(
                 [((v, c), w[c]) for c in range(f.shape[0])],
-                '=',
+                '>=',
                 (num_functions-1) / 2.)
 
     def add_zeroing_upper_bound(self):
@@ -133,7 +134,6 @@ class LpVertexZeroing:
         B: the cliques zeroed by feeding in zeros to a vertex of C
         A: the cliques which are left over
         """
-
         # add case when v == self.k
         # FIXME: not sure this is sufficient...
         self.lp.add_constraint([((self.k, 1), 1)],
@@ -206,7 +206,6 @@ class LpVertexZeroing:
                     # Since we presumably "hit" a clique, the number of "new"
                     # functions is the number which include all the vertices.
                     (A_num_functions + B_num_functions) / 2.)
- 
 
     def get_bounds_1(self):
         """Gets bounds, with all of the vertices.
@@ -225,6 +224,41 @@ class LpVertexZeroing:
             }
             for c in range(self.num_cliques+1)
         ]
+
+        return pandas.DataFrame(bounds)
+
+    def get_bounds_on_average(self, num_levels_below):
+        """Gets bounds, on average rank for sets with lots of cliques.
+
+        num_levels_below: minimize the weighted average of from
+            [N-num_levels_below, N] cliques. (Thus, when num_levels_below==0,
+            this minimizes the rank of finding _all_ the cliques.)
+        Returns: Pandas DataFrame of results, and the value of the objective functions
+        """
+
+        FIXME this currently only includes "sets which include all vertices"!
+
+
+        # construct objective function, as weighted average of "high levels"
+        N = self.num_cliques
+        num_cliques = range(self.num_cliques-num_levels_below, self.num_cliques+1)
+        num_functions = [comb(N, c) for c in num_cliques]
+        total_functions = sum(num_functions)
+        objective_function = {
+            (self.n, num_cliques[i]): num_functions[i]/total_functions
+            for i in range(len(num_cliques))
+        }
+        x = self.lp.solve_with_objective(objective_function)
+        # get bounds for all the vertices, and any number of cliques
+        bounds = [{
+                "Num. cliques": c,
+                "Expected rank": x[(self.n, c)]
+            }
+            for c in range(self.num_cliques+1)
+        ]
+        # XXX also include the value of the objective function
+        bounds += [{"Num. cliques": -1, "Expected rank": x["__objective__"]
+        }]
 
         return pandas.DataFrame(bounds)
 
@@ -250,6 +284,7 @@ class LpVertexZeroing:
 if __name__ == '__main__':
     n = int(sys.argv[1])
     k = int(sys.argv[2])
+    num_levels_below = int(sys.argv[3])
     bound = LpVertexZeroing(n, k)
 
     # FIXME add constraints based on options?
@@ -259,10 +294,11 @@ if __name__ == '__main__':
     bound.add_vertex_zeroing_constraints()
 
     # get bound
-    b = bound.get_bounds_1()
+    b = bound.get_bounds_on_average(num_levels_below)
     print(b)
-    sys.exit(0)
 
+    # XXX this is all deprecated
+    sys.exit(0)
     b = bound.get_bounds()
     # print all the bounds, for "all the vertices"
     print('Num. cliques    Expected rank')

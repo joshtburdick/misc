@@ -74,15 +74,15 @@ class PuLP_Helper:
             self.prob += A_as_expr >= lcm * b
 
     def solve_1(self, var_to_minimize):
-        """Solves the linear system, for one variable.
+        """solves the linear system, for one variable.
 
-        This assumes all variables are >= 0.
-        FIXME add option to make all variables integers?
+        this assumes all variables are >= 0.
+        fixme add option to make all variables integers?
         """
         self.prob += self.vars[var_to_minimize]
         # for debugging
-        self.prob.writeLP("./bound.lp")
-        r = self.prob.solve(pulp.GLPK(options=['--exact']))
+        self.prob.writelp("./bound.lp")
+        r = self.prob.solve(pulp.glpk(options=['--exact']))
         # problem had a solution
         if r == 1:
             return self.vars[var_to_minimize].varValue
@@ -109,6 +109,35 @@ class PuLP_Helper:
         if r == 1:
             opt = {x: self.vars[x].varValue
                 for x in self.vars}
+            return opt
+        # problem was infeasible, or something else went wrong
+        else:
+            return None
+
+    def solve_with_objective(self, objective):
+        """Solves the linear system, with a multivariable objective
+
+        objective: linear function to minimize (as a dict, indexed
+            by variable name, and coefficients as values)
+        Returns: a dict, indexed by variable name, of
+            all the variables, at the lower bound.
+            (Also includes the objective value, as "__objective__".)
+        """
+        objective_function = 0
+        for x, a in objective:
+            objective_function += a * xself.vars[var_to_minimize]
+        self.prob += objective_function
+
+        self.prob.writeLP("./bound.lp")
+        r = self.prob.solve(pulp.GLPK("glpsol",
+                                      options=['--exact']))
+        print(f"Result r = {r}")
+
+        # did problem have a solution?
+        if r == 1:
+            opt = {x: self.vars[x].varValue
+                for x in self.vars}
+            opt["__objective__"] = pulp.pulp.value(self.prob.objective)
             return opt
         # problem was infeasible, or something else went wrong
         else:

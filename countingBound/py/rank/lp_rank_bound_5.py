@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
-# Attempt at bounding rank, based on zeroing out vertices.
+# Attempt at bounding rank, based on zeroing out edges.
 # FIXME
 # - use argparse?
+# - add sharper upper bounds, based on number of vertices zeroed out?
+#   (??? is this still needed? add_vertex_zeroing_constraints()
 #   implements this, but doesn't seem to have any effect)
 
 import argparse
@@ -19,7 +21,6 @@ import pandas
 sys.path.append("../")            # XXX
 sys.path.append("../fractions/")  # XXX
 
-import hypergraph_counter
 import lp_helper
 import pulp_helper
 
@@ -35,18 +36,12 @@ def hyperg_frac(N, K, n, k):
         comb(K, k) * comb(N-K, n-k),
         comb(N, n))
 
-class LpVertexZeroing:
+class LpEdgeZeroing:
     """Attempt at bound by zeroing out vertices.
     """
 
     def __init__(self, n, k):
         """Constructor gets graph info, and sets up variable names.
-
-        This will have a variable labelled (v, c) where:
-            v is the number of vertices, with k <= v <= n
-            c is the number of cliques, with 0 <= c <= {n choose v}
-        Each variable (currently) will be the expected rank of functions
-        with _up to_ v vertices.
 
         n: number of vertices in the graph
         k: number of vertices in a clique (>= 3)
@@ -56,71 +51,60 @@ class LpVertexZeroing:
         if k < 3:
             raise ValueError('k must be >= 3')
         # the number of possible cliques
-        # FIXME rename to "max_cliques"?
-        self.num_cliques = comb(n, k)
+        self.max_cliques = comb(n, k)
+        # the number of cliques which could be "hit" by the zonked edge
+        self.max_hit_by_edge = comb(n-2, k-2)
+        # number of cliques, omitting those which contain the zonked edge
+        self.max_cliques_low = self.max_cliques - self.max_hit_by_edge
         # the total number of functions
-        self.num_functions = 2 ** self.num_cliques
+        self.num_functions = 2 ** self.max_cliques
+        # variable names: the expected ("E") rank at each level,
+        # and in the "high" and "low" sets at each level
+        vars = ([("E", i) for i in range(self.max_cliques+1)
+            + [("high", i) for i in range(self.max_cliques+1)
+            + [("low", i) for i in range(self.max_cliques_low+1)])
         # wrapper for LP solver
-        vars = []
-        for v in range(k, n+1):
-            for c in range(0, comb(v, k) + 1):
-                vars += [(v, c)]
-        # self.lp = lp_helper.LP_Helper(vars)
         self.lp = pulp_helper.PuLP_Helper(vars)
-        # precompute numbers of hypergraphs with different numbers of vertices
-        counter = hypergraph_counter.HypergraphCounter(n, k)
-        # this is the number which use _up to_ some number of vertices
-        self.counts_max_vertices = counter.count_hypergraphs_max_vertices()
-        # this is the number which use _all_ of some number of vertices
-        self.counts_exact_vertices = counter.count_hypergraphs_exact_vertices()
+
+
+
+        # ??? omit all of these?
+        # to count functions in "low" sets, omit cliques hit by an edge
+        # (XXX currently we pad this with 0s at the top)
+        self.num_functions_low = [comb(self.max_cliques_low, i) 
+            for i in range(self.max_cliques+1)
+        ]
+        # to count functions in "high" sets, count all the
+        # possible functions, and subtract off functions in "low" sets
+        self.num_functions_high = [
+            comb(self.max_cliques, i) - self.num_functions_low[i]
+            for i in range(self.max_cliques+1)
+        ]
+
+
+    def add_expected_level_constraints(self):
+        """Adds constraints for expected rank, at each level."""
+
+
+
 
     def add_average_rank_constraints(self):
         """Adds equality constraints on average rank of all of the functions.
 
-        Idea: possibly this should just be a weighted average of all
-        possible relevant functions?
-        There is one of these for each possible number of vertices included.
-
-        ??? We could also include something like add_counting_lower_bound(),
-        from lp_brute_force_1.py. This changed some of the bounds, but not
-        the bound for CLIQUE.
+        This is an average of the expected rank, for each set of functions,
+        weighted by that set's size.
         """
-        # add constraints
-        for v in range(self.k, self.n+1):
-            # get counts of functions, for _up to_ this many vertices
-            f = self.counts_max_vertices[v]
-            # the number of functions, which implies a lower bound (from counting);
-            # I no longer think it implies an upper bound
-            # (of vertex-zeroed functions "above" all of these)
-            num_functions = f.sum()
-            # bound the weighted average of these
-            w = f / num_functions
-            self.lp.add_constraint(
-                [((v, c), w[c]) for c in range(f.shape[0])],
-                '>=',
-                (num_functions-1) / 2.)
+        A = ([("high", i): self.num_functions_high[i]
+            for i in range(self.max_cliques+1)]
+            + [("low", i): self.num_functions_low[i]
+            for i in range(self.max_cliques_low+1)])
+        self.lp.add_constraint(A, "=", (self.num_functions-1) / 2)
 
-    def add_zeroing_upper_bound(self):
-        """Adds upper bound based on the number of functions "above".
+    def add_edge_zeroing_constraints(self):
 
-        ??? This may not be useful; it seems like add_average_rank_constraints()
-        almost subsumes it.
-        However, this is at least a "hard" bound.
-        """
-        # loop through number of vertices
-        for v in range(self.k, self.n+1):
-            # get counts of functions, for _up to_ this many vertices
-            f = self.counts_max_vertices[v]
-            # the number of functions with up to this many vertices
-            num_functions = f.sum()
-            # presumably, all of the _other_ functions are "higher"?
-            # which (I think) should make this an upper bound;
-            # however, this isn't quite clear
-            for c in range(0, f.shape[0]):
-                self.lp.add_constraint(
-                    [((v, c), 1.)],
-                    '<=',
-                    num_functions)
+
+
+
 
     def add_vertex_zeroing_constraints(self):
         """Adds constraints from zeroing out vertices.
@@ -203,26 +187,6 @@ class LpVertexZeroing:
                     # functions is the number which include all the vertices.
                     (A_num_functions + B_num_functions) / 2.)
 
-    def get_bounds_1(self):
-        """Gets bounds, with all of the vertices.
-
-        Note that this is only minimizing the bound for any number
-        of cliques, and all of the vertices.
-        However, it returns bounds for any number of cliques or vertices
-        (even though it's not explicitly minimizing those individually).
-        """
-        s = (self.n, self.num_cliques)
-        x = self.lp.solve(s, bounds=(0, self.num_functions-1))
-        # get bounds for all the vertices, and any number of cliques
-        bounds = [{
-                "Num. cliques": c,
-                "Expected rank": x[(self.n, c)]
-            }
-            for c in range(self.num_cliques+1)
-        ]
-
-        return pandas.DataFrame(bounds)
-
     def get_bounds_on_average(self, num_levels_below):
         """Gets bounds, on average rank for sets with lots of cliques.
 
@@ -231,8 +195,6 @@ class LpVertexZeroing:
             this minimizes the rank of finding _all_ the cliques.)
         Returns: Pandas DataFrame of results, and the value of the objective functions
         """
-
-        FIXME this currently only includes "sets which include all vertices"!
 
 
         # construct objective function, as weighted average of "high levels"
@@ -258,46 +220,24 @@ class LpVertexZeroing:
 
         return pandas.DataFrame(bounds)
 
-    def get_bounds(self):
-        """Gets bounds, for each number of vertices.
 
-        This is the bound at each 'level'.
 
-        ??? is there a more efficient way to compute this?
-        """
-        def get_bound_at_level(i):
-            # this is the number we're minimizing
-            x = (self.n, i)
-            r = self.lp.solve(x, bounds=(0, self.num_functions-1))
-            return r[x]
-        # get bounds for all the vertices, and any number of cliques
-        b = np.array([get_bound_at_level(c)
-            for c in range(self.num_cliques+1)])
-        return b
 
-# FIXME add minimizing / maximizing individual variables ?
+
+
 
 if __name__ == '__main__':
     n = int(sys.argv[1])
     k = int(sys.argv[2])
     num_levels_below = int(sys.argv[3])
-    bound = LpVertexZeroing(n, k)
+    bound = LpEdgeZeroing(n, k)
 
     # FIXME add constraints based on options?
     # ??? do we need the "base case" of only one clique?
-    # bound.add_average_rank_constraints()
-    # bound.add_zeroing_upper_bound()
-    bound.add_vertex_zeroing_constraints()
+    bound.add_average_rank_constraints()
+    bound.add_edge_zeroing_constraints()
 
     # get bound
     b = bound.get_bounds_on_average(num_levels_below)
     print(b)
-
-    # XXX this is all deprecated
-    sys.exit(0)
-    b = bound.get_bounds()
-    # print all the bounds, for "all the vertices"
-    print('Num. cliques    Expected rank')
-    for i in range(bound.num_cliques+1):
-        print('\t\t'.join([str(i), str('%.2f' % b[i])]))
 

@@ -124,8 +124,8 @@ class PuLP_Helper:
             (Also includes the objective value, as "__objective__".)
         """
         objective_function = 0
-        for x, a in objective:
-            objective_function += a * xself.vars[var_to_minimize]
+        for x, a in objective.items():
+            objective_function += a * self.vars[x]
         self.prob += objective_function
 
         self.prob.writeLP("./bound.lp")

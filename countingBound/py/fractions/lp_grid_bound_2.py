@@ -136,7 +136,7 @@ class LpEdgeZeroing:
         A = []
         for i in range(self.num_cliques_missed+1):
             for j in range(self.num_cliques_hit+1):
-                A += [((i,j), self.num_functions([i,j])
+                A += [((i,j), self.num_functions[i,j])]
         self.lp.add_constraint(A, ">=",
             self.basis.expected_gates(comb(self.n, 2), self.N) /
             (2 ** self.N))
@@ -154,9 +154,10 @@ class LpEdgeZeroing:
             for j in range(1, i+1):
                 # we can combine them to detect more cliques
                 for k in range(i+1, min(i+j, self.N)+1):
-                self.lp.add_constraint(
-                    [(("E",k),1), (("E",i),-1), (("E",j),-1)]
-                    "<=", self.basis.or_bound())
+                    # ... using one OR gate
+                    self.lp.add_constraint(
+                        [(("E",k),1), (("E",i),-1), (("E",j),-1)],
+                        "<=", self.basis.or_bound())
 
     def get_all_bounds(self):
         """Gets bounds for each possible number of cliques.
@@ -179,28 +180,28 @@ class LpEdgeZeroing:
                 'Num. cliques': n_cliques,
                 'Min. gates': bounds})
 
-def get_bounds(n, k, max_gates, constraints_label,
+def get_bounds(n, k, constraints_label,
         use_counting_bound, use_lower_bound, use_upper_bound,
         use_no_cliques_bound):
     """Gets bounds with some set of constraints.
 
-    n, k, max_gates: problem size
+    n, k: problem size
     constraints_label: label to use for this set of constraints
     use_counting_bound, use_lower_bound, use_upper_bound, use_no_cliques_bound:
         whether to use each of these groups of constraints
     """
     # ??? track resource usage?
     sys.stderr.write(f'[bounding with n={n}, k={k}, max_gates={max_gates}, label={constraints_label}]\n')
-    bound = LpEdgeZeroing(n, k, max_gates)
+    bound = LpEdgeZeroing(n, k)
     bound.add_level_constraints()
     if use_counting_bound:
         bound.add_counting_bound()
+        bound.add_no_cliques_constraint()
     if use_lower_bound or use_upper_bound:
         bound.add_step_constraints(use_lower_bound, use_upper_bound)
     if use_no_cliques_bound:
         bound.add_no_cliques_constraint()
-        # XXX this is somewhat misnamed
-        bound.add_simple_step_constraint()
+
     # pdb.set_trace()
     b = bound.get_all_bounds()
     b['Constraints'] = constraints_label
@@ -221,12 +222,10 @@ if __name__ == '__main__':
     args = parse_args()
     n = args.n
     k = args.k
-    max_gates = args.max_gates
 
     # output_file = sys.argv[3]
     bounds = pandas.concat([
         get_bounds(n, k, max_gates, 'Counting', True, False, False, False),
-        get_bounds(n, k, max_gates, 'Step', False, True, True, False),
         get_bounds(n, k, max_gates, 'Counting and step', True, True, True, False),
         get_bounds(n, k, max_gates, 'Counting, step, and no cliques',
             True, True, True, True)

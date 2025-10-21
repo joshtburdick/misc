@@ -85,6 +85,8 @@ class LpEdgeZeroing:
                 self.num_functions[i,j] = (
                     comb(self.max_cliques_missed, i)
                     * comb(self.max_cliques_hit, j))
+        # the number of functions should add up to this
+        assert(self.num_functions.sum() == 2 ** self.N)
 
     def add_level_constraints(self):
         """Adds average for each total number of cliques."""
@@ -146,11 +148,15 @@ class LpEdgeZeroing:
 
     # FIXME add combining bound
     def add_combining_bound(self):
-        # we assume we're given circuits which detect i and j cliques
-        for i in range(1, self.N+1):
-            for j in range(1, self.N+1):
-                pass    # FIXME
-
+        # starting with a circuit which detects i cliques
+        for i in range(1, self.N):
+            # ... and a circuit which detects no more than i cliques
+            for j in range(1, i+1):
+                # we can combine them to detect more cliques
+                for k in range(i+1, min(i+j, self.N)+1):
+                self.lp.add_constraint(
+                    [(("E",k),1), (("E",i),-1), (("E",j),-1)]
+                    "<=", self.basis.or_bound())
 
     def get_all_bounds(self):
         """Gets bounds for each possible number of cliques.

@@ -32,7 +32,7 @@ class LpEdgeZeroing:
     """Attempt at bound by zeroing out edges.
     """
 
-    def __init__(self, n, k, max_gates):
+    def __init__(self, n, k):
         """Constructor gets graph info, and sets up variable names.
 
         This will have two groups of variables, for expected number
@@ -52,24 +52,6 @@ class LpEdgeZeroing:
         if k < 3:
             raise ValueError('k must be >= 3')
 
-        self.expected_num_gates_vars = []
-        self.num_gates_dist_vars = []
-        for c in range(0, comb(n, k) + 1):
-            # variables for expected number of gates, for each number of cliques
-            self.expected_num_gates_vars += [("E", c)]
-            for g in range(1, max_gates+1):
-                # variables for counts of numbers of functions
-                # with some number of gates
-                self.num_gates_dist_vars += [(c, g)]
-        # wrapper for LP solver
-        # FIXME: make this an option?
-        self.lp = pulp_helper.PuLP_Helper(
-             self.expected_num_gates_vars + self.num_gates_dist_vars)
-
-        # FIXME make this an option?
-        self.basis = gate_basis.UnboundedFanInNandBasis()
-        # self.basis = gate_basis.TwoInputNandBasis()
-
         # number of possible cliques
         self.N = comb(n, k)
         # maximum number of cliques which could be "hit" by an arbitrary edge
@@ -79,7 +61,7 @@ class LpEdgeZeroing:
 
         # number of functions in each set
         self.num_functions = np.zeros(
-            (self.max_cliques_missed, self.max_cliques_hit), dtype=int)
+            (self.max_cliques_missed+1, self.max_cliques_hit+1), dtype=int)
         for i in range(self.max_cliques_missed+1):
             for j in range(self.max_cliques_hit+1):
                 self.num_functions[i,j] = (
@@ -87,6 +69,25 @@ class LpEdgeZeroing:
                     * comb(self.max_cliques_hit, j))
         # the number of functions should add up to this
         assert(self.num_functions.sum() == 2 ** self.N)
+
+        # define variables
+        # "grid" of variables, for each number of cliques "missed" and "hit"
+        grid_variables = []
+        for i in range(self.max_cliques_missed+1):
+            for j in range(self.max_cliques_hit+1):
+                grid_variables += [(i,j)]
+        # variables for expected number of gates, for each number of cliques
+        num_gates_variables = [("E", c)
+            for c in range(0, comb(n, k) + 1)]
+
+        # wrapper for LP solver
+        # FIXME: make this an option?
+        self.lp = pulp_helper.PuLP_Helper(
+            grid_variables + num_gates_variables)
+
+        # FIXME make this an option?
+        self.basis = gate_basis.UnboundedFanInNandBasis()
+        # self.basis = gate_basis.TwoInputNandBasis()
 
     def add_level_constraints(self):
         """Adds average for each total number of cliques."""
@@ -100,9 +101,9 @@ class LpEdgeZeroing:
                 i = k - j
                 if not (0 <= i <= self.max_cliques_missed):
                     continue
-                A += ((i, j), self.num_functions[i, j])
+                A += [((i, j), self.num_functions[i, j])]
                 total_functions += self.num_functions[i, j]
-            self.lp.add_constraint(A + [(("E", k), -num_functions)],
+            self.lp.add_constraint(A + [(("E", k), -total_functions)],
                 '=', 0)
 
     def add_step_constraints(self, lower_bound=True, upper_bound=True):
@@ -111,8 +112,8 @@ class LpEdgeZeroing:
         This bounds the number of gates, after one 'step' of zeroing
         an edge.
         """ 
-        for i in range(self.num_cliques_missed+1):
-            for j in range(1, self.num_cliques_hit+1):
+        for i in range(self.max_cliques_missed+1):
+            for j in range(1, self.max_cliques_hit+1):
                 if lower_bound:
                     # zonking the edge removes at least one gate
                     self.lp.add_constraint(
@@ -134,8 +135,8 @@ class LpEdgeZeroing:
         This is a weighted average of all of the sets.
         """
         A = []
-        for i in range(self.num_cliques_missed+1):
-            for j in range(self.num_cliques_hit+1):
+        for i in range(self.max_cliques_missed+1):
+            for j in range(self.max_cliques_hit+1):
                 A += [((i,j), self.num_functions[i,j])]
         self.lp.add_constraint(A, ">=",
             self.basis.expected_gates(comb(self.n, 2), self.N) /
@@ -157,7 +158,7 @@ class LpEdgeZeroing:
                     # ... using one OR gate
                     self.lp.add_constraint(
                         [(("E",k),1), (("E",i),-1), (("E",j),-1)],
-                        "<=", self.basis.or_bound())
+                        "<=", self.basis.or_upper_bound())
 
     def get_all_bounds(self):
         """Gets bounds for each possible number of cliques.
@@ -167,14 +168,14 @@ class LpEdgeZeroing:
         CLIQUE is minimized.
         """
         # solve, minimizing number of gates for CLIQUE
-        r = self.lp.solve(("E", self.num_possible_cliques))
+        r = self.lp.solve(("E", self.N))
         if not r:
             return None
         # for now, we only get bounds for "expected number of gates"
         # for each number of cliques
-        n_cliques = range(self.num_possible_cliques+1)
+        n_cliques = range(self.N+1)
         bounds = [r[("E", num_cliques)]
-            for num_cliques in range(self.num_possible_cliques+1)]
+            for num_cliques in range(self.N+1)]
         return pandas.DataFrame({
                 'Num. vertices': self.n,
                 'Num. cliques': n_cliques,
@@ -182,25 +183,26 @@ class LpEdgeZeroing:
 
 def get_bounds(n, k, constraints_label,
         use_counting_bound, use_lower_bound, use_upper_bound,
-        use_no_cliques_bound):
+        use_combining_bound):
     """Gets bounds with some set of constraints.
 
     n, k: problem size
     constraints_label: label to use for this set of constraints
-    use_counting_bound, use_lower_bound, use_upper_bound, use_no_cliques_bound:
+    use_counting_bound, use_lower_bound, use_upper_bound, use_combining_bound:
         whether to use each of these groups of constraints
     """
     # ??? track resource usage?
-    sys.stderr.write(f'[bounding with n={n}, k={k}, max_gates={max_gates}, label={constraints_label}]\n')
+    sys.stderr.write(f'[bounding with n={n}, k={k}, label={constraints_label}]\n')
     bound = LpEdgeZeroing(n, k)
     bound.add_level_constraints()
     if use_counting_bound:
         bound.add_counting_bound()
+        # we include this as well, as it seems pretty basic
         bound.add_no_cliques_constraint()
     if use_lower_bound or use_upper_bound:
         bound.add_step_constraints(use_lower_bound, use_upper_bound)
-    if use_no_cliques_bound:
-        bound.add_no_cliques_constraint()
+    if use_combining_bound:
+        bound.add_combining_bound()
 
     # pdb.set_trace()
     b = bound.get_all_bounds()
@@ -225,9 +227,9 @@ if __name__ == '__main__':
 
     # output_file = sys.argv[3]
     bounds = pandas.concat([
-        get_bounds(n, k, max_gates, 'Counting', True, False, False, False),
-        get_bounds(n, k, max_gates, 'Counting and step', True, True, True, False),
-        get_bounds(n, k, max_gates, 'Counting, step, and no cliques',
+        get_bounds(n, k, 'Counting', True, False, False, False),
+        get_bounds(n, k, 'Counting and step', True, True, True, False),
+        get_bounds(n, k, 'Counting, step, and combining',
             True, True, True, True)
     ])
     if args.result_file:

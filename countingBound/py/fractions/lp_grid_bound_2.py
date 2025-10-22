@@ -119,7 +119,7 @@ class LpEdgeZeroing:
         expected_num_gates = fractions.Fraction(
             self.basis.expected_gates(comb(self.n, 2), self.N))
         print(f"E[#gates] = {expected_num_gates}")
-        self.lp.add_constraint(A, ">=", expected_num_gates / (2 ** self.N))
+        self.lp.add_constraint(A, ">=", (2 ** self.N) * expected_num_gates)
 
     def add_step_constraints(self, lower_bound=True, upper_bound=True):
         """Adds 'step' constraints, for tweaking one edge.
@@ -231,8 +231,8 @@ if __name__ == '__main__':
     bounds = pandas.concat([
         get_bounds(n, k, 'Counting', True, False, False, False),
         get_bounds(n, k, 'Counting and step', True, True, True, False),
-#        get_bounds(n, k, 'Counting, step, and combining',
-#            True, True, True, True)
+        get_bounds(n, k, 'Counting, step, and combining',
+            True, True, True, True)
     ])
     if args.result_file:
         with open(args.result_file, "wt") as f:

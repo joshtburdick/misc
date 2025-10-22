@@ -60,8 +60,8 @@ class LpEdgeZeroing:
         self.max_cliques_missed = self.N - self.max_cliques_hit
 
         # number of functions in each set
-        self.num_functions = np.zeros(
-            (self.max_cliques_missed+1, self.max_cliques_hit+1), dtype=int)
+        self.num_functions = np.full(
+            (self.max_cliques_missed+1, self.max_cliques_hit+1), None)
         for i in range(self.max_cliques_missed+1):
             for j in range(self.max_cliques_hit+1):
                 self.num_functions[i,j] = (
@@ -106,6 +106,21 @@ class LpEdgeZeroing:
             self.lp.add_constraint(A + [(("E", k), -total_functions)],
                 '=', 0)
 
+    def add_counting_bound(self):
+        """Adds counting bound.
+
+        This is a weighted average of all of the sets.
+        """
+        A = []
+        # these are all weighted by the number of functions
+        for i in range(self.max_cliques_missed+1):
+            for j in range(self.max_cliques_hit+1):
+                A += [((i,j), self.num_functions[i,j])]
+        expected_num_gates = fractions.Fraction(
+            self.basis.expected_gates(comb(self.n, 2), self.N))
+        print(f"E[#gates] = {expected_num_gates}")
+        self.lp.add_constraint(A, ">=", expected_num_gates / (2 ** self.N))
+
     def add_step_constraints(self, lower_bound=True, upper_bound=True):
         """Adds 'step' constraints, for tweaking one edge.
 
@@ -128,19 +143,6 @@ class LpEdgeZeroing:
                     self.lp.add_constraint(
                         [((i, j), 1), ((i, 0), -1)],
                         "<=", num_additional_gates)
-
-    def add_counting_bound(self):
-        """Adds counting bound.
-
-        This is a weighted average of all of the sets.
-        """
-        A = []
-        for i in range(self.max_cliques_missed+1):
-            for j in range(self.max_cliques_hit+1):
-                A += [((i,j), self.num_functions[i,j])]
-        self.lp.add_constraint(A, ">=",
-            self.basis.expected_gates(comb(self.n, 2), self.N) /
-            (2 ** self.N))
 
     def add_no_cliques_constraint(self):
         """Adds trivial constraint, on finding no cliques."""
@@ -229,8 +231,8 @@ if __name__ == '__main__':
     bounds = pandas.concat([
         get_bounds(n, k, 'Counting', True, False, False, False),
         get_bounds(n, k, 'Counting and step', True, True, True, False),
-        get_bounds(n, k, 'Counting, step, and combining',
-            True, True, True, True)
+#        get_bounds(n, k, 'Counting, step, and combining',
+#            True, True, True, True)
     ])
     if args.result_file:
         with open(args.result_file, "wt") as f:

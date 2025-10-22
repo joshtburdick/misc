@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # Attempt at bounding rank, based on zeroing out edges.
 # FIXME
+# - possibly use the "grid" idea, to simplify
 # - use argparse?
 # - add sharper upper bounds, based on number of vertices zeroed out?
 #   (??? is this still needed? add_vertex_zeroing_constraints()
@@ -66,8 +67,6 @@ class LpEdgeZeroing:
         # wrapper for LP solver
         self.lp = pulp_helper.PuLP_Helper(vars)
 
-
-
         # ??? omit all of these?
         # to count functions in "low" sets, omit cliques hit by an edge
         # (XXX currently we pad this with 0s at the top)
@@ -84,9 +83,14 @@ class LpEdgeZeroing:
 
     def add_expected_level_constraints(self):
         """Adds constraints for expected rank, at each level."""
+        # first, constraints for mix of "high" and "low" functions
+        # ...
 
-
-
+        # then, add "convenience" equality constraints for
+        # the levels without any "low" functions
+        for i in range(self.max_cliques_low, self.max_cliques+1):
+            self.lp.add_constraint([(("E", i), 1), (("high", i), -1)],
+                "=", 0)
 
     def add_average_rank_constraints(self):
         """Adds equality constraints on average rank of all of the functions.

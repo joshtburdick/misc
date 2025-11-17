@@ -149,7 +149,6 @@ class LpEdgeZeroing:
         # ... that is, finding zero cliques requires zero NAND gates
         self.lp.add_constraint([((0, 0), 1)], "=", 0)
 
-    # FIXME add combining bound
     def add_combining_bound(self):
         # starting with a circuit which detects i cliques
         for i in range(1, self.N):

@@ -54,54 +54,28 @@ class LpParity:
             raise ValueError('k must be >= 3')
         self.max_gates = max_gates
 
-        self.expected_num_gates_vars = []
-        self.num_gates_dist_vars = []
-        for c in range(0, comb(n, k) + 1):
-            # variables for expected number of gates, for each number of cliques
-            self.expected_num_gates_vars += [("A", c)]
-            for g in range(1, max_gates+1):
-                # variables for counts of numbers of functions
-                # with some number of gates
-                self.num_gates_dist_vars += [(c, g)]
+        # number of possible cliques
+        self.max_cliques = comb(n, k)
+        # number of cliques which could be "hit" by zeroing an edge
+        self.max_cliques_hit = comb(n-2, k-2)
+ 
+        # the variables
+        self.expected_num_gates_vars = (
+            [("A", c) for c in range(0, self.max_cliques + 1)]
+            + [("B", c) for c in range(0, self.max_cliques + 1 - self.max_cliques_hit)]
+        )
+
         # wrapper for LP solver
         self.lp = pulp_helper.PuLP_Helper(
              self.expected_num_gates_vars + self.num_gates_dist_vars)
-        # self.lp = simplex_algorithm_helper.SimplexAlgorithmHelper(
-        #      self.expected_num_gates_vars + self.num_gates_dist_vars, verbosity=0)
-
-        # number of possible cliques
-        self.num_possible_cliques = comb(n, k)
 
         self.basis = gate_basis.TwoInputNandBasis()
-        self.rng = np.random.default_rng()
 
         # for debugging: directory in which to save LP problem files
         self.lp_save_dir = None
 
-    def add_level_constraints(self):
-        """Adds constraints on functions at some "level"
-
-        By "level", we mean "number of cliques".
-
-        The constraints (both of which are equalities) are:
-        - on the total number of functions at that "level", and
-        - connecting the counts with that "level"'s expected gate count
-        """
-        # loop through number of cliques
-        for c in range(self.num_possible_cliques+1):
-            num_functions = comb(self.num_possible_cliques, c)
-            # add constraint that these sum to the number of functions
-            self.lp.add_constraint(
-                [((c, i), 1) for i in range(1, self.max_gates+1)],
-                '=', num_functions)
-            # add constraint defining expected number of gates
-            A = [((c, i), i)
-                for i in range(1, self.max_gates+1)]
-            self.lp.add_constraint(A + [(("A", c), -num_functions)],
-                '=', 0)
-
-    def add_counting_bound(self):
-        """Adds counting bounds, for a given number of gates.
+    def add_counting_bound(self, include_B_bound=True):
+        """Adds counting bounds, based on number of functions.
 
         This is a lower bound on the number of functions with
         some number of gates.
@@ -116,8 +90,19 @@ class LpParity:
                     for c in range(self.num_possible_cliques+1)],
                 '<=', num_functions[g])
 
-    def add_combining_bound(self):
-        """Adds constraints, based on combining circuits.
+    def add_step_bound(self):
+        """Adds 'step' bounds from the random walk.
+
+        """
+        # the bounce "down":
+
+
+
+        # the bounce "up":
+
+
+    def add_level_bound(self):
+        """Adds constraints, based on combining "levels" of circuits.
 
         """
         N = self.num_possible_cliques
@@ -133,6 +118,7 @@ class LpParity:
 
     def add_no_cliques_constraint(self):
         """Adds trivial constraint, on finding no cliques."""
+        # FIXME move this to the "levels" bound
         # ... that is, finding zero cliques requires one NAND gate
         self.lp.add_constraint([(("A", 0), 1)], "=", 1)
 
@@ -163,19 +149,18 @@ def get_bounds(n, k, max_gates, constraints_label,
 
     n, k, max_gates: problem size
     constraints_label: label to use for this set of constraints
-    use_counting_bound, use_combining_bound, use_no_cliques_bound:
+    use_counting_bound, use_step_bound, use_level_bound:
         whether to use each of these groups of constraints
     """
     # ??? track resource usage?
     sys.stderr.write(f'[bounding with n={n}, k={k}, max_gates={max_gates}, label={constraints_label}]\n')
     bound = LpParity(n, k, max_gates)
-    bound.add_level_constraints()
     if use_counting_bound:
         bound.add_counting_bound()
-    if use_combining_bound:
-        bound.add_combining_bound()
-    if use_no_cliques_bound:
-        bound.add_no_cliques_constraint()
+    if use_step_bound:
+        bound.add_level_bound()
+    if use_level_bound:
+        bound.add_level_bound()
     # pdb.set_trace()
     b = bound.get_all_bounds()
     b['Constraints'] = constraints_label

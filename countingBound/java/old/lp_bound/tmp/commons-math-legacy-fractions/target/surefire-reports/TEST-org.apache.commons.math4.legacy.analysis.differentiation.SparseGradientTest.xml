@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" version="3.0.2" name="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.797" tests="120" errors="0" skipped="0" failures="0">
+  <properties>
+    <property name="java.specification.version" value="17"/>
+    <property name="sun.jnu.encoding" value="UTF-8"/>
+    <property name="java.class.path" value="/home/josh_t_burdick/tmp/commons-math-legacy-fractions/target/test-classes:/home/josh_t_burdick/tmp/commons-math-legacy-fractions/target/classes:/home/josh_t_burdick/.m2/repository/org/apache/commons/commons-statistics-distribution/1.1/commons-statistics-distribution-1.1.jar:/home/josh_t_burdick/.m2/repository/org/apache/commons/commons-numbers-core/1.2/commons-numbers-core-1.2.jar:/home/josh_t_burdick/.m2/repository/org/apache/commons/commons-numbers-complex/1.2/commons-numbers-complex-1.2.jar:/home/josh_t_burdick/.m2/repository/org/apache/commons/commons-numbers-gamma/1.2/commons-numbers-gamma-1.2.jar:/home/josh_t_burdick/.m2/repository/org/apache/commons/commons-numbers-fraction/1.2/commons-numbers-fraction-1.2.jar:/home/josh_t_burdick/.m2/repository/org/apache/commons/commons-numbers-combinatorics/1.2/commons-numbers-combinatorics-1.2.jar:/home/josh_t_burdick/.m2/repository/org/apache/commons/commons-numbers-angle/1.2/commons-numbers-angle-1.2.jar:/home/josh_t_burdick/.m2/repository/org/apache/commons/commons-numbers-rootfinder/1.2/commons-numbers-rootfinder-1.2.jar:/home/josh_t_burdick/.m2/repository/org/apache/commons/commons-numbers-field/1.2/commons-numbers-field-1.2.jar:/home/josh_t_burdick/.m2/repository/org/apache/commons/commons-numbers-quaternion/1.2/commons-numbers-quaternion-1.2.jar:/home/josh_t_burdick/.m2/repository/org/apache/commons/commons-numbers-arrays/1.2/commons-numbers-arrays-1.2.jar:/home/josh_t_burdick/.m2/repository/org/apache/commons/commons-rng-client-api/1.5/commons-rng-client-api-1.5.jar:/home/josh_t_burdick/.m2/repository/org/apache/commons/commons-rng-simple/1.5/commons-rng-simple-1.5.jar:/home/josh_t_burdick/.m2/repository/org/apache/commons/commons-rng-core/1.5/commons-rng-core-1.5.jar:/home/josh_t_burdick/.m2/repository/org/apache/commons/commons-rng-sampling/1.5/commons-rng-sampling-1.5.jar:/home/josh_t_burdick/.m2/repository/org/apache/commons/commons-math4-legacy-exception/4.0-SNAPSHOT/commons-math4-legacy-exception-4.0-SNAPSHOT.jar:/home/josh_t_burdick/.m2/repository/org/apache/commons/commons-math4-legacy-core/4.0-SNAPSHOT/commons-math4-legacy-core-4.0-SNAPSHOT.jar:/home/josh_t_burdick/.m2/repository/org/apache/commons/commons-math4-core/4.0-SNAPSHOT/commons-math4-core-4.0-SNAPSHOT.jar:/home/josh_t_burdick/.m2/repository/org/junit/vintage/junit-vintage-engine/5.11.0/junit-vintage-engine-5.11.0.jar:/home/josh_t_burdick/.m2/repository/org/junit/platform/junit-platform-engine/1.11.0/junit-platform-engine-1.11.0.jar:/home/josh_t_burdick/.m2/repository/org/opentest4j/opentest4j/1.3.0/opentest4j-1.3.0.jar:/home/josh_t_burdick/.m2/repository/org/junit/platform/junit-platform-commons/1.11.0/junit-platform-commons-1.11.0.jar:/home/josh_t_burdick/.m2/repository/junit/junit/4.13.2/junit-4.13.2.jar:/home/josh_t_burdick/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:/home/josh_t_burdick/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/home/josh_t_burdick/.m2/repository/org/apache/commons/commons-geometry-euclidean/1.0/commons-geometry-euclidean-1.0.jar:/home/josh_t_burdick/.m2/repository/org/apache/commons/commons-geometry-core/1.0/commons-geometry-core-1.0.jar:/home/josh_t_burdick/.m2/repository/org/junit/jupiter/junit-jupiter/5.11.0/junit-jupiter-5.11.0.jar:/home/josh_t_burdick/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.11.0/junit-jupiter-api-5.11.0.jar:/home/josh_t_burdick/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.11.0/junit-jupiter-params-5.11.0.jar:/home/josh_t_burdick/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.11.0/junit-jupiter-engine-5.11.0.jar:"/>
+    <property name="java.vm.vendor" value="Debian"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="java.vendor.url" value="https://tracker.debian.org/openjdk-17"/>
+    <property name="os.name" value="Linux"/>
+    <property name="java.vm.specification.version" value="17"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="sun.boot.library.path" value="/usr/lib/jvm/java-17-openjdk-amd64/lib"/>
+    <property name="sun.java.command" value="/home/josh_t_burdick/tmp/commons-math-legacy-fractions/target/surefire/surefirebooter-20240926044715586_3.jar /home/josh_t_burdick/tmp/commons-math-legacy-fractions/target/surefire 2024-09-26T04-47-15_431-jvmRun1 surefire-20240926044715586_1tmp surefire_0-20240926044715586_2tmp"/>
+    <property name="jdk.debug" value="release"/>
+    <property name="surefire.test.class.path" value="/home/josh_t_burdick/tmp/commons-math-legacy-fractions/target/test-classes:/home/josh_t_burdick/tmp/commons-math-legacy-fractions/target/classes:/home/josh_t_burdick/.m2/repository/org/apache/commons/commons-statistics-distribution/1.1/commons-statistics-distribution-1.1.jar:/home/josh_t_burdick/.m2/repository/org/apache/commons/commons-numbers-core/1.2/commons-numbers-core-1.2.jar:/home/josh_t_burdick/.m2/repository/org/apache/commons/commons-numbers-complex/1.2/commons-numbers-complex-1.2.jar:/home/josh_t_burdick/.m2/repository/org/apache/commons/commons-numbers-gamma/1.2/commons-numbers-gamma-1.2.jar:/home/josh_t_burdick/.m2/repository/org/apache/commons/commons-numbers-fraction/1.2/commons-numbers-fraction-1.2.jar:/home/josh_t_burdick/.m2/repository/org/apache/commons/commons-numbers-combinatorics/1.2/commons-numbers-combinatorics-1.2.jar:/home/josh_t_burdick/.m2/repository/org/apache/commons/commons-numbers-angle/1.2/commons-numbers-angle-1.2.jar:/home/josh_t_burdick/.m2/repository/org/apache/commons/commons-numbers-rootfinder/1.2/commons-numbers-rootfinder-1.2.jar:/home/josh_t_burdick/.m2/repository/org/apache/commons/commons-numbers-field/1.2/commons-numbers-field-1.2.jar:/home/josh_t_burdick/.m2/repository/org/apache/commons/commons-numbers-quaternion/1.2/commons-numbers-quaternion-1.2.jar:/home/josh_t_burdick/.m2/repository/org/apache/commons/commons-numbers-arrays/1.2/commons-numbers-arrays-1.2.jar:/home/josh_t_burdick/.m2/repository/org/apache/commons/commons-rng-client-api/1.5/commons-rng-client-api-1.5.jar:/home/josh_t_burdick/.m2/repository/org/apache/commons/commons-rng-simple/1.5/commons-rng-simple-1.5.jar:/home/josh_t_burdick/.m2/repository/org/apache/commons/commons-rng-core/1.5/commons-rng-core-1.5.jar:/home/josh_t_burdick/.m2/repository/org/apache/commons/commons-rng-sampling/1.5/commons-rng-sampling-1.5.jar:/home/josh_t_burdick/.m2/repository/org/apache/commons/commons-math4-legacy-exception/4.0-SNAPSHOT/commons-math4-legacy-exception-4.0-SNAPSHOT.jar:/home/josh_t_burdick/.m2/repository/org/apache/commons/commons-math4-legacy-core/4.0-SNAPSHOT/commons-math4-legacy-core-4.0-SNAPSHOT.jar:/home/josh_t_burdick/.m2/repository/org/apache/commons/commons-math4-core/4.0-SNAPSHOT/commons-math4-core-4.0-SNAPSHOT.jar:/home/josh_t_burdick/.m2/repository/org/junit/vintage/junit-vintage-engine/5.11.0/junit-vintage-engine-5.11.0.jar:/home/josh_t_burdick/.m2/repository/org/junit/platform/junit-platform-engine/1.11.0/junit-platform-engine-1.11.0.jar:/home/josh_t_burdick/.m2/repository/org/opentest4j/opentest4j/1.3.0/opentest4j-1.3.0.jar:/home/josh_t_burdick/.m2/repository/org/junit/platform/junit-platform-commons/1.11.0/junit-platform-commons-1.11.0.jar:/home/josh_t_burdick/.m2/repository/junit/junit/4.13.2/junit-4.13.2.jar:/home/josh_t_burdick/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:/home/josh_t_burdick/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/home/josh_t_burdick/.m2/repository/org/apache/commons/commons-geometry-euclidean/1.0/commons-geometry-euclidean-1.0.jar:/home/josh_t_burdick/.m2/repository/org/apache/commons/commons-geometry-core/1.0/commons-geometry-core-1.0.jar:/home/josh_t_burdick/.m2/repository/org/junit/jupiter/junit-jupiter/5.11.0/junit-jupiter-5.11.0.jar:/home/josh_t_burdick/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.11.0/junit-jupiter-api-5.11.0.jar:/home/josh_t_burdick/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.11.0/junit-jupiter-params-5.11.0.jar:/home/josh_t_burdick/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.11.0/junit-jupiter-engine-5.11.0.jar:"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="user.home" value="/home/josh_t_burdick"/>
+    <property name="user.language" value="en"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.version.date" value="2024-07-16"/>
+    <property name="java.home" value="/usr/lib/jvm/java-17-openjdk-amd64"/>
+    <property name="file.separator" value="/"/>
+    <property name="basedir" value="/home/josh_t_burdick/tmp/commons-math-legacy-fractions"/>
+    <property name="java.vm.compressedOopsMode" value="Zero based"/>
+    <property name="line.separator" value="&#10;"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="surefire.real.class.path" value="/home/josh_t_burdick/tmp/commons-math-legacy-fractions/target/surefire/surefirebooter-20240926044715586_3.jar"/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="java.runtime.version" value="17.0.12+7-Debian-2deb12u1"/>
+    <property name="user.name" value="josh_t_burdick"/>
+    <property name="path.separator" value=":"/>
+    <property name="os.version" value="6.1.0-23-cloud-amd64"/>
+    <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
+    <property name="file.encoding" value="UTF-8"/>
+    <property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/>
+    <property name="localRepository" value="/home/josh_t_burdick/.m2/repository"/>
+    <property name="java.vendor.url.bug" value="https://bugs.debian.org/openjdk-17"/>
+    <property name="java.io.tmpdir" value="/tmp"/>
+    <property name="java.version" value="17.0.12"/>
+    <property name="user.dir" value="/home/josh_t_burdick/tmp/commons-math-legacy-fractions"/>
+    <property name="os.arch" value="amd64"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="native.encoding" value="UTF-8"/>
+    <property name="java.library.path" value="/usr/java/packages/lib:/usr/lib/x86_64-linux-gnu/jni:/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu:/usr/lib/jni:/lib:/usr/lib"/>
+    <property name="java.vm.info" value="mixed mode, sharing"/>
+    <property name="java.vendor" value="Debian"/>
+    <property name="java.vm.version" value="17.0.12+7-Debian-2deb12u1"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+    <property name="java.class.version" value="61.0"/>
+  </properties>
+  <testcase name="testCeilFloorRintLong" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.002"/>
+  <testcase name="testVarMultInPlace" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.0"/>
+  <testcase name="testPrimitiveAdd" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.0"/>
+  <testcase name="testTanAtan" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.016"/>
+  <testcase name="testSqrtDefinition" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.005"/>
+  <testcase name="testHypotDefinition" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.021"/>
+  <testcase name="testLog1pDefinition" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.01"/>
+  <testcase name="testLinearCombination1DSDS" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.0"/>
+  <testcase name="testLinearCombination2DSDS" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.172"/>
+  <testcase name="testExpm1Definition" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.007"/>
+  <testcase name="testCoshDefinition" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.01"/>
+  <testcase name="testAtan2SpecialCases" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.0"/>
+  <testcase name="testAbs" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.0"/>
+  <testcase name="testAdd" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.001"/>
+  <testcase name="testExp" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.001"/>
+  <testcase name="testLog" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.003"/>
+  <testcase name="testPow" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.012"/>
+  <testcase name="testSubtract" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.0"/>
+  <testcase name="testAtan2" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.009"/>
+  <testcase name="testField" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.0"/>
+  <testcase name="testTrigo" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.015"/>
+  <testcase name="testMult" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.0"/>
+  <testcase name="testReciprocal" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.001"/>
+  <testcase name="testLinearCombination2DoubleDS" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.169"/>
+  <testcase name="testVarAddition" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.0"/>
+  <testcase name="testSinhAsinh" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.003"/>
+  <testcase name="testPrimitiveRemainder" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.002"/>
+  <testcase name="testLog1pExpm1" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.003"/>
+  <testcase name="testToRadiansDefinition" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.023"/>
+  <testcase name="testVariable" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.0"/>
+  <testcase name="testPrimitiveMultiply" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.0"/>
+  <testcase name="testHypotSpecial" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.0"/>
+  <testcase name="testCompositionOneVariableX" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.0"/>
+  <testcase name="testCompositionOneVariableY" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.001"/>
+  <testcase name="testSqrtPow2" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.002"/>
+  <testcase name="testCoshAcosh" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.003"/>
+  <testcase name="testSinhDefinition" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.004"/>
+  <testcase name="testConstant" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.0"/>
+  <testcase name="testCopySign" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.0"/>
+  <testcase name="testTangentDefinition" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.004"/>
+  <testcase name="testCompose" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.011"/>
+  <testcase name="testCosAcos" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.003"/>
+  <testcase name="testTanhAtanh" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.004"/>
+  <testcase name="testPowDoubleDS" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.001"/>
+  <testcase name="testLinearCombination1DoubleDS" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.0"/>
+  <testcase name="testHypotNoOverflow" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.001"/>
+  <testcase name="testTaylorPolynomial" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.007"/>
+  <testcase name="testPrimitiveSubtract" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.001"/>
+  <testcase name="testDivision" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.0"/>
+  <testcase name="testDegRad" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.003"/>
+  <testcase name="testMultiply" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.0"/>
+  <testcase name="testPowReciprocalPow" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.056"/>
+  <testcase name="testLogExp" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.003"/>
+  <testcase name="testRemainder" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.002"/>
+  <testcase name="testNegate" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.0"/>
+  <testcase name="testHypotNeglectible" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.0"/>
+  <testcase name="testCbrtPow3" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.004"/>
+  <testcase name="testLog10Definition" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.004"/>
+  <testcase name="testSinAsin" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.004"/>
+  <testcase name="testSignum" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.001"/>
+  <testcase name="testSinCos" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.002"/>
+  <testcase name="testRootNSingularity" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.0"/>
+  <testcase name="testExpression" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.014"/>
+  <testcase name="testToDegreesDefinition" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.008"/>
+  <testcase name="testSubtraction" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.0"/>
+  <testcase name="testLog10Power" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.005"/>
+  <testcase name="testTanhDefinition" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.007"/>
+  <testcase name="testCbrtDefinition" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.004"/>
+  <testcase name="testTaylorAtan2" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.01"/>
+  <testcase name="testDivideField" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.004"/>
+  <testcase name="testRemainderDouble" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.004"/>
+  <testcase name="testGetField" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.0"/>
+  <testcase name="testDivideDouble" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.002"/>
+  <testcase name="testCos" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.001"/>
+  <testcase name="testSin" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.0"/>
+  <testcase name="testTan" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.001"/>
+  <testcase name="testAcosh" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.001"/>
+  <testcase name="testAsinh" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.0"/>
+  <testcase name="testAtanh" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.001"/>
+  <testcase name="testExpm1" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.0"/>
+  <testcase name="testFloor" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.001"/>
+  <testcase name="testHypot" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.007"/>
+  <testcase name="testLog10" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.0"/>
+  <testcase name="testLog1p" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.001"/>
+  <testcase name="testRootN" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.0"/>
+  <testcase name="testRound" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.0"/>
+  <testcase name="testScalb" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.007"/>
+  <testcase name="testAcos" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.001"/>
+  <testcase name="testAsin" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.0"/>
+  <testcase name="testAtan" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.0"/>
+  <testcase name="testCbrt" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.0"/>
+  <testcase name="testCeil" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.0"/>
+  <testcase name="testCosh" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.001"/>
+  <testcase name="testHash" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.0"/>
+  <testcase name="testRint" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.0"/>
+  <testcase name="testSinh" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.0"/>
+  <testcase name="testSqrt" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.0"/>
+  <testcase name="testTanh" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.0"/>
+  <testcase name="testAddField" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.002"/>
+  <testcase name="testMultiplyDouble" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.001"/>
+  <testcase name="testMultiplyInt" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.001"/>
+  <testcase name="testLinearCombinationDaFa" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.002"/>
+  <testcase name="testLinearCombinationFaFa" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.002"/>
+  <testcase name="testAddDouble" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.001"/>
+  <testcase name="testPowDouble" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.002"/>
+  <testcase name="testSubtractDouble" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.001"/>
+  <testcase name="testRemainderField" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.003"/>
+  <testcase name="testCopySignDouble" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.003"/>
+  <testcase name="testLinearCombinationDF2" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.001"/>
+  <testcase name="testLinearCombinationDF3" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.001"/>
+  <testcase name="testLinearCombinationDF4" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.002"/>
+  <testcase name="testLinearCombinationFF2" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.0"/>
+  <testcase name="testLinearCombinationFF3" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.0"/>
+  <testcase name="testLinearCombinationFF4" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.001"/>
+  <testcase name="testEquals" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.001"/>
+  <testcase name="testCopySignField" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.002"/>
+  <testcase name="testPowField" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.002"/>
+  <testcase name="testPowInt" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.0"/>
+  <testcase name="testMultiplyField" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.002"/>
+  <testcase name="testSubtractField" classname="org.apache.commons.math4.legacy.analysis.differentiation.SparseGradientTest" time="0.001"/>
+</testsuite>

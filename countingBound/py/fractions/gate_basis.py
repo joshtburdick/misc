@@ -15,6 +15,64 @@ import numpy as np
 # so that it returns an int
 from scipy.special import comb
 
+def function_counts(num_inputs, max_fan_in=2):
+    """Gets counts of functions implementable with some number of gates.
+
+    num_inputs: number of inputs to the circuit
+    max_fan_in: maximum number of inputs (None for "unbounded")
+    """
+    num_gates = 0
+    # we assume that with zero gates, we can either
+    # "pass through" an input, or implement constants 0 and 1
+    num_functions = num_inputs + 2
+    # number of inputs to the next gate
+    num_gate_inputs = num_inputs + 2
+    while True:
+        yield (num_gates, num_functions)
+        # "pool" of inputs to new gates are the inputs,
+        # outputs of previous gates, or 0 or 1
+        num_gate_inputs = num_inputs + num_gates + 2
+        num_gates += 1
+        if max_fan_in:
+            num_functions *= comb(num_gate_inputs,
+                max_fan_in, exact=True)
+        else:
+            num_functions *= 2 ** num_gate_inputs
+
+def expected_num_gates(num_inputs, num_functions, max_fan_in=2):
+    """Lower bound on E[ # gates ] to compute some # functions.
+
+    Note that we don't round this up, even though the expected number
+    of gates may be slightly higher.    
+    num_inputs: number of inputs to the circuit
+    num_functions: number of functions (this can be a numpy array)
+    max_fan_in: maximum number of inputs (None for "unbounded")
+    Returns: a numpy array of the same shape as num_functions,
+    such that the i'th element is the expected number of gates
+    needed to compute num_functions[i] functions.
+    """
+    # First, count the number of functions implementable with
+    # each number of gates, up until the largest number of functions
+    # we need to consider.
+    max_functions = num_functions.max()
+    total_functions = 0
+    num_functions_implementable = []
+    for num_gates, num_functions in function_counts(num_inputs, max_fan_in):
+        total_functions += num_functions
+        num_functions_implementable.append(num_functions)
+        if total_functions > max_functions:
+            break
+    # Now, for each number of functions, compute the expected number of gates
+    # needed to implement it.
+    num_functions_implementable = np.array(num_functions_implementable)
+    cumu_num_functions_implementable = np.cumsum(num_functions_implementable)
+    num_gates = np.range(len(num_functions_implementable))
+    expected_num_gates = num_gates * num_functions_implementable / cumu_num_functions_implementable
+    idx = np.searchsorted(cumu_num_functions_implementable, num_functions,
+                              side="right")
+    return expected_num_gates[idx]
+
+
 class UnboundedFanInNandBasis:
     """Bounds on number of unbounded-fan-in NAND gates."""
 

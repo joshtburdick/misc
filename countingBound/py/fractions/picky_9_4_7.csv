@@ -1,0 +1,382 @@
+Constraints,Num. vertices,Num. cliques,Min. gates
+Counting,9,0,
+Counting,9,1,
+Counting,9,2,6.0
+Counting,9,3,6.0
+Counting,9,4,6.0
+Counting,9,5,6.0
+Counting,9,6,6.0
+Counting,9,7,6.0
+Counting,9,8,6.0
+Counting,9,9,2.0
+Counting,9,10,6.0
+Counting,9,11,6.0
+Counting,9,12,6.0
+Counting,9,13,6.0
+Counting,9,14,6.0
+Counting,9,15,6.0
+Counting,9,16,6.0
+Counting,9,17,6.0
+Counting,9,18,6.0
+Counting,9,19,6.0
+Counting,9,20,6.0
+Counting,9,21,6.0
+Counting,9,22,6.0
+Counting,9,23,6.0
+Counting,9,24,6.0
+Counting,9,25,6.0
+Counting,9,26,6.0
+Counting,9,27,6.0
+Counting,9,28,6.0
+Counting,9,29,6.0
+Counting,9,30,6.0
+Counting,9,31,6.0
+Counting,9,32,6.0
+Counting,9,33,6.0
+Counting,9,34,6.0
+Counting,9,35,6.0
+Counting,9,36,6.0
+Counting,9,37,6.0
+Counting,9,38,6.0
+Counting,9,39,6.0
+Counting,9,40,6.0
+Counting,9,41,6.0
+Counting,9,42,6.0
+Counting,9,43,6.0
+Counting,9,44,6.0
+Counting,9,45,6.0
+Counting,9,46,6.0
+Counting,9,47,6.0
+Counting,9,48,6.0
+Counting,9,49,6.0
+Counting,9,50,6.0
+Counting,9,51,6.0
+Counting,9,52,6.0
+Counting,9,53,6.0
+Counting,9,54,6.0
+Counting,9,55,6.0
+Counting,9,56,6.0
+Counting,9,57,6.0
+Counting,9,58,6.0
+Counting,9,59,6.0
+Counting,9,60,6.0
+Counting,9,61,6.0
+Counting,9,62,6.0
+Counting,9,63,6.0
+Counting,9,64,6.0
+Counting,9,65,6.0
+Counting,9,66,6.0
+Counting,9,67,6.0
+Counting,9,68,6.0
+Counting,9,69,6.0
+Counting,9,70,6.0
+Counting,9,71,6.0
+Counting,9,72,6.0
+Counting,9,73,6.0
+Counting,9,74,6.0
+Counting,9,75,6.0
+Counting,9,76,6.0
+Counting,9,77,6.0
+Counting,9,78,6.0
+Counting,9,79,6.0
+Counting,9,80,6.0
+Counting,9,81,6.0
+Counting,9,82,6.0
+Counting,9,83,6.0
+Counting,9,84,6.0
+Counting,9,85,6.0
+Counting,9,86,6.0
+Counting,9,87,6.0
+Counting,9,88,6.0
+Counting,9,89,6.0
+Counting,9,90,6.0
+Counting,9,91,6.0
+Counting,9,92,6.0
+Counting,9,93,6.0
+Counting,9,94,6.0
+Counting,9,95,6.0
+Counting,9,96,6.0
+Counting,9,97,6.0
+Counting,9,98,6.0
+Counting,9,99,5.0
+Counting,9,100,6.0
+Counting,9,101,6.0
+Counting,9,102,6.0
+Counting,9,103,6.0
+Counting,9,104,6.0
+Counting,9,105,6.0
+Counting,9,106,6.0
+Counting,9,107,6.0
+Counting,9,108,6.0
+Counting,9,109,6.0
+Counting,9,110,6.0
+Counting,9,111,6.0
+Counting,9,112,6.0
+Counting,9,113,6.0
+Counting,9,114,6.0
+Counting,9,115,6.0
+Counting,9,116,6.0
+Counting,9,117,6.0
+Counting,9,118,6.0
+Counting,9,119,6.0
+Counting,9,120,6.0
+Counting,9,121,6.0
+Counting,9,122,6.0
+Counting,9,123,6.0
+Counting,9,124,6.0
+Counting,9,125,6.0
+Counting,9,126,1.0
+Counting and picky,9,0,0.0
+Counting and picky,9,1,2.0
+Counting and picky,9,2,6.0
+Counting and picky,9,3,7.0
+Counting and picky,9,4,7.0
+Counting and picky,9,5,7.0
+Counting and picky,9,6,7.0
+Counting and picky,9,7,7.0
+Counting and picky,9,8,7.0
+Counting and picky,9,9,7.0
+Counting and picky,9,10,7.0
+Counting and picky,9,11,7.0
+Counting and picky,9,12,7.0
+Counting and picky,9,13,7.0
+Counting and picky,9,14,7.0
+Counting and picky,9,15,7.0
+Counting and picky,9,16,7.0
+Counting and picky,9,17,7.0
+Counting and picky,9,18,7.0
+Counting and picky,9,19,7.0
+Counting and picky,9,20,7.0
+Counting and picky,9,21,7.0
+Counting and picky,9,22,7.0
+Counting and picky,9,23,7.0
+Counting and picky,9,24,7.0
+Counting and picky,9,25,7.0
+Counting and picky,9,26,7.0
+Counting and picky,9,27,7.0
+Counting and picky,9,28,7.0
+Counting and picky,9,29,7.0
+Counting and picky,9,30,7.0
+Counting and picky,9,31,7.0
+Counting and picky,9,32,6.0
+Counting and picky,9,33,6.0
+Counting and picky,9,34,6.0
+Counting and picky,9,35,6.0
+Counting and picky,9,36,6.0
+Counting and picky,9,37,6.0
+Counting and picky,9,38,6.0
+Counting and picky,9,39,6.0
+Counting and picky,9,40,6.0
+Counting and picky,9,41,6.0
+Counting and picky,9,42,6.0
+Counting and picky,9,43,6.0
+Counting and picky,9,44,6.0
+Counting and picky,9,45,6.0
+Counting and picky,9,46,6.0
+Counting and picky,9,47,6.0
+Counting and picky,9,48,6.0
+Counting and picky,9,49,6.0
+Counting and picky,9,50,6.0
+Counting and picky,9,51,6.0
+Counting and picky,9,52,6.0
+Counting and picky,9,53,6.0
+Counting and picky,9,54,6.0
+Counting and picky,9,55,6.0
+Counting and picky,9,56,6.0
+Counting and picky,9,57,6.0
+Counting and picky,9,58,6.0
+Counting and picky,9,59,6.0
+Counting and picky,9,60,6.0
+Counting and picky,9,61,6.0
+Counting and picky,9,62,6.0
+Counting and picky,9,63,6.0
+Counting and picky,9,64,6.0
+Counting and picky,9,65,6.0
+Counting and picky,9,66,6.0
+Counting and picky,9,67,6.0
+Counting and picky,9,68,6.0
+Counting and picky,9,69,6.0
+Counting and picky,9,70,6.0
+Counting and picky,9,71,6.0
+Counting and picky,9,72,6.0
+Counting and picky,9,73,6.0
+Counting and picky,9,74,6.0
+Counting and picky,9,75,6.0
+Counting and picky,9,76,6.0
+Counting and picky,9,77,6.0
+Counting and picky,9,78,6.0
+Counting and picky,9,79,6.0
+Counting and picky,9,80,6.0
+Counting and picky,9,81,6.0
+Counting and picky,9,82,6.0
+Counting and picky,9,83,6.0
+Counting and picky,9,84,6.0
+Counting and picky,9,85,6.0
+Counting and picky,9,86,6.0
+Counting and picky,9,87,6.0
+Counting and picky,9,88,6.0
+Counting and picky,9,89,6.0
+Counting and picky,9,90,6.0
+Counting and picky,9,91,6.0
+Counting and picky,9,92,6.0
+Counting and picky,9,93,6.0
+Counting and picky,9,94,6.0
+Counting and picky,9,95,6.0
+Counting and picky,9,96,6.0
+Counting and picky,9,97,6.0
+Counting and picky,9,98,6.0
+Counting and picky,9,99,5.0
+Counting and picky,9,100,6.0
+Counting and picky,9,101,7.0
+Counting and picky,9,102,6.0
+Counting and picky,9,103,6.0
+Counting and picky,9,104,6.0
+Counting and picky,9,105,6.0
+Counting and picky,9,106,6.0
+Counting and picky,9,107,6.0
+Counting and picky,9,108,6.0
+Counting and picky,9,109,6.0
+Counting and picky,9,110,6.0
+Counting and picky,9,111,6.0
+Counting and picky,9,112,6.0
+Counting and picky,9,113,6.0
+Counting and picky,9,114,6.0
+Counting and picky,9,115,6.0
+Counting and picky,9,116,6.0
+Counting and picky,9,117,6.0
+Counting and picky,9,118,6.0
+Counting and picky,9,119,6.0
+Counting and picky,9,120,6.0
+Counting and picky,9,121,6.0
+Counting and picky,9,122,6.0
+Counting and picky,9,123,6.0
+Counting and picky,9,124,6.0
+Counting and picky,9,125,6.0
+Counting and picky,9,126,1.0
+"Counting, picky, and upper bound",9,0,1.0
+"Counting, picky, and upper bound",9,1,2.0
+"Counting, picky, and upper bound",9,2,3.0
+"Counting, picky, and upper bound",9,3,4.0
+"Counting, picky, and upper bound",9,4,5.0
+"Counting, picky, and upper bound",9,5,6.0
+"Counting, picky, and upper bound",9,6,7.0
+"Counting, picky, and upper bound",9,7,7.0
+"Counting, picky, and upper bound",9,8,7.0
+"Counting, picky, and upper bound",9,9,7.0
+"Counting, picky, and upper bound",9,10,7.0
+"Counting, picky, and upper bound",9,11,7.0
+"Counting, picky, and upper bound",9,12,7.0
+"Counting, picky, and upper bound",9,13,7.0
+"Counting, picky, and upper bound",9,14,7.0
+"Counting, picky, and upper bound",9,15,7.0
+"Counting, picky, and upper bound",9,16,7.0
+"Counting, picky, and upper bound",9,17,7.0
+"Counting, picky, and upper bound",9,18,7.0
+"Counting, picky, and upper bound",9,19,7.0
+"Counting, picky, and upper bound",9,20,7.0
+"Counting, picky, and upper bound",9,21,7.0
+"Counting, picky, and upper bound",9,22,7.0
+"Counting, picky, and upper bound",9,23,7.0
+"Counting, picky, and upper bound",9,24,7.0
+"Counting, picky, and upper bound",9,25,7.0
+"Counting, picky, and upper bound",9,26,7.0
+"Counting, picky, and upper bound",9,27,7.0
+"Counting, picky, and upper bound",9,28,7.0
+"Counting, picky, and upper bound",9,29,7.0
+"Counting, picky, and upper bound",9,30,7.0
+"Counting, picky, and upper bound",9,31,7.0
+"Counting, picky, and upper bound",9,32,6.0
+"Counting, picky, and upper bound",9,33,6.0
+"Counting, picky, and upper bound",9,34,6.0
+"Counting, picky, and upper bound",9,35,6.0
+"Counting, picky, and upper bound",9,36,6.0
+"Counting, picky, and upper bound",9,37,6.0
+"Counting, picky, and upper bound",9,38,6.0
+"Counting, picky, and upper bound",9,39,6.0
+"Counting, picky, and upper bound",9,40,6.0
+"Counting, picky, and upper bound",9,41,6.0
+"Counting, picky, and upper bound",9,42,6.0
+"Counting, picky, and upper bound",9,43,6.0
+"Counting, picky, and upper bound",9,44,6.0
+"Counting, picky, and upper bound",9,45,6.0
+"Counting, picky, and upper bound",9,46,6.0
+"Counting, picky, and upper bound",9,47,6.0
+"Counting, picky, and upper bound",9,48,6.0
+"Counting, picky, and upper bound",9,49,6.0
+"Counting, picky, and upper bound",9,50,6.0
+"Counting, picky, and upper bound",9,51,6.0
+"Counting, picky, and upper bound",9,52,6.0
+"Counting, picky, and upper bound",9,53,6.0
+"Counting, picky, and upper bound",9,54,6.0
+"Counting, picky, and upper bound",9,55,6.0
+"Counting, picky, and upper bound",9,56,6.0
+"Counting, picky, and upper bound",9,57,6.0
+"Counting, picky, and upper bound",9,58,6.0
+"Counting, picky, and upper bound",9,59,6.0
+"Counting, picky, and upper bound",9,60,6.0
+"Counting, picky, and upper bound",9,61,6.0
+"Counting, picky, and upper bound",9,62,6.0
+"Counting, picky, and upper bound",9,63,6.0
+"Counting, picky, and upper bound",9,64,6.0
+"Counting, picky, and upper bound",9,65,6.0
+"Counting, picky, and upper bound",9,66,6.0
+"Counting, picky, and upper bound",9,67,6.0
+"Counting, picky, and upper bound",9,68,6.0
+"Counting, picky, and upper bound",9,69,6.0
+"Counting, picky, and upper bound",9,70,6.0
+"Counting, picky, and upper bound",9,71,6.0
+"Counting, picky, and upper bound",9,72,6.0
+"Counting, picky, and upper bound",9,73,6.0
+"Counting, picky, and upper bound",9,74,6.0
+"Counting, picky, and upper bound",9,75,6.0
+"Counting, picky, and upper bound",9,76,6.0
+"Counting, picky, and upper bound",9,77,6.0
+"Counting, picky, and upper bound",9,78,6.0
+"Counting, picky, and upper bound",9,79,6.0
+"Counting, picky, and upper bound",9,80,6.0
+"Counting, picky, and upper bound",9,81,6.0
+"Counting, picky, and upper bound",9,82,6.0
+"Counting, picky, and upper bound",9,83,6.0
+"Counting, picky, and upper bound",9,84,6.0
+"Counting, picky, and upper bound",9,85,6.0
+"Counting, picky, and upper bound",9,86,6.0
+"Counting, picky, and upper bound",9,87,6.0
+"Counting, picky, and upper bound",9,88,6.0
+"Counting, picky, and upper bound",9,89,6.0
+"Counting, picky, and upper bound",9,90,6.0
+"Counting, picky, and upper bound",9,91,6.0
+"Counting, picky, and upper bound",9,92,6.0
+"Counting, picky, and upper bound",9,93,6.0
+"Counting, picky, and upper bound",9,94,6.0
+"Counting, picky, and upper bound",9,95,6.0
+"Counting, picky, and upper bound",9,96,6.0
+"Counting, picky, and upper bound",9,97,6.0
+"Counting, picky, and upper bound",9,98,6.0
+"Counting, picky, and upper bound",9,99,5.0
+"Counting, picky, and upper bound",9,100,6.0
+"Counting, picky, and upper bound",9,101,7.0
+"Counting, picky, and upper bound",9,102,6.0
+"Counting, picky, and upper bound",9,103,6.0
+"Counting, picky, and upper bound",9,104,6.0
+"Counting, picky, and upper bound",9,105,6.0
+"Counting, picky, and upper bound",9,106,6.0
+"Counting, picky, and upper bound",9,107,6.0
+"Counting, picky, and upper bound",9,108,6.0
+"Counting, picky, and upper bound",9,109,6.0
+"Counting, picky, and upper bound",9,110,6.0
+"Counting, picky, and upper bound",9,111,6.0
+"Counting, picky, and upper bound",9,112,6.0
+"Counting, picky, and upper bound",9,113,6.0
+"Counting, picky, and upper bound",9,114,6.0
+"Counting, picky, and upper bound",9,115,6.0
+"Counting, picky, and upper bound",9,116,6.0
+"Counting, picky, and upper bound",9,117,6.0
+"Counting, picky, and upper bound",9,118,6.0
+"Counting, picky, and upper bound",9,119,6.0
+"Counting, picky, and upper bound",9,120,6.0
+"Counting, picky, and upper bound",9,121,6.0
+"Counting, picky, and upper bound",9,122,6.0
+"Counting, picky, and upper bound",9,123,6.0
+"Counting, picky, and upper bound",9,124,6.0
+"Counting, picky, and upper bound",9,125,6.0
+"Counting, picky, and upper bound",9,126,1.0

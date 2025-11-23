@@ -1,0 +1,57 @@
+This is BibTeX, Version 0.99d (TeX Live 2025/Homebrew)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: countingBound2.aux
+The style file: unsrt.bst
+Database file #1: references.bib
+I was expecting a `,' or a `}'---line 52 of file references.bib
+ : 
+ : @MISC{Razborov85lowerbounds,
+(Error may have been on previous line)
+I'm skipping whatever remains of this entry
+I was expecting a `,' or a `}'---line 313 of file references.bib
+ :     
+ :     author = {Luca Trevisan},
+(Error may have been on previous line)
+I'm skipping whatever remains of this entry
+You've used 8 entries,
+            1791 wiz_defined-function locations,
+            498 strings with 4685 characters,
+and the built_in function-call counts, 1661 in all, are:
+= -- 163
+> -- 33
+< -- 1
++ -- 16
+- -- 8
+* -- 102
+:= -- 248
+add.period$ -- 24
+call.type$ -- 8
+change.case$ -- 8
+chr.to.int$ -- 0
+cite$ -- 8
+duplicate$ -- 75
+empty$ -- 190
+format.name$ -- 8
+if$ -- 377
+int.to.chr$ -- 0
+int.to.str$ -- 8
+missing$ -- 6
+newline$ -- 42
+num.names$ -- 7
+pop$ -- 22
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 38
+stack$ -- 0
+substring$ -- 139
+swap$ -- 15
+text.length$ -- 1
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 0
+while$ -- 19
+width$ -- 9
+write$ -- 85
+(There were 2 error messages)

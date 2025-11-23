@@ -1,0 +1,285 @@
+Constraints,Num. vertices,Num. cliques,Min. gates
+Counting,8,0,9.0
+Counting,8,1,9.0
+Counting,8,2,9.0
+Counting,8,3,9.0
+Counting,8,4,9.0
+Counting,8,5,9.0
+Counting,8,6,9.0
+Counting,8,7,9.0
+Counting,8,8,6.0
+Counting,8,9,5.18235
+Counting,8,10,9.0
+Counting,8,11,9.0
+Counting,8,12,9.0
+Counting,8,13,9.0
+Counting,8,14,9.0
+Counting,8,15,9.0
+Counting,8,16,9.0
+Counting,8,17,9.0
+Counting,8,18,9.0
+Counting,8,19,9.0
+Counting,8,20,9.0
+Counting,8,21,9.0
+Counting,8,22,9.0
+Counting,8,23,9.0
+Counting,8,24,9.0
+Counting,8,25,9.0
+Counting,8,26,9.0
+Counting,8,27,9.0
+Counting,8,28,9.0
+Counting,8,29,9.0
+Counting,8,30,9.0
+Counting,8,31,9.0
+Counting,8,32,9.0
+Counting,8,33,9.0
+Counting,8,34,9.0
+Counting,8,35,9.0
+Counting,8,36,9.0
+Counting,8,37,9.0
+Counting,8,38,9.0
+Counting,8,39,9.0
+Counting,8,40,9.0
+Counting,8,41,9.0
+Counting,8,42,9.0
+Counting,8,43,9.0
+Counting,8,44,9.0
+Counting,8,45,8.22567
+Counting,8,46,8.0
+Counting,8,47,8.0
+Counting,8,48,7.97933
+Counting,8,49,9.0
+Counting,8,50,9.0
+Counting,8,51,9.0
+Counting,8,52,9.0
+Counting,8,53,9.0
+Counting,8,54,9.0
+Counting,8,55,9.0
+Counting,8,56,9.0
+Counting,8,57,9.0
+Counting,8,58,9.0
+Counting,8,59,9.0
+Counting,8,60,9.0
+Counting,8,61,9.0
+Counting,8,62,9.0
+Counting,8,63,9.0
+Counting,8,64,9.0
+Counting,8,65,9.0
+Counting,8,66,9.0
+Counting,8,67,9.0
+Counting,8,68,9.0
+Counting,8,69,9.0
+Counting,8,70,1.0
+Counting and small,8,0,1.0
+Counting and small,8,1,9.0
+Counting and small,8,2,9.0
+Counting and small,8,3,9.0
+Counting and small,8,4,9.0
+Counting and small,8,5,9.0
+Counting and small,8,6,9.0
+Counting and small,8,7,9.0
+Counting and small,8,8,6.0
+Counting and small,8,9,5.18235
+Counting and small,8,10,9.0
+Counting and small,8,11,9.0
+Counting and small,8,12,9.0
+Counting and small,8,13,9.0
+Counting and small,8,14,9.0
+Counting and small,8,15,9.0
+Counting and small,8,16,9.0
+Counting and small,8,17,9.0
+Counting and small,8,18,9.0
+Counting and small,8,19,9.0
+Counting and small,8,20,9.0
+Counting and small,8,21,9.0
+Counting and small,8,22,9.0
+Counting and small,8,23,9.0
+Counting and small,8,24,9.0
+Counting and small,8,25,9.0
+Counting and small,8,26,9.0
+Counting and small,8,27,9.0
+Counting and small,8,28,9.0
+Counting and small,8,29,9.0
+Counting and small,8,30,9.0
+Counting and small,8,31,9.0
+Counting and small,8,32,9.0
+Counting and small,8,33,9.0
+Counting and small,8,34,9.0
+Counting and small,8,35,9.0
+Counting and small,8,36,9.0
+Counting and small,8,37,9.0
+Counting and small,8,38,9.0
+Counting and small,8,39,9.0
+Counting and small,8,40,9.0
+Counting and small,8,41,9.0
+Counting and small,8,42,9.0
+Counting and small,8,43,9.0
+Counting and small,8,44,9.0
+Counting and small,8,45,8.22567
+Counting and small,8,46,8.0
+Counting and small,8,47,8.0
+Counting and small,8,48,7.97933
+Counting and small,8,49,9.0
+Counting and small,8,50,9.0
+Counting and small,8,51,9.0
+Counting and small,8,52,9.0
+Counting and small,8,53,9.0
+Counting and small,8,54,9.0
+Counting and small,8,55,9.0
+Counting and small,8,56,9.0
+Counting and small,8,57,9.0
+Counting and small,8,58,9.0
+Counting and small,8,59,9.0
+Counting and small,8,60,9.0
+Counting and small,8,61,9.0
+Counting and small,8,62,9.0
+Counting and small,8,63,9.0
+Counting and small,8,64,9.0
+Counting and small,8,65,9.0
+Counting and small,8,66,9.0
+Counting and small,8,67,9.0
+Counting and small,8,68,9.0
+Counting and small,8,69,9.0
+Counting and small,8,70,2.0
+Counting and large,8,0,9.0
+Counting and large,8,1,9.0
+Counting and large,8,2,9.0
+Counting and large,8,3,9.0
+Counting and large,8,4,9.0
+Counting and large,8,5,9.0
+Counting and large,8,6,9.0
+Counting and large,8,7,9.0
+Counting and large,8,8,6.0
+Counting and large,8,9,5.18235
+Counting and large,8,10,9.0
+Counting and large,8,11,9.0
+Counting and large,8,12,9.0
+Counting and large,8,13,9.0
+Counting and large,8,14,9.0
+Counting and large,8,15,9.0
+Counting and large,8,16,9.0
+Counting and large,8,17,9.0
+Counting and large,8,18,9.0
+Counting and large,8,19,9.0
+Counting and large,8,20,9.0
+Counting and large,8,21,9.0
+Counting and large,8,22,9.0
+Counting and large,8,23,9.0
+Counting and large,8,24,9.0
+Counting and large,8,25,9.0
+Counting and large,8,26,9.0
+Counting and large,8,27,9.0
+Counting and large,8,28,9.0
+Counting and large,8,29,9.0
+Counting and large,8,30,9.0
+Counting and large,8,31,9.0
+Counting and large,8,32,9.0
+Counting and large,8,33,9.0
+Counting and large,8,34,9.0
+Counting and large,8,35,9.0
+Counting and large,8,36,9.0
+Counting and large,8,37,9.0
+Counting and large,8,38,9.0
+Counting and large,8,39,9.0
+Counting and large,8,40,9.0
+Counting and large,8,41,9.0
+Counting and large,8,42,9.0
+Counting and large,8,43,9.0
+Counting and large,8,44,9.0
+Counting and large,8,45,8.22567
+Counting and large,8,46,8.0
+Counting and large,8,47,8.0
+Counting and large,8,48,7.97933
+Counting and large,8,49,9.0
+Counting and large,8,50,9.0
+Counting and large,8,51,9.0
+Counting and large,8,52,9.0
+Counting and large,8,53,9.0
+Counting and large,8,54,9.0
+Counting and large,8,55,9.0
+Counting and large,8,56,9.0
+Counting and large,8,57,9.0
+Counting and large,8,58,9.0
+Counting and large,8,59,9.0
+Counting and large,8,60,9.0
+Counting and large,8,61,9.0
+Counting and large,8,62,9.0
+Counting and large,8,63,9.0
+Counting and large,8,64,9.0
+Counting and large,8,65,9.0
+Counting and large,8,66,9.0
+Counting and large,8,67,9.0
+Counting and large,8,68,9.0
+Counting and large,8,69,9.0
+Counting and large,8,70,1.0
+"Counting, small and large",8,0,1.0
+"Counting, small and large",8,1,9.0
+"Counting, small and large",8,2,9.0
+"Counting, small and large",8,3,9.0
+"Counting, small and large",8,4,9.0
+"Counting, small and large",8,5,9.0
+"Counting, small and large",8,6,9.0
+"Counting, small and large",8,7,9.0
+"Counting, small and large",8,8,6.0
+"Counting, small and large",8,9,5.18235
+"Counting, small and large",8,10,9.0
+"Counting, small and large",8,11,9.0
+"Counting, small and large",8,12,9.0
+"Counting, small and large",8,13,9.0
+"Counting, small and large",8,14,9.0
+"Counting, small and large",8,15,9.0
+"Counting, small and large",8,16,9.0
+"Counting, small and large",8,17,9.0
+"Counting, small and large",8,18,9.0
+"Counting, small and large",8,19,9.0
+"Counting, small and large",8,20,9.0
+"Counting, small and large",8,21,9.0
+"Counting, small and large",8,22,9.0
+"Counting, small and large",8,23,9.0
+"Counting, small and large",8,24,9.0
+"Counting, small and large",8,25,9.0
+"Counting, small and large",8,26,9.0
+"Counting, small and large",8,27,9.0
+"Counting, small and large",8,28,9.0
+"Counting, small and large",8,29,9.0
+"Counting, small and large",8,30,9.0
+"Counting, small and large",8,31,9.0
+"Counting, small and large",8,32,9.0
+"Counting, small and large",8,33,9.0
+"Counting, small and large",8,34,9.0
+"Counting, small and large",8,35,9.0
+"Counting, small and large",8,36,9.0
+"Counting, small and large",8,37,9.0
+"Counting, small and large",8,38,9.0
+"Counting, small and large",8,39,9.0
+"Counting, small and large",8,40,9.0
+"Counting, small and large",8,41,9.0
+"Counting, small and large",8,42,9.0
+"Counting, small and large",8,43,9.0
+"Counting, small and large",8,44,9.0
+"Counting, small and large",8,45,8.22567
+"Counting, small and large",8,46,8.0
+"Counting, small and large",8,47,8.0
+"Counting, small and large",8,48,7.97933
+"Counting, small and large",8,49,9.0
+"Counting, small and large",8,50,9.0
+"Counting, small and large",8,51,9.0
+"Counting, small and large",8,52,9.0
+"Counting, small and large",8,53,9.0
+"Counting, small and large",8,54,9.0
+"Counting, small and large",8,55,9.0
+"Counting, small and large",8,56,9.0
+"Counting, small and large",8,57,9.0
+"Counting, small and large",8,58,9.0
+"Counting, small and large",8,59,9.0
+"Counting, small and large",8,60,9.0
+"Counting, small and large",8,61,9.0
+"Counting, small and large",8,62,9.0
+"Counting, small and large",8,63,9.0
+"Counting, small and large",8,64,9.0
+"Counting, small and large",8,65,9.0
+"Counting, small and large",8,66,9.0
+"Counting, small and large",8,67,9.0
+"Counting, small and large",8,68,9.0
+"Counting, small and large",8,69,9.0
+"Counting, small and large",8,70,2.0

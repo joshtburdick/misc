@@ -1,0 +1,509 @@
+Constraints,Num. vertices,Num. cliques,Min. gates
+Counting,9,0,10.0
+Counting,9,1,14.0
+Counting,9,2,14.0
+Counting,9,3,14.0
+Counting,9,4,14.0
+Counting,9,5,14.0
+Counting,9,6,14.0
+Counting,9,7,14.0
+Counting,9,8,14.0
+Counting,9,9,14.0
+Counting,9,10,14.0
+Counting,9,11,14.0
+Counting,9,12,14.0
+Counting,9,13,14.0
+Counting,9,14,14.0
+Counting,9,15,14.0
+Counting,9,16,14.0
+Counting,9,17,14.0
+Counting,9,18,14.0
+Counting,9,19,14.0
+Counting,9,20,14.0
+Counting,9,21,14.0
+Counting,9,22,14.0
+Counting,9,23,14.0
+Counting,9,24,14.0
+Counting,9,25,14.0
+Counting,9,26,14.0
+Counting,9,27,14.0
+Counting,9,28,14.0
+Counting,9,29,14.0
+Counting,9,30,14.0
+Counting,9,31,14.0
+Counting,9,32,14.0
+Counting,9,33,14.0
+Counting,9,34,14.0
+Counting,9,35,14.0
+Counting,9,36,14.0
+Counting,9,37,14.0
+Counting,9,38,14.0
+Counting,9,39,14.0
+Counting,9,40,14.0
+Counting,9,41,14.0
+Counting,9,42,14.0
+Counting,9,43,14.0
+Counting,9,44,14.0
+Counting,9,45,13.1562
+Counting,9,46,13.0
+Counting,9,47,13.0
+Counting,9,48,12.9982
+Counting,9,49,14.0
+Counting,9,50,14.0
+Counting,9,51,14.0
+Counting,9,52,14.0
+Counting,9,53,14.0
+Counting,9,54,14.0
+Counting,9,55,14.0
+Counting,9,56,14.0
+Counting,9,57,14.0
+Counting,9,58,14.0
+Counting,9,59,14.0
+Counting,9,60,14.0
+Counting,9,61,14.0
+Counting,9,62,14.0
+Counting,9,63,14.0
+Counting,9,64,14.0
+Counting,9,65,14.0
+Counting,9,66,14.0
+Counting,9,67,14.0
+Counting,9,68,14.0
+Counting,9,69,14.0
+Counting,9,70,14.0
+Counting,9,71,14.0
+Counting,9,72,14.0
+Counting,9,73,14.0
+Counting,9,74,14.0
+Counting,9,75,14.0
+Counting,9,76,14.0
+Counting,9,77,14.0
+Counting,9,78,14.0
+Counting,9,79,14.0
+Counting,9,80,14.0
+Counting,9,81,14.0
+Counting,9,82,14.0
+Counting,9,83,14.0
+Counting,9,84,14.0
+Counting,9,85,14.0
+Counting,9,86,14.0
+Counting,9,87,14.0
+Counting,9,88,14.0
+Counting,9,89,14.0
+Counting,9,90,14.0
+Counting,9,91,14.0
+Counting,9,92,14.0
+Counting,9,93,14.0
+Counting,9,94,14.0
+Counting,9,95,14.0
+Counting,9,96,14.0
+Counting,9,97,14.0
+Counting,9,98,14.0
+Counting,9,99,14.0
+Counting,9,100,14.0
+Counting,9,101,14.0
+Counting,9,102,14.0
+Counting,9,103,14.0
+Counting,9,104,14.0
+Counting,9,105,14.0
+Counting,9,106,14.0
+Counting,9,107,14.0
+Counting,9,108,14.0
+Counting,9,109,14.0
+Counting,9,110,14.0
+Counting,9,111,14.0
+Counting,9,112,14.0
+Counting,9,113,14.0
+Counting,9,114,14.0
+Counting,9,115,14.0
+Counting,9,116,14.0
+Counting,9,117,14.0
+Counting,9,118,14.0
+Counting,9,119,14.0
+Counting,9,120,14.0
+Counting,9,121,14.0
+Counting,9,122,14.0
+Counting,9,123,14.0
+Counting,9,124,14.0
+Counting,9,125,14.0
+Counting,9,126,1.0
+Combining,9,0,1.0
+Combining,9,1,14.0
+Combining,9,2,14.0
+Combining,9,3,14.0
+Combining,9,4,10.0
+Combining,9,5,14.0
+Combining,9,6,14.0
+Combining,9,7,14.0
+Combining,9,8,14.0
+Combining,9,9,14.0
+Combining,9,10,14.0
+Combining,9,11,14.0
+Combining,9,12,14.0
+Combining,9,13,14.0
+Combining,9,14,14.0
+Combining,9,15,14.0
+Combining,9,16,14.0
+Combining,9,17,14.0
+Combining,9,18,14.0
+Combining,9,19,14.0
+Combining,9,20,14.0
+Combining,9,21,14.0
+Combining,9,22,14.0
+Combining,9,23,14.0
+Combining,9,24,14.0
+Combining,9,25,14.0
+Combining,9,26,14.0
+Combining,9,27,14.0
+Combining,9,28,14.0
+Combining,9,29,14.0
+Combining,9,30,14.0
+Combining,9,31,14.0
+Combining,9,32,14.0
+Combining,9,33,14.0
+Combining,9,34,14.0
+Combining,9,35,14.0
+Combining,9,36,14.0
+Combining,9,37,14.0
+Combining,9,38,14.0
+Combining,9,39,14.0
+Combining,9,40,14.0
+Combining,9,41,14.0
+Combining,9,42,14.0
+Combining,9,43,14.0
+Combining,9,44,14.0
+Combining,9,45,14.0
+Combining,9,46,14.0
+Combining,9,47,14.0
+Combining,9,48,14.0
+Combining,9,49,10.0
+Combining,9,50,14.0
+Combining,9,51,14.0
+Combining,9,52,14.0
+Combining,9,53,14.0
+Combining,9,54,14.0
+Combining,9,55,14.0
+Combining,9,56,14.0
+Combining,9,57,14.0
+Combining,9,58,14.0
+Combining,9,59,14.0
+Combining,9,60,14.0
+Combining,9,61,14.0
+Combining,9,62,14.0
+Combining,9,63,14.0
+Combining,9,64,14.0
+Combining,9,65,14.0
+Combining,9,66,14.0
+Combining,9,67,14.0
+Combining,9,68,14.0
+Combining,9,69,14.0
+Combining,9,70,14.0
+Combining,9,71,14.0
+Combining,9,72,14.0
+Combining,9,73,14.0
+Combining,9,74,14.0
+Combining,9,75,14.0
+Combining,9,76,14.0
+Combining,9,77,12.0
+Combining,9,78,14.0
+Combining,9,79,14.0
+Combining,9,80,14.0
+Combining,9,81,14.0
+Combining,9,82,14.0
+Combining,9,83,14.0
+Combining,9,84,14.0
+Combining,9,85,14.0
+Combining,9,86,14.0
+Combining,9,87,14.0
+Combining,9,88,14.0
+Combining,9,89,14.0
+Combining,9,90,14.0
+Combining,9,91,14.0
+Combining,9,92,14.0
+Combining,9,93,14.0
+Combining,9,94,14.0
+Combining,9,95,14.0
+Combining,9,96,14.0
+Combining,9,97,14.0
+Combining,9,98,14.0
+Combining,9,99,14.0
+Combining,9,100,14.0
+Combining,9,101,14.0
+Combining,9,102,14.0
+Combining,9,103,14.0
+Combining,9,104,14.0
+Combining,9,105,14.0
+Combining,9,106,14.0
+Combining,9,107,14.0
+Combining,9,108,14.0
+Combining,9,109,14.0
+Combining,9,110,14.0
+Combining,9,111,14.0
+Combining,9,112,14.0
+Combining,9,113,14.0
+Combining,9,114,14.0
+Combining,9,115,14.0
+Combining,9,116,14.0
+Combining,9,117,14.0
+Combining,9,118,14.0
+Combining,9,119,14.0
+Combining,9,120,14.0
+Combining,9,121,14.0
+Combining,9,122,12.0
+Combining,9,123,14.0
+Combining,9,124,14.0
+Combining,9,125,14.0
+Combining,9,126,1.0
+Counting and combining,9,0,3.0
+Counting and combining,9,1,14.0
+Counting and combining,9,2,14.0
+Counting and combining,9,3,14.0
+Counting and combining,9,4,13.4275
+Counting and combining,9,5,14.0
+Counting and combining,9,6,14.0
+Counting and combining,9,7,14.0
+Counting and combining,9,8,14.0
+Counting and combining,9,9,14.0
+Counting and combining,9,10,14.0
+Counting and combining,9,11,14.0
+Counting and combining,9,12,14.0
+Counting and combining,9,13,14.0
+Counting and combining,9,14,14.0
+Counting and combining,9,15,14.0
+Counting and combining,9,16,14.0
+Counting and combining,9,17,14.0
+Counting and combining,9,18,14.0
+Counting and combining,9,19,14.0
+Counting and combining,9,20,14.0
+Counting and combining,9,21,14.0
+Counting and combining,9,22,14.0
+Counting and combining,9,23,14.0
+Counting and combining,9,24,14.0
+Counting and combining,9,25,14.0
+Counting and combining,9,26,14.0
+Counting and combining,9,27,14.0
+Counting and combining,9,28,14.0
+Counting and combining,9,29,14.0
+Counting and combining,9,30,14.0
+Counting and combining,9,31,14.0
+Counting and combining,9,32,14.0
+Counting and combining,9,33,14.0
+Counting and combining,9,34,14.0
+Counting and combining,9,35,14.0
+Counting and combining,9,36,14.0
+Counting and combining,9,37,14.0
+Counting and combining,9,38,14.0
+Counting and combining,9,39,14.0
+Counting and combining,9,40,14.0
+Counting and combining,9,41,14.0
+Counting and combining,9,42,14.0
+Counting and combining,9,43,14.0
+Counting and combining,9,44,14.0
+Counting and combining,9,45,14.0
+Counting and combining,9,46,14.0
+Counting and combining,9,47,14.0
+Counting and combining,9,48,14.0
+Counting and combining,9,49,14.0
+Counting and combining,9,50,14.0
+Counting and combining,9,51,14.0
+Counting and combining,9,52,14.0
+Counting and combining,9,53,14.0
+Counting and combining,9,54,14.0
+Counting and combining,9,55,14.0
+Counting and combining,9,56,14.0
+Counting and combining,9,57,14.0
+Counting and combining,9,58,14.0
+Counting and combining,9,59,14.0
+Counting and combining,9,60,14.0
+Counting and combining,9,61,14.0
+Counting and combining,9,62,14.0
+Counting and combining,9,63,14.0
+Counting and combining,9,64,14.0
+Counting and combining,9,65,14.0
+Counting and combining,9,66,14.0
+Counting and combining,9,67,14.0
+Counting and combining,9,68,13.9114
+Counting and combining,9,69,14.0
+Counting and combining,9,70,14.0
+Counting and combining,9,71,14.0
+Counting and combining,9,72,14.0
+Counting and combining,9,73,14.0
+Counting and combining,9,74,14.0
+Counting and combining,9,75,14.0
+Counting and combining,9,76,14.0
+Counting and combining,9,77,14.0
+Counting and combining,9,78,14.0
+Counting and combining,9,79,14.0
+Counting and combining,9,80,14.0
+Counting and combining,9,81,14.0
+Counting and combining,9,82,14.0
+Counting and combining,9,83,14.0
+Counting and combining,9,84,14.0
+Counting and combining,9,85,14.0
+Counting and combining,9,86,14.0
+Counting and combining,9,87,14.0
+Counting and combining,9,88,14.0
+Counting and combining,9,89,14.0
+Counting and combining,9,90,14.0
+Counting and combining,9,91,14.0
+Counting and combining,9,92,14.0
+Counting and combining,9,93,14.0
+Counting and combining,9,94,14.0
+Counting and combining,9,95,14.0
+Counting and combining,9,96,14.0
+Counting and combining,9,97,14.0
+Counting and combining,9,98,14.0
+Counting and combining,9,99,14.0
+Counting and combining,9,100,14.0
+Counting and combining,9,101,14.0
+Counting and combining,9,102,14.0
+Counting and combining,9,103,14.0
+Counting and combining,9,104,14.0
+Counting and combining,9,105,14.0
+Counting and combining,9,106,14.0
+Counting and combining,9,107,14.0
+Counting and combining,9,108,14.0
+Counting and combining,9,109,14.0
+Counting and combining,9,110,14.0
+Counting and combining,9,111,14.0
+Counting and combining,9,112,14.0
+Counting and combining,9,113,14.0
+Counting and combining,9,114,14.0
+Counting and combining,9,115,14.0
+Counting and combining,9,116,14.0
+Counting and combining,9,117,14.0
+Counting and combining,9,118,14.0
+Counting and combining,9,119,14.0
+Counting and combining,9,120,14.0
+Counting and combining,9,121,14.0
+Counting and combining,9,122,14.0
+Counting and combining,9,123,14.0
+Counting and combining,9,124,14.0
+Counting and combining,9,125,14.0
+Counting and combining,9,126,1.0
+"Counting, combining, and no cliques",9,0,1.0
+"Counting, combining, and no cliques",9,1,14.0
+"Counting, combining, and no cliques",9,2,14.0
+"Counting, combining, and no cliques",9,3,14.0
+"Counting, combining, and no cliques",9,4,13.4275
+"Counting, combining, and no cliques",9,5,14.0
+"Counting, combining, and no cliques",9,6,14.0
+"Counting, combining, and no cliques",9,7,14.0
+"Counting, combining, and no cliques",9,8,14.0
+"Counting, combining, and no cliques",9,9,14.0
+"Counting, combining, and no cliques",9,10,14.0
+"Counting, combining, and no cliques",9,11,14.0
+"Counting, combining, and no cliques",9,12,14.0
+"Counting, combining, and no cliques",9,13,14.0
+"Counting, combining, and no cliques",9,14,14.0
+"Counting, combining, and no cliques",9,15,14.0
+"Counting, combining, and no cliques",9,16,14.0
+"Counting, combining, and no cliques",9,17,14.0
+"Counting, combining, and no cliques",9,18,14.0
+"Counting, combining, and no cliques",9,19,14.0
+"Counting, combining, and no cliques",9,20,14.0
+"Counting, combining, and no cliques",9,21,14.0
+"Counting, combining, and no cliques",9,22,14.0
+"Counting, combining, and no cliques",9,23,14.0
+"Counting, combining, and no cliques",9,24,14.0
+"Counting, combining, and no cliques",9,25,14.0
+"Counting, combining, and no cliques",9,26,14.0
+"Counting, combining, and no cliques",9,27,14.0
+"Counting, combining, and no cliques",9,28,14.0
+"Counting, combining, and no cliques",9,29,14.0
+"Counting, combining, and no cliques",9,30,14.0
+"Counting, combining, and no cliques",9,31,14.0
+"Counting, combining, and no cliques",9,32,14.0
+"Counting, combining, and no cliques",9,33,14.0
+"Counting, combining, and no cliques",9,34,14.0
+"Counting, combining, and no cliques",9,35,14.0
+"Counting, combining, and no cliques",9,36,14.0
+"Counting, combining, and no cliques",9,37,14.0
+"Counting, combining, and no cliques",9,38,14.0
+"Counting, combining, and no cliques",9,39,14.0
+"Counting, combining, and no cliques",9,40,14.0
+"Counting, combining, and no cliques",9,41,14.0
+"Counting, combining, and no cliques",9,42,14.0
+"Counting, combining, and no cliques",9,43,14.0
+"Counting, combining, and no cliques",9,44,14.0
+"Counting, combining, and no cliques",9,45,14.0
+"Counting, combining, and no cliques",9,46,14.0
+"Counting, combining, and no cliques",9,47,14.0
+"Counting, combining, and no cliques",9,48,14.0
+"Counting, combining, and no cliques",9,49,14.0
+"Counting, combining, and no cliques",9,50,14.0
+"Counting, combining, and no cliques",9,51,14.0
+"Counting, combining, and no cliques",9,52,14.0
+"Counting, combining, and no cliques",9,53,14.0
+"Counting, combining, and no cliques",9,54,14.0
+"Counting, combining, and no cliques",9,55,14.0
+"Counting, combining, and no cliques",9,56,14.0
+"Counting, combining, and no cliques",9,57,14.0
+"Counting, combining, and no cliques",9,58,14.0
+"Counting, combining, and no cliques",9,59,14.0
+"Counting, combining, and no cliques",9,60,14.0
+"Counting, combining, and no cliques",9,61,14.0
+"Counting, combining, and no cliques",9,62,14.0
+"Counting, combining, and no cliques",9,63,14.0
+"Counting, combining, and no cliques",9,64,14.0
+"Counting, combining, and no cliques",9,65,14.0
+"Counting, combining, and no cliques",9,66,14.0
+"Counting, combining, and no cliques",9,67,14.0
+"Counting, combining, and no cliques",9,68,13.9114
+"Counting, combining, and no cliques",9,69,14.0
+"Counting, combining, and no cliques",9,70,14.0
+"Counting, combining, and no cliques",9,71,14.0
+"Counting, combining, and no cliques",9,72,14.0
+"Counting, combining, and no cliques",9,73,14.0
+"Counting, combining, and no cliques",9,74,14.0
+"Counting, combining, and no cliques",9,75,14.0
+"Counting, combining, and no cliques",9,76,14.0
+"Counting, combining, and no cliques",9,77,14.0
+"Counting, combining, and no cliques",9,78,14.0
+"Counting, combining, and no cliques",9,79,14.0
+"Counting, combining, and no cliques",9,80,14.0
+"Counting, combining, and no cliques",9,81,14.0
+"Counting, combining, and no cliques",9,82,14.0
+"Counting, combining, and no cliques",9,83,14.0
+"Counting, combining, and no cliques",9,84,14.0
+"Counting, combining, and no cliques",9,85,14.0
+"Counting, combining, and no cliques",9,86,14.0
+"Counting, combining, and no cliques",9,87,14.0
+"Counting, combining, and no cliques",9,88,14.0
+"Counting, combining, and no cliques",9,89,14.0
+"Counting, combining, and no cliques",9,90,14.0
+"Counting, combining, and no cliques",9,91,14.0
+"Counting, combining, and no cliques",9,92,14.0
+"Counting, combining, and no cliques",9,93,14.0
+"Counting, combining, and no cliques",9,94,14.0
+"Counting, combining, and no cliques",9,95,14.0
+"Counting, combining, and no cliques",9,96,14.0
+"Counting, combining, and no cliques",9,97,14.0
+"Counting, combining, and no cliques",9,98,14.0
+"Counting, combining, and no cliques",9,99,14.0
+"Counting, combining, and no cliques",9,100,14.0
+"Counting, combining, and no cliques",9,101,14.0
+"Counting, combining, and no cliques",9,102,14.0
+"Counting, combining, and no cliques",9,103,14.0
+"Counting, combining, and no cliques",9,104,14.0
+"Counting, combining, and no cliques",9,105,14.0
+"Counting, combining, and no cliques",9,106,14.0
+"Counting, combining, and no cliques",9,107,14.0
+"Counting, combining, and no cliques",9,108,14.0
+"Counting, combining, and no cliques",9,109,14.0
+"Counting, combining, and no cliques",9,110,14.0
+"Counting, combining, and no cliques",9,111,14.0
+"Counting, combining, and no cliques",9,112,14.0
+"Counting, combining, and no cliques",9,113,14.0
+"Counting, combining, and no cliques",9,114,14.0
+"Counting, combining, and no cliques",9,115,14.0
+"Counting, combining, and no cliques",9,116,14.0
+"Counting, combining, and no cliques",9,117,14.0
+"Counting, combining, and no cliques",9,118,14.0
+"Counting, combining, and no cliques",9,119,14.0
+"Counting, combining, and no cliques",9,120,14.0
+"Counting, combining, and no cliques",9,121,14.0
+"Counting, combining, and no cliques",9,122,14.0
+"Counting, combining, and no cliques",9,123,14.0
+"Counting, combining, and no cliques",9,124,14.0
+"Counting, combining, and no cliques",9,125,14.0
+"Counting, combining, and no cliques",9,126,2.0

@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: org.apache.commons.math4.legacy.analysis.polynomials.PolynomialsUtilsTest
+-------------------------------------------------------------------------------
+Tests run: 18, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.697 s -- in org.apache.commons.math4.legacy.analysis.polynomials.PolynomialsUtilsTest

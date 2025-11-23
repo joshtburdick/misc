@@ -1,0 +1,4 @@
+read bound.lp
+optimize
+write solution opt.txt
+quit

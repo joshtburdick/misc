@@ -1,0 +1,47 @@
+\begin{thebibliography}{1}
+
+\bibitem{shannon_synthesis_1949}
+Claude~E Shannon.
+\newblock The synthesis of two-terminal switching circuits.
+\newblock {\em Bell System Technical Journal}, 28(1):59--98, 1949.
+
+\bibitem{buggyclique}
+Josh Burdick.
+\newblock How hard is it to detect {\em some} cliques?
+\newblock {\em SIGACT News}, 55(2):38–52, Jun 2024.
+
+\bibitem{quenell1994spectral}
+Gregory Quenell.
+\newblock Spectral diameter estimates for k-regular graphs.
+\newblock {\em Advances in mathematics}, 106(1):122--148, 1994.
+
+\bibitem{wegener1991complexity}
+Ingo Wegener.
+\newblock The complexity of the parity function in unbounded fan-in, unbounded
+  depth circuits.
+\newblock {\em Theoretical computer science}, 85(1):155--170, 1991.
+
+\bibitem{allender1994depth}
+Eric Allender and Ulrich Hertrampf.
+\newblock Depth reduction for circuits of unbounded fan-in.
+\newblock {\em Information and Computation}, 112(2):217--238, 1994.
+
+\bibitem{aaronson_pnp}
+Scott Aaronson.
+\newblock P ?= {NP}.
+\newblock Available online at
+  \href{http://www.scottaaronson.com/papers/pnp.pdf}{{\tt
+  http://www.scottaaronson.com/papers/pnp.pdf}}.
+
+\bibitem{glpk}
+{GNU} {Linear} {Programming} {Kit}.
+\newblock Available online at
+  \href{https://www.gnu.org/software/glpk/}{https://www.gnu.org/software/glpk/}.
+
+\bibitem{goldreich2025counting}
+Oded Goldreich.
+\newblock On counting t-cliques mod 2.
+\newblock In {\em Computational Complexity and Local Algorithms}, pages 44--51.
+  Springer, 2025.
+
+\end{thebibliography}

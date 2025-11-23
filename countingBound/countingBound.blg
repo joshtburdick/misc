@@ -1,0 +1,53 @@
+This is BibTeX, Version 0.99d (TeX Live 2024/Homebrew)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: countingBound.aux
+The style file: unsrt.bst
+Database file #1: references.bib
+I was expecting a `,' or a `}'---line 37 of file references.bib
+ : 
+ : @MISC{Razborov85lowerbounds,
+(Error may have been on previous line)
+I'm skipping whatever remains of this entry
+Warning--can't use both volume and number fields in bollobas1976cliques
+You've used 14 entries,
+            1791 wiz_defined-function locations,
+            539 strings with 5869 characters,
+and the built_in function-call counts, 3523 in all, are:
+= -- 351
+> -- 86
+< -- 8
++ -- 36
+- -- 22
+* -- 184
+:= -- 489
+add.period$ -- 46
+call.type$ -- 14
+change.case$ -- 14
+chr.to.int$ -- 0
+cite$ -- 15
+duplicate$ -- 178
+empty$ -- 382
+format.name$ -- 22
+if$ -- 845
+int.to.chr$ -- 0
+int.to.str$ -- 14
+missing$ -- 10
+newline$ -- 73
+num.names$ -- 14
+pop$ -- 60
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 114
+stack$ -- 0
+substring$ -- 251
+swap$ -- 72
+text.length$ -- 8
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 1
+while$ -- 39
+width$ -- 16
+write$ -- 158
+(There was 1 error message)

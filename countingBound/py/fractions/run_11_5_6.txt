@@ -1,0 +1,17 @@
+GLPSOL--GLPK LP/MIP Solver 5.0
+Parameter(s) specified in the command line:
+ --cpxlp /var/folders/29/7mqqcvmx1ybgwgxtx1cgj9dr0000gn/T/7e029de4f9614e35924814c38e62de06-pulp.lp
+ -o /var/folders/29/7mqqcvmx1ybgwgxtx1cgj9dr0000gn/T/7e029de4f9614e35924814c38e62de06-pulp.sol
+ --exact
+Reading problem data from '/var/folders/29/7mqqcvmx1ybgwgxtx1cgj9dr0000gn/T/7e029de4f9614e35924814c38e62de06-pulp.lp'...
+932 rows, 3241 columns, 8797 non-zeros
+2307 lines were read
+glp_exact: 932 rows, 3241 columns, 8797 non-zeros
+GNU MP bignum library is being used
+      0:   infsum =   1.1908525658863e+139   (463)
+    419:   infsum =   1.1908525658863e+139   (403)
+PROBLEM HAS NO FEASIBLE SOLUTION
+Time used:   0.3 secs
+Memory used: 2.8 Mb (2901324 bytes)
+Writing basic solution to '/var/folders/29/7mqqcvmx1ybgwgxtx1cgj9dr0000gn/T/7e029de4f9614e35924814c38e62de06-pulp.sol'...
+Result r = -1

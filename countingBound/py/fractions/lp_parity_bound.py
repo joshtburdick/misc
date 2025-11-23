@@ -154,7 +154,7 @@ def get_bounds(n, k, max_gates, constraints_label,
     """
     # ??? track resource usage?
     sys.stderr.write(f'[bounding with n={n}, k={k}, max_gates={max_gates}, label={constraints_label}]\n')
-    bound = LpParity(n, k, max_gates)
+    bound = LpParity(n, k)
     if use_counting_bound:
         bound.add_counting_bound()
     if use_step_bound:

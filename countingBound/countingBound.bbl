@@ -1,0 +1,86 @@
+\begin{thebibliography}{10}
+
+\bibitem{shannon_synthesis_1949}
+Claude~E Shannon.
+\newblock The synthesis of two-terminal switching circuits.
+\newblock {\em Bell System Technical Journal}, 28(1):59--98, 1949.
+
+\bibitem{fenner1996complexity}
+Stephen~A Fenner, Lance~J Fortnow, and William~J Gasarch.
+\newblock Complexity theory newsflash.
+\newblock {\em ACM SIGACT News}, 27(3):126, 1996.
+
+\bibitem{iwama2002explicit}
+Kazuo Iwama and Hiroki Morizumi.
+\newblock An explicit lower bound of 5 n- o (n) for boolean circuits.
+\newblock In {\em Mathematical Foundations of Computer Science 2002: 27th
+  International Symposium, MFCS 2002 Warsaw, Poland, August 26--30, 2002
+  Proceedings 27}, pages 353--364. Springer, 2002.
+
+\bibitem{aaronson_pnp}
+Scott Aaronson.
+\newblock P ?= {NP}.
+\newblock Available online at
+  \href{http://www.scottaaronson.com/papers/pnp.pdf}{{\tt
+  http://www.scottaaronson.com/papers/pnp.pdf}}.
+
+\bibitem{subbotovskaya1963comparison}
+Bella~Abramovna Subbotovskaya.
+\newblock Comparison of bases for the realization by formulas of functions of
+  an algebra of logic.
+\newblock In {\em Doklady Akademii Nauk}, volume 149, pages 784--787. Russian
+  Academy of Sciences, 1963.
+
+\bibitem{hastad1987lower}
+Johan H{\aa}stad.
+\newblock Lower bounds for the size of parity circuits, 1987.
+
+\bibitem{rossmanRestrictions}
+Benjamin Rossman.
+\newblock Restriction-based methods.
+\newblock
+  \url{https://simons.berkeley.edu/sites/default/files/docs/10142/restrictionmethods.pdf}.
+\newblock Accessed: {2020–09-02}.
+
+\bibitem{bollobas1976cliques}
+B{\'e}la Bollob{\'a}s and Paul Erd{\H{o}}s.
+\newblock Cliques in random graphs.
+\newblock In {\em Mathematical Proceedings of the Cambridge Philosophical
+  Society}, volume~80, pages 419--427. Cambridge University Press, 1976.
+
+\bibitem{itai_finding_1977}
+Alon Itai and Michael Rodeh.
+\newblock Finding a {Minimum} {Circuit} in a {Graph}.
+\newblock In {\em Proceedings of the {Ninth} {Annual} {ACM} {Symposium} on
+  {Theory} of {Computing}}, {STOC} '77, pages 1--10, New York, NY, USA, 1977.
+  ACM.
+
+\bibitem{strassen_gaussian_1969}
+Volker Strassen.
+\newblock Gaussian elimination is not optimal.
+\newblock {\em Numerische Mathematik}, 13(4):354--356, August 1969.
+
+\bibitem{williams_multiplying_2012}
+Virginia~Vassilevska Williams.
+\newblock Multiplying matrices faster than {Coppersmith-Winograd}.
+\newblock In {\em In {Proc}. 44th {ACM} {Symposium} on {Theory} of
+  {Computation}}, pages 887--898, 2012.
+
+\bibitem{razborov1994natural}
+Alexander~A Razborov and Steven Rudich.
+\newblock Natural proofs.
+\newblock In {\em Proceedings of the twenty-sixth annual ACM symposium on
+  Theory of computing}, pages 204--213, 1994.
+
+\bibitem{r_williams_blog_comment}
+Ryan Williams.
+\newblock Comment on {\em computational complexity} blog, 2007.
+\newblock Accessed on July 8, 2023.
+
+\bibitem{bogdanov2006average}
+Andrej Bogdanov, Luca Trevisan, et~al.
+\newblock Average-case complexity.
+\newblock {\em Foundations and Trends{\textregistered} in Theoretical Computer
+  Science}, 2(1):1--106, 2006.
+
+\end{thebibliography}

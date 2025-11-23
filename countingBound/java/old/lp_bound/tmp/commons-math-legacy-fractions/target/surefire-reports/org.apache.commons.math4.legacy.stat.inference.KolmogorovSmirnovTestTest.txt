@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: org.apache.commons.math4.legacy.stat.inference.KolmogorovSmirnovTestTest
+-------------------------------------------------------------------------------
+Tests run: 34, Failures: 0, Errors: 0, Skipped: 3, Time elapsed: 6.925 s -- in org.apache.commons.math4.legacy.stat.inference.KolmogorovSmirnovTestTest

@@ -1,0 +1,54 @@
+
+Hi! My name is Josh Burdick; I am a programmer, mostly in bioinformatics
+(and a part-time musician). So I don't study complexity "by day".
+However, I was in grad school at Maryland in the late 90's.  Among
+the classes I took was Gasarch's lower bounds class, which piqued
+my interest.
+
+Sometime around 2016, I started thinking about Shannon's function-counting
+argument, and whether it said anything about detecting cliques.
+This led to the set of functions BUGGYCLIQUE: "functions which
+detect some subset of cliques" [1] This showed that detecting, say,
+half of the possible cliques, requires many gates, at least on
+average.  However, it said frustratingly little about detecing _all_
+the cliques...
+
+I have been trying to extend this result to detecting all the
+cliques, by trying to connect the number of cliques a BUGGYCLIQUE
+function detects, with the number of gates it has.
+
+I don't think that I've managed to do this, at least to a publishable
+point. But I have written up my speculations about this [2]. I
+have some questions about it, which I'm hoping seasoned circuit
+complexity thinkers might be able to answer. The questions:
+
+1. My main question: Is the random walk bound (in section 1.3.4)
+correct? The walk is between sets of cliques: the bounds are on how
+much each ``step'' of that walk changes the number of cliques, and
+the number of gates.
+
+Smaller questions:
+
+2. If it _isn't_ correct, can it be tweaked to be something correct,
+and useful? Or, does it have useful ideas?
+
+3. If it is correct, what bound does the associated integer program
+give, for larger input sizes? (The LP relaxation involves really
+large numbers, which seem to require using exact rational arithmetic,
+raising practical problems.)
+
+Although the writeup includes a metaphor involving a martini glass,
+it's not intended as an April Fool's joke (as the calendar attests).
+Whether it should have been may be an open question...
+
+Comments appreciated.
+
+Thanks!  Josh Burdick
+
+
+[1] Burdick J. How hard is it to detect some cliques? ACM SIGACT
+News. 2024 Jun 18;55(2):38-52.  https://doi.org/10.1145/3674159.3674163
+
+[2] "A lower bound from a random walk?" Available online at
+https://github.com/joshtburdick/misc/blob/master/countingBound/bound2/countingBound2_240404.pdf
+

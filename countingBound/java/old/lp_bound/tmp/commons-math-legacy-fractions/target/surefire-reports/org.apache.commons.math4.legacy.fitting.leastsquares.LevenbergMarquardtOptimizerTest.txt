@@ -1,0 +1,12 @@
+-------------------------------------------------------------------------------
+Test set: org.apache.commons.math4.legacy.fitting.leastsquares.LevenbergMarquardtOptimizerTest
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.025 s <<< FAILURE! -- in org.apache.commons.math4.legacy.fitting.leastsquares.LevenbergMarquardtOptimizerTest
+org.apache.commons.math4.legacy.fitting.leastsquares.LevenbergMarquardtOptimizerTest.testCircleFitting2 -- Time elapsed: 0.024 s <<< FAILURE!
+java.lang.AssertionError: Delta=9.487221260271136 expected:<654.321> but was:<634.8987527686611>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:555)
+	at org.apache.commons.math4.legacy.fitting.leastsquares.LevenbergMarquardtOptimizerTest.testCircleFitting2(LevenbergMarquardtOptimizerTest.java:272)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+

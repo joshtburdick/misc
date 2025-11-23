@@ -1,0 +1,3701 @@
+Constraints,Num. vertices,Num. cliques,Min. gates
+Counting,12,0,10.0
+Counting,12,1,76.0
+Counting,12,2,76.0
+Counting,12,3,76.0
+Counting,12,4,76.0
+Counting,12,5,76.0
+Counting,12,6,76.0
+Counting,12,7,76.0
+Counting,12,8,76.0
+Counting,12,9,76.0
+Counting,12,10,76.0
+Counting,12,11,76.0
+Counting,12,12,76.0
+Counting,12,13,76.0
+Counting,12,14,76.0
+Counting,12,15,76.0
+Counting,12,16,76.0
+Counting,12,17,76.0
+Counting,12,18,76.0
+Counting,12,19,76.0
+Counting,12,20,76.0
+Counting,12,21,76.0
+Counting,12,22,76.0
+Counting,12,23,76.0
+Counting,12,24,76.0
+Counting,12,25,76.0
+Counting,12,26,76.0
+Counting,12,27,76.0
+Counting,12,28,76.0
+Counting,12,29,76.0
+Counting,12,30,76.0
+Counting,12,31,76.0
+Counting,12,32,76.0
+Counting,12,33,76.0
+Counting,12,34,76.0
+Counting,12,35,76.0
+Counting,12,36,76.0
+Counting,12,37,76.0
+Counting,12,38,76.0
+Counting,12,39,76.0
+Counting,12,40,76.0
+Counting,12,41,76.0
+Counting,12,42,76.0
+Counting,12,43,76.0
+Counting,12,44,76.0
+Counting,12,45,76.0
+Counting,12,46,76.0
+Counting,12,47,76.0
+Counting,12,48,76.0
+Counting,12,49,76.0
+Counting,12,50,76.0
+Counting,12,51,76.0
+Counting,12,52,76.0
+Counting,12,53,76.0
+Counting,12,54,76.0
+Counting,12,55,76.0
+Counting,12,56,76.0
+Counting,12,57,76.0
+Counting,12,58,76.0
+Counting,12,59,76.0
+Counting,12,60,76.0
+Counting,12,61,76.0
+Counting,12,62,76.0
+Counting,12,63,76.0
+Counting,12,64,76.0
+Counting,12,65,76.0
+Counting,12,66,76.0
+Counting,12,67,76.0
+Counting,12,68,76.0
+Counting,12,69,76.0
+Counting,12,70,76.0
+Counting,12,71,76.0
+Counting,12,72,76.0
+Counting,12,73,76.0
+Counting,12,74,76.0
+Counting,12,75,76.0
+Counting,12,76,76.0
+Counting,12,77,76.0
+Counting,12,78,76.0
+Counting,12,79,76.0
+Counting,12,80,76.0
+Counting,12,81,76.0
+Counting,12,82,76.0
+Counting,12,83,76.0
+Counting,12,84,76.0
+Counting,12,85,76.0
+Counting,12,86,76.0
+Counting,12,87,76.0
+Counting,12,88,76.0
+Counting,12,89,76.0
+Counting,12,90,76.0
+Counting,12,91,76.0
+Counting,12,92,76.0
+Counting,12,93,76.0
+Counting,12,94,76.0
+Counting,12,95,76.0
+Counting,12,96,40.0
+Counting,12,97,40.0
+Counting,12,98,39.1091889741185
+Counting,12,99,38.9997972566802
+Counting,12,100,76.0
+Counting,12,101,76.0
+Counting,12,102,76.0
+Counting,12,103,76.0
+Counting,12,104,76.0
+Counting,12,105,76.0
+Counting,12,106,76.0
+Counting,12,107,76.0
+Counting,12,108,76.0
+Counting,12,109,76.0
+Counting,12,110,76.0
+Counting,12,111,76.0
+Counting,12,112,76.0
+Counting,12,113,76.0
+Counting,12,114,76.0
+Counting,12,115,76.0
+Counting,12,116,76.0
+Counting,12,117,76.0
+Counting,12,118,76.0
+Counting,12,119,76.0
+Counting,12,120,76.0
+Counting,12,121,76.0
+Counting,12,122,76.0
+Counting,12,123,76.0
+Counting,12,124,76.0
+Counting,12,125,76.0
+Counting,12,126,76.0
+Counting,12,127,76.0
+Counting,12,128,76.0
+Counting,12,129,76.0
+Counting,12,130,76.0
+Counting,12,131,76.0
+Counting,12,132,76.0
+Counting,12,133,76.0
+Counting,12,134,76.0
+Counting,12,135,76.0
+Counting,12,136,76.0
+Counting,12,137,76.0
+Counting,12,138,76.0
+Counting,12,139,76.0
+Counting,12,140,76.0
+Counting,12,141,76.0
+Counting,12,142,76.0
+Counting,12,143,76.0
+Counting,12,144,76.0
+Counting,12,145,76.0
+Counting,12,146,76.0
+Counting,12,147,76.0
+Counting,12,148,76.0
+Counting,12,149,76.0
+Counting,12,150,76.0
+Counting,12,151,76.0
+Counting,12,152,76.0
+Counting,12,153,76.0
+Counting,12,154,76.0
+Counting,12,155,76.0
+Counting,12,156,76.0
+Counting,12,157,76.0
+Counting,12,158,76.0
+Counting,12,159,76.0
+Counting,12,160,76.0
+Counting,12,161,76.0
+Counting,12,162,76.0
+Counting,12,163,76.0
+Counting,12,164,76.0
+Counting,12,165,76.0
+Counting,12,166,76.0
+Counting,12,167,76.0
+Counting,12,168,76.0
+Counting,12,169,76.0
+Counting,12,170,76.0
+Counting,12,171,76.0
+Counting,12,172,76.0
+Counting,12,173,76.0
+Counting,12,174,76.0
+Counting,12,175,76.0
+Counting,12,176,76.0
+Counting,12,177,76.0
+Counting,12,178,76.0
+Counting,12,179,76.0
+Counting,12,180,76.0
+Counting,12,181,76.0
+Counting,12,182,76.0
+Counting,12,183,76.0
+Counting,12,184,76.0
+Counting,12,185,76.0
+Counting,12,186,76.0
+Counting,12,187,76.0
+Counting,12,188,76.0
+Counting,12,189,76.0
+Counting,12,190,76.0
+Counting,12,191,76.0
+Counting,12,192,76.0
+Counting,12,193,76.0
+Counting,12,194,76.0
+Counting,12,195,76.0
+Counting,12,196,76.0
+Counting,12,197,76.0
+Counting,12,198,76.0
+Counting,12,199,76.0
+Counting,12,200,76.0
+Counting,12,201,76.0
+Counting,12,202,76.0
+Counting,12,203,76.0
+Counting,12,204,76.0
+Counting,12,205,76.0
+Counting,12,206,76.0
+Counting,12,207,76.0
+Counting,12,208,76.0
+Counting,12,209,76.0
+Counting,12,210,76.0
+Counting,12,211,76.0
+Counting,12,212,76.0
+Counting,12,213,76.0
+Counting,12,214,76.0
+Counting,12,215,76.0
+Counting,12,216,76.0
+Counting,12,217,76.0
+Counting,12,218,76.0
+Counting,12,219,76.0
+Counting,12,220,76.0
+Counting,12,221,76.0
+Counting,12,222,76.0
+Counting,12,223,76.0
+Counting,12,224,76.0
+Counting,12,225,76.0
+Counting,12,226,76.0
+Counting,12,227,76.0
+Counting,12,228,76.0
+Counting,12,229,76.0
+Counting,12,230,76.0
+Counting,12,231,76.0
+Counting,12,232,76.0
+Counting,12,233,76.0
+Counting,12,234,76.0
+Counting,12,235,76.0
+Counting,12,236,76.0
+Counting,12,237,76.0
+Counting,12,238,76.0
+Counting,12,239,76.0
+Counting,12,240,76.0
+Counting,12,241,76.0
+Counting,12,242,76.0
+Counting,12,243,76.0
+Counting,12,244,76.0
+Counting,12,245,76.0
+Counting,12,246,76.0
+Counting,12,247,76.0
+Counting,12,248,76.0
+Counting,12,249,76.0
+Counting,12,250,76.0
+Counting,12,251,76.0
+Counting,12,252,76.0
+Counting,12,253,76.0
+Counting,12,254,76.0
+Counting,12,255,76.0
+Counting,12,256,76.0
+Counting,12,257,76.0
+Counting,12,258,76.0
+Counting,12,259,76.0
+Counting,12,260,76.0
+Counting,12,261,76.0
+Counting,12,262,76.0
+Counting,12,263,76.0
+Counting,12,264,76.0
+Counting,12,265,76.0
+Counting,12,266,76.0
+Counting,12,267,76.0
+Counting,12,268,76.0
+Counting,12,269,76.0
+Counting,12,270,76.0
+Counting,12,271,76.0
+Counting,12,272,76.0
+Counting,12,273,76.0
+Counting,12,274,76.0
+Counting,12,275,76.0
+Counting,12,276,76.0
+Counting,12,277,76.0
+Counting,12,278,76.0
+Counting,12,279,76.0
+Counting,12,280,76.0
+Counting,12,281,76.0
+Counting,12,282,76.0
+Counting,12,283,76.0
+Counting,12,284,76.0
+Counting,12,285,76.0
+Counting,12,286,76.0
+Counting,12,287,76.0
+Counting,12,288,76.0
+Counting,12,289,76.0
+Counting,12,290,76.0
+Counting,12,291,76.0
+Counting,12,292,76.0
+Counting,12,293,76.0
+Counting,12,294,76.0
+Counting,12,295,76.0
+Counting,12,296,76.0
+Counting,12,297,76.0
+Counting,12,298,76.0
+Counting,12,299,76.0
+Counting,12,300,76.0
+Counting,12,301,76.0
+Counting,12,302,76.0
+Counting,12,303,76.0
+Counting,12,304,76.0
+Counting,12,305,76.0
+Counting,12,306,76.0
+Counting,12,307,76.0
+Counting,12,308,76.0
+Counting,12,309,76.0
+Counting,12,310,76.0
+Counting,12,311,76.0
+Counting,12,312,76.0
+Counting,12,313,76.0
+Counting,12,314,76.0
+Counting,12,315,76.0
+Counting,12,316,76.0
+Counting,12,317,76.0
+Counting,12,318,76.0
+Counting,12,319,76.0
+Counting,12,320,76.0
+Counting,12,321,76.0
+Counting,12,322,76.0
+Counting,12,323,76.0
+Counting,12,324,76.0
+Counting,12,325,76.0
+Counting,12,326,76.0
+Counting,12,327,76.0
+Counting,12,328,76.0
+Counting,12,329,76.0
+Counting,12,330,76.0
+Counting,12,331,76.0
+Counting,12,332,76.0
+Counting,12,333,76.0
+Counting,12,334,76.0
+Counting,12,335,76.0
+Counting,12,336,76.0
+Counting,12,337,76.0
+Counting,12,338,76.0
+Counting,12,339,76.0
+Counting,12,340,76.0
+Counting,12,341,76.0
+Counting,12,342,76.0
+Counting,12,343,76.0
+Counting,12,344,76.0
+Counting,12,345,76.0
+Counting,12,346,76.0
+Counting,12,347,76.0
+Counting,12,348,76.0
+Counting,12,349,76.0
+Counting,12,350,76.0
+Counting,12,351,76.0
+Counting,12,352,76.0
+Counting,12,353,76.0
+Counting,12,354,76.0
+Counting,12,355,76.0
+Counting,12,356,76.0
+Counting,12,357,76.0
+Counting,12,358,76.0
+Counting,12,359,76.0
+Counting,12,360,76.0
+Counting,12,361,76.0
+Counting,12,362,76.0
+Counting,12,363,76.0
+Counting,12,364,76.0
+Counting,12,365,76.0
+Counting,12,366,76.0
+Counting,12,367,76.0
+Counting,12,368,76.0
+Counting,12,369,76.0
+Counting,12,370,76.0
+Counting,12,371,76.0
+Counting,12,372,76.0
+Counting,12,373,76.0
+Counting,12,374,76.0
+Counting,12,375,76.0
+Counting,12,376,76.0
+Counting,12,377,76.0
+Counting,12,378,76.0
+Counting,12,379,76.0
+Counting,12,380,76.0
+Counting,12,381,76.0
+Counting,12,382,76.0
+Counting,12,383,76.0
+Counting,12,384,76.0
+Counting,12,385,76.0
+Counting,12,386,76.0
+Counting,12,387,76.0
+Counting,12,388,76.0
+Counting,12,389,76.0
+Counting,12,390,76.0
+Counting,12,391,76.0
+Counting,12,392,76.0
+Counting,12,393,76.0
+Counting,12,394,76.0
+Counting,12,395,76.0
+Counting,12,396,76.0
+Counting,12,397,76.0
+Counting,12,398,76.0
+Counting,12,399,76.0
+Counting,12,400,76.0
+Counting,12,401,76.0
+Counting,12,402,76.0
+Counting,12,403,76.0
+Counting,12,404,76.0
+Counting,12,405,76.0
+Counting,12,406,76.0
+Counting,12,407,76.0
+Counting,12,408,76.0
+Counting,12,409,76.0
+Counting,12,410,76.0
+Counting,12,411,76.0
+Counting,12,412,76.0
+Counting,12,413,76.0
+Counting,12,414,76.0
+Counting,12,415,76.0
+Counting,12,416,76.0
+Counting,12,417,76.0
+Counting,12,418,76.0
+Counting,12,419,76.0
+Counting,12,420,76.0
+Counting,12,421,76.0
+Counting,12,422,76.0
+Counting,12,423,76.0
+Counting,12,424,76.0
+Counting,12,425,76.0
+Counting,12,426,76.0
+Counting,12,427,76.0
+Counting,12,428,76.0
+Counting,12,429,76.0
+Counting,12,430,76.0
+Counting,12,431,76.0
+Counting,12,432,76.0
+Counting,12,433,76.0
+Counting,12,434,76.0
+Counting,12,435,76.0
+Counting,12,436,76.0
+Counting,12,437,76.0
+Counting,12,438,76.0
+Counting,12,439,76.0
+Counting,12,440,76.0
+Counting,12,441,76.0
+Counting,12,442,76.0
+Counting,12,443,76.0
+Counting,12,444,76.0
+Counting,12,445,76.0
+Counting,12,446,76.0
+Counting,12,447,76.0
+Counting,12,448,76.0
+Counting,12,449,76.0
+Counting,12,450,76.0
+Counting,12,451,76.0
+Counting,12,452,76.0
+Counting,12,453,76.0
+Counting,12,454,76.0
+Counting,12,455,76.0
+Counting,12,456,76.0
+Counting,12,457,76.0
+Counting,12,458,76.0
+Counting,12,459,76.0
+Counting,12,460,76.0
+Counting,12,461,76.0
+Counting,12,462,76.0
+Counting,12,463,76.0
+Counting,12,464,76.0
+Counting,12,465,76.0
+Counting,12,466,76.0
+Counting,12,467,76.0
+Counting,12,468,76.0
+Counting,12,469,76.0
+Counting,12,470,76.0
+Counting,12,471,76.0
+Counting,12,472,76.0
+Counting,12,473,76.0
+Counting,12,474,76.0
+Counting,12,475,76.0
+Counting,12,476,76.0
+Counting,12,477,76.0
+Counting,12,478,76.0
+Counting,12,479,76.0
+Counting,12,480,76.0
+Counting,12,481,76.0
+Counting,12,482,76.0
+Counting,12,483,76.0
+Counting,12,484,76.0
+Counting,12,485,76.0
+Counting,12,486,76.0
+Counting,12,487,76.0
+Counting,12,488,76.0
+Counting,12,489,76.0
+Counting,12,490,76.0
+Counting,12,491,76.0
+Counting,12,492,76.0
+Counting,12,493,76.0
+Counting,12,494,76.0
+Counting,12,495,76.0
+Counting,12,496,76.0
+Counting,12,497,76.0
+Counting,12,498,75.6973249505971
+Counting,12,499,76.0
+Counting,12,500,76.0
+Counting,12,501,76.0
+Counting,12,502,76.0
+Counting,12,503,76.0
+Counting,12,504,76.0
+Counting,12,505,76.0
+Counting,12,506,76.0
+Counting,12,507,76.0
+Counting,12,508,76.0
+Counting,12,509,76.0
+Counting,12,510,76.0
+Counting,12,511,76.0
+Counting,12,512,76.0
+Counting,12,513,76.0
+Counting,12,514,76.0
+Counting,12,515,76.0
+Counting,12,516,76.0
+Counting,12,517,76.0
+Counting,12,518,76.0
+Counting,12,519,76.0
+Counting,12,520,76.0
+Counting,12,521,76.0
+Counting,12,522,76.0
+Counting,12,523,76.0
+Counting,12,524,76.0
+Counting,12,525,76.0
+Counting,12,526,76.0
+Counting,12,527,76.0
+Counting,12,528,76.0
+Counting,12,529,76.0
+Counting,12,530,76.0
+Counting,12,531,76.0
+Counting,12,532,76.0
+Counting,12,533,76.0
+Counting,12,534,76.0
+Counting,12,535,76.0
+Counting,12,536,76.0
+Counting,12,537,76.0
+Counting,12,538,76.0
+Counting,12,539,76.0
+Counting,12,540,76.0
+Counting,12,541,76.0
+Counting,12,542,76.0
+Counting,12,543,76.0
+Counting,12,544,76.0
+Counting,12,545,76.0
+Counting,12,546,76.0
+Counting,12,547,76.0
+Counting,12,548,76.0
+Counting,12,549,76.0
+Counting,12,550,76.0
+Counting,12,551,76.0
+Counting,12,552,76.0
+Counting,12,553,76.0
+Counting,12,554,76.0
+Counting,12,555,76.0
+Counting,12,556,76.0
+Counting,12,557,76.0
+Counting,12,558,76.0
+Counting,12,559,76.0
+Counting,12,560,76.0
+Counting,12,561,76.0
+Counting,12,562,76.0
+Counting,12,563,76.0
+Counting,12,564,76.0
+Counting,12,565,76.0
+Counting,12,566,76.0
+Counting,12,567,76.0
+Counting,12,568,76.0
+Counting,12,569,76.0
+Counting,12,570,76.0
+Counting,12,571,76.0
+Counting,12,572,76.0
+Counting,12,573,76.0
+Counting,12,574,76.0
+Counting,12,575,76.0
+Counting,12,576,76.0
+Counting,12,577,76.0
+Counting,12,578,76.0
+Counting,12,579,76.0
+Counting,12,580,76.0
+Counting,12,581,76.0
+Counting,12,582,76.0
+Counting,12,583,76.0
+Counting,12,584,76.0
+Counting,12,585,76.0
+Counting,12,586,76.0
+Counting,12,587,76.0
+Counting,12,588,76.0
+Counting,12,589,76.0
+Counting,12,590,76.0
+Counting,12,591,76.0
+Counting,12,592,76.0
+Counting,12,593,76.0
+Counting,12,594,76.0
+Counting,12,595,76.0
+Counting,12,596,76.0
+Counting,12,597,76.0
+Counting,12,598,76.0
+Counting,12,599,76.0
+Counting,12,600,76.0
+Counting,12,601,76.0
+Counting,12,602,76.0
+Counting,12,603,76.0
+Counting,12,604,76.0
+Counting,12,605,76.0
+Counting,12,606,76.0
+Counting,12,607,76.0
+Counting,12,608,76.0
+Counting,12,609,76.0
+Counting,12,610,76.0
+Counting,12,611,76.0
+Counting,12,612,76.0
+Counting,12,613,76.0
+Counting,12,614,76.0
+Counting,12,615,76.0
+Counting,12,616,76.0
+Counting,12,617,76.0
+Counting,12,618,76.0
+Counting,12,619,76.0
+Counting,12,620,76.0
+Counting,12,621,76.0
+Counting,12,622,76.0
+Counting,12,623,76.0
+Counting,12,624,76.0
+Counting,12,625,76.0
+Counting,12,626,76.0
+Counting,12,627,76.0
+Counting,12,628,76.0
+Counting,12,629,76.0
+Counting,12,630,76.0
+Counting,12,631,76.0
+Counting,12,632,76.0
+Counting,12,633,76.0
+Counting,12,634,76.0
+Counting,12,635,76.0
+Counting,12,636,76.0
+Counting,12,637,76.0
+Counting,12,638,76.0
+Counting,12,639,76.0
+Counting,12,640,76.0
+Counting,12,641,76.0
+Counting,12,642,76.0
+Counting,12,643,76.0
+Counting,12,644,76.0
+Counting,12,645,76.0
+Counting,12,646,76.0
+Counting,12,647,76.0
+Counting,12,648,76.0
+Counting,12,649,76.0
+Counting,12,650,76.0
+Counting,12,651,76.0
+Counting,12,652,76.0
+Counting,12,653,76.0
+Counting,12,654,76.0
+Counting,12,655,76.0
+Counting,12,656,76.0
+Counting,12,657,76.0
+Counting,12,658,76.0
+Counting,12,659,76.0
+Counting,12,660,76.0
+Counting,12,661,76.0
+Counting,12,662,76.0
+Counting,12,663,76.0
+Counting,12,664,76.0
+Counting,12,665,76.0
+Counting,12,666,76.0
+Counting,12,667,76.0
+Counting,12,668,76.0
+Counting,12,669,76.0
+Counting,12,670,76.0
+Counting,12,671,76.0
+Counting,12,672,76.0
+Counting,12,673,76.0
+Counting,12,674,76.0
+Counting,12,675,76.0
+Counting,12,676,76.0
+Counting,12,677,76.0
+Counting,12,678,76.0
+Counting,12,679,76.0
+Counting,12,680,76.0
+Counting,12,681,76.0
+Counting,12,682,76.0
+Counting,12,683,76.0
+Counting,12,684,76.0
+Counting,12,685,76.0
+Counting,12,686,76.0
+Counting,12,687,76.0
+Counting,12,688,76.0
+Counting,12,689,76.0
+Counting,12,690,76.0
+Counting,12,691,76.0
+Counting,12,692,76.0
+Counting,12,693,76.0
+Counting,12,694,76.0
+Counting,12,695,76.0
+Counting,12,696,76.0
+Counting,12,697,76.0
+Counting,12,698,76.0
+Counting,12,699,76.0
+Counting,12,700,76.0
+Counting,12,701,76.0
+Counting,12,702,76.0
+Counting,12,703,76.0
+Counting,12,704,76.0
+Counting,12,705,76.0
+Counting,12,706,76.0
+Counting,12,707,76.0
+Counting,12,708,76.0
+Counting,12,709,76.0
+Counting,12,710,76.0
+Counting,12,711,76.0
+Counting,12,712,76.0
+Counting,12,713,76.0
+Counting,12,714,76.0
+Counting,12,715,76.0
+Counting,12,716,76.0
+Counting,12,717,76.0
+Counting,12,718,76.0
+Counting,12,719,76.0
+Counting,12,720,76.0
+Counting,12,721,76.0
+Counting,12,722,76.0
+Counting,12,723,76.0
+Counting,12,724,76.0
+Counting,12,725,76.0
+Counting,12,726,76.0
+Counting,12,727,76.0
+Counting,12,728,76.0
+Counting,12,729,76.0
+Counting,12,730,76.0
+Counting,12,731,76.0
+Counting,12,732,76.0
+Counting,12,733,76.0
+Counting,12,734,76.0
+Counting,12,735,76.0
+Counting,12,736,76.0
+Counting,12,737,76.0
+Counting,12,738,76.0
+Counting,12,739,76.0
+Counting,12,740,76.0
+Counting,12,741,76.0
+Counting,12,742,76.0
+Counting,12,743,76.0
+Counting,12,744,76.0
+Counting,12,745,76.0
+Counting,12,746,76.0
+Counting,12,747,76.0
+Counting,12,748,76.0
+Counting,12,749,76.0
+Counting,12,750,76.0
+Counting,12,751,76.0
+Counting,12,752,76.0
+Counting,12,753,76.0
+Counting,12,754,76.0
+Counting,12,755,76.0
+Counting,12,756,76.0
+Counting,12,757,76.0
+Counting,12,758,76.0
+Counting,12,759,76.0
+Counting,12,760,76.0
+Counting,12,761,76.0
+Counting,12,762,76.0
+Counting,12,763,76.0
+Counting,12,764,76.0
+Counting,12,765,76.0
+Counting,12,766,76.0
+Counting,12,767,76.0
+Counting,12,768,76.0
+Counting,12,769,76.0
+Counting,12,770,76.0
+Counting,12,771,76.0
+Counting,12,772,76.0
+Counting,12,773,76.0
+Counting,12,774,76.0
+Counting,12,775,76.0
+Counting,12,776,76.0
+Counting,12,777,76.0
+Counting,12,778,76.0
+Counting,12,779,76.0
+Counting,12,780,76.0
+Counting,12,781,76.0
+Counting,12,782,76.0
+Counting,12,783,76.0
+Counting,12,784,76.0
+Counting,12,785,76.0
+Counting,12,786,76.0
+Counting,12,787,76.0
+Counting,12,788,76.0
+Counting,12,789,76.0
+Counting,12,790,76.0
+Counting,12,791,76.0
+Counting,12,792,76.0
+Counting,12,793,76.0
+Counting,12,794,76.0
+Counting,12,795,76.0
+Counting,12,796,76.0
+Counting,12,797,76.0
+Counting,12,798,76.0
+Counting,12,799,76.0
+Counting,12,800,76.0
+Counting,12,801,76.0
+Counting,12,802,76.0
+Counting,12,803,76.0
+Counting,12,804,76.0
+Counting,12,805,76.0
+Counting,12,806,76.0
+Counting,12,807,76.0
+Counting,12,808,76.0
+Counting,12,809,76.0
+Counting,12,810,76.0
+Counting,12,811,76.0
+Counting,12,812,76.0
+Counting,12,813,76.0
+Counting,12,814,76.0
+Counting,12,815,76.0
+Counting,12,816,76.0
+Counting,12,817,76.0
+Counting,12,818,76.0
+Counting,12,819,76.0
+Counting,12,820,76.0
+Counting,12,821,76.0
+Counting,12,822,76.0
+Counting,12,823,76.0
+Counting,12,824,76.0
+Counting,12,825,76.0
+Counting,12,826,76.0
+Counting,12,827,76.0
+Counting,12,828,76.0
+Counting,12,829,76.0
+Counting,12,830,76.0
+Counting,12,831,76.0
+Counting,12,832,76.0
+Counting,12,833,76.0
+Counting,12,834,76.0
+Counting,12,835,76.0
+Counting,12,836,76.0
+Counting,12,837,76.0
+Counting,12,838,76.0
+Counting,12,839,76.0
+Counting,12,840,76.0
+Counting,12,841,76.0
+Counting,12,842,76.0
+Counting,12,843,76.0
+Counting,12,844,76.0
+Counting,12,845,76.0
+Counting,12,846,76.0
+Counting,12,847,76.0
+Counting,12,848,76.0
+Counting,12,849,76.0
+Counting,12,850,76.0
+Counting,12,851,76.0
+Counting,12,852,76.0
+Counting,12,853,76.0
+Counting,12,854,76.0
+Counting,12,855,76.0
+Counting,12,856,76.0
+Counting,12,857,76.0
+Counting,12,858,76.0
+Counting,12,859,76.0
+Counting,12,860,76.0
+Counting,12,861,76.0
+Counting,12,862,76.0
+Counting,12,863,76.0
+Counting,12,864,76.0
+Counting,12,865,76.0
+Counting,12,866,76.0
+Counting,12,867,76.0
+Counting,12,868,76.0
+Counting,12,869,76.0
+Counting,12,870,76.0
+Counting,12,871,76.0
+Counting,12,872,76.0
+Counting,12,873,76.0
+Counting,12,874,76.0
+Counting,12,875,76.0
+Counting,12,876,76.0
+Counting,12,877,76.0
+Counting,12,878,76.0
+Counting,12,879,76.0
+Counting,12,880,76.0
+Counting,12,881,76.0
+Counting,12,882,76.0
+Counting,12,883,76.0
+Counting,12,884,76.0
+Counting,12,885,76.0
+Counting,12,886,76.0
+Counting,12,887,76.0
+Counting,12,888,76.0
+Counting,12,889,76.0
+Counting,12,890,76.0
+Counting,12,891,76.0
+Counting,12,892,76.0
+Counting,12,893,76.0
+Counting,12,894,76.0
+Counting,12,895,76.0
+Counting,12,896,76.0
+Counting,12,897,76.0
+Counting,12,898,76.0
+Counting,12,899,76.0
+Counting,12,900,76.0
+Counting,12,901,76.0
+Counting,12,902,76.0
+Counting,12,903,76.0
+Counting,12,904,76.0
+Counting,12,905,76.0
+Counting,12,906,76.0
+Counting,12,907,76.0
+Counting,12,908,76.0
+Counting,12,909,76.0
+Counting,12,910,76.0
+Counting,12,911,76.0
+Counting,12,912,76.0
+Counting,12,913,76.0
+Counting,12,914,76.0
+Counting,12,915,76.0
+Counting,12,916,76.0
+Counting,12,917,76.0
+Counting,12,918,76.0
+Counting,12,919,76.0
+Counting,12,920,76.0
+Counting,12,921,76.0
+Counting,12,922,76.0
+Counting,12,923,76.0
+Counting,12,924,1.0
+Counting and small,12,0,1.0
+Counting and small,12,1,28.0
+Counting and small,12,2,60.0
+Counting and small,12,3,76.0
+Counting and small,12,4,76.0
+Counting and small,12,5,76.0
+Counting and small,12,6,76.0
+Counting and small,12,7,76.0
+Counting and small,12,8,76.0
+Counting and small,12,9,76.0
+Counting and small,12,10,76.0
+Counting and small,12,11,76.0
+Counting and small,12,12,76.0
+Counting and small,12,13,76.0
+Counting and small,12,14,76.0
+Counting and small,12,15,76.0
+Counting and small,12,16,76.0
+Counting and small,12,17,76.0
+Counting and small,12,18,76.0
+Counting and small,12,19,76.0
+Counting and small,12,20,76.0
+Counting and small,12,21,76.0
+Counting and small,12,22,76.0
+Counting and small,12,23,76.0
+Counting and small,12,24,76.0
+Counting and small,12,25,76.0
+Counting and small,12,26,76.0
+Counting and small,12,27,76.0
+Counting and small,12,28,76.0
+Counting and small,12,29,76.0
+Counting and small,12,30,76.0
+Counting and small,12,31,76.0
+Counting and small,12,32,76.0
+Counting and small,12,33,76.0
+Counting and small,12,34,76.0
+Counting and small,12,35,76.0
+Counting and small,12,36,76.0
+Counting and small,12,37,76.0
+Counting and small,12,38,76.0
+Counting and small,12,39,76.0
+Counting and small,12,40,76.0
+Counting and small,12,41,76.0
+Counting and small,12,42,76.0
+Counting and small,12,43,76.0
+Counting and small,12,44,76.0
+Counting and small,12,45,76.0
+Counting and small,12,46,76.0
+Counting and small,12,47,76.0
+Counting and small,12,48,76.0
+Counting and small,12,49,76.0
+Counting and small,12,50,76.0
+Counting and small,12,51,76.0
+Counting and small,12,52,76.0
+Counting and small,12,53,76.0
+Counting and small,12,54,76.0
+Counting and small,12,55,76.0
+Counting and small,12,56,76.0
+Counting and small,12,57,76.0
+Counting and small,12,58,76.0
+Counting and small,12,59,76.0
+Counting and small,12,60,76.0
+Counting and small,12,61,76.0
+Counting and small,12,62,76.0
+Counting and small,12,63,76.0
+Counting and small,12,64,76.0
+Counting and small,12,65,76.0
+Counting and small,12,66,76.0
+Counting and small,12,67,76.0
+Counting and small,12,68,76.0
+Counting and small,12,69,76.0
+Counting and small,12,70,76.0
+Counting and small,12,71,76.0
+Counting and small,12,72,76.0
+Counting and small,12,73,76.0
+Counting and small,12,74,76.0
+Counting and small,12,75,76.0
+Counting and small,12,76,76.0
+Counting and small,12,77,76.0
+Counting and small,12,78,76.0
+Counting and small,12,79,76.0
+Counting and small,12,80,76.0
+Counting and small,12,81,76.0
+Counting and small,12,82,76.0
+Counting and small,12,83,76.0
+Counting and small,12,84,76.0
+Counting and small,12,85,76.0
+Counting and small,12,86,76.0
+Counting and small,12,87,76.0
+Counting and small,12,88,76.0
+Counting and small,12,89,76.0
+Counting and small,12,90,76.0
+Counting and small,12,91,76.0
+Counting and small,12,92,76.0
+Counting and small,12,93,76.0
+Counting and small,12,94,76.0
+Counting and small,12,95,76.0
+Counting and small,12,96,40.0
+Counting and small,12,97,40.0
+Counting and small,12,98,39.1091889741185
+Counting and small,12,99,38.9997972566802
+Counting and small,12,100,76.0
+Counting and small,12,101,76.0
+Counting and small,12,102,76.0
+Counting and small,12,103,76.0
+Counting and small,12,104,76.0
+Counting and small,12,105,76.0
+Counting and small,12,106,76.0
+Counting and small,12,107,76.0
+Counting and small,12,108,76.0
+Counting and small,12,109,76.0
+Counting and small,12,110,76.0
+Counting and small,12,111,76.0
+Counting and small,12,112,76.0
+Counting and small,12,113,76.0
+Counting and small,12,114,76.0
+Counting and small,12,115,76.0
+Counting and small,12,116,76.0
+Counting and small,12,117,76.0
+Counting and small,12,118,76.0
+Counting and small,12,119,76.0
+Counting and small,12,120,76.0
+Counting and small,12,121,76.0
+Counting and small,12,122,76.0
+Counting and small,12,123,76.0
+Counting and small,12,124,76.0
+Counting and small,12,125,76.0
+Counting and small,12,126,76.0
+Counting and small,12,127,76.0
+Counting and small,12,128,76.0
+Counting and small,12,129,76.0
+Counting and small,12,130,76.0
+Counting and small,12,131,76.0
+Counting and small,12,132,76.0
+Counting and small,12,133,76.0
+Counting and small,12,134,76.0
+Counting and small,12,135,76.0
+Counting and small,12,136,76.0
+Counting and small,12,137,76.0
+Counting and small,12,138,76.0
+Counting and small,12,139,76.0
+Counting and small,12,140,76.0
+Counting and small,12,141,76.0
+Counting and small,12,142,76.0
+Counting and small,12,143,76.0
+Counting and small,12,144,76.0
+Counting and small,12,145,76.0
+Counting and small,12,146,76.0
+Counting and small,12,147,76.0
+Counting and small,12,148,76.0
+Counting and small,12,149,76.0
+Counting and small,12,150,76.0
+Counting and small,12,151,76.0
+Counting and small,12,152,76.0
+Counting and small,12,153,76.0
+Counting and small,12,154,76.0
+Counting and small,12,155,76.0
+Counting and small,12,156,76.0
+Counting and small,12,157,76.0
+Counting and small,12,158,76.0
+Counting and small,12,159,76.0
+Counting and small,12,160,76.0
+Counting and small,12,161,76.0
+Counting and small,12,162,76.0
+Counting and small,12,163,76.0
+Counting and small,12,164,76.0
+Counting and small,12,165,76.0
+Counting and small,12,166,76.0
+Counting and small,12,167,76.0
+Counting and small,12,168,76.0
+Counting and small,12,169,76.0
+Counting and small,12,170,76.0
+Counting and small,12,171,76.0
+Counting and small,12,172,76.0
+Counting and small,12,173,76.0
+Counting and small,12,174,76.0
+Counting and small,12,175,76.0
+Counting and small,12,176,76.0
+Counting and small,12,177,76.0
+Counting and small,12,178,76.0
+Counting and small,12,179,76.0
+Counting and small,12,180,76.0
+Counting and small,12,181,76.0
+Counting and small,12,182,76.0
+Counting and small,12,183,76.0
+Counting and small,12,184,76.0
+Counting and small,12,185,76.0
+Counting and small,12,186,76.0
+Counting and small,12,187,76.0
+Counting and small,12,188,76.0
+Counting and small,12,189,76.0
+Counting and small,12,190,76.0
+Counting and small,12,191,76.0
+Counting and small,12,192,76.0
+Counting and small,12,193,76.0
+Counting and small,12,194,76.0
+Counting and small,12,195,76.0
+Counting and small,12,196,76.0
+Counting and small,12,197,76.0
+Counting and small,12,198,76.0
+Counting and small,12,199,76.0
+Counting and small,12,200,76.0
+Counting and small,12,201,76.0
+Counting and small,12,202,76.0
+Counting and small,12,203,76.0
+Counting and small,12,204,76.0
+Counting and small,12,205,76.0
+Counting and small,12,206,76.0
+Counting and small,12,207,76.0
+Counting and small,12,208,76.0
+Counting and small,12,209,76.0
+Counting and small,12,210,76.0
+Counting and small,12,211,76.0
+Counting and small,12,212,76.0
+Counting and small,12,213,76.0
+Counting and small,12,214,76.0
+Counting and small,12,215,76.0
+Counting and small,12,216,76.0
+Counting and small,12,217,76.0
+Counting and small,12,218,76.0
+Counting and small,12,219,76.0
+Counting and small,12,220,76.0
+Counting and small,12,221,76.0
+Counting and small,12,222,76.0
+Counting and small,12,223,76.0
+Counting and small,12,224,76.0
+Counting and small,12,225,76.0
+Counting and small,12,226,76.0
+Counting and small,12,227,76.0
+Counting and small,12,228,76.0
+Counting and small,12,229,76.0
+Counting and small,12,230,76.0
+Counting and small,12,231,76.0
+Counting and small,12,232,76.0
+Counting and small,12,233,76.0
+Counting and small,12,234,76.0
+Counting and small,12,235,76.0
+Counting and small,12,236,76.0
+Counting and small,12,237,76.0
+Counting and small,12,238,76.0
+Counting and small,12,239,76.0
+Counting and small,12,240,76.0
+Counting and small,12,241,76.0
+Counting and small,12,242,76.0
+Counting and small,12,243,76.0
+Counting and small,12,244,76.0
+Counting and small,12,245,76.0
+Counting and small,12,246,76.0
+Counting and small,12,247,76.0
+Counting and small,12,248,76.0
+Counting and small,12,249,76.0
+Counting and small,12,250,76.0
+Counting and small,12,251,76.0
+Counting and small,12,252,76.0
+Counting and small,12,253,76.0
+Counting and small,12,254,76.0
+Counting and small,12,255,76.0
+Counting and small,12,256,76.0
+Counting and small,12,257,76.0
+Counting and small,12,258,76.0
+Counting and small,12,259,76.0
+Counting and small,12,260,76.0
+Counting and small,12,261,76.0
+Counting and small,12,262,76.0
+Counting and small,12,263,76.0
+Counting and small,12,264,76.0
+Counting and small,12,265,76.0
+Counting and small,12,266,76.0
+Counting and small,12,267,76.0
+Counting and small,12,268,76.0
+Counting and small,12,269,76.0
+Counting and small,12,270,76.0
+Counting and small,12,271,76.0
+Counting and small,12,272,76.0
+Counting and small,12,273,76.0
+Counting and small,12,274,76.0
+Counting and small,12,275,76.0
+Counting and small,12,276,76.0
+Counting and small,12,277,76.0
+Counting and small,12,278,76.0
+Counting and small,12,279,76.0
+Counting and small,12,280,76.0
+Counting and small,12,281,76.0
+Counting and small,12,282,76.0
+Counting and small,12,283,76.0
+Counting and small,12,284,76.0
+Counting and small,12,285,76.0
+Counting and small,12,286,76.0
+Counting and small,12,287,76.0
+Counting and small,12,288,76.0
+Counting and small,12,289,76.0
+Counting and small,12,290,76.0
+Counting and small,12,291,76.0
+Counting and small,12,292,76.0
+Counting and small,12,293,76.0
+Counting and small,12,294,76.0
+Counting and small,12,295,76.0
+Counting and small,12,296,76.0
+Counting and small,12,297,76.0
+Counting and small,12,298,76.0
+Counting and small,12,299,76.0
+Counting and small,12,300,76.0
+Counting and small,12,301,76.0
+Counting and small,12,302,76.0
+Counting and small,12,303,76.0
+Counting and small,12,304,76.0
+Counting and small,12,305,76.0
+Counting and small,12,306,76.0
+Counting and small,12,307,76.0
+Counting and small,12,308,76.0
+Counting and small,12,309,76.0
+Counting and small,12,310,76.0
+Counting and small,12,311,76.0
+Counting and small,12,312,76.0
+Counting and small,12,313,76.0
+Counting and small,12,314,76.0
+Counting and small,12,315,76.0
+Counting and small,12,316,76.0
+Counting and small,12,317,76.0
+Counting and small,12,318,76.0
+Counting and small,12,319,76.0
+Counting and small,12,320,76.0
+Counting and small,12,321,76.0
+Counting and small,12,322,76.0
+Counting and small,12,323,76.0
+Counting and small,12,324,76.0
+Counting and small,12,325,76.0
+Counting and small,12,326,76.0
+Counting and small,12,327,76.0
+Counting and small,12,328,76.0
+Counting and small,12,329,76.0
+Counting and small,12,330,76.0
+Counting and small,12,331,76.0
+Counting and small,12,332,76.0
+Counting and small,12,333,76.0
+Counting and small,12,334,76.0
+Counting and small,12,335,76.0
+Counting and small,12,336,76.0
+Counting and small,12,337,76.0
+Counting and small,12,338,76.0
+Counting and small,12,339,76.0
+Counting and small,12,340,76.0
+Counting and small,12,341,76.0
+Counting and small,12,342,76.0
+Counting and small,12,343,76.0
+Counting and small,12,344,76.0
+Counting and small,12,345,76.0
+Counting and small,12,346,76.0
+Counting and small,12,347,76.0
+Counting and small,12,348,76.0
+Counting and small,12,349,76.0
+Counting and small,12,350,76.0
+Counting and small,12,351,76.0
+Counting and small,12,352,76.0
+Counting and small,12,353,76.0
+Counting and small,12,354,76.0
+Counting and small,12,355,76.0
+Counting and small,12,356,76.0
+Counting and small,12,357,76.0
+Counting and small,12,358,76.0
+Counting and small,12,359,76.0
+Counting and small,12,360,76.0
+Counting and small,12,361,76.0
+Counting and small,12,362,76.0
+Counting and small,12,363,76.0
+Counting and small,12,364,76.0
+Counting and small,12,365,76.0
+Counting and small,12,366,76.0
+Counting and small,12,367,76.0
+Counting and small,12,368,76.0
+Counting and small,12,369,76.0
+Counting and small,12,370,76.0
+Counting and small,12,371,76.0
+Counting and small,12,372,76.0
+Counting and small,12,373,76.0
+Counting and small,12,374,76.0
+Counting and small,12,375,76.0
+Counting and small,12,376,76.0
+Counting and small,12,377,76.0
+Counting and small,12,378,76.0
+Counting and small,12,379,76.0
+Counting and small,12,380,76.0
+Counting and small,12,381,76.0
+Counting and small,12,382,76.0
+Counting and small,12,383,76.0
+Counting and small,12,384,76.0
+Counting and small,12,385,76.0
+Counting and small,12,386,76.0
+Counting and small,12,387,76.0
+Counting and small,12,388,76.0
+Counting and small,12,389,76.0
+Counting and small,12,390,76.0
+Counting and small,12,391,76.0
+Counting and small,12,392,76.0
+Counting and small,12,393,76.0
+Counting and small,12,394,76.0
+Counting and small,12,395,76.0
+Counting and small,12,396,76.0
+Counting and small,12,397,76.0
+Counting and small,12,398,76.0
+Counting and small,12,399,76.0
+Counting and small,12,400,76.0
+Counting and small,12,401,76.0
+Counting and small,12,402,76.0
+Counting and small,12,403,76.0
+Counting and small,12,404,76.0
+Counting and small,12,405,76.0
+Counting and small,12,406,76.0
+Counting and small,12,407,76.0
+Counting and small,12,408,76.0
+Counting and small,12,409,76.0
+Counting and small,12,410,76.0
+Counting and small,12,411,76.0
+Counting and small,12,412,76.0
+Counting and small,12,413,76.0
+Counting and small,12,414,76.0
+Counting and small,12,415,76.0
+Counting and small,12,416,76.0
+Counting and small,12,417,76.0
+Counting and small,12,418,76.0
+Counting and small,12,419,76.0
+Counting and small,12,420,76.0
+Counting and small,12,421,76.0
+Counting and small,12,422,76.0
+Counting and small,12,423,76.0
+Counting and small,12,424,76.0
+Counting and small,12,425,76.0
+Counting and small,12,426,76.0
+Counting and small,12,427,76.0
+Counting and small,12,428,76.0
+Counting and small,12,429,76.0
+Counting and small,12,430,76.0
+Counting and small,12,431,76.0
+Counting and small,12,432,76.0
+Counting and small,12,433,76.0
+Counting and small,12,434,76.0
+Counting and small,12,435,76.0
+Counting and small,12,436,76.0
+Counting and small,12,437,76.0
+Counting and small,12,438,76.0
+Counting and small,12,439,76.0
+Counting and small,12,440,76.0
+Counting and small,12,441,76.0
+Counting and small,12,442,76.0
+Counting and small,12,443,76.0
+Counting and small,12,444,76.0
+Counting and small,12,445,76.0
+Counting and small,12,446,76.0
+Counting and small,12,447,76.0
+Counting and small,12,448,76.0
+Counting and small,12,449,76.0
+Counting and small,12,450,76.0
+Counting and small,12,451,76.0
+Counting and small,12,452,76.0
+Counting and small,12,453,76.0
+Counting and small,12,454,76.0
+Counting and small,12,455,76.0
+Counting and small,12,456,76.0
+Counting and small,12,457,76.0
+Counting and small,12,458,76.0
+Counting and small,12,459,76.0
+Counting and small,12,460,76.0
+Counting and small,12,461,76.0
+Counting and small,12,462,76.0
+Counting and small,12,463,76.0
+Counting and small,12,464,76.0
+Counting and small,12,465,76.0
+Counting and small,12,466,76.0
+Counting and small,12,467,76.0
+Counting and small,12,468,76.0
+Counting and small,12,469,76.0
+Counting and small,12,470,76.0
+Counting and small,12,471,76.0
+Counting and small,12,472,76.0
+Counting and small,12,473,76.0
+Counting and small,12,474,76.0
+Counting and small,12,475,76.0
+Counting and small,12,476,76.0
+Counting and small,12,477,76.0
+Counting and small,12,478,76.0
+Counting and small,12,479,76.0
+Counting and small,12,480,76.0
+Counting and small,12,481,76.0
+Counting and small,12,482,76.0
+Counting and small,12,483,76.0
+Counting and small,12,484,76.0
+Counting and small,12,485,76.0
+Counting and small,12,486,76.0
+Counting and small,12,487,76.0
+Counting and small,12,488,76.0
+Counting and small,12,489,76.0
+Counting and small,12,490,76.0
+Counting and small,12,491,76.0
+Counting and small,12,492,76.0
+Counting and small,12,493,76.0
+Counting and small,12,494,76.0
+Counting and small,12,495,76.0
+Counting and small,12,496,76.0
+Counting and small,12,497,76.0
+Counting and small,12,498,75.6973249505971
+Counting and small,12,499,76.0
+Counting and small,12,500,76.0
+Counting and small,12,501,76.0
+Counting and small,12,502,76.0
+Counting and small,12,503,76.0
+Counting and small,12,504,76.0
+Counting and small,12,505,76.0
+Counting and small,12,506,76.0
+Counting and small,12,507,76.0
+Counting and small,12,508,76.0
+Counting and small,12,509,76.0
+Counting and small,12,510,76.0
+Counting and small,12,511,76.0
+Counting and small,12,512,76.0
+Counting and small,12,513,76.0
+Counting and small,12,514,76.0
+Counting and small,12,515,76.0
+Counting and small,12,516,76.0
+Counting and small,12,517,76.0
+Counting and small,12,518,76.0
+Counting and small,12,519,76.0
+Counting and small,12,520,76.0
+Counting and small,12,521,76.0
+Counting and small,12,522,76.0
+Counting and small,12,523,76.0
+Counting and small,12,524,76.0
+Counting and small,12,525,76.0
+Counting and small,12,526,76.0
+Counting and small,12,527,76.0
+Counting and small,12,528,76.0
+Counting and small,12,529,76.0
+Counting and small,12,530,76.0
+Counting and small,12,531,76.0
+Counting and small,12,532,76.0
+Counting and small,12,533,76.0
+Counting and small,12,534,76.0
+Counting and small,12,535,76.0
+Counting and small,12,536,76.0
+Counting and small,12,537,76.0
+Counting and small,12,538,76.0
+Counting and small,12,539,76.0
+Counting and small,12,540,76.0
+Counting and small,12,541,76.0
+Counting and small,12,542,76.0
+Counting and small,12,543,76.0
+Counting and small,12,544,76.0
+Counting and small,12,545,76.0
+Counting and small,12,546,76.0
+Counting and small,12,547,76.0
+Counting and small,12,548,76.0
+Counting and small,12,549,76.0
+Counting and small,12,550,76.0
+Counting and small,12,551,76.0
+Counting and small,12,552,76.0
+Counting and small,12,553,76.0
+Counting and small,12,554,76.0
+Counting and small,12,555,76.0
+Counting and small,12,556,76.0
+Counting and small,12,557,76.0
+Counting and small,12,558,76.0
+Counting and small,12,559,76.0
+Counting and small,12,560,76.0
+Counting and small,12,561,76.0
+Counting and small,12,562,76.0
+Counting and small,12,563,76.0
+Counting and small,12,564,76.0
+Counting and small,12,565,76.0
+Counting and small,12,566,76.0
+Counting and small,12,567,76.0
+Counting and small,12,568,76.0
+Counting and small,12,569,76.0
+Counting and small,12,570,76.0
+Counting and small,12,571,76.0
+Counting and small,12,572,76.0
+Counting and small,12,573,76.0
+Counting and small,12,574,76.0
+Counting and small,12,575,76.0
+Counting and small,12,576,76.0
+Counting and small,12,577,76.0
+Counting and small,12,578,76.0
+Counting and small,12,579,76.0
+Counting and small,12,580,76.0
+Counting and small,12,581,76.0
+Counting and small,12,582,76.0
+Counting and small,12,583,76.0
+Counting and small,12,584,76.0
+Counting and small,12,585,76.0
+Counting and small,12,586,76.0
+Counting and small,12,587,76.0
+Counting and small,12,588,76.0
+Counting and small,12,589,76.0
+Counting and small,12,590,76.0
+Counting and small,12,591,76.0
+Counting and small,12,592,76.0
+Counting and small,12,593,76.0
+Counting and small,12,594,76.0
+Counting and small,12,595,76.0
+Counting and small,12,596,76.0
+Counting and small,12,597,76.0
+Counting and small,12,598,76.0
+Counting and small,12,599,76.0
+Counting and small,12,600,76.0
+Counting and small,12,601,76.0
+Counting and small,12,602,76.0
+Counting and small,12,603,76.0
+Counting and small,12,604,76.0
+Counting and small,12,605,76.0
+Counting and small,12,606,76.0
+Counting and small,12,607,76.0
+Counting and small,12,608,76.0
+Counting and small,12,609,76.0
+Counting and small,12,610,76.0
+Counting and small,12,611,76.0
+Counting and small,12,612,76.0
+Counting and small,12,613,76.0
+Counting and small,12,614,76.0
+Counting and small,12,615,76.0
+Counting and small,12,616,76.0
+Counting and small,12,617,76.0
+Counting and small,12,618,76.0
+Counting and small,12,619,76.0
+Counting and small,12,620,76.0
+Counting and small,12,621,76.0
+Counting and small,12,622,76.0
+Counting and small,12,623,76.0
+Counting and small,12,624,76.0
+Counting and small,12,625,76.0
+Counting and small,12,626,76.0
+Counting and small,12,627,76.0
+Counting and small,12,628,76.0
+Counting and small,12,629,76.0
+Counting and small,12,630,76.0
+Counting and small,12,631,76.0
+Counting and small,12,632,76.0
+Counting and small,12,633,76.0
+Counting and small,12,634,76.0
+Counting and small,12,635,76.0
+Counting and small,12,636,76.0
+Counting and small,12,637,76.0
+Counting and small,12,638,76.0
+Counting and small,12,639,76.0
+Counting and small,12,640,76.0
+Counting and small,12,641,76.0
+Counting and small,12,642,76.0
+Counting and small,12,643,76.0
+Counting and small,12,644,76.0
+Counting and small,12,645,76.0
+Counting and small,12,646,76.0
+Counting and small,12,647,76.0
+Counting and small,12,648,76.0
+Counting and small,12,649,76.0
+Counting and small,12,650,76.0
+Counting and small,12,651,76.0
+Counting and small,12,652,76.0
+Counting and small,12,653,76.0
+Counting and small,12,654,76.0
+Counting and small,12,655,76.0
+Counting and small,12,656,76.0
+Counting and small,12,657,76.0
+Counting and small,12,658,76.0
+Counting and small,12,659,76.0
+Counting and small,12,660,76.0
+Counting and small,12,661,76.0
+Counting and small,12,662,76.0
+Counting and small,12,663,76.0
+Counting and small,12,664,76.0
+Counting and small,12,665,76.0
+Counting and small,12,666,76.0
+Counting and small,12,667,76.0
+Counting and small,12,668,76.0
+Counting and small,12,669,76.0
+Counting and small,12,670,76.0
+Counting and small,12,671,76.0
+Counting and small,12,672,76.0
+Counting and small,12,673,76.0
+Counting and small,12,674,76.0
+Counting and small,12,675,76.0
+Counting and small,12,676,76.0
+Counting and small,12,677,76.0
+Counting and small,12,678,76.0
+Counting and small,12,679,76.0
+Counting and small,12,680,76.0
+Counting and small,12,681,76.0
+Counting and small,12,682,76.0
+Counting and small,12,683,76.0
+Counting and small,12,684,76.0
+Counting and small,12,685,76.0
+Counting and small,12,686,76.0
+Counting and small,12,687,76.0
+Counting and small,12,688,76.0
+Counting and small,12,689,76.0
+Counting and small,12,690,76.0
+Counting and small,12,691,76.0
+Counting and small,12,692,76.0
+Counting and small,12,693,76.0
+Counting and small,12,694,76.0
+Counting and small,12,695,76.0
+Counting and small,12,696,76.0
+Counting and small,12,697,76.0
+Counting and small,12,698,76.0
+Counting and small,12,699,76.0
+Counting and small,12,700,76.0
+Counting and small,12,701,76.0
+Counting and small,12,702,76.0
+Counting and small,12,703,76.0
+Counting and small,12,704,76.0
+Counting and small,12,705,76.0
+Counting and small,12,706,76.0
+Counting and small,12,707,76.0
+Counting and small,12,708,76.0
+Counting and small,12,709,76.0
+Counting and small,12,710,76.0
+Counting and small,12,711,76.0
+Counting and small,12,712,76.0
+Counting and small,12,713,76.0
+Counting and small,12,714,76.0
+Counting and small,12,715,76.0
+Counting and small,12,716,76.0
+Counting and small,12,717,76.0
+Counting and small,12,718,76.0
+Counting and small,12,719,76.0
+Counting and small,12,720,76.0
+Counting and small,12,721,76.0
+Counting and small,12,722,76.0
+Counting and small,12,723,76.0
+Counting and small,12,724,76.0
+Counting and small,12,725,76.0
+Counting and small,12,726,76.0
+Counting and small,12,727,76.0
+Counting and small,12,728,76.0
+Counting and small,12,729,76.0
+Counting and small,12,730,76.0
+Counting and small,12,731,76.0
+Counting and small,12,732,76.0
+Counting and small,12,733,76.0
+Counting and small,12,734,76.0
+Counting and small,12,735,76.0
+Counting and small,12,736,76.0
+Counting and small,12,737,76.0
+Counting and small,12,738,76.0
+Counting and small,12,739,76.0
+Counting and small,12,740,76.0
+Counting and small,12,741,76.0
+Counting and small,12,742,76.0
+Counting and small,12,743,76.0
+Counting and small,12,744,76.0
+Counting and small,12,745,76.0
+Counting and small,12,746,76.0
+Counting and small,12,747,76.0
+Counting and small,12,748,76.0
+Counting and small,12,749,76.0
+Counting and small,12,750,76.0
+Counting and small,12,751,76.0
+Counting and small,12,752,76.0
+Counting and small,12,753,76.0
+Counting and small,12,754,76.0
+Counting and small,12,755,76.0
+Counting and small,12,756,76.0
+Counting and small,12,757,76.0
+Counting and small,12,758,76.0
+Counting and small,12,759,76.0
+Counting and small,12,760,76.0
+Counting and small,12,761,76.0
+Counting and small,12,762,76.0
+Counting and small,12,763,76.0
+Counting and small,12,764,76.0
+Counting and small,12,765,76.0
+Counting and small,12,766,76.0
+Counting and small,12,767,76.0
+Counting and small,12,768,76.0
+Counting and small,12,769,76.0
+Counting and small,12,770,76.0
+Counting and small,12,771,76.0
+Counting and small,12,772,76.0
+Counting and small,12,773,76.0
+Counting and small,12,774,76.0
+Counting and small,12,775,76.0
+Counting and small,12,776,76.0
+Counting and small,12,777,76.0
+Counting and small,12,778,76.0
+Counting and small,12,779,76.0
+Counting and small,12,780,76.0
+Counting and small,12,781,76.0
+Counting and small,12,782,76.0
+Counting and small,12,783,76.0
+Counting and small,12,784,76.0
+Counting and small,12,785,76.0
+Counting and small,12,786,76.0
+Counting and small,12,787,76.0
+Counting and small,12,788,76.0
+Counting and small,12,789,76.0
+Counting and small,12,790,76.0
+Counting and small,12,791,76.0
+Counting and small,12,792,76.0
+Counting and small,12,793,76.0
+Counting and small,12,794,76.0
+Counting and small,12,795,76.0
+Counting and small,12,796,76.0
+Counting and small,12,797,76.0
+Counting and small,12,798,76.0
+Counting and small,12,799,76.0
+Counting and small,12,800,76.0
+Counting and small,12,801,76.0
+Counting and small,12,802,76.0
+Counting and small,12,803,76.0
+Counting and small,12,804,76.0
+Counting and small,12,805,76.0
+Counting and small,12,806,76.0
+Counting and small,12,807,76.0
+Counting and small,12,808,76.0
+Counting and small,12,809,76.0
+Counting and small,12,810,76.0
+Counting and small,12,811,76.0
+Counting and small,12,812,76.0
+Counting and small,12,813,76.0
+Counting and small,12,814,76.0
+Counting and small,12,815,76.0
+Counting and small,12,816,76.0
+Counting and small,12,817,76.0
+Counting and small,12,818,76.0
+Counting and small,12,819,76.0
+Counting and small,12,820,76.0
+Counting and small,12,821,76.0
+Counting and small,12,822,76.0
+Counting and small,12,823,76.0
+Counting and small,12,824,76.0
+Counting and small,12,825,76.0
+Counting and small,12,826,76.0
+Counting and small,12,827,76.0
+Counting and small,12,828,76.0
+Counting and small,12,829,76.0
+Counting and small,12,830,76.0
+Counting and small,12,831,76.0
+Counting and small,12,832,76.0
+Counting and small,12,833,76.0
+Counting and small,12,834,76.0
+Counting and small,12,835,76.0
+Counting and small,12,836,76.0
+Counting and small,12,837,76.0
+Counting and small,12,838,76.0
+Counting and small,12,839,76.0
+Counting and small,12,840,76.0
+Counting and small,12,841,76.0
+Counting and small,12,842,76.0
+Counting and small,12,843,76.0
+Counting and small,12,844,76.0
+Counting and small,12,845,76.0
+Counting and small,12,846,76.0
+Counting and small,12,847,76.0
+Counting and small,12,848,76.0
+Counting and small,12,849,76.0
+Counting and small,12,850,76.0
+Counting and small,12,851,76.0
+Counting and small,12,852,76.0
+Counting and small,12,853,76.0
+Counting and small,12,854,76.0
+Counting and small,12,855,76.0
+Counting and small,12,856,76.0
+Counting and small,12,857,76.0
+Counting and small,12,858,76.0
+Counting and small,12,859,76.0
+Counting and small,12,860,76.0
+Counting and small,12,861,76.0
+Counting and small,12,862,76.0
+Counting and small,12,863,76.0
+Counting and small,12,864,76.0
+Counting and small,12,865,76.0
+Counting and small,12,866,76.0
+Counting and small,12,867,76.0
+Counting and small,12,868,76.0
+Counting and small,12,869,76.0
+Counting and small,12,870,76.0
+Counting and small,12,871,76.0
+Counting and small,12,872,76.0
+Counting and small,12,873,76.0
+Counting and small,12,874,76.0
+Counting and small,12,875,76.0
+Counting and small,12,876,76.0
+Counting and small,12,877,76.0
+Counting and small,12,878,76.0
+Counting and small,12,879,76.0
+Counting and small,12,880,76.0
+Counting and small,12,881,76.0
+Counting and small,12,882,76.0
+Counting and small,12,883,76.0
+Counting and small,12,884,76.0
+Counting and small,12,885,76.0
+Counting and small,12,886,76.0
+Counting and small,12,887,76.0
+Counting and small,12,888,76.0
+Counting and small,12,889,76.0
+Counting and small,12,890,76.0
+Counting and small,12,891,76.0
+Counting and small,12,892,76.0
+Counting and small,12,893,76.0
+Counting and small,12,894,76.0
+Counting and small,12,895,76.0
+Counting and small,12,896,76.0
+Counting and small,12,897,76.0
+Counting and small,12,898,76.0
+Counting and small,12,899,76.0
+Counting and small,12,900,76.0
+Counting and small,12,901,76.0
+Counting and small,12,902,76.0
+Counting and small,12,903,76.0
+Counting and small,12,904,76.0
+Counting and small,12,905,76.0
+Counting and small,12,906,76.0
+Counting and small,12,907,76.0
+Counting and small,12,908,76.0
+Counting and small,12,909,76.0
+Counting and small,12,910,76.0
+Counting and small,12,911,76.0
+Counting and small,12,912,76.0
+Counting and small,12,913,76.0
+Counting and small,12,914,76.0
+Counting and small,12,915,76.0
+Counting and small,12,916,76.0
+Counting and small,12,917,76.0
+Counting and small,12,918,76.0
+Counting and small,12,919,76.0
+Counting and small,12,920,76.0
+Counting and small,12,921,76.0
+Counting and small,12,922,76.0
+Counting and small,12,923,76.0
+Counting and small,12,924,2.0
+Counting and large,12,0,10.0
+Counting and large,12,1,76.0
+Counting and large,12,2,76.0
+Counting and large,12,3,76.0
+Counting and large,12,4,76.0
+Counting and large,12,5,76.0
+Counting and large,12,6,76.0
+Counting and large,12,7,76.0
+Counting and large,12,8,76.0
+Counting and large,12,9,76.0
+Counting and large,12,10,76.0
+Counting and large,12,11,76.0
+Counting and large,12,12,76.0
+Counting and large,12,13,76.0
+Counting and large,12,14,76.0
+Counting and large,12,15,76.0
+Counting and large,12,16,76.0
+Counting and large,12,17,76.0
+Counting and large,12,18,76.0
+Counting and large,12,19,76.0
+Counting and large,12,20,76.0
+Counting and large,12,21,76.0
+Counting and large,12,22,76.0
+Counting and large,12,23,76.0
+Counting and large,12,24,76.0
+Counting and large,12,25,76.0
+Counting and large,12,26,76.0
+Counting and large,12,27,76.0
+Counting and large,12,28,76.0
+Counting and large,12,29,76.0
+Counting and large,12,30,76.0
+Counting and large,12,31,76.0
+Counting and large,12,32,76.0
+Counting and large,12,33,76.0
+Counting and large,12,34,76.0
+Counting and large,12,35,76.0
+Counting and large,12,36,76.0
+Counting and large,12,37,76.0
+Counting and large,12,38,76.0
+Counting and large,12,39,76.0
+Counting and large,12,40,76.0
+Counting and large,12,41,76.0
+Counting and large,12,42,76.0
+Counting and large,12,43,76.0
+Counting and large,12,44,76.0
+Counting and large,12,45,76.0
+Counting and large,12,46,76.0
+Counting and large,12,47,76.0
+Counting and large,12,48,76.0
+Counting and large,12,49,76.0
+Counting and large,12,50,76.0
+Counting and large,12,51,76.0
+Counting and large,12,52,76.0
+Counting and large,12,53,76.0
+Counting and large,12,54,76.0
+Counting and large,12,55,76.0
+Counting and large,12,56,76.0
+Counting and large,12,57,76.0
+Counting and large,12,58,76.0
+Counting and large,12,59,76.0
+Counting and large,12,60,76.0
+Counting and large,12,61,76.0
+Counting and large,12,62,76.0
+Counting and large,12,63,76.0
+Counting and large,12,64,76.0
+Counting and large,12,65,76.0
+Counting and large,12,66,76.0
+Counting and large,12,67,76.0
+Counting and large,12,68,76.0
+Counting and large,12,69,76.0
+Counting and large,12,70,76.0
+Counting and large,12,71,76.0
+Counting and large,12,72,76.0
+Counting and large,12,73,76.0
+Counting and large,12,74,76.0
+Counting and large,12,75,76.0
+Counting and large,12,76,76.0
+Counting and large,12,77,76.0
+Counting and large,12,78,76.0
+Counting and large,12,79,76.0
+Counting and large,12,80,76.0
+Counting and large,12,81,76.0
+Counting and large,12,82,76.0
+Counting and large,12,83,76.0
+Counting and large,12,84,76.0
+Counting and large,12,85,76.0
+Counting and large,12,86,76.0
+Counting and large,12,87,76.0
+Counting and large,12,88,76.0
+Counting and large,12,89,76.0
+Counting and large,12,90,76.0
+Counting and large,12,91,76.0
+Counting and large,12,92,76.0
+Counting and large,12,93,76.0
+Counting and large,12,94,76.0
+Counting and large,12,95,76.0
+Counting and large,12,96,40.0
+Counting and large,12,97,40.0
+Counting and large,12,98,39.1091889741185
+Counting and large,12,99,38.9997972566802
+Counting and large,12,100,76.0
+Counting and large,12,101,76.0
+Counting and large,12,102,76.0
+Counting and large,12,103,76.0
+Counting and large,12,104,76.0
+Counting and large,12,105,76.0
+Counting and large,12,106,76.0
+Counting and large,12,107,76.0
+Counting and large,12,108,76.0
+Counting and large,12,109,76.0
+Counting and large,12,110,76.0
+Counting and large,12,111,76.0
+Counting and large,12,112,76.0
+Counting and large,12,113,76.0
+Counting and large,12,114,76.0
+Counting and large,12,115,76.0
+Counting and large,12,116,76.0
+Counting and large,12,117,76.0
+Counting and large,12,118,76.0
+Counting and large,12,119,76.0
+Counting and large,12,120,76.0
+Counting and large,12,121,76.0
+Counting and large,12,122,76.0
+Counting and large,12,123,76.0
+Counting and large,12,124,76.0
+Counting and large,12,125,76.0
+Counting and large,12,126,76.0
+Counting and large,12,127,76.0
+Counting and large,12,128,76.0
+Counting and large,12,129,76.0
+Counting and large,12,130,76.0
+Counting and large,12,131,76.0
+Counting and large,12,132,76.0
+Counting and large,12,133,76.0
+Counting and large,12,134,76.0
+Counting and large,12,135,76.0
+Counting and large,12,136,76.0
+Counting and large,12,137,76.0
+Counting and large,12,138,76.0
+Counting and large,12,139,76.0
+Counting and large,12,140,76.0
+Counting and large,12,141,76.0
+Counting and large,12,142,76.0
+Counting and large,12,143,76.0
+Counting and large,12,144,76.0
+Counting and large,12,145,76.0
+Counting and large,12,146,76.0
+Counting and large,12,147,76.0
+Counting and large,12,148,76.0
+Counting and large,12,149,76.0
+Counting and large,12,150,76.0
+Counting and large,12,151,76.0
+Counting and large,12,152,76.0
+Counting and large,12,153,76.0
+Counting and large,12,154,76.0
+Counting and large,12,155,76.0
+Counting and large,12,156,76.0
+Counting and large,12,157,76.0
+Counting and large,12,158,76.0
+Counting and large,12,159,76.0
+Counting and large,12,160,76.0
+Counting and large,12,161,76.0
+Counting and large,12,162,76.0
+Counting and large,12,163,76.0
+Counting and large,12,164,76.0
+Counting and large,12,165,76.0
+Counting and large,12,166,76.0
+Counting and large,12,167,76.0
+Counting and large,12,168,76.0
+Counting and large,12,169,76.0
+Counting and large,12,170,76.0
+Counting and large,12,171,76.0
+Counting and large,12,172,76.0
+Counting and large,12,173,76.0
+Counting and large,12,174,76.0
+Counting and large,12,175,76.0
+Counting and large,12,176,76.0
+Counting and large,12,177,76.0
+Counting and large,12,178,76.0
+Counting and large,12,179,76.0
+Counting and large,12,180,76.0
+Counting and large,12,181,76.0
+Counting and large,12,182,76.0
+Counting and large,12,183,76.0
+Counting and large,12,184,76.0
+Counting and large,12,185,76.0
+Counting and large,12,186,76.0
+Counting and large,12,187,76.0
+Counting and large,12,188,76.0
+Counting and large,12,189,76.0
+Counting and large,12,190,76.0
+Counting and large,12,191,76.0
+Counting and large,12,192,76.0
+Counting and large,12,193,76.0
+Counting and large,12,194,76.0
+Counting and large,12,195,76.0
+Counting and large,12,196,76.0
+Counting and large,12,197,76.0
+Counting and large,12,198,76.0
+Counting and large,12,199,76.0
+Counting and large,12,200,76.0
+Counting and large,12,201,76.0
+Counting and large,12,202,76.0
+Counting and large,12,203,76.0
+Counting and large,12,204,76.0
+Counting and large,12,205,76.0
+Counting and large,12,206,76.0
+Counting and large,12,207,76.0
+Counting and large,12,208,76.0
+Counting and large,12,209,76.0
+Counting and large,12,210,76.0
+Counting and large,12,211,76.0
+Counting and large,12,212,76.0
+Counting and large,12,213,76.0
+Counting and large,12,214,76.0
+Counting and large,12,215,76.0
+Counting and large,12,216,76.0
+Counting and large,12,217,76.0
+Counting and large,12,218,76.0
+Counting and large,12,219,76.0
+Counting and large,12,220,76.0
+Counting and large,12,221,76.0
+Counting and large,12,222,76.0
+Counting and large,12,223,76.0
+Counting and large,12,224,76.0
+Counting and large,12,225,76.0
+Counting and large,12,226,76.0
+Counting and large,12,227,76.0
+Counting and large,12,228,76.0
+Counting and large,12,229,76.0
+Counting and large,12,230,76.0
+Counting and large,12,231,76.0
+Counting and large,12,232,76.0
+Counting and large,12,233,76.0
+Counting and large,12,234,76.0
+Counting and large,12,235,76.0
+Counting and large,12,236,76.0
+Counting and large,12,237,76.0
+Counting and large,12,238,76.0
+Counting and large,12,239,76.0
+Counting and large,12,240,76.0
+Counting and large,12,241,76.0
+Counting and large,12,242,76.0
+Counting and large,12,243,76.0
+Counting and large,12,244,76.0
+Counting and large,12,245,76.0
+Counting and large,12,246,76.0
+Counting and large,12,247,76.0
+Counting and large,12,248,76.0
+Counting and large,12,249,76.0
+Counting and large,12,250,76.0
+Counting and large,12,251,76.0
+Counting and large,12,252,76.0
+Counting and large,12,253,76.0
+Counting and large,12,254,76.0
+Counting and large,12,255,76.0
+Counting and large,12,256,76.0
+Counting and large,12,257,76.0
+Counting and large,12,258,76.0
+Counting and large,12,259,76.0
+Counting and large,12,260,76.0
+Counting and large,12,261,76.0
+Counting and large,12,262,76.0
+Counting and large,12,263,76.0
+Counting and large,12,264,76.0
+Counting and large,12,265,76.0
+Counting and large,12,266,76.0
+Counting and large,12,267,76.0
+Counting and large,12,268,76.0
+Counting and large,12,269,76.0
+Counting and large,12,270,76.0
+Counting and large,12,271,76.0
+Counting and large,12,272,76.0
+Counting and large,12,273,76.0
+Counting and large,12,274,76.0
+Counting and large,12,275,76.0
+Counting and large,12,276,76.0
+Counting and large,12,277,76.0
+Counting and large,12,278,76.0
+Counting and large,12,279,76.0
+Counting and large,12,280,76.0
+Counting and large,12,281,76.0
+Counting and large,12,282,76.0
+Counting and large,12,283,76.0
+Counting and large,12,284,76.0
+Counting and large,12,285,76.0
+Counting and large,12,286,76.0
+Counting and large,12,287,76.0
+Counting and large,12,288,76.0
+Counting and large,12,289,76.0
+Counting and large,12,290,76.0
+Counting and large,12,291,76.0
+Counting and large,12,292,76.0
+Counting and large,12,293,76.0
+Counting and large,12,294,76.0
+Counting and large,12,295,76.0
+Counting and large,12,296,76.0
+Counting and large,12,297,76.0
+Counting and large,12,298,76.0
+Counting and large,12,299,76.0
+Counting and large,12,300,76.0
+Counting and large,12,301,76.0
+Counting and large,12,302,76.0
+Counting and large,12,303,76.0
+Counting and large,12,304,76.0
+Counting and large,12,305,76.0
+Counting and large,12,306,76.0
+Counting and large,12,307,76.0
+Counting and large,12,308,76.0
+Counting and large,12,309,76.0
+Counting and large,12,310,76.0
+Counting and large,12,311,76.0
+Counting and large,12,312,76.0
+Counting and large,12,313,76.0
+Counting and large,12,314,76.0
+Counting and large,12,315,76.0
+Counting and large,12,316,76.0
+Counting and large,12,317,76.0
+Counting and large,12,318,76.0
+Counting and large,12,319,76.0
+Counting and large,12,320,76.0
+Counting and large,12,321,76.0
+Counting and large,12,322,76.0
+Counting and large,12,323,76.0
+Counting and large,12,324,76.0
+Counting and large,12,325,76.0
+Counting and large,12,326,76.0
+Counting and large,12,327,76.0
+Counting and large,12,328,76.0
+Counting and large,12,329,76.0
+Counting and large,12,330,76.0
+Counting and large,12,331,76.0
+Counting and large,12,332,76.0
+Counting and large,12,333,76.0
+Counting and large,12,334,76.0
+Counting and large,12,335,76.0
+Counting and large,12,336,76.0
+Counting and large,12,337,76.0
+Counting and large,12,338,76.0
+Counting and large,12,339,76.0
+Counting and large,12,340,76.0
+Counting and large,12,341,76.0
+Counting and large,12,342,76.0
+Counting and large,12,343,76.0
+Counting and large,12,344,76.0
+Counting and large,12,345,76.0
+Counting and large,12,346,76.0
+Counting and large,12,347,76.0
+Counting and large,12,348,76.0
+Counting and large,12,349,76.0
+Counting and large,12,350,76.0
+Counting and large,12,351,76.0
+Counting and large,12,352,76.0
+Counting and large,12,353,76.0
+Counting and large,12,354,76.0
+Counting and large,12,355,76.0
+Counting and large,12,356,76.0
+Counting and large,12,357,76.0
+Counting and large,12,358,76.0
+Counting and large,12,359,76.0
+Counting and large,12,360,76.0
+Counting and large,12,361,76.0
+Counting and large,12,362,76.0
+Counting and large,12,363,76.0
+Counting and large,12,364,76.0
+Counting and large,12,365,76.0
+Counting and large,12,366,76.0
+Counting and large,12,367,76.0
+Counting and large,12,368,76.0
+Counting and large,12,369,76.0
+Counting and large,12,370,76.0
+Counting and large,12,371,76.0
+Counting and large,12,372,76.0
+Counting and large,12,373,76.0
+Counting and large,12,374,76.0
+Counting and large,12,375,76.0
+Counting and large,12,376,76.0
+Counting and large,12,377,76.0
+Counting and large,12,378,76.0
+Counting and large,12,379,76.0
+Counting and large,12,380,76.0
+Counting and large,12,381,76.0
+Counting and large,12,382,76.0
+Counting and large,12,383,76.0
+Counting and large,12,384,76.0
+Counting and large,12,385,76.0
+Counting and large,12,386,76.0
+Counting and large,12,387,76.0
+Counting and large,12,388,76.0
+Counting and large,12,389,76.0
+Counting and large,12,390,76.0
+Counting and large,12,391,76.0
+Counting and large,12,392,76.0
+Counting and large,12,393,76.0
+Counting and large,12,394,76.0
+Counting and large,12,395,76.0
+Counting and large,12,396,76.0
+Counting and large,12,397,76.0
+Counting and large,12,398,76.0
+Counting and large,12,399,76.0
+Counting and large,12,400,76.0
+Counting and large,12,401,76.0
+Counting and large,12,402,76.0
+Counting and large,12,403,76.0
+Counting and large,12,404,76.0
+Counting and large,12,405,76.0
+Counting and large,12,406,76.0
+Counting and large,12,407,76.0
+Counting and large,12,408,76.0
+Counting and large,12,409,76.0
+Counting and large,12,410,76.0
+Counting and large,12,411,76.0
+Counting and large,12,412,76.0
+Counting and large,12,413,76.0
+Counting and large,12,414,76.0
+Counting and large,12,415,76.0
+Counting and large,12,416,76.0
+Counting and large,12,417,76.0
+Counting and large,12,418,76.0
+Counting and large,12,419,76.0
+Counting and large,12,420,76.0
+Counting and large,12,421,76.0
+Counting and large,12,422,76.0
+Counting and large,12,423,76.0
+Counting and large,12,424,76.0
+Counting and large,12,425,76.0
+Counting and large,12,426,76.0
+Counting and large,12,427,76.0
+Counting and large,12,428,76.0
+Counting and large,12,429,76.0
+Counting and large,12,430,76.0
+Counting and large,12,431,76.0
+Counting and large,12,432,76.0
+Counting and large,12,433,76.0
+Counting and large,12,434,76.0
+Counting and large,12,435,76.0
+Counting and large,12,436,76.0
+Counting and large,12,437,76.0
+Counting and large,12,438,76.0
+Counting and large,12,439,76.0
+Counting and large,12,440,76.0
+Counting and large,12,441,76.0
+Counting and large,12,442,76.0
+Counting and large,12,443,76.0
+Counting and large,12,444,76.0
+Counting and large,12,445,76.0
+Counting and large,12,446,76.0
+Counting and large,12,447,76.0
+Counting and large,12,448,76.0
+Counting and large,12,449,76.0
+Counting and large,12,450,76.0
+Counting and large,12,451,76.0
+Counting and large,12,452,76.0
+Counting and large,12,453,76.0
+Counting and large,12,454,76.0
+Counting and large,12,455,76.0
+Counting and large,12,456,76.0
+Counting and large,12,457,76.0
+Counting and large,12,458,76.0
+Counting and large,12,459,76.0
+Counting and large,12,460,76.0
+Counting and large,12,461,76.0
+Counting and large,12,462,76.0
+Counting and large,12,463,76.0
+Counting and large,12,464,76.0
+Counting and large,12,465,76.0
+Counting and large,12,466,76.0
+Counting and large,12,467,76.0
+Counting and large,12,468,76.0
+Counting and large,12,469,76.0
+Counting and large,12,470,76.0
+Counting and large,12,471,76.0
+Counting and large,12,472,76.0
+Counting and large,12,473,76.0
+Counting and large,12,474,76.0
+Counting and large,12,475,76.0
+Counting and large,12,476,76.0
+Counting and large,12,477,76.0
+Counting and large,12,478,76.0
+Counting and large,12,479,76.0
+Counting and large,12,480,76.0
+Counting and large,12,481,76.0
+Counting and large,12,482,76.0
+Counting and large,12,483,76.0
+Counting and large,12,484,76.0
+Counting and large,12,485,76.0
+Counting and large,12,486,76.0
+Counting and large,12,487,76.0
+Counting and large,12,488,76.0
+Counting and large,12,489,76.0
+Counting and large,12,490,76.0
+Counting and large,12,491,76.0
+Counting and large,12,492,76.0
+Counting and large,12,493,76.0
+Counting and large,12,494,76.0
+Counting and large,12,495,76.0
+Counting and large,12,496,76.0
+Counting and large,12,497,76.0
+Counting and large,12,498,75.6973249505971
+Counting and large,12,499,76.0
+Counting and large,12,500,76.0
+Counting and large,12,501,76.0
+Counting and large,12,502,76.0
+Counting and large,12,503,76.0
+Counting and large,12,504,76.0
+Counting and large,12,505,76.0
+Counting and large,12,506,76.0
+Counting and large,12,507,76.0
+Counting and large,12,508,76.0
+Counting and large,12,509,76.0
+Counting and large,12,510,76.0
+Counting and large,12,511,76.0
+Counting and large,12,512,76.0
+Counting and large,12,513,76.0
+Counting and large,12,514,76.0
+Counting and large,12,515,76.0
+Counting and large,12,516,76.0
+Counting and large,12,517,76.0
+Counting and large,12,518,76.0
+Counting and large,12,519,76.0
+Counting and large,12,520,76.0
+Counting and large,12,521,76.0
+Counting and large,12,522,76.0
+Counting and large,12,523,76.0
+Counting and large,12,524,76.0
+Counting and large,12,525,76.0
+Counting and large,12,526,76.0
+Counting and large,12,527,76.0
+Counting and large,12,528,76.0
+Counting and large,12,529,76.0
+Counting and large,12,530,76.0
+Counting and large,12,531,76.0
+Counting and large,12,532,76.0
+Counting and large,12,533,76.0
+Counting and large,12,534,76.0
+Counting and large,12,535,76.0
+Counting and large,12,536,76.0
+Counting and large,12,537,76.0
+Counting and large,12,538,76.0
+Counting and large,12,539,76.0
+Counting and large,12,540,76.0
+Counting and large,12,541,76.0
+Counting and large,12,542,76.0
+Counting and large,12,543,76.0
+Counting and large,12,544,76.0
+Counting and large,12,545,76.0
+Counting and large,12,546,76.0
+Counting and large,12,547,76.0
+Counting and large,12,548,76.0
+Counting and large,12,549,76.0
+Counting and large,12,550,76.0
+Counting and large,12,551,76.0
+Counting and large,12,552,76.0
+Counting and large,12,553,76.0
+Counting and large,12,554,76.0
+Counting and large,12,555,76.0
+Counting and large,12,556,76.0
+Counting and large,12,557,76.0
+Counting and large,12,558,76.0
+Counting and large,12,559,76.0
+Counting and large,12,560,76.0
+Counting and large,12,561,76.0
+Counting and large,12,562,76.0
+Counting and large,12,563,76.0
+Counting and large,12,564,76.0
+Counting and large,12,565,76.0
+Counting and large,12,566,76.0
+Counting and large,12,567,76.0
+Counting and large,12,568,76.0
+Counting and large,12,569,76.0
+Counting and large,12,570,76.0
+Counting and large,12,571,76.0
+Counting and large,12,572,76.0
+Counting and large,12,573,76.0
+Counting and large,12,574,76.0
+Counting and large,12,575,76.0
+Counting and large,12,576,76.0
+Counting and large,12,577,76.0
+Counting and large,12,578,76.0
+Counting and large,12,579,76.0
+Counting and large,12,580,76.0
+Counting and large,12,581,76.0
+Counting and large,12,582,76.0
+Counting and large,12,583,76.0
+Counting and large,12,584,76.0
+Counting and large,12,585,76.0
+Counting and large,12,586,76.0
+Counting and large,12,587,76.0
+Counting and large,12,588,76.0
+Counting and large,12,589,76.0
+Counting and large,12,590,76.0
+Counting and large,12,591,76.0
+Counting and large,12,592,76.0
+Counting and large,12,593,76.0
+Counting and large,12,594,76.0
+Counting and large,12,595,76.0
+Counting and large,12,596,76.0
+Counting and large,12,597,76.0
+Counting and large,12,598,76.0
+Counting and large,12,599,76.0
+Counting and large,12,600,76.0
+Counting and large,12,601,76.0
+Counting and large,12,602,76.0
+Counting and large,12,603,76.0
+Counting and large,12,604,76.0
+Counting and large,12,605,76.0
+Counting and large,12,606,76.0
+Counting and large,12,607,76.0
+Counting and large,12,608,76.0
+Counting and large,12,609,76.0
+Counting and large,12,610,76.0
+Counting and large,12,611,76.0
+Counting and large,12,612,76.0
+Counting and large,12,613,76.0
+Counting and large,12,614,76.0
+Counting and large,12,615,76.0
+Counting and large,12,616,76.0
+Counting and large,12,617,76.0
+Counting and large,12,618,76.0
+Counting and large,12,619,76.0
+Counting and large,12,620,76.0
+Counting and large,12,621,76.0
+Counting and large,12,622,76.0
+Counting and large,12,623,76.0
+Counting and large,12,624,76.0
+Counting and large,12,625,76.0
+Counting and large,12,626,76.0
+Counting and large,12,627,76.0
+Counting and large,12,628,76.0
+Counting and large,12,629,76.0
+Counting and large,12,630,76.0
+Counting and large,12,631,76.0
+Counting and large,12,632,76.0
+Counting and large,12,633,76.0
+Counting and large,12,634,76.0
+Counting and large,12,635,76.0
+Counting and large,12,636,76.0
+Counting and large,12,637,76.0
+Counting and large,12,638,76.0
+Counting and large,12,639,76.0
+Counting and large,12,640,76.0
+Counting and large,12,641,76.0
+Counting and large,12,642,76.0
+Counting and large,12,643,76.0
+Counting and large,12,644,76.0
+Counting and large,12,645,76.0
+Counting and large,12,646,76.0
+Counting and large,12,647,76.0
+Counting and large,12,648,76.0
+Counting and large,12,649,76.0
+Counting and large,12,650,76.0
+Counting and large,12,651,76.0
+Counting and large,12,652,76.0
+Counting and large,12,653,76.0
+Counting and large,12,654,76.0
+Counting and large,12,655,76.0
+Counting and large,12,656,76.0
+Counting and large,12,657,76.0
+Counting and large,12,658,76.0
+Counting and large,12,659,76.0
+Counting and large,12,660,76.0
+Counting and large,12,661,76.0
+Counting and large,12,662,76.0
+Counting and large,12,663,76.0
+Counting and large,12,664,76.0
+Counting and large,12,665,76.0
+Counting and large,12,666,76.0
+Counting and large,12,667,76.0
+Counting and large,12,668,76.0
+Counting and large,12,669,76.0
+Counting and large,12,670,76.0
+Counting and large,12,671,76.0
+Counting and large,12,672,76.0
+Counting and large,12,673,76.0
+Counting and large,12,674,76.0
+Counting and large,12,675,76.0
+Counting and large,12,676,76.0
+Counting and large,12,677,76.0
+Counting and large,12,678,76.0
+Counting and large,12,679,76.0
+Counting and large,12,680,76.0
+Counting and large,12,681,76.0
+Counting and large,12,682,76.0
+Counting and large,12,683,76.0
+Counting and large,12,684,76.0
+Counting and large,12,685,76.0
+Counting and large,12,686,76.0
+Counting and large,12,687,76.0
+Counting and large,12,688,76.0
+Counting and large,12,689,76.0
+Counting and large,12,690,76.0
+Counting and large,12,691,76.0
+Counting and large,12,692,76.0
+Counting and large,12,693,76.0
+Counting and large,12,694,76.0
+Counting and large,12,695,76.0
+Counting and large,12,696,76.0
+Counting and large,12,697,76.0
+Counting and large,12,698,76.0
+Counting and large,12,699,76.0
+Counting and large,12,700,76.0
+Counting and large,12,701,76.0
+Counting and large,12,702,76.0
+Counting and large,12,703,76.0
+Counting and large,12,704,76.0
+Counting and large,12,705,76.0
+Counting and large,12,706,76.0
+Counting and large,12,707,76.0
+Counting and large,12,708,76.0
+Counting and large,12,709,76.0
+Counting and large,12,710,76.0
+Counting and large,12,711,76.0
+Counting and large,12,712,76.0
+Counting and large,12,713,76.0
+Counting and large,12,714,76.0
+Counting and large,12,715,76.0
+Counting and large,12,716,76.0
+Counting and large,12,717,76.0
+Counting and large,12,718,76.0
+Counting and large,12,719,76.0
+Counting and large,12,720,76.0
+Counting and large,12,721,76.0
+Counting and large,12,722,76.0
+Counting and large,12,723,76.0
+Counting and large,12,724,76.0
+Counting and large,12,725,76.0
+Counting and large,12,726,76.0
+Counting and large,12,727,76.0
+Counting and large,12,728,76.0
+Counting and large,12,729,76.0
+Counting and large,12,730,76.0
+Counting and large,12,731,76.0
+Counting and large,12,732,76.0
+Counting and large,12,733,76.0
+Counting and large,12,734,76.0
+Counting and large,12,735,76.0
+Counting and large,12,736,76.0
+Counting and large,12,737,76.0
+Counting and large,12,738,76.0
+Counting and large,12,739,76.0
+Counting and large,12,740,76.0
+Counting and large,12,741,76.0
+Counting and large,12,742,76.0
+Counting and large,12,743,76.0
+Counting and large,12,744,76.0
+Counting and large,12,745,76.0
+Counting and large,12,746,76.0
+Counting and large,12,747,76.0
+Counting and large,12,748,76.0
+Counting and large,12,749,76.0
+Counting and large,12,750,76.0
+Counting and large,12,751,76.0
+Counting and large,12,752,76.0
+Counting and large,12,753,76.0
+Counting and large,12,754,76.0
+Counting and large,12,755,76.0
+Counting and large,12,756,76.0
+Counting and large,12,757,76.0
+Counting and large,12,758,76.0
+Counting and large,12,759,76.0
+Counting and large,12,760,76.0
+Counting and large,12,761,76.0
+Counting and large,12,762,76.0
+Counting and large,12,763,76.0
+Counting and large,12,764,76.0
+Counting and large,12,765,76.0
+Counting and large,12,766,76.0
+Counting and large,12,767,76.0
+Counting and large,12,768,76.0
+Counting and large,12,769,76.0
+Counting and large,12,770,76.0
+Counting and large,12,771,76.0
+Counting and large,12,772,76.0
+Counting and large,12,773,76.0
+Counting and large,12,774,76.0
+Counting and large,12,775,76.0
+Counting and large,12,776,76.0
+Counting and large,12,777,76.0
+Counting and large,12,778,76.0
+Counting and large,12,779,76.0
+Counting and large,12,780,76.0
+Counting and large,12,781,76.0
+Counting and large,12,782,76.0
+Counting and large,12,783,76.0
+Counting and large,12,784,76.0
+Counting and large,12,785,76.0
+Counting and large,12,786,76.0
+Counting and large,12,787,76.0
+Counting and large,12,788,76.0
+Counting and large,12,789,76.0
+Counting and large,12,790,76.0
+Counting and large,12,791,76.0
+Counting and large,12,792,76.0
+Counting and large,12,793,76.0
+Counting and large,12,794,76.0
+Counting and large,12,795,76.0
+Counting and large,12,796,76.0
+Counting and large,12,797,76.0
+Counting and large,12,798,76.0
+Counting and large,12,799,76.0
+Counting and large,12,800,76.0
+Counting and large,12,801,76.0
+Counting and large,12,802,76.0
+Counting and large,12,803,76.0
+Counting and large,12,804,76.0
+Counting and large,12,805,76.0
+Counting and large,12,806,76.0
+Counting and large,12,807,76.0
+Counting and large,12,808,76.0
+Counting and large,12,809,76.0
+Counting and large,12,810,76.0
+Counting and large,12,811,76.0
+Counting and large,12,812,76.0
+Counting and large,12,813,76.0
+Counting and large,12,814,76.0
+Counting and large,12,815,76.0
+Counting and large,12,816,76.0
+Counting and large,12,817,76.0
+Counting and large,12,818,76.0
+Counting and large,12,819,76.0
+Counting and large,12,820,76.0
+Counting and large,12,821,76.0
+Counting and large,12,822,76.0
+Counting and large,12,823,76.0
+Counting and large,12,824,76.0
+Counting and large,12,825,76.0
+Counting and large,12,826,76.0
+Counting and large,12,827,76.0
+Counting and large,12,828,76.0
+Counting and large,12,829,76.0
+Counting and large,12,830,76.0
+Counting and large,12,831,76.0
+Counting and large,12,832,76.0
+Counting and large,12,833,76.0
+Counting and large,12,834,76.0
+Counting and large,12,835,76.0
+Counting and large,12,836,76.0
+Counting and large,12,837,76.0
+Counting and large,12,838,76.0
+Counting and large,12,839,76.0
+Counting and large,12,840,76.0
+Counting and large,12,841,76.0
+Counting and large,12,842,76.0
+Counting and large,12,843,76.0
+Counting and large,12,844,76.0
+Counting and large,12,845,76.0
+Counting and large,12,846,76.0
+Counting and large,12,847,76.0
+Counting and large,12,848,76.0
+Counting and large,12,849,76.0
+Counting and large,12,850,76.0
+Counting and large,12,851,76.0
+Counting and large,12,852,76.0
+Counting and large,12,853,76.0
+Counting and large,12,854,76.0
+Counting and large,12,855,76.0
+Counting and large,12,856,76.0
+Counting and large,12,857,76.0
+Counting and large,12,858,76.0
+Counting and large,12,859,76.0
+Counting and large,12,860,76.0
+Counting and large,12,861,76.0
+Counting and large,12,862,76.0
+Counting and large,12,863,76.0
+Counting and large,12,864,76.0
+Counting and large,12,865,76.0
+Counting and large,12,866,76.0
+Counting and large,12,867,76.0
+Counting and large,12,868,76.0
+Counting and large,12,869,76.0
+Counting and large,12,870,76.0
+Counting and large,12,871,76.0
+Counting and large,12,872,76.0
+Counting and large,12,873,76.0
+Counting and large,12,874,76.0
+Counting and large,12,875,76.0
+Counting and large,12,876,76.0
+Counting and large,12,877,76.0
+Counting and large,12,878,76.0
+Counting and large,12,879,76.0
+Counting and large,12,880,76.0
+Counting and large,12,881,76.0
+Counting and large,12,882,76.0
+Counting and large,12,883,76.0
+Counting and large,12,884,76.0
+Counting and large,12,885,76.0
+Counting and large,12,886,76.0
+Counting and large,12,887,76.0
+Counting and large,12,888,76.0
+Counting and large,12,889,76.0
+Counting and large,12,890,76.0
+Counting and large,12,891,76.0
+Counting and large,12,892,76.0
+Counting and large,12,893,76.0
+Counting and large,12,894,76.0
+Counting and large,12,895,76.0
+Counting and large,12,896,76.0
+Counting and large,12,897,76.0
+Counting and large,12,898,76.0
+Counting and large,12,899,76.0
+Counting and large,12,900,76.0
+Counting and large,12,901,76.0
+Counting and large,12,902,76.0
+Counting and large,12,903,76.0
+Counting and large,12,904,76.0
+Counting and large,12,905,76.0
+Counting and large,12,906,76.0
+Counting and large,12,907,76.0
+Counting and large,12,908,76.0
+Counting and large,12,909,76.0
+Counting and large,12,910,76.0
+Counting and large,12,911,76.0
+Counting and large,12,912,76.0
+Counting and large,12,913,76.0
+Counting and large,12,914,76.0
+Counting and large,12,915,76.0
+Counting and large,12,916,76.0
+Counting and large,12,917,76.0
+Counting and large,12,918,76.0
+Counting and large,12,919,76.0
+Counting and large,12,920,76.0
+Counting and large,12,921,76.0
+Counting and large,12,922,65.0
+Counting and large,12,923,33.0
+Counting and large,12,924,1.0
+"Counting, small and large",12,0,1.0
+"Counting, small and large",12,1,28.0
+"Counting, small and large",12,2,60.0
+"Counting, small and large",12,3,76.0
+"Counting, small and large",12,4,76.0
+"Counting, small and large",12,5,76.0
+"Counting, small and large",12,6,76.0
+"Counting, small and large",12,7,76.0
+"Counting, small and large",12,8,76.0
+"Counting, small and large",12,9,76.0
+"Counting, small and large",12,10,76.0
+"Counting, small and large",12,11,76.0
+"Counting, small and large",12,12,76.0
+"Counting, small and large",12,13,76.0
+"Counting, small and large",12,14,76.0
+"Counting, small and large",12,15,76.0
+"Counting, small and large",12,16,76.0
+"Counting, small and large",12,17,76.0
+"Counting, small and large",12,18,76.0
+"Counting, small and large",12,19,76.0
+"Counting, small and large",12,20,76.0
+"Counting, small and large",12,21,76.0
+"Counting, small and large",12,22,76.0
+"Counting, small and large",12,23,76.0
+"Counting, small and large",12,24,76.0
+"Counting, small and large",12,25,76.0
+"Counting, small and large",12,26,76.0
+"Counting, small and large",12,27,76.0
+"Counting, small and large",12,28,76.0
+"Counting, small and large",12,29,76.0
+"Counting, small and large",12,30,76.0
+"Counting, small and large",12,31,76.0
+"Counting, small and large",12,32,76.0
+"Counting, small and large",12,33,76.0
+"Counting, small and large",12,34,76.0
+"Counting, small and large",12,35,76.0
+"Counting, small and large",12,36,76.0
+"Counting, small and large",12,37,76.0
+"Counting, small and large",12,38,76.0
+"Counting, small and large",12,39,76.0
+"Counting, small and large",12,40,76.0
+"Counting, small and large",12,41,76.0
+"Counting, small and large",12,42,76.0
+"Counting, small and large",12,43,76.0
+"Counting, small and large",12,44,76.0
+"Counting, small and large",12,45,76.0
+"Counting, small and large",12,46,76.0
+"Counting, small and large",12,47,76.0
+"Counting, small and large",12,48,76.0
+"Counting, small and large",12,49,76.0
+"Counting, small and large",12,50,76.0
+"Counting, small and large",12,51,76.0
+"Counting, small and large",12,52,76.0
+"Counting, small and large",12,53,76.0
+"Counting, small and large",12,54,76.0
+"Counting, small and large",12,55,76.0
+"Counting, small and large",12,56,76.0
+"Counting, small and large",12,57,76.0
+"Counting, small and large",12,58,76.0
+"Counting, small and large",12,59,76.0
+"Counting, small and large",12,60,76.0
+"Counting, small and large",12,61,76.0
+"Counting, small and large",12,62,76.0
+"Counting, small and large",12,63,76.0
+"Counting, small and large",12,64,76.0
+"Counting, small and large",12,65,76.0
+"Counting, small and large",12,66,76.0
+"Counting, small and large",12,67,76.0
+"Counting, small and large",12,68,76.0
+"Counting, small and large",12,69,76.0
+"Counting, small and large",12,70,76.0
+"Counting, small and large",12,71,76.0
+"Counting, small and large",12,72,76.0
+"Counting, small and large",12,73,76.0
+"Counting, small and large",12,74,76.0
+"Counting, small and large",12,75,76.0
+"Counting, small and large",12,76,76.0
+"Counting, small and large",12,77,76.0
+"Counting, small and large",12,78,76.0
+"Counting, small and large",12,79,76.0
+"Counting, small and large",12,80,76.0
+"Counting, small and large",12,81,76.0
+"Counting, small and large",12,82,76.0
+"Counting, small and large",12,83,76.0
+"Counting, small and large",12,84,76.0
+"Counting, small and large",12,85,76.0
+"Counting, small and large",12,86,76.0
+"Counting, small and large",12,87,76.0
+"Counting, small and large",12,88,76.0
+"Counting, small and large",12,89,76.0
+"Counting, small and large",12,90,76.0
+"Counting, small and large",12,91,76.0
+"Counting, small and large",12,92,76.0
+"Counting, small and large",12,93,76.0
+"Counting, small and large",12,94,76.0
+"Counting, small and large",12,95,76.0
+"Counting, small and large",12,96,40.0
+"Counting, small and large",12,97,40.0
+"Counting, small and large",12,98,39.1091889741185
+"Counting, small and large",12,99,38.9997972566802
+"Counting, small and large",12,100,76.0
+"Counting, small and large",12,101,76.0
+"Counting, small and large",12,102,76.0
+"Counting, small and large",12,103,76.0
+"Counting, small and large",12,104,76.0
+"Counting, small and large",12,105,76.0
+"Counting, small and large",12,106,76.0
+"Counting, small and large",12,107,76.0
+"Counting, small and large",12,108,76.0
+"Counting, small and large",12,109,76.0
+"Counting, small and large",12,110,76.0
+"Counting, small and large",12,111,76.0
+"Counting, small and large",12,112,76.0
+"Counting, small and large",12,113,76.0
+"Counting, small and large",12,114,76.0
+"Counting, small and large",12,115,76.0
+"Counting, small and large",12,116,76.0
+"Counting, small and large",12,117,76.0
+"Counting, small and large",12,118,76.0
+"Counting, small and large",12,119,76.0
+"Counting, small and large",12,120,76.0
+"Counting, small and large",12,121,76.0
+"Counting, small and large",12,122,76.0
+"Counting, small and large",12,123,76.0
+"Counting, small and large",12,124,76.0
+"Counting, small and large",12,125,76.0
+"Counting, small and large",12,126,76.0
+"Counting, small and large",12,127,76.0
+"Counting, small and large",12,128,76.0
+"Counting, small and large",12,129,76.0
+"Counting, small and large",12,130,76.0
+"Counting, small and large",12,131,76.0
+"Counting, small and large",12,132,76.0
+"Counting, small and large",12,133,76.0
+"Counting, small and large",12,134,76.0
+"Counting, small and large",12,135,76.0
+"Counting, small and large",12,136,76.0
+"Counting, small and large",12,137,76.0
+"Counting, small and large",12,138,76.0
+"Counting, small and large",12,139,76.0
+"Counting, small and large",12,140,76.0
+"Counting, small and large",12,141,76.0
+"Counting, small and large",12,142,76.0
+"Counting, small and large",12,143,76.0
+"Counting, small and large",12,144,76.0
+"Counting, small and large",12,145,76.0
+"Counting, small and large",12,146,76.0
+"Counting, small and large",12,147,76.0
+"Counting, small and large",12,148,76.0
+"Counting, small and large",12,149,76.0
+"Counting, small and large",12,150,76.0
+"Counting, small and large",12,151,76.0
+"Counting, small and large",12,152,76.0
+"Counting, small and large",12,153,76.0
+"Counting, small and large",12,154,76.0
+"Counting, small and large",12,155,76.0
+"Counting, small and large",12,156,76.0
+"Counting, small and large",12,157,76.0
+"Counting, small and large",12,158,76.0
+"Counting, small and large",12,159,76.0
+"Counting, small and large",12,160,76.0
+"Counting, small and large",12,161,76.0
+"Counting, small and large",12,162,76.0
+"Counting, small and large",12,163,76.0
+"Counting, small and large",12,164,76.0
+"Counting, small and large",12,165,76.0
+"Counting, small and large",12,166,76.0
+"Counting, small and large",12,167,76.0
+"Counting, small and large",12,168,76.0
+"Counting, small and large",12,169,76.0
+"Counting, small and large",12,170,76.0
+"Counting, small and large",12,171,76.0
+"Counting, small and large",12,172,76.0
+"Counting, small and large",12,173,76.0
+"Counting, small and large",12,174,76.0
+"Counting, small and large",12,175,76.0
+"Counting, small and large",12,176,76.0
+"Counting, small and large",12,177,76.0
+"Counting, small and large",12,178,76.0
+"Counting, small and large",12,179,76.0
+"Counting, small and large",12,180,76.0
+"Counting, small and large",12,181,76.0
+"Counting, small and large",12,182,76.0
+"Counting, small and large",12,183,76.0
+"Counting, small and large",12,184,76.0
+"Counting, small and large",12,185,76.0
+"Counting, small and large",12,186,76.0
+"Counting, small and large",12,187,76.0
+"Counting, small and large",12,188,76.0
+"Counting, small and large",12,189,76.0
+"Counting, small and large",12,190,76.0
+"Counting, small and large",12,191,76.0
+"Counting, small and large",12,192,76.0
+"Counting, small and large",12,193,76.0
+"Counting, small and large",12,194,76.0
+"Counting, small and large",12,195,76.0
+"Counting, small and large",12,196,76.0
+"Counting, small and large",12,197,76.0
+"Counting, small and large",12,198,76.0
+"Counting, small and large",12,199,76.0
+"Counting, small and large",12,200,76.0
+"Counting, small and large",12,201,76.0
+"Counting, small and large",12,202,76.0
+"Counting, small and large",12,203,76.0
+"Counting, small and large",12,204,76.0
+"Counting, small and large",12,205,76.0
+"Counting, small and large",12,206,76.0
+"Counting, small and large",12,207,76.0
+"Counting, small and large",12,208,76.0
+"Counting, small and large",12,209,76.0
+"Counting, small and large",12,210,76.0
+"Counting, small and large",12,211,76.0
+"Counting, small and large",12,212,76.0
+"Counting, small and large",12,213,76.0
+"Counting, small and large",12,214,76.0
+"Counting, small and large",12,215,76.0
+"Counting, small and large",12,216,76.0
+"Counting, small and large",12,217,76.0
+"Counting, small and large",12,218,76.0
+"Counting, small and large",12,219,76.0
+"Counting, small and large",12,220,76.0
+"Counting, small and large",12,221,76.0
+"Counting, small and large",12,222,76.0
+"Counting, small and large",12,223,76.0
+"Counting, small and large",12,224,76.0
+"Counting, small and large",12,225,76.0
+"Counting, small and large",12,226,76.0
+"Counting, small and large",12,227,76.0
+"Counting, small and large",12,228,76.0
+"Counting, small and large",12,229,76.0
+"Counting, small and large",12,230,76.0
+"Counting, small and large",12,231,76.0
+"Counting, small and large",12,232,76.0
+"Counting, small and large",12,233,76.0
+"Counting, small and large",12,234,76.0
+"Counting, small and large",12,235,76.0
+"Counting, small and large",12,236,76.0
+"Counting, small and large",12,237,76.0
+"Counting, small and large",12,238,76.0
+"Counting, small and large",12,239,76.0
+"Counting, small and large",12,240,76.0
+"Counting, small and large",12,241,76.0
+"Counting, small and large",12,242,76.0
+"Counting, small and large",12,243,76.0
+"Counting, small and large",12,244,76.0
+"Counting, small and large",12,245,76.0
+"Counting, small and large",12,246,76.0
+"Counting, small and large",12,247,76.0
+"Counting, small and large",12,248,76.0
+"Counting, small and large",12,249,76.0
+"Counting, small and large",12,250,76.0
+"Counting, small and large",12,251,76.0
+"Counting, small and large",12,252,76.0
+"Counting, small and large",12,253,76.0
+"Counting, small and large",12,254,76.0
+"Counting, small and large",12,255,76.0
+"Counting, small and large",12,256,76.0
+"Counting, small and large",12,257,76.0
+"Counting, small and large",12,258,76.0
+"Counting, small and large",12,259,76.0
+"Counting, small and large",12,260,76.0
+"Counting, small and large",12,261,76.0
+"Counting, small and large",12,262,76.0
+"Counting, small and large",12,263,76.0
+"Counting, small and large",12,264,76.0
+"Counting, small and large",12,265,76.0
+"Counting, small and large",12,266,76.0
+"Counting, small and large",12,267,76.0
+"Counting, small and large",12,268,76.0
+"Counting, small and large",12,269,76.0
+"Counting, small and large",12,270,76.0
+"Counting, small and large",12,271,76.0
+"Counting, small and large",12,272,76.0
+"Counting, small and large",12,273,76.0
+"Counting, small and large",12,274,76.0
+"Counting, small and large",12,275,76.0
+"Counting, small and large",12,276,76.0
+"Counting, small and large",12,277,76.0
+"Counting, small and large",12,278,76.0
+"Counting, small and large",12,279,76.0
+"Counting, small and large",12,280,76.0
+"Counting, small and large",12,281,76.0
+"Counting, small and large",12,282,76.0
+"Counting, small and large",12,283,76.0
+"Counting, small and large",12,284,76.0
+"Counting, small and large",12,285,76.0
+"Counting, small and large",12,286,76.0
+"Counting, small and large",12,287,76.0
+"Counting, small and large",12,288,76.0
+"Counting, small and large",12,289,76.0
+"Counting, small and large",12,290,76.0
+"Counting, small and large",12,291,76.0
+"Counting, small and large",12,292,76.0
+"Counting, small and large",12,293,76.0
+"Counting, small and large",12,294,76.0
+"Counting, small and large",12,295,76.0
+"Counting, small and large",12,296,76.0
+"Counting, small and large",12,297,76.0
+"Counting, small and large",12,298,76.0
+"Counting, small and large",12,299,76.0
+"Counting, small and large",12,300,76.0
+"Counting, small and large",12,301,76.0
+"Counting, small and large",12,302,76.0
+"Counting, small and large",12,303,76.0
+"Counting, small and large",12,304,76.0
+"Counting, small and large",12,305,76.0
+"Counting, small and large",12,306,76.0
+"Counting, small and large",12,307,76.0
+"Counting, small and large",12,308,76.0
+"Counting, small and large",12,309,76.0
+"Counting, small and large",12,310,76.0
+"Counting, small and large",12,311,76.0
+"Counting, small and large",12,312,76.0
+"Counting, small and large",12,313,76.0
+"Counting, small and large",12,314,76.0
+"Counting, small and large",12,315,76.0
+"Counting, small and large",12,316,76.0
+"Counting, small and large",12,317,76.0
+"Counting, small and large",12,318,76.0
+"Counting, small and large",12,319,76.0
+"Counting, small and large",12,320,76.0
+"Counting, small and large",12,321,76.0
+"Counting, small and large",12,322,76.0
+"Counting, small and large",12,323,76.0
+"Counting, small and large",12,324,76.0
+"Counting, small and large",12,325,76.0
+"Counting, small and large",12,326,76.0
+"Counting, small and large",12,327,76.0
+"Counting, small and large",12,328,76.0
+"Counting, small and large",12,329,76.0
+"Counting, small and large",12,330,76.0
+"Counting, small and large",12,331,76.0
+"Counting, small and large",12,332,76.0
+"Counting, small and large",12,333,76.0
+"Counting, small and large",12,334,76.0
+"Counting, small and large",12,335,76.0
+"Counting, small and large",12,336,76.0
+"Counting, small and large",12,337,76.0
+"Counting, small and large",12,338,76.0
+"Counting, small and large",12,339,76.0
+"Counting, small and large",12,340,76.0
+"Counting, small and large",12,341,76.0
+"Counting, small and large",12,342,76.0
+"Counting, small and large",12,343,76.0
+"Counting, small and large",12,344,76.0
+"Counting, small and large",12,345,76.0
+"Counting, small and large",12,346,76.0
+"Counting, small and large",12,347,76.0
+"Counting, small and large",12,348,76.0
+"Counting, small and large",12,349,76.0
+"Counting, small and large",12,350,76.0
+"Counting, small and large",12,351,76.0
+"Counting, small and large",12,352,76.0
+"Counting, small and large",12,353,76.0
+"Counting, small and large",12,354,76.0
+"Counting, small and large",12,355,76.0
+"Counting, small and large",12,356,76.0
+"Counting, small and large",12,357,76.0
+"Counting, small and large",12,358,76.0
+"Counting, small and large",12,359,76.0
+"Counting, small and large",12,360,76.0
+"Counting, small and large",12,361,76.0
+"Counting, small and large",12,362,76.0
+"Counting, small and large",12,363,76.0
+"Counting, small and large",12,364,76.0
+"Counting, small and large",12,365,76.0
+"Counting, small and large",12,366,76.0
+"Counting, small and large",12,367,76.0
+"Counting, small and large",12,368,76.0
+"Counting, small and large",12,369,76.0
+"Counting, small and large",12,370,76.0
+"Counting, small and large",12,371,76.0
+"Counting, small and large",12,372,76.0
+"Counting, small and large",12,373,76.0
+"Counting, small and large",12,374,76.0
+"Counting, small and large",12,375,76.0
+"Counting, small and large",12,376,76.0
+"Counting, small and large",12,377,76.0
+"Counting, small and large",12,378,76.0
+"Counting, small and large",12,379,76.0
+"Counting, small and large",12,380,76.0
+"Counting, small and large",12,381,76.0
+"Counting, small and large",12,382,76.0
+"Counting, small and large",12,383,76.0
+"Counting, small and large",12,384,76.0
+"Counting, small and large",12,385,76.0
+"Counting, small and large",12,386,76.0
+"Counting, small and large",12,387,76.0
+"Counting, small and large",12,388,76.0
+"Counting, small and large",12,389,76.0
+"Counting, small and large",12,390,76.0
+"Counting, small and large",12,391,76.0
+"Counting, small and large",12,392,76.0
+"Counting, small and large",12,393,76.0
+"Counting, small and large",12,394,76.0
+"Counting, small and large",12,395,76.0
+"Counting, small and large",12,396,76.0
+"Counting, small and large",12,397,76.0
+"Counting, small and large",12,398,76.0
+"Counting, small and large",12,399,76.0
+"Counting, small and large",12,400,76.0
+"Counting, small and large",12,401,76.0
+"Counting, small and large",12,402,76.0
+"Counting, small and large",12,403,76.0
+"Counting, small and large",12,404,76.0
+"Counting, small and large",12,405,76.0
+"Counting, small and large",12,406,76.0
+"Counting, small and large",12,407,76.0
+"Counting, small and large",12,408,76.0
+"Counting, small and large",12,409,76.0
+"Counting, small and large",12,410,76.0
+"Counting, small and large",12,411,76.0
+"Counting, small and large",12,412,76.0
+"Counting, small and large",12,413,76.0
+"Counting, small and large",12,414,76.0
+"Counting, small and large",12,415,76.0
+"Counting, small and large",12,416,76.0
+"Counting, small and large",12,417,76.0
+"Counting, small and large",12,418,76.0
+"Counting, small and large",12,419,76.0
+"Counting, small and large",12,420,76.0
+"Counting, small and large",12,421,76.0
+"Counting, small and large",12,422,76.0
+"Counting, small and large",12,423,76.0
+"Counting, small and large",12,424,76.0
+"Counting, small and large",12,425,76.0
+"Counting, small and large",12,426,76.0
+"Counting, small and large",12,427,76.0
+"Counting, small and large",12,428,76.0
+"Counting, small and large",12,429,76.0
+"Counting, small and large",12,430,76.0
+"Counting, small and large",12,431,76.0
+"Counting, small and large",12,432,76.0
+"Counting, small and large",12,433,76.0
+"Counting, small and large",12,434,76.0
+"Counting, small and large",12,435,76.0
+"Counting, small and large",12,436,76.0
+"Counting, small and large",12,437,76.0
+"Counting, small and large",12,438,76.0
+"Counting, small and large",12,439,76.0
+"Counting, small and large",12,440,76.0
+"Counting, small and large",12,441,76.0
+"Counting, small and large",12,442,76.0
+"Counting, small and large",12,443,76.0
+"Counting, small and large",12,444,76.0
+"Counting, small and large",12,445,76.0
+"Counting, small and large",12,446,76.0
+"Counting, small and large",12,447,76.0
+"Counting, small and large",12,448,76.0
+"Counting, small and large",12,449,76.0
+"Counting, small and large",12,450,76.0
+"Counting, small and large",12,451,76.0
+"Counting, small and large",12,452,76.0
+"Counting, small and large",12,453,76.0
+"Counting, small and large",12,454,76.0
+"Counting, small and large",12,455,76.0
+"Counting, small and large",12,456,76.0
+"Counting, small and large",12,457,76.0
+"Counting, small and large",12,458,76.0
+"Counting, small and large",12,459,76.0
+"Counting, small and large",12,460,76.0
+"Counting, small and large",12,461,76.0
+"Counting, small and large",12,462,76.0
+"Counting, small and large",12,463,76.0
+"Counting, small and large",12,464,76.0
+"Counting, small and large",12,465,76.0
+"Counting, small and large",12,466,76.0
+"Counting, small and large",12,467,76.0
+"Counting, small and large",12,468,76.0
+"Counting, small and large",12,469,76.0
+"Counting, small and large",12,470,76.0
+"Counting, small and large",12,471,76.0
+"Counting, small and large",12,472,76.0
+"Counting, small and large",12,473,76.0
+"Counting, small and large",12,474,76.0
+"Counting, small and large",12,475,76.0
+"Counting, small and large",12,476,76.0
+"Counting, small and large",12,477,76.0
+"Counting, small and large",12,478,76.0
+"Counting, small and large",12,479,76.0
+"Counting, small and large",12,480,76.0
+"Counting, small and large",12,481,76.0
+"Counting, small and large",12,482,76.0
+"Counting, small and large",12,483,76.0
+"Counting, small and large",12,484,76.0
+"Counting, small and large",12,485,76.0
+"Counting, small and large",12,486,76.0
+"Counting, small and large",12,487,76.0
+"Counting, small and large",12,488,76.0
+"Counting, small and large",12,489,76.0
+"Counting, small and large",12,490,76.0
+"Counting, small and large",12,491,76.0
+"Counting, small and large",12,492,76.0
+"Counting, small and large",12,493,76.0
+"Counting, small and large",12,494,76.0
+"Counting, small and large",12,495,76.0
+"Counting, small and large",12,496,76.0
+"Counting, small and large",12,497,76.0
+"Counting, small and large",12,498,75.6973249505971
+"Counting, small and large",12,499,76.0
+"Counting, small and large",12,500,76.0
+"Counting, small and large",12,501,76.0
+"Counting, small and large",12,502,76.0
+"Counting, small and large",12,503,76.0
+"Counting, small and large",12,504,76.0
+"Counting, small and large",12,505,76.0
+"Counting, small and large",12,506,76.0
+"Counting, small and large",12,507,76.0
+"Counting, small and large",12,508,76.0
+"Counting, small and large",12,509,76.0
+"Counting, small and large",12,510,76.0
+"Counting, small and large",12,511,76.0
+"Counting, small and large",12,512,76.0
+"Counting, small and large",12,513,76.0
+"Counting, small and large",12,514,76.0
+"Counting, small and large",12,515,76.0
+"Counting, small and large",12,516,76.0
+"Counting, small and large",12,517,76.0
+"Counting, small and large",12,518,76.0
+"Counting, small and large",12,519,76.0
+"Counting, small and large",12,520,76.0
+"Counting, small and large",12,521,76.0
+"Counting, small and large",12,522,76.0
+"Counting, small and large",12,523,76.0
+"Counting, small and large",12,524,76.0
+"Counting, small and large",12,525,76.0
+"Counting, small and large",12,526,76.0
+"Counting, small and large",12,527,76.0
+"Counting, small and large",12,528,76.0
+"Counting, small and large",12,529,76.0
+"Counting, small and large",12,530,76.0
+"Counting, small and large",12,531,76.0
+"Counting, small and large",12,532,76.0
+"Counting, small and large",12,533,76.0
+"Counting, small and large",12,534,76.0
+"Counting, small and large",12,535,76.0
+"Counting, small and large",12,536,76.0
+"Counting, small and large",12,537,76.0
+"Counting, small and large",12,538,76.0
+"Counting, small and large",12,539,76.0
+"Counting, small and large",12,540,76.0
+"Counting, small and large",12,541,76.0
+"Counting, small and large",12,542,76.0
+"Counting, small and large",12,543,76.0
+"Counting, small and large",12,544,76.0
+"Counting, small and large",12,545,76.0
+"Counting, small and large",12,546,76.0
+"Counting, small and large",12,547,76.0
+"Counting, small and large",12,548,76.0
+"Counting, small and large",12,549,76.0
+"Counting, small and large",12,550,76.0
+"Counting, small and large",12,551,76.0
+"Counting, small and large",12,552,76.0
+"Counting, small and large",12,553,76.0
+"Counting, small and large",12,554,76.0
+"Counting, small and large",12,555,76.0
+"Counting, small and large",12,556,76.0
+"Counting, small and large",12,557,76.0
+"Counting, small and large",12,558,76.0
+"Counting, small and large",12,559,76.0
+"Counting, small and large",12,560,76.0
+"Counting, small and large",12,561,76.0
+"Counting, small and large",12,562,76.0
+"Counting, small and large",12,563,76.0
+"Counting, small and large",12,564,76.0
+"Counting, small and large",12,565,76.0
+"Counting, small and large",12,566,76.0
+"Counting, small and large",12,567,76.0
+"Counting, small and large",12,568,76.0
+"Counting, small and large",12,569,76.0
+"Counting, small and large",12,570,76.0
+"Counting, small and large",12,571,76.0
+"Counting, small and large",12,572,76.0
+"Counting, small and large",12,573,76.0
+"Counting, small and large",12,574,76.0
+"Counting, small and large",12,575,76.0
+"Counting, small and large",12,576,76.0
+"Counting, small and large",12,577,76.0
+"Counting, small and large",12,578,76.0
+"Counting, small and large",12,579,76.0
+"Counting, small and large",12,580,76.0
+"Counting, small and large",12,581,76.0
+"Counting, small and large",12,582,76.0
+"Counting, small and large",12,583,76.0
+"Counting, small and large",12,584,76.0
+"Counting, small and large",12,585,76.0
+"Counting, small and large",12,586,76.0
+"Counting, small and large",12,587,76.0
+"Counting, small and large",12,588,76.0
+"Counting, small and large",12,589,76.0
+"Counting, small and large",12,590,76.0
+"Counting, small and large",12,591,76.0
+"Counting, small and large",12,592,76.0
+"Counting, small and large",12,593,76.0
+"Counting, small and large",12,594,76.0
+"Counting, small and large",12,595,76.0
+"Counting, small and large",12,596,76.0
+"Counting, small and large",12,597,76.0
+"Counting, small and large",12,598,76.0
+"Counting, small and large",12,599,76.0
+"Counting, small and large",12,600,76.0
+"Counting, small and large",12,601,76.0
+"Counting, small and large",12,602,76.0
+"Counting, small and large",12,603,76.0
+"Counting, small and large",12,604,76.0
+"Counting, small and large",12,605,76.0
+"Counting, small and large",12,606,76.0
+"Counting, small and large",12,607,76.0
+"Counting, small and large",12,608,76.0
+"Counting, small and large",12,609,76.0
+"Counting, small and large",12,610,76.0
+"Counting, small and large",12,611,76.0
+"Counting, small and large",12,612,76.0
+"Counting, small and large",12,613,76.0
+"Counting, small and large",12,614,76.0
+"Counting, small and large",12,615,76.0
+"Counting, small and large",12,616,76.0
+"Counting, small and large",12,617,76.0
+"Counting, small and large",12,618,76.0
+"Counting, small and large",12,619,76.0
+"Counting, small and large",12,620,76.0
+"Counting, small and large",12,621,76.0
+"Counting, small and large",12,622,76.0
+"Counting, small and large",12,623,76.0
+"Counting, small and large",12,624,76.0
+"Counting, small and large",12,625,76.0
+"Counting, small and large",12,626,76.0
+"Counting, small and large",12,627,76.0
+"Counting, small and large",12,628,76.0
+"Counting, small and large",12,629,76.0
+"Counting, small and large",12,630,76.0
+"Counting, small and large",12,631,76.0
+"Counting, small and large",12,632,76.0
+"Counting, small and large",12,633,76.0
+"Counting, small and large",12,634,76.0
+"Counting, small and large",12,635,76.0
+"Counting, small and large",12,636,76.0
+"Counting, small and large",12,637,76.0
+"Counting, small and large",12,638,76.0
+"Counting, small and large",12,639,76.0
+"Counting, small and large",12,640,76.0
+"Counting, small and large",12,641,76.0
+"Counting, small and large",12,642,76.0
+"Counting, small and large",12,643,76.0
+"Counting, small and large",12,644,76.0
+"Counting, small and large",12,645,76.0
+"Counting, small and large",12,646,76.0
+"Counting, small and large",12,647,76.0
+"Counting, small and large",12,648,76.0
+"Counting, small and large",12,649,76.0
+"Counting, small and large",12,650,76.0
+"Counting, small and large",12,651,76.0
+"Counting, small and large",12,652,76.0
+"Counting, small and large",12,653,76.0
+"Counting, small and large",12,654,76.0
+"Counting, small and large",12,655,76.0
+"Counting, small and large",12,656,76.0
+"Counting, small and large",12,657,76.0
+"Counting, small and large",12,658,76.0
+"Counting, small and large",12,659,76.0
+"Counting, small and large",12,660,76.0
+"Counting, small and large",12,661,76.0
+"Counting, small and large",12,662,76.0
+"Counting, small and large",12,663,76.0
+"Counting, small and large",12,664,76.0
+"Counting, small and large",12,665,76.0
+"Counting, small and large",12,666,76.0
+"Counting, small and large",12,667,76.0
+"Counting, small and large",12,668,76.0
+"Counting, small and large",12,669,76.0
+"Counting, small and large",12,670,76.0
+"Counting, small and large",12,671,76.0
+"Counting, small and large",12,672,76.0
+"Counting, small and large",12,673,76.0
+"Counting, small and large",12,674,76.0
+"Counting, small and large",12,675,76.0
+"Counting, small and large",12,676,76.0
+"Counting, small and large",12,677,76.0
+"Counting, small and large",12,678,76.0
+"Counting, small and large",12,679,76.0
+"Counting, small and large",12,680,76.0
+"Counting, small and large",12,681,76.0
+"Counting, small and large",12,682,76.0
+"Counting, small and large",12,683,76.0
+"Counting, small and large",12,684,76.0
+"Counting, small and large",12,685,76.0
+"Counting, small and large",12,686,76.0
+"Counting, small and large",12,687,76.0
+"Counting, small and large",12,688,76.0
+"Counting, small and large",12,689,76.0
+"Counting, small and large",12,690,76.0
+"Counting, small and large",12,691,76.0
+"Counting, small and large",12,692,76.0
+"Counting, small and large",12,693,76.0
+"Counting, small and large",12,694,76.0
+"Counting, small and large",12,695,76.0
+"Counting, small and large",12,696,76.0
+"Counting, small and large",12,697,76.0
+"Counting, small and large",12,698,76.0
+"Counting, small and large",12,699,76.0
+"Counting, small and large",12,700,76.0
+"Counting, small and large",12,701,76.0
+"Counting, small and large",12,702,76.0
+"Counting, small and large",12,703,76.0
+"Counting, small and large",12,704,76.0
+"Counting, small and large",12,705,76.0
+"Counting, small and large",12,706,76.0
+"Counting, small and large",12,707,76.0
+"Counting, small and large",12,708,76.0
+"Counting, small and large",12,709,76.0
+"Counting, small and large",12,710,76.0
+"Counting, small and large",12,711,76.0
+"Counting, small and large",12,712,76.0
+"Counting, small and large",12,713,76.0
+"Counting, small and large",12,714,76.0
+"Counting, small and large",12,715,76.0
+"Counting, small and large",12,716,76.0
+"Counting, small and large",12,717,76.0
+"Counting, small and large",12,718,76.0
+"Counting, small and large",12,719,76.0
+"Counting, small and large",12,720,76.0
+"Counting, small and large",12,721,76.0
+"Counting, small and large",12,722,76.0
+"Counting, small and large",12,723,76.0
+"Counting, small and large",12,724,76.0
+"Counting, small and large",12,725,76.0
+"Counting, small and large",12,726,76.0
+"Counting, small and large",12,727,76.0
+"Counting, small and large",12,728,76.0
+"Counting, small and large",12,729,76.0
+"Counting, small and large",12,730,76.0
+"Counting, small and large",12,731,76.0
+"Counting, small and large",12,732,76.0
+"Counting, small and large",12,733,76.0
+"Counting, small and large",12,734,76.0
+"Counting, small and large",12,735,76.0
+"Counting, small and large",12,736,76.0
+"Counting, small and large",12,737,76.0
+"Counting, small and large",12,738,76.0
+"Counting, small and large",12,739,76.0
+"Counting, small and large",12,740,76.0
+"Counting, small and large",12,741,76.0
+"Counting, small and large",12,742,76.0
+"Counting, small and large",12,743,76.0
+"Counting, small and large",12,744,76.0
+"Counting, small and large",12,745,76.0
+"Counting, small and large",12,746,76.0
+"Counting, small and large",12,747,76.0
+"Counting, small and large",12,748,76.0
+"Counting, small and large",12,749,76.0
+"Counting, small and large",12,750,76.0
+"Counting, small and large",12,751,76.0
+"Counting, small and large",12,752,76.0
+"Counting, small and large",12,753,76.0
+"Counting, small and large",12,754,76.0
+"Counting, small and large",12,755,76.0
+"Counting, small and large",12,756,76.0
+"Counting, small and large",12,757,76.0
+"Counting, small and large",12,758,76.0
+"Counting, small and large",12,759,76.0
+"Counting, small and large",12,760,76.0
+"Counting, small and large",12,761,76.0
+"Counting, small and large",12,762,76.0
+"Counting, small and large",12,763,76.0
+"Counting, small and large",12,764,76.0
+"Counting, small and large",12,765,76.0
+"Counting, small and large",12,766,76.0
+"Counting, small and large",12,767,76.0
+"Counting, small and large",12,768,76.0
+"Counting, small and large",12,769,76.0
+"Counting, small and large",12,770,76.0
+"Counting, small and large",12,771,76.0
+"Counting, small and large",12,772,76.0
+"Counting, small and large",12,773,76.0
+"Counting, small and large",12,774,76.0
+"Counting, small and large",12,775,76.0
+"Counting, small and large",12,776,76.0
+"Counting, small and large",12,777,76.0
+"Counting, small and large",12,778,76.0
+"Counting, small and large",12,779,76.0
+"Counting, small and large",12,780,76.0
+"Counting, small and large",12,781,76.0
+"Counting, small and large",12,782,76.0
+"Counting, small and large",12,783,76.0
+"Counting, small and large",12,784,76.0
+"Counting, small and large",12,785,76.0
+"Counting, small and large",12,786,76.0
+"Counting, small and large",12,787,76.0
+"Counting, small and large",12,788,76.0
+"Counting, small and large",12,789,76.0
+"Counting, small and large",12,790,76.0
+"Counting, small and large",12,791,76.0
+"Counting, small and large",12,792,76.0
+"Counting, small and large",12,793,76.0
+"Counting, small and large",12,794,76.0
+"Counting, small and large",12,795,76.0
+"Counting, small and large",12,796,76.0
+"Counting, small and large",12,797,76.0
+"Counting, small and large",12,798,76.0
+"Counting, small and large",12,799,76.0
+"Counting, small and large",12,800,76.0
+"Counting, small and large",12,801,76.0
+"Counting, small and large",12,802,76.0
+"Counting, small and large",12,803,76.0
+"Counting, small and large",12,804,76.0
+"Counting, small and large",12,805,76.0
+"Counting, small and large",12,806,76.0
+"Counting, small and large",12,807,76.0
+"Counting, small and large",12,808,76.0
+"Counting, small and large",12,809,76.0
+"Counting, small and large",12,810,76.0
+"Counting, small and large",12,811,76.0
+"Counting, small and large",12,812,76.0
+"Counting, small and large",12,813,76.0
+"Counting, small and large",12,814,76.0
+"Counting, small and large",12,815,76.0
+"Counting, small and large",12,816,76.0
+"Counting, small and large",12,817,76.0
+"Counting, small and large",12,818,76.0
+"Counting, small and large",12,819,76.0
+"Counting, small and large",12,820,76.0
+"Counting, small and large",12,821,76.0
+"Counting, small and large",12,822,76.0
+"Counting, small and large",12,823,76.0
+"Counting, small and large",12,824,76.0
+"Counting, small and large",12,825,76.0
+"Counting, small and large",12,826,76.0
+"Counting, small and large",12,827,76.0
+"Counting, small and large",12,828,76.0
+"Counting, small and large",12,829,76.0
+"Counting, small and large",12,830,76.0
+"Counting, small and large",12,831,76.0
+"Counting, small and large",12,832,76.0
+"Counting, small and large",12,833,76.0
+"Counting, small and large",12,834,76.0
+"Counting, small and large",12,835,76.0
+"Counting, small and large",12,836,76.0
+"Counting, small and large",12,837,76.0
+"Counting, small and large",12,838,76.0
+"Counting, small and large",12,839,76.0
+"Counting, small and large",12,840,76.0
+"Counting, small and large",12,841,76.0
+"Counting, small and large",12,842,76.0
+"Counting, small and large",12,843,76.0
+"Counting, small and large",12,844,76.0
+"Counting, small and large",12,845,76.0
+"Counting, small and large",12,846,76.0
+"Counting, small and large",12,847,76.0
+"Counting, small and large",12,848,76.0
+"Counting, small and large",12,849,76.0
+"Counting, small and large",12,850,76.0
+"Counting, small and large",12,851,76.0
+"Counting, small and large",12,852,76.0
+"Counting, small and large",12,853,76.0
+"Counting, small and large",12,854,76.0
+"Counting, small and large",12,855,76.0
+"Counting, small and large",12,856,76.0
+"Counting, small and large",12,857,76.0
+"Counting, small and large",12,858,76.0
+"Counting, small and large",12,859,76.0
+"Counting, small and large",12,860,76.0
+"Counting, small and large",12,861,76.0
+"Counting, small and large",12,862,76.0
+"Counting, small and large",12,863,76.0
+"Counting, small and large",12,864,76.0
+"Counting, small and large",12,865,76.0
+"Counting, small and large",12,866,76.0
+"Counting, small and large",12,867,76.0
+"Counting, small and large",12,868,76.0
+"Counting, small and large",12,869,76.0
+"Counting, small and large",12,870,76.0
+"Counting, small and large",12,871,76.0
+"Counting, small and large",12,872,76.0
+"Counting, small and large",12,873,76.0
+"Counting, small and large",12,874,76.0
+"Counting, small and large",12,875,76.0
+"Counting, small and large",12,876,76.0
+"Counting, small and large",12,877,76.0
+"Counting, small and large",12,878,76.0
+"Counting, small and large",12,879,76.0
+"Counting, small and large",12,880,76.0
+"Counting, small and large",12,881,76.0
+"Counting, small and large",12,882,76.0
+"Counting, small and large",12,883,76.0
+"Counting, small and large",12,884,76.0
+"Counting, small and large",12,885,76.0
+"Counting, small and large",12,886,76.0
+"Counting, small and large",12,887,76.0
+"Counting, small and large",12,888,76.0
+"Counting, small and large",12,889,76.0
+"Counting, small and large",12,890,76.0
+"Counting, small and large",12,891,76.0
+"Counting, small and large",12,892,76.0
+"Counting, small and large",12,893,76.0
+"Counting, small and large",12,894,76.0
+"Counting, small and large",12,895,76.0
+"Counting, small and large",12,896,76.0
+"Counting, small and large",12,897,76.0
+"Counting, small and large",12,898,76.0
+"Counting, small and large",12,899,76.0
+"Counting, small and large",12,900,76.0
+"Counting, small and large",12,901,76.0
+"Counting, small and large",12,902,76.0
+"Counting, small and large",12,903,76.0
+"Counting, small and large",12,904,76.0
+"Counting, small and large",12,905,76.0
+"Counting, small and large",12,906,76.0
+"Counting, small and large",12,907,76.0
+"Counting, small and large",12,908,76.0
+"Counting, small and large",12,909,76.0
+"Counting, small and large",12,910,76.0
+"Counting, small and large",12,911,76.0
+"Counting, small and large",12,912,76.0
+"Counting, small and large",12,913,76.0
+"Counting, small and large",12,914,76.0
+"Counting, small and large",12,915,76.0
+"Counting, small and large",12,916,76.0
+"Counting, small and large",12,917,76.0
+"Counting, small and large",12,918,76.0
+"Counting, small and large",12,919,76.0
+"Counting, small and large",12,920,76.0
+"Counting, small and large",12,921,76.0
+"Counting, small and large",12,922,66.0
+"Counting, small and large",12,923,34.0
+"Counting, small and large",12,924,2.0

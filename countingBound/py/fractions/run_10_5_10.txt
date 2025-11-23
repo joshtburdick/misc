@@ -1,0 +1,1104 @@
+GLPSOL--GLPK LP/MIP Solver 5.0
+Parameter(s) specified in the command line:
+ --cpxlp /var/folders/29/7mqqcvmx1ybgwgxtx1cgj9dr0000gn/T/64911f9d23e4455db2e4a606f65e8eeb-pulp.lp
+ -o /var/folders/29/7mqqcvmx1ybgwgxtx1cgj9dr0000gn/T/64911f9d23e4455db2e4a606f65e8eeb-pulp.sol
+ --exact
+Reading problem data from '/var/folders/29/7mqqcvmx1ybgwgxtx1cgj9dr0000gn/T/64911f9d23e4455db2e4a606f65e8eeb-pulp.lp'...
+516 rows, 2783 columns, 7843 non-zeros
+1675 lines were read
+glp_exact: 516 rows, 2783 columns, 7843 non-zeros
+GNU MP bignum library is being used
+      0:   infsum =   7.23700557733203e+75   (253)
+    583:   infsum =                      0   (0)
+*   583:   objval =                      1   (0)
+*   583:   objval =                      1   (0)
+OPTIMAL SOLUTION FOUND
+Time used:   0.3 secs
+Memory used: 2.2 Mb (2331860 bytes)
+Writing basic solution to '/var/folders/29/7mqqcvmx1ybgwgxtx1cgj9dr0000gn/T/64911f9d23e4455db2e4a606f65e8eeb-pulp.sol'...
+GLPSOL--GLPK LP/MIP Solver 5.0
+Parameter(s) specified in the command line:
+ --cpxlp /var/folders/29/7mqqcvmx1ybgwgxtx1cgj9dr0000gn/T/70bdc6131e4a4722836c04efd32f4097-pulp.lp
+ -o /var/folders/29/7mqqcvmx1ybgwgxtx1cgj9dr0000gn/T/70bdc6131e4a4722836c04efd32f4097-pulp.sol
+ --exact
+Reading problem data from '/var/folders/29/7mqqcvmx1ybgwgxtx1cgj9dr0000gn/T/70bdc6131e4a4722836c04efd32f4097-pulp.lp'...
+1012 rows, 2783 columns, 56107 non-zeros
+26831 lines were read
+glp_exact: 1012 rows, 2783 columns, 56107 non-zeros
+GNU MP bignum library is being used
+      0:   infsum =   7.23700557733203e+75   (253)
+    117:   infsum =   7.23700557733202e+75   (174)
+    126:   infsum =   7.23700557733202e+75   (171)
+    135:   infsum =   7.23700557733202e+75   (171)
+    143:   infsum =   7.23700557733202e+75   (171)
+    445:   infsum =   1.61815626472284e+52   (34)
+    533:   infsum =                      0   (0)
+*   533:   objval =                      1   (0)
+*   533:   objval =                      1   (0)
+OPTIMAL SOLUTION FOUND
+Time used:   27.5 secs
+Memory used: 10.3 Mb (10794804 bytes)
+Writing basic solution to '/var/folders/29/7mqqcvmx1ybgwgxtx1cgj9dr0000gn/T/70bdc6131e4a4722836c04efd32f4097-pulp.sol'...
+GLPSOL--GLPK LP/MIP Solver 5.0
+Parameter(s) specified in the command line:
+ --cpxlp /var/folders/29/7mqqcvmx1ybgwgxtx1cgj9dr0000gn/T/33ce37b84d294c3c8a190417713b69f6-pulp.lp
+ -o /var/folders/29/7mqqcvmx1ybgwgxtx1cgj9dr0000gn/T/33ce37b84d294c3c8a190417713b69f6-pulp.sol
+ --exact
+Reading problem data from '/var/folders/29/7mqqcvmx1ybgwgxtx1cgj9dr0000gn/T/33ce37b84d294c3c8a190417713b69f6-pulp.lp'...
+1022 rows, 2783 columns, 58637 non-zeros
+27243 lines were read
+glp_exact: 1022 rows, 2783 columns, 58637 non-zeros
+GNU MP bignum library is being used
+      0:   infsum =   7.23700557733203e+75   (253)
+    117:   infsum =   7.23700557733202e+75   (174)
+    126:   infsum =   7.23700557733202e+75   (171)
+    135:   infsum =   7.23700557733202e+75   (171)
+    143:   infsum =   7.23700557733202e+75   (171)
+    422:   infsum =   1.63693644357884e+52   (45)
+    554:   infsum =                      0   (0)
+*   554:   objval =                      1   (0)
+*   554:   objval =                      1   (0)
+OPTIMAL SOLUTION FOUND
+Time used:   28.6 secs
+Memory used: 10.5 Mb (11051404 bytes)
+Writing basic solution to '/var/folders/29/7mqqcvmx1ybgwgxtx1cgj9dr0000gn/T/33ce37b84d294c3c8a190417713b69f6-pulp.sol'...
+GLPSOL--GLPK LP/MIP Solver 5.0
+Parameter(s) specified in the command line:
+ --cpxlp /var/folders/29/7mqqcvmx1ybgwgxtx1cgj9dr0000gn/T/f28cc435024b44de971625e1af73e5a4-pulp.lp
+ -o /var/folders/29/7mqqcvmx1ybgwgxtx1cgj9dr0000gn/T/f28cc435024b44de971625e1af73e5a4-pulp.sol
+ --exact
+Reading problem data from '/var/folders/29/7mqqcvmx1ybgwgxtx1cgj9dr0000gn/T/f28cc435024b44de971625e1af73e5a4-pulp.lp'...
+1023 rows, 2783 columns, 58638 non-zeros
+27244 lines were read
+glp_exact: 1023 rows, 2783 columns, 58638 non-zeros
+GNU MP bignum library is being used
+      0:   infsum =   7.23700557733203e+75   (253)
+    115:   infsum =   7.23700557733202e+75   (176)
+    124:   infsum =   7.23700557733202e+75   (172)
+    134:   infsum =   7.23700557733202e+75   (171)
+    141:   infsum =   7.23700557733202e+75   (171)
+    166:   infsum =   7.23700557716452e+75   (171)
+    555:   infsum =                      0   (0)
+*   555:   objval =                      1   (0)
+*   555:   objval =                      1   (0)
+OPTIMAL SOLUTION FOUND
+Time used:   31.0 secs
+Memory used: 10.5 Mb (11051928 bytes)
+Writing basic solution to '/var/folders/29/7mqqcvmx1ybgwgxtx1cgj9dr0000gn/T/f28cc435024b44de971625e1af73e5a4-pulp.sol'...
+Result r = 1
+Result r = 1
+Result r = 1
+Result r = 1
+Constraints,Num. vertices,Num. cliques,Min. gates
+Counting,10,0,1.0
+Counting,10,1,10.0
+Counting,10,2,10.0
+Counting,10,3,4.0
+Counting,10,4,10.0
+Counting,10,5,10.0
+Counting,10,6,10.0
+Counting,10,7,10.0
+Counting,10,8,10.0
+Counting,10,9,10.0
+Counting,10,10,10.0
+Counting,10,11,10.0
+Counting,10,12,10.0
+Counting,10,13,10.0
+Counting,10,14,10.0
+Counting,10,15,10.0
+Counting,10,16,10.0
+Counting,10,17,10.0
+Counting,10,18,10.0
+Counting,10,19,10.0
+Counting,10,20,10.0
+Counting,10,21,10.0
+Counting,10,22,10.0
+Counting,10,23,10.0
+Counting,10,24,10.0
+Counting,10,25,10.0
+Counting,10,26,4.0
+Counting,10,27,4.0
+Counting,10,28,4.0
+Counting,10,29,4.0
+Counting,10,30,4.0
+Counting,10,31,4.0
+Counting,10,32,4.0
+Counting,10,33,4.0
+Counting,10,34,4.0
+Counting,10,35,4.0
+Counting,10,36,4.0
+Counting,10,37,4.0
+Counting,10,38,4.0
+Counting,10,39,4.0
+Counting,10,40,4.0
+Counting,10,41,4.0
+Counting,10,42,4.0
+Counting,10,43,4.0
+Counting,10,44,4.0
+Counting,10,45,4.0
+Counting,10,46,4.0
+Counting,10,47,4.0
+Counting,10,48,4.0
+Counting,10,49,10.0
+Counting,10,50,10.0
+Counting,10,51,10.0
+Counting,10,52,10.0
+Counting,10,53,10.0
+Counting,10,54,10.0
+Counting,10,55,10.0
+Counting,10,56,10.0
+Counting,10,57,10.0
+Counting,10,58,10.0
+Counting,10,59,10.0
+Counting,10,60,10.0
+Counting,10,61,10.0
+Counting,10,62,10.0
+Counting,10,63,10.0
+Counting,10,64,10.0
+Counting,10,65,10.0
+Counting,10,66,10.0
+Counting,10,67,10.0
+Counting,10,68,10.0
+Counting,10,69,10.0
+Counting,10,70,10.0
+Counting,10,71,10.0
+Counting,10,72,10.0
+Counting,10,73,10.0
+Counting,10,74,10.0
+Counting,10,75,10.0
+Counting,10,76,10.0
+Counting,10,77,10.0
+Counting,10,78,10.0
+Counting,10,79,10.0
+Counting,10,80,10.0
+Counting,10,81,10.0
+Counting,10,82,10.0
+Counting,10,83,10.0
+Counting,10,84,10.0
+Counting,10,85,10.0
+Counting,10,86,10.0
+Counting,10,87,10.0
+Counting,10,88,10.0
+Counting,10,89,10.0
+Counting,10,90,10.0
+Counting,10,91,10.0
+Counting,10,92,10.0
+Counting,10,93,10.0
+Counting,10,94,10.0
+Counting,10,95,10.0
+Counting,10,96,10.0
+Counting,10,97,10.0
+Counting,10,98,10.0
+Counting,10,99,10.0
+Counting,10,100,10.0
+Counting,10,101,10.0
+Counting,10,102,10.0
+Counting,10,103,10.0
+Counting,10,104,10.0
+Counting,10,105,10.0
+Counting,10,106,10.0
+Counting,10,107,10.0
+Counting,10,108,10.0
+Counting,10,109,10.0
+Counting,10,110,10.0
+Counting,10,111,10.0
+Counting,10,112,10.0
+Counting,10,113,10.0
+Counting,10,114,10.0
+Counting,10,115,10.0
+Counting,10,116,10.0
+Counting,10,117,10.0
+Counting,10,118,10.0
+Counting,10,119,10.0
+Counting,10,120,10.0
+Counting,10,121,10.0
+Counting,10,122,10.0
+Counting,10,123,10.0
+Counting,10,124,10.0
+Counting,10,125,10.0
+Counting,10,126,10.0
+Counting,10,127,10.0
+Counting,10,128,10.0
+Counting,10,129,10.0
+Counting,10,130,10.0
+Counting,10,131,10.0
+Counting,10,132,10.0
+Counting,10,133,10.0
+Counting,10,134,10.0
+Counting,10,135,10.0
+Counting,10,136,10.0
+Counting,10,137,10.0
+Counting,10,138,10.0
+Counting,10,139,10.0
+Counting,10,140,10.0
+Counting,10,141,10.0
+Counting,10,142,10.0
+Counting,10,143,10.0
+Counting,10,144,10.0
+Counting,10,145,10.0
+Counting,10,146,10.0
+Counting,10,147,10.0
+Counting,10,148,10.0
+Counting,10,149,10.0
+Counting,10,150,10.0
+Counting,10,151,10.0
+Counting,10,152,10.0
+Counting,10,153,10.0
+Counting,10,154,10.0
+Counting,10,155,10.0
+Counting,10,156,10.0
+Counting,10,157,10.0
+Counting,10,158,10.0
+Counting,10,159,10.0
+Counting,10,160,10.0
+Counting,10,161,10.0
+Counting,10,162,10.0
+Counting,10,163,10.0
+Counting,10,164,10.0
+Counting,10,165,10.0
+Counting,10,166,10.0
+Counting,10,167,10.0
+Counting,10,168,10.0
+Counting,10,169,10.0
+Counting,10,170,10.0
+Counting,10,171,10.0
+Counting,10,172,10.0
+Counting,10,173,10.0
+Counting,10,174,10.0
+Counting,10,175,10.0
+Counting,10,176,10.0
+Counting,10,177,10.0
+Counting,10,178,10.0
+Counting,10,179,10.0
+Counting,10,180,10.0
+Counting,10,181,10.0
+Counting,10,182,10.0
+Counting,10,183,10.0
+Counting,10,184,10.0
+Counting,10,185,10.0
+Counting,10,186,10.0
+Counting,10,187,10.0
+Counting,10,188,10.0
+Counting,10,189,10.0
+Counting,10,190,10.0
+Counting,10,191,10.0
+Counting,10,192,10.0
+Counting,10,193,10.0
+Counting,10,194,10.0
+Counting,10,195,10.0
+Counting,10,196,10.0
+Counting,10,197,10.0
+Counting,10,198,10.0
+Counting,10,199,10.0
+Counting,10,200,10.0
+Counting,10,201,10.0
+Counting,10,202,10.0
+Counting,10,203,10.0
+Counting,10,204,10.0
+Counting,10,205,10.0
+Counting,10,206,10.0
+Counting,10,207,10.0
+Counting,10,208,10.0
+Counting,10,209,10.0
+Counting,10,210,10.0
+Counting,10,211,10.0
+Counting,10,212,10.0
+Counting,10,213,10.0
+Counting,10,214,10.0
+Counting,10,215,10.0
+Counting,10,216,10.0
+Counting,10,217,10.0
+Counting,10,218,10.0
+Counting,10,219,10.0
+Counting,10,220,10.0
+Counting,10,221,10.0
+Counting,10,222,10.0
+Counting,10,223,10.0
+Counting,10,224,10.0
+Counting,10,225,10.0
+Counting,10,226,10.0
+Counting,10,227,10.0
+Counting,10,228,10.0
+Counting,10,229,10.0
+Counting,10,230,10.0
+Counting,10,231,10.0
+Counting,10,232,10.0
+Counting,10,233,10.0
+Counting,10,234,10.0
+Counting,10,235,10.0
+Counting,10,236,10.0
+Counting,10,237,10.0
+Counting,10,238,10.0
+Counting,10,239,10.0
+Counting,10,240,10.0
+Counting,10,241,10.0
+Counting,10,242,10.0
+Counting,10,243,10.0
+Counting,10,244,10.0
+Counting,10,245,10.0
+Counting,10,246,10.0
+Counting,10,247,10.0
+Counting,10,248,10.0
+Counting,10,249,10.0
+Counting,10,250,10.0
+Counting,10,251,10.0
+Counting,10,252,1.0
+Step,10,0,1.0
+Step,10,1,10.0
+Step,10,2,10.0
+Step,10,3,10.0
+Step,10,4,10.0
+Step,10,5,10.0
+Step,10,6,10.0
+Step,10,7,10.0
+Step,10,8,10.0
+Step,10,9,10.0
+Step,10,10,10.0
+Step,10,11,10.0
+Step,10,12,10.0
+Step,10,13,10.0
+Step,10,14,10.0
+Step,10,15,10.0
+Step,10,16,10.0
+Step,10,17,10.0
+Step,10,18,10.0
+Step,10,19,10.0
+Step,10,20,10.0
+Step,10,21,10.0
+Step,10,22,10.0
+Step,10,23,10.0
+Step,10,24,10.0
+Step,10,25,10.0
+Step,10,26,10.0
+Step,10,27,10.0
+Step,10,28,10.0
+Step,10,29,10.0
+Step,10,30,10.0
+Step,10,31,10.0
+Step,10,32,10.0
+Step,10,33,10.0
+Step,10,34,10.0
+Step,10,35,10.0
+Step,10,36,10.0
+Step,10,37,10.0
+Step,10,38,10.0
+Step,10,39,10.0
+Step,10,40,10.0
+Step,10,41,10.0
+Step,10,42,10.0
+Step,10,43,10.0
+Step,10,44,10.0
+Step,10,45,10.0
+Step,10,46,10.0
+Step,10,47,10.0
+Step,10,48,10.0
+Step,10,49,10.0
+Step,10,50,10.0
+Step,10,51,10.0
+Step,10,52,10.0
+Step,10,53,10.0
+Step,10,54,10.0
+Step,10,55,10.0
+Step,10,56,10.0
+Step,10,57,10.0
+Step,10,58,10.0
+Step,10,59,10.0
+Step,10,60,10.0
+Step,10,61,10.0
+Step,10,62,10.0
+Step,10,63,10.0
+Step,10,64,10.0
+Step,10,65,10.0
+Step,10,66,10.0
+Step,10,67,10.0
+Step,10,68,10.0
+Step,10,69,10.0
+Step,10,70,10.0
+Step,10,71,10.0
+Step,10,72,10.0
+Step,10,73,10.0
+Step,10,74,10.0
+Step,10,75,10.0
+Step,10,76,10.0
+Step,10,77,10.0
+Step,10,78,10.0
+Step,10,79,10.0
+Step,10,80,10.0
+Step,10,81,10.0
+Step,10,82,10.0
+Step,10,83,10.0
+Step,10,84,10.0
+Step,10,85,10.0
+Step,10,86,10.0
+Step,10,87,10.0
+Step,10,88,10.0
+Step,10,89,10.0
+Step,10,90,10.0
+Step,10,91,10.0
+Step,10,92,10.0
+Step,10,93,10.0
+Step,10,94,10.0
+Step,10,95,10.0
+Step,10,96,10.0
+Step,10,97,10.0
+Step,10,98,10.0
+Step,10,99,10.0
+Step,10,100,10.0
+Step,10,101,10.0
+Step,10,102,10.0
+Step,10,103,10.0
+Step,10,104,10.0
+Step,10,105,10.0
+Step,10,106,10.0
+Step,10,107,10.0
+Step,10,108,10.0
+Step,10,109,10.0
+Step,10,110,10.0
+Step,10,111,10.0
+Step,10,112,10.0
+Step,10,113,10.0
+Step,10,114,10.0
+Step,10,115,10.0
+Step,10,116,10.0
+Step,10,117,10.0
+Step,10,118,10.0
+Step,10,119,10.0
+Step,10,120,10.0
+Step,10,121,10.0
+Step,10,122,10.0
+Step,10,123,10.0
+Step,10,124,10.0
+Step,10,125,10.0
+Step,10,126,10.0
+Step,10,127,10.0
+Step,10,128,10.0
+Step,10,129,10.0
+Step,10,130,10.0
+Step,10,131,10.0
+Step,10,132,10.0
+Step,10,133,10.0
+Step,10,134,10.0
+Step,10,135,10.0
+Step,10,136,10.0
+Step,10,137,10.0
+Step,10,138,10.0
+Step,10,139,10.0
+Step,10,140,10.0
+Step,10,141,10.0
+Step,10,142,10.0
+Step,10,143,10.0
+Step,10,144,10.0
+Step,10,145,10.0
+Step,10,146,10.0
+Step,10,147,10.0
+Step,10,148,10.0
+Step,10,149,10.0
+Step,10,150,10.0
+Step,10,151,10.0
+Step,10,152,10.0
+Step,10,153,10.0
+Step,10,154,10.0
+Step,10,155,10.0
+Step,10,156,10.0
+Step,10,157,10.0
+Step,10,158,10.0
+Step,10,159,10.0
+Step,10,160,10.0
+Step,10,161,10.0
+Step,10,162,10.0
+Step,10,163,10.0
+Step,10,164,10.0
+Step,10,165,10.0
+Step,10,166,10.0
+Step,10,167,10.0
+Step,10,168,10.0
+Step,10,169,10.0
+Step,10,170,10.0
+Step,10,171,10.0
+Step,10,172,10.0
+Step,10,173,10.0
+Step,10,174,10.0
+Step,10,175,10.0
+Step,10,176,10.0
+Step,10,177,10.0
+Step,10,178,10.0
+Step,10,179,10.0
+Step,10,180,10.0
+Step,10,181,10.0
+Step,10,182,10.0
+Step,10,183,10.0
+Step,10,184,10.0
+Step,10,185,10.0
+Step,10,186,10.0
+Step,10,187,10.0
+Step,10,188,10.0
+Step,10,189,10.0
+Step,10,190,10.0
+Step,10,191,10.0
+Step,10,192,10.0
+Step,10,193,10.0
+Step,10,194,10.0
+Step,10,195,10.0
+Step,10,196,10.0
+Step,10,197,10.0
+Step,10,198,10.0
+Step,10,199,10.0
+Step,10,200,10.0
+Step,10,201,10.0
+Step,10,202,10.0
+Step,10,203,10.0
+Step,10,204,10.0
+Step,10,205,10.0
+Step,10,206,10.0
+Step,10,207,10.0
+Step,10,208,10.0
+Step,10,209,10.0
+Step,10,210,10.0
+Step,10,211,10.0
+Step,10,212,10.0
+Step,10,213,10.0
+Step,10,214,10.0
+Step,10,215,10.0
+Step,10,216,10.0
+Step,10,217,10.0
+Step,10,218,10.0
+Step,10,219,10.0
+Step,10,220,10.0
+Step,10,221,10.0
+Step,10,222,10.0
+Step,10,223,10.0
+Step,10,224,10.0
+Step,10,225,10.0
+Step,10,226,10.0
+Step,10,227,10.0
+Step,10,228,10.0
+Step,10,229,10.0
+Step,10,230,10.0
+Step,10,231,10.0
+Step,10,232,10.0
+Step,10,233,10.0
+Step,10,234,10.0
+Step,10,235,10.0
+Step,10,236,10.0
+Step,10,237,10.0
+Step,10,238,10.0
+Step,10,239,10.0
+Step,10,240,10.0
+Step,10,241,10.0
+Step,10,242,10.0
+Step,10,243,10.0
+Step,10,244,10.0
+Step,10,245,10.0
+Step,10,246,10.0
+Step,10,247,10.0
+Step,10,248,10.0
+Step,10,249,10.0
+Step,10,250,10.0
+Step,10,251,10.0
+Step,10,252,1.0
+Counting and step,10,0,1.0
+Counting and step,10,1,10.0
+Counting and step,10,2,10.0
+Counting and step,10,3,10.0
+Counting and step,10,4,10.0
+Counting and step,10,5,10.0
+Counting and step,10,6,10.0
+Counting and step,10,7,10.0
+Counting and step,10,8,10.0
+Counting and step,10,9,10.0
+Counting and step,10,10,10.0
+Counting and step,10,11,10.0
+Counting and step,10,12,10.0
+Counting and step,10,13,10.0
+Counting and step,10,14,10.0
+Counting and step,10,15,10.0
+Counting and step,10,16,10.0
+Counting and step,10,17,10.0
+Counting and step,10,18,10.0
+Counting and step,10,19,10.0
+Counting and step,10,20,10.0
+Counting and step,10,21,10.0
+Counting and step,10,22,10.0
+Counting and step,10,23,10.0
+Counting and step,10,24,10.0
+Counting and step,10,25,10.0
+Counting and step,10,26,10.0
+Counting and step,10,27,10.0
+Counting and step,10,28,10.0
+Counting and step,10,29,10.0
+Counting and step,10,30,10.0
+Counting and step,10,31,10.0
+Counting and step,10,32,10.0
+Counting and step,10,33,10.0
+Counting and step,10,34,10.0
+Counting and step,10,35,10.0
+Counting and step,10,36,10.0
+Counting and step,10,37,10.0
+Counting and step,10,38,10.0
+Counting and step,10,39,10.0
+Counting and step,10,40,10.0
+Counting and step,10,41,7.0
+Counting and step,10,42,4.0
+Counting and step,10,43,4.0
+Counting and step,10,44,4.0
+Counting and step,10,45,4.0
+Counting and step,10,46,4.0
+Counting and step,10,47,4.0
+Counting and step,10,48,4.0
+Counting and step,10,49,10.0
+Counting and step,10,50,10.0
+Counting and step,10,51,10.0
+Counting and step,10,52,10.0
+Counting and step,10,53,10.0
+Counting and step,10,54,10.0
+Counting and step,10,55,10.0
+Counting and step,10,56,10.0
+Counting and step,10,57,10.0
+Counting and step,10,58,10.0
+Counting and step,10,59,10.0
+Counting and step,10,60,10.0
+Counting and step,10,61,10.0
+Counting and step,10,62,10.0
+Counting and step,10,63,10.0
+Counting and step,10,64,10.0
+Counting and step,10,65,10.0
+Counting and step,10,66,10.0
+Counting and step,10,67,10.0
+Counting and step,10,68,10.0
+Counting and step,10,69,10.0
+Counting and step,10,70,10.0
+Counting and step,10,71,10.0
+Counting and step,10,72,10.0
+Counting and step,10,73,10.0
+Counting and step,10,74,10.0
+Counting and step,10,75,10.0
+Counting and step,10,76,10.0
+Counting and step,10,77,10.0
+Counting and step,10,78,10.0
+Counting and step,10,79,10.0
+Counting and step,10,80,10.0
+Counting and step,10,81,10.0
+Counting and step,10,82,10.0
+Counting and step,10,83,10.0
+Counting and step,10,84,10.0
+Counting and step,10,85,10.0
+Counting and step,10,86,10.0
+Counting and step,10,87,10.0
+Counting and step,10,88,10.0
+Counting and step,10,89,10.0
+Counting and step,10,90,10.0
+Counting and step,10,91,10.0
+Counting and step,10,92,10.0
+Counting and step,10,93,10.0
+Counting and step,10,94,10.0
+Counting and step,10,95,10.0
+Counting and step,10,96,10.0
+Counting and step,10,97,10.0
+Counting and step,10,98,10.0
+Counting and step,10,99,10.0
+Counting and step,10,100,10.0
+Counting and step,10,101,10.0
+Counting and step,10,102,10.0
+Counting and step,10,103,10.0
+Counting and step,10,104,10.0
+Counting and step,10,105,10.0
+Counting and step,10,106,10.0
+Counting and step,10,107,10.0
+Counting and step,10,108,10.0
+Counting and step,10,109,10.0
+Counting and step,10,110,10.0
+Counting and step,10,111,10.0
+Counting and step,10,112,10.0
+Counting and step,10,113,10.0
+Counting and step,10,114,10.0
+Counting and step,10,115,10.0
+Counting and step,10,116,10.0
+Counting and step,10,117,10.0
+Counting and step,10,118,10.0
+Counting and step,10,119,10.0
+Counting and step,10,120,10.0
+Counting and step,10,121,10.0
+Counting and step,10,122,10.0
+Counting and step,10,123,10.0
+Counting and step,10,124,10.0
+Counting and step,10,125,10.0
+Counting and step,10,126,10.0
+Counting and step,10,127,10.0
+Counting and step,10,128,10.0
+Counting and step,10,129,10.0
+Counting and step,10,130,10.0
+Counting and step,10,131,10.0
+Counting and step,10,132,10.0
+Counting and step,10,133,10.0
+Counting and step,10,134,10.0
+Counting and step,10,135,10.0
+Counting and step,10,136,10.0
+Counting and step,10,137,10.0
+Counting and step,10,138,10.0
+Counting and step,10,139,10.0
+Counting and step,10,140,10.0
+Counting and step,10,141,10.0
+Counting and step,10,142,10.0
+Counting and step,10,143,10.0
+Counting and step,10,144,10.0
+Counting and step,10,145,10.0
+Counting and step,10,146,10.0
+Counting and step,10,147,10.0
+Counting and step,10,148,10.0
+Counting and step,10,149,10.0
+Counting and step,10,150,10.0
+Counting and step,10,151,10.0
+Counting and step,10,152,10.0
+Counting and step,10,153,10.0
+Counting and step,10,154,10.0
+Counting and step,10,155,10.0
+Counting and step,10,156,10.0
+Counting and step,10,157,10.0
+Counting and step,10,158,10.0
+Counting and step,10,159,10.0
+Counting and step,10,160,10.0
+Counting and step,10,161,10.0
+Counting and step,10,162,10.0
+Counting and step,10,163,10.0
+Counting and step,10,164,10.0
+Counting and step,10,165,10.0
+Counting and step,10,166,10.0
+Counting and step,10,167,10.0
+Counting and step,10,168,10.0
+Counting and step,10,169,10.0
+Counting and step,10,170,10.0
+Counting and step,10,171,10.0
+Counting and step,10,172,10.0
+Counting and step,10,173,10.0
+Counting and step,10,174,10.0
+Counting and step,10,175,10.0
+Counting and step,10,176,10.0
+Counting and step,10,177,10.0
+Counting and step,10,178,10.0
+Counting and step,10,179,10.0
+Counting and step,10,180,10.0
+Counting and step,10,181,10.0
+Counting and step,10,182,10.0
+Counting and step,10,183,10.0
+Counting and step,10,184,10.0
+Counting and step,10,185,10.0
+Counting and step,10,186,10.0
+Counting and step,10,187,10.0
+Counting and step,10,188,10.0
+Counting and step,10,189,10.0
+Counting and step,10,190,10.0
+Counting and step,10,191,10.0
+Counting and step,10,192,10.0
+Counting and step,10,193,10.0
+Counting and step,10,194,10.0
+Counting and step,10,195,10.0
+Counting and step,10,196,10.0
+Counting and step,10,197,10.0
+Counting and step,10,198,10.0
+Counting and step,10,199,10.0
+Counting and step,10,200,10.0
+Counting and step,10,201,10.0
+Counting and step,10,202,10.0
+Counting and step,10,203,10.0
+Counting and step,10,204,10.0
+Counting and step,10,205,10.0
+Counting and step,10,206,10.0
+Counting and step,10,207,10.0
+Counting and step,10,208,10.0
+Counting and step,10,209,10.0
+Counting and step,10,210,10.0
+Counting and step,10,211,10.0
+Counting and step,10,212,10.0
+Counting and step,10,213,10.0
+Counting and step,10,214,10.0
+Counting and step,10,215,10.0
+Counting and step,10,216,10.0
+Counting and step,10,217,10.0
+Counting and step,10,218,10.0
+Counting and step,10,219,10.0
+Counting and step,10,220,10.0
+Counting and step,10,221,10.0
+Counting and step,10,222,10.0
+Counting and step,10,223,10.0
+Counting and step,10,224,10.0
+Counting and step,10,225,10.0
+Counting and step,10,226,10.0
+Counting and step,10,227,10.0
+Counting and step,10,228,10.0
+Counting and step,10,229,10.0
+Counting and step,10,230,10.0
+Counting and step,10,231,10.0
+Counting and step,10,232,10.0
+Counting and step,10,233,10.0
+Counting and step,10,234,10.0
+Counting and step,10,235,10.0
+Counting and step,10,236,10.0
+Counting and step,10,237,10.0
+Counting and step,10,238,10.0
+Counting and step,10,239,10.0
+Counting and step,10,240,10.0
+Counting and step,10,241,10.0
+Counting and step,10,242,10.0
+Counting and step,10,243,10.0
+Counting and step,10,244,10.0
+Counting and step,10,245,10.0
+Counting and step,10,246,10.0
+Counting and step,10,247,10.0
+Counting and step,10,248,10.0
+Counting and step,10,249,10.0
+Counting and step,10,250,10.0
+Counting and step,10,251,10.0
+Counting and step,10,252,1.0
+"Counting, step, and no cliques",10,0,1.0
+"Counting, step, and no cliques",10,1,10.0
+"Counting, step, and no cliques",10,2,10.0
+"Counting, step, and no cliques",10,3,10.0
+"Counting, step, and no cliques",10,4,10.0
+"Counting, step, and no cliques",10,5,10.0
+"Counting, step, and no cliques",10,6,10.0
+"Counting, step, and no cliques",10,7,10.0
+"Counting, step, and no cliques",10,8,10.0
+"Counting, step, and no cliques",10,9,10.0
+"Counting, step, and no cliques",10,10,10.0
+"Counting, step, and no cliques",10,11,10.0
+"Counting, step, and no cliques",10,12,10.0
+"Counting, step, and no cliques",10,13,10.0
+"Counting, step, and no cliques",10,14,10.0
+"Counting, step, and no cliques",10,15,10.0
+"Counting, step, and no cliques",10,16,10.0
+"Counting, step, and no cliques",10,17,10.0
+"Counting, step, and no cliques",10,18,10.0
+"Counting, step, and no cliques",10,19,10.0
+"Counting, step, and no cliques",10,20,10.0
+"Counting, step, and no cliques",10,21,10.0
+"Counting, step, and no cliques",10,22,10.0
+"Counting, step, and no cliques",10,23,10.0
+"Counting, step, and no cliques",10,24,10.0
+"Counting, step, and no cliques",10,25,10.0
+"Counting, step, and no cliques",10,26,10.0
+"Counting, step, and no cliques",10,27,10.0
+"Counting, step, and no cliques",10,28,10.0
+"Counting, step, and no cliques",10,29,10.0
+"Counting, step, and no cliques",10,30,10.0
+"Counting, step, and no cliques",10,31,10.0
+"Counting, step, and no cliques",10,32,10.0
+"Counting, step, and no cliques",10,33,10.0
+"Counting, step, and no cliques",10,34,10.0
+"Counting, step, and no cliques",10,35,10.0
+"Counting, step, and no cliques",10,36,10.0
+"Counting, step, and no cliques",10,37,10.0
+"Counting, step, and no cliques",10,38,10.0
+"Counting, step, and no cliques",10,39,10.0
+"Counting, step, and no cliques",10,40,10.0
+"Counting, step, and no cliques",10,41,7.0
+"Counting, step, and no cliques",10,42,4.0
+"Counting, step, and no cliques",10,43,4.0
+"Counting, step, and no cliques",10,44,4.0
+"Counting, step, and no cliques",10,45,4.0
+"Counting, step, and no cliques",10,46,4.0
+"Counting, step, and no cliques",10,47,4.0
+"Counting, step, and no cliques",10,48,4.0
+"Counting, step, and no cliques",10,49,10.0
+"Counting, step, and no cliques",10,50,10.0
+"Counting, step, and no cliques",10,51,10.0
+"Counting, step, and no cliques",10,52,10.0
+"Counting, step, and no cliques",10,53,10.0
+"Counting, step, and no cliques",10,54,10.0
+"Counting, step, and no cliques",10,55,10.0
+"Counting, step, and no cliques",10,56,10.0
+"Counting, step, and no cliques",10,57,10.0
+"Counting, step, and no cliques",10,58,10.0
+"Counting, step, and no cliques",10,59,10.0
+"Counting, step, and no cliques",10,60,10.0
+"Counting, step, and no cliques",10,61,10.0
+"Counting, step, and no cliques",10,62,10.0
+"Counting, step, and no cliques",10,63,10.0
+"Counting, step, and no cliques",10,64,10.0
+"Counting, step, and no cliques",10,65,10.0
+"Counting, step, and no cliques",10,66,10.0
+"Counting, step, and no cliques",10,67,10.0
+"Counting, step, and no cliques",10,68,10.0
+"Counting, step, and no cliques",10,69,10.0
+"Counting, step, and no cliques",10,70,10.0
+"Counting, step, and no cliques",10,71,10.0
+"Counting, step, and no cliques",10,72,10.0
+"Counting, step, and no cliques",10,73,10.0
+"Counting, step, and no cliques",10,74,10.0
+"Counting, step, and no cliques",10,75,10.0
+"Counting, step, and no cliques",10,76,10.0
+"Counting, step, and no cliques",10,77,10.0
+"Counting, step, and no cliques",10,78,10.0
+"Counting, step, and no cliques",10,79,10.0
+"Counting, step, and no cliques",10,80,10.0
+"Counting, step, and no cliques",10,81,10.0
+"Counting, step, and no cliques",10,82,10.0
+"Counting, step, and no cliques",10,83,10.0
+"Counting, step, and no cliques",10,84,10.0
+"Counting, step, and no cliques",10,85,10.0
+"Counting, step, and no cliques",10,86,10.0
+"Counting, step, and no cliques",10,87,10.0
+"Counting, step, and no cliques",10,88,10.0
+"Counting, step, and no cliques",10,89,10.0
+"Counting, step, and no cliques",10,90,10.0
+"Counting, step, and no cliques",10,91,10.0
+"Counting, step, and no cliques",10,92,10.0
+"Counting, step, and no cliques",10,93,10.0
+"Counting, step, and no cliques",10,94,10.0
+"Counting, step, and no cliques",10,95,10.0
+"Counting, step, and no cliques",10,96,10.0
+"Counting, step, and no cliques",10,97,10.0
+"Counting, step, and no cliques",10,98,10.0
+"Counting, step, and no cliques",10,99,10.0
+"Counting, step, and no cliques",10,100,10.0
+"Counting, step, and no cliques",10,101,10.0
+"Counting, step, and no cliques",10,102,10.0
+"Counting, step, and no cliques",10,103,10.0
+"Counting, step, and no cliques",10,104,10.0
+"Counting, step, and no cliques",10,105,10.0
+"Counting, step, and no cliques",10,106,10.0
+"Counting, step, and no cliques",10,107,10.0
+"Counting, step, and no cliques",10,108,10.0
+"Counting, step, and no cliques",10,109,10.0
+"Counting, step, and no cliques",10,110,10.0
+"Counting, step, and no cliques",10,111,10.0
+"Counting, step, and no cliques",10,112,10.0
+"Counting, step, and no cliques",10,113,10.0
+"Counting, step, and no cliques",10,114,10.0
+"Counting, step, and no cliques",10,115,10.0
+"Counting, step, and no cliques",10,116,10.0
+"Counting, step, and no cliques",10,117,10.0
+"Counting, step, and no cliques",10,118,10.0
+"Counting, step, and no cliques",10,119,10.0
+"Counting, step, and no cliques",10,120,10.0
+"Counting, step, and no cliques",10,121,10.0
+"Counting, step, and no cliques",10,122,10.0
+"Counting, step, and no cliques",10,123,10.0
+"Counting, step, and no cliques",10,124,10.0
+"Counting, step, and no cliques",10,125,10.0
+"Counting, step, and no cliques",10,126,10.0
+"Counting, step, and no cliques",10,127,10.0
+"Counting, step, and no cliques",10,128,10.0
+"Counting, step, and no cliques",10,129,10.0
+"Counting, step, and no cliques",10,130,10.0
+"Counting, step, and no cliques",10,131,10.0
+"Counting, step, and no cliques",10,132,10.0
+"Counting, step, and no cliques",10,133,10.0
+"Counting, step, and no cliques",10,134,10.0
+"Counting, step, and no cliques",10,135,10.0
+"Counting, step, and no cliques",10,136,10.0
+"Counting, step, and no cliques",10,137,10.0
+"Counting, step, and no cliques",10,138,10.0
+"Counting, step, and no cliques",10,139,10.0
+"Counting, step, and no cliques",10,140,10.0
+"Counting, step, and no cliques",10,141,10.0
+"Counting, step, and no cliques",10,142,10.0
+"Counting, step, and no cliques",10,143,10.0
+"Counting, step, and no cliques",10,144,10.0
+"Counting, step, and no cliques",10,145,10.0
+"Counting, step, and no cliques",10,146,10.0
+"Counting, step, and no cliques",10,147,10.0
+"Counting, step, and no cliques",10,148,10.0
+"Counting, step, and no cliques",10,149,10.0
+"Counting, step, and no cliques",10,150,10.0
+"Counting, step, and no cliques",10,151,10.0
+"Counting, step, and no cliques",10,152,10.0
+"Counting, step, and no cliques",10,153,10.0
+"Counting, step, and no cliques",10,154,10.0
+"Counting, step, and no cliques",10,155,10.0
+"Counting, step, and no cliques",10,156,10.0
+"Counting, step, and no cliques",10,157,10.0
+"Counting, step, and no cliques",10,158,10.0
+"Counting, step, and no cliques",10,159,10.0
+"Counting, step, and no cliques",10,160,10.0
+"Counting, step, and no cliques",10,161,10.0
+"Counting, step, and no cliques",10,162,10.0
+"Counting, step, and no cliques",10,163,10.0
+"Counting, step, and no cliques",10,164,10.0
+"Counting, step, and no cliques",10,165,10.0
+"Counting, step, and no cliques",10,166,10.0
+"Counting, step, and no cliques",10,167,10.0
+"Counting, step, and no cliques",10,168,10.0
+"Counting, step, and no cliques",10,169,10.0
+"Counting, step, and no cliques",10,170,10.0
+"Counting, step, and no cliques",10,171,10.0
+"Counting, step, and no cliques",10,172,10.0
+"Counting, step, and no cliques",10,173,10.0
+"Counting, step, and no cliques",10,174,10.0
+"Counting, step, and no cliques",10,175,10.0
+"Counting, step, and no cliques",10,176,10.0
+"Counting, step, and no cliques",10,177,10.0
+"Counting, step, and no cliques",10,178,10.0
+"Counting, step, and no cliques",10,179,10.0
+"Counting, step, and no cliques",10,180,10.0
+"Counting, step, and no cliques",10,181,10.0
+"Counting, step, and no cliques",10,182,10.0
+"Counting, step, and no cliques",10,183,10.0
+"Counting, step, and no cliques",10,184,10.0
+"Counting, step, and no cliques",10,185,10.0
+"Counting, step, and no cliques",10,186,10.0
+"Counting, step, and no cliques",10,187,10.0
+"Counting, step, and no cliques",10,188,10.0
+"Counting, step, and no cliques",10,189,10.0
+"Counting, step, and no cliques",10,190,10.0
+"Counting, step, and no cliques",10,191,10.0
+"Counting, step, and no cliques",10,192,10.0
+"Counting, step, and no cliques",10,193,10.0
+"Counting, step, and no cliques",10,194,10.0
+"Counting, step, and no cliques",10,195,10.0
+"Counting, step, and no cliques",10,196,10.0
+"Counting, step, and no cliques",10,197,10.0
+"Counting, step, and no cliques",10,198,10.0
+"Counting, step, and no cliques",10,199,10.0
+"Counting, step, and no cliques",10,200,10.0
+"Counting, step, and no cliques",10,201,10.0
+"Counting, step, and no cliques",10,202,10.0
+"Counting, step, and no cliques",10,203,10.0
+"Counting, step, and no cliques",10,204,10.0
+"Counting, step, and no cliques",10,205,10.0
+"Counting, step, and no cliques",10,206,10.0
+"Counting, step, and no cliques",10,207,10.0
+"Counting, step, and no cliques",10,208,10.0
+"Counting, step, and no cliques",10,209,10.0
+"Counting, step, and no cliques",10,210,10.0
+"Counting, step, and no cliques",10,211,10.0
+"Counting, step, and no cliques",10,212,10.0
+"Counting, step, and no cliques",10,213,10.0
+"Counting, step, and no cliques",10,214,10.0
+"Counting, step, and no cliques",10,215,10.0
+"Counting, step, and no cliques",10,216,10.0
+"Counting, step, and no cliques",10,217,10.0
+"Counting, step, and no cliques",10,218,10.0
+"Counting, step, and no cliques",10,219,10.0
+"Counting, step, and no cliques",10,220,10.0
+"Counting, step, and no cliques",10,221,10.0
+"Counting, step, and no cliques",10,222,10.0
+"Counting, step, and no cliques",10,223,10.0
+"Counting, step, and no cliques",10,224,10.0
+"Counting, step, and no cliques",10,225,10.0
+"Counting, step, and no cliques",10,226,10.0
+"Counting, step, and no cliques",10,227,10.0
+"Counting, step, and no cliques",10,228,10.0
+"Counting, step, and no cliques",10,229,10.0
+"Counting, step, and no cliques",10,230,10.0
+"Counting, step, and no cliques",10,231,10.0
+"Counting, step, and no cliques",10,232,10.0
+"Counting, step, and no cliques",10,233,10.0
+"Counting, step, and no cliques",10,234,10.0
+"Counting, step, and no cliques",10,235,10.0
+"Counting, step, and no cliques",10,236,10.0
+"Counting, step, and no cliques",10,237,10.0
+"Counting, step, and no cliques",10,238,10.0
+"Counting, step, and no cliques",10,239,10.0
+"Counting, step, and no cliques",10,240,10.0
+"Counting, step, and no cliques",10,241,10.0
+"Counting, step, and no cliques",10,242,10.0
+"Counting, step, and no cliques",10,243,10.0
+"Counting, step, and no cliques",10,244,10.0
+"Counting, step, and no cliques",10,245,10.0
+"Counting, step, and no cliques",10,246,10.0
+"Counting, step, and no cliques",10,247,10.0
+"Counting, step, and no cliques",10,248,10.0
+"Counting, step, and no cliques",10,249,10.0
+"Counting, step, and no cliques",10,250,10.0
+"Counting, step, and no cliques",10,251,10.0
+"Counting, step, and no cliques",10,252,1.0

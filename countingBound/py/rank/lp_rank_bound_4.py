@@ -232,9 +232,6 @@ class LpVertexZeroing:
         Returns: Pandas DataFrame of results, and the value of the objective functions
         """
 
-        FIXME this currently only includes "sets which include all vertices"!
-
-
         # construct objective function, as weighted average of "high levels"
         N = self.num_cliques
         num_cliques = range(self.num_cliques-num_levels_below, self.num_cliques+1)
@@ -285,8 +282,8 @@ if __name__ == '__main__':
 
     # FIXME add constraints based on options?
     # ??? do we need the "base case" of only one clique?
-    # bound.add_average_rank_constraints()
-    # bound.add_zeroing_upper_bound()
+    bound.add_average_rank_constraints()
+    bound.add_zeroing_upper_bound()
     bound.add_vertex_zeroing_constraints()
 
     # get bound

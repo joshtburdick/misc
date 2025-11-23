@@ -1,0 +1,63 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\citation{shannon_synthesis_1949}
+\citation{buggyclique}
+\citation{buggyclique}
+\citation{shannon_synthesis_1949}
+\@writefile{toc}{\contentsline {section}{\numberline {1}A random walk on hypergraphs}{2}{section.1}\protected@file@percent }
+\newlabel{se:countingBound}{{1}{2}{A random walk on hypergraphs}{section.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces  One step of the walk. Starting from $A_t$, the cliques containing a randomly-chosen edge are removed, resulting in $B_t$. Adding a random set of cliques back results in $A_{t+1}$. }}{3}{figure.1}\protected@file@percent }
+\newlabel{fig:boing}{{1}{3}{One step of the walk. Starting from $A_t$, the cliques containing a randomly-chosen edge are removed, resulting in $B_t$. Adding a random set of cliques back results in $A_{t+1}$}{figure.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.1}Definition of the walk}{3}{subsection.1.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.2}Graph-theoretic properties of the walk}{3}{subsection.1.2}\protected@file@percent }
+\newlabel{def:bouncingWalk}{{1.1}{3}{}{defn.1.1}{}}
+\citation{quenell1994spectral}
+\newlabel{def:oneEdgeNeighbors}{{1.2}{4}{}{defn.1.2}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.2.1}Degree}{4}{subsubsection.1.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.2.2}Diameter}{4}{subsubsection.1.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.3}Modelling where the walk goes}{4}{subsection.1.3}\protected@file@percent }
+\citation{wegener1991complexity}
+\citation{allender1994depth}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.3.1}Number of cliques}{5}{subsubsection.1.3.1}\protected@file@percent }
+\newlabel{defn:levels}{{1.3}{5}{}{defn.1.3}{}}
+\newlabel{defn:B}{{1.4}{5}{}{defn.1.4}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.3.2}Number of gates}{5}{subsubsection.1.3.2}\protected@file@percent }
+\newlabel{defn:circuitSize}{{1.5}{5}{}{defn.1.5}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.3.3}An example}{5}{subsubsection.1.3.3}\protected@file@percent }
+\citation{aaronson_pnp}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.3.4}Bounds for all sets of cliques}{6}{subsubsection.1.3.4}\protected@file@percent }
+\newlabel{defn:sequenceVector}{{1.6}{6}{}{defn.1.6}{}}
+\newlabel{eq:stepBound}{{1}{6}{Bounds for all sets of cliques}{equation.1}{}}
+\citation{buggyclique}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces  Example steps in the bouncing walk, for $n=14, k=4$; note that the number of possible cliques $N = {14 \atopwithdelims ()4} = 1,001$. Starting from an initial set of cliques ($A_t$, black dot), a random edge $e$ is chosen. (Note that $e$ could, in general, ``hit'' anywhere from 0 to $H = {12 \atopwithdelims ()2} = 66$ cliques.) All cliques containing $e$ are removed, yielding $B_t$ (red region). Then, a random set of cliques containing $e$ is added back, resulting in $A_{t+1}$ (blue region). The shading of the regions represents the relative likelihood of different possibilities; lines indicate bounds on where the walk could go. The height of the regions reflects the uncertainty in the number of gates, after a bounce; note that the $y$-axis is relative to the initial number of gates. }}{7}{figure.2}\protected@file@percent }
+\newlabel{fig:walk}{{2}{7}{Example steps in the bouncing walk, for $n=14, k=4$; note that the number of possible cliques $N = {14 \choose 4} = 1,001$. Starting from an initial set of cliques ($A_t$, black dot), a random edge $e$ is chosen. (Note that $e$ could, in general, ``hit'' anywhere from 0 to $H = {12 \choose 2} = 66$ cliques.) All cliques containing $e$ are removed, yielding $B_t$ (red region). Then, a random set of cliques containing $e$ is added back, resulting in $A_{t+1}$ (blue region). The shading of the regions represents the relative likelihood of different possibilities; lines indicate bounds on where the walk could go. The height of the regions reflects the uncertainty in the number of gates, after a bounce; note that the $y$-axis is relative to the initial number of gates}{figure.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.4}Plotting the walk}{7}{subsection.1.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {2}A bound using integer programming?}{8}{section.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Variables and objective function}{8}{subsection.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Counting functions}{8}{subsection.2.2}\protected@file@percent }
+\citation{glpk}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Counting sets of cliques}{9}{subsection.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4}The walking bound}{9}{subsection.2.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.5}Bound on finding zero cliques}{9}{subsection.2.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3}Results}{9}{section.3}\protected@file@percent }
+\citation{goldreich2025counting}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces  Bounds with $n=13$ and $k=3$ (with up to six gates), including different sets of constraints. Note that this plot shows results for all the variables, when minimizing $x_N$.}}{10}{figure.3}\protected@file@percent }
+\newlabel{fig:bounds0}{{3}{10}{Bounds with $n=13$ and $k=3$ (with up to six gates), including different sets of constraints. Note that this plot shows results for all the variables, when minimizing $x_N$}{figure.3}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Bounding the {\em  parity} of the number of cliques}{10}{section.4}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces  Bounds for $CLIQUE-PARITY$ with $n=8$ and $k=3$ (with up to nine gates), including different sets of constraints. Again, this plot shows results for all the variables, when minimizing $x_N$.}}{11}{figure.4}\protected@file@percent }
+\newlabel{fig:bounds0}{{4}{11}{Bounds for $CLIQUE-PARITY$ with $n=8$ and $k=3$ (with up to nine gates), including different sets of constraints. Again, this plot shows results for all the variables, when minimizing $x_N$}{figure.4}{}}
+\bibdata{references}
+\bibcite{shannon_synthesis_1949}{1}
+\bibcite{buggyclique}{2}
+\bibcite{quenell1994spectral}{3}
+\bibcite{wegener1991complexity}{4}
+\bibcite{allender1994depth}{5}
+\bibcite{aaronson_pnp}{6}
+\bibcite{glpk}{7}
+\bibcite{goldreich2025counting}{8}
+\bibstyle{unsrt}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Conclusion}{12}{section.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6}Acknowledgements}{12}{section.6}\protected@file@percent }
+\gdef \@abspage@last{12}

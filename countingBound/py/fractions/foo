@@ -1,0 +1,145 @@
+Constraints,Num. vertices,Num. cliques,Min. gates
+Counting,7,0,2.0
+Counting,7,1,2.0
+Counting,7,2,2.0
+Counting,7,3,2.0
+Counting,7,4,2.0
+Counting,7,5,2.0
+Counting,7,6,2.0
+Counting,7,7,2.0
+Counting,7,8,2.0
+Counting,7,9,2.0
+Counting,7,10,2.0
+Counting,7,11,2.0
+Counting,7,12,2.0
+Counting,7,13,2.0
+Counting,7,14,2.0
+Counting,7,15,2.0
+Counting,7,16,2.0
+Counting,7,17,2.0
+Counting,7,18,2.0
+Counting,7,19,2.0
+Counting,7,20,2.0
+Counting,7,21,2.0
+Counting,7,22,1.99857949108937
+Counting,7,23,2.0
+Counting,7,24,2.0
+Counting,7,25,2.0
+Counting,7,26,2.0
+Counting,7,27,2.0
+Counting,7,28,2.0
+Counting,7,29,2.0
+Counting,7,30,2.0
+Counting,7,31,2.0
+Counting,7,32,2.0
+Counting,7,33,2.0
+Counting,7,34,2.0
+Counting,7,35,1.0
+Step,7,0,1.0
+Step,7,1,1.0
+Step,7,2,1.0
+Step,7,3,1.0
+Step,7,4,1.0
+Step,7,5,1.0
+Step,7,6,1.0
+Step,7,7,1.0
+Step,7,8,1.0
+Step,7,9,1.0
+Step,7,10,1.0
+Step,7,11,1.0
+Step,7,12,1.0
+Step,7,13,1.0
+Step,7,14,1.0
+Step,7,15,1.0
+Step,7,16,1.0
+Step,7,17,1.0
+Step,7,18,1.0
+Step,7,19,1.0
+Step,7,20,1.0
+Step,7,21,1.0
+Step,7,22,1.0
+Step,7,23,1.0
+Step,7,24,1.0
+Step,7,25,1.0
+Step,7,26,1.0
+Step,7,27,1.0
+Step,7,28,1.0
+Step,7,29,1.0
+Step,7,30,1.0
+Step,7,31,1.0
+Step,7,32,1.0
+Step,7,33,1.0
+Step,7,34,1.0
+Step,7,35,1.0
+Counting and step,7,0,1.0
+Counting and step,7,1,1.0
+Counting and step,7,2,1.0
+Counting and step,7,3,1.0
+Counting and step,7,4,1.0
+Counting and step,7,5,1.90670051011607
+Counting and step,7,6,2.0
+Counting and step,7,7,2.0
+Counting and step,7,8,2.0
+Counting and step,7,9,2.0
+Counting and step,7,10,2.0
+Counting and step,7,11,2.0
+Counting and step,7,12,2.0
+Counting and step,7,13,2.0
+Counting and step,7,14,2.0
+Counting and step,7,15,2.0
+Counting and step,7,16,2.0
+Counting and step,7,17,2.0
+Counting and step,7,18,2.0
+Counting and step,7,19,2.0
+Counting and step,7,20,2.0
+Counting and step,7,21,2.0
+Counting and step,7,22,2.0
+Counting and step,7,23,2.0
+Counting and step,7,24,2.0
+Counting and step,7,25,2.0
+Counting and step,7,26,2.0
+Counting and step,7,27,2.0
+Counting and step,7,28,2.0
+Counting and step,7,29,1.0
+Counting and step,7,30,1.0
+Counting and step,7,31,1.0
+Counting and step,7,32,1.0
+Counting and step,7,33,1.0
+Counting and step,7,34,1.0
+Counting and step,7,35,1.0
+"Counting, step, and no cliques",7,0,1.0
+"Counting, step, and no cliques",7,1,1.0
+"Counting, step, and no cliques",7,2,1.0
+"Counting, step, and no cliques",7,3,1.0
+"Counting, step, and no cliques",7,4,1.0
+"Counting, step, and no cliques",7,5,1.90670051011607
+"Counting, step, and no cliques",7,6,2.0
+"Counting, step, and no cliques",7,7,2.0
+"Counting, step, and no cliques",7,8,2.0
+"Counting, step, and no cliques",7,9,2.0
+"Counting, step, and no cliques",7,10,2.0
+"Counting, step, and no cliques",7,11,2.0
+"Counting, step, and no cliques",7,12,2.0
+"Counting, step, and no cliques",7,13,2.0
+"Counting, step, and no cliques",7,14,2.0
+"Counting, step, and no cliques",7,15,2.0
+"Counting, step, and no cliques",7,16,2.0
+"Counting, step, and no cliques",7,17,2.0
+"Counting, step, and no cliques",7,18,2.0
+"Counting, step, and no cliques",7,19,2.0
+"Counting, step, and no cliques",7,20,2.0
+"Counting, step, and no cliques",7,21,2.0
+"Counting, step, and no cliques",7,22,2.0
+"Counting, step, and no cliques",7,23,2.0
+"Counting, step, and no cliques",7,24,2.0
+"Counting, step, and no cliques",7,25,2.0
+"Counting, step, and no cliques",7,26,2.0
+"Counting, step, and no cliques",7,27,2.0
+"Counting, step, and no cliques",7,28,2.0
+"Counting, step, and no cliques",7,29,1.0
+"Counting, step, and no cliques",7,30,1.0
+"Counting, step, and no cliques",7,31,1.0
+"Counting, step, and no cliques",7,32,1.0
+"Counting, step, and no cliques",7,33,1.0
+"Counting, step, and no cliques",7,34,1.0
+"Counting, step, and no cliques",7,35,1.0

@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: org.apache.commons.math4.legacy.distribution.EmpiricalDistributionTest
+-------------------------------------------------------------------------------
+Tests run: 23, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.963 s -- in org.apache.commons.math4.legacy.distribution.EmpiricalDistributionTest

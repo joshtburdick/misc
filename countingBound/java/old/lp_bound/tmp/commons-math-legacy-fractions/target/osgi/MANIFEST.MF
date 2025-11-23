@@ -1,0 +1,60 @@
+Manifest-Version: 1.0
+Build-Jdk-Spec: 17
+Bundle-Description: Codes that are either currently unsupported or not y
+ et modularized.
+Bundle-DocURL: http://commons.apache.org/proper/commons-math/commons-mat
+ h4-legacy-fractions/
+Bundle-License: https://www.apache.org/licenses/LICENSE-2.0.txt
+Bundle-ManifestVersion: 2
+Bundle-Name: Apache Commons Math (Legacy)
+Bundle-SymbolicName: org.apache.commons.math4.legacy
+Bundle-Vendor: The Apache Software Foundation
+Bundle-Version: 4.0.0.SNAPSHOT
+Created-By: Apache Maven Bundle Plugin 5.1.9
+Export-Package: org.apache.commons.math4.legacy;version="4.0.0"
+Import-Package: org.apache.commons.math4.core.jdkmath,org.apache.commons
+ .math4.legacy.core,org.apache.commons.math4.legacy.exception,org.apache
+ .commons.math4.legacy.exception.util,org.apache.commons.numbers.angle,o
+ rg.apache.commons.numbers.arrays,org.apache.commons.numbers.combinatori
+ cs,org.apache.commons.numbers.complex,org.apache.commons.numbers.core,o
+ rg.apache.commons.numbers.field,org.apache.commons.numbers.fraction,org
+ .apache.commons.numbers.gamma,org.apache.commons.numbers.rootfinder,org
+ .apache.commons.rng,org.apache.commons.rng.sampling,org.apache.commons.
+ rng.sampling.distribution,org.apache.commons.rng.simple,org.apache.comm
+ ons.statistics.distribution
+Include-Resource: assets/org/apache/commons/math4/legacy/random/new-joe-
+ kuo-6.21201=src/main/resources/assets/org/apache/commons/math4/legacy/r
+ andom/new-joe-kuo-6.21201,META-INF/NOTICE=NOTICE
+Private-Package: assets.org.apache.commons.math4.legacy.random,org.apach
+ e.commons.math4.legacy.analysis,org.apache.commons.math4.legacy.analysi
+ s.differentiation,org.apache.commons.math4.legacy.analysis.function,org
+ .apache.commons.math4.legacy.analysis.integration,org.apache.commons.ma
+ th4.legacy.analysis.integration.gauss,org.apache.commons.math4.legacy.a
+ nalysis.interpolation,org.apache.commons.math4.legacy.analysis.polynomi
+ als,org.apache.commons.math4.legacy.analysis.solvers,org.apache.commons
+ .math4.legacy.distribution,org.apache.commons.math4.legacy.distribution
+ .fitting,org.apache.commons.math4.legacy.field.linalg,org.apache.common
+ s.math4.legacy.field,org.apache.commons.math4.legacy.filter,org.apache.
+ commons.math4.legacy.fitting,org.apache.commons.math4.legacy.fitting.le
+ astsquares,org.apache.commons.math4.legacy.genetics,org.apache.commons.
+ math4.legacy.linear,org.apache.commons.math4.legacy.ml.clustering,org.a
+ pache.commons.math4.legacy.ml.clustering.evaluation,org.apache.commons.
+ math4.legacy.ml.distance,org.apache.commons.math4.legacy.ml,org.apache.
+ commons.math4.legacy.ode,org.apache.commons.math4.legacy.ode.events,org
+ .apache.commons.math4.legacy.ode.nonstiff,org.apache.commons.math4.lega
+ cy.ode.sampling,org.apache.commons.math4.legacy.optim,org.apache.common
+ s.math4.legacy.optim.linear,org.apache.commons.math4.legacy.optim.nonli
+ near.scalar,org.apache.commons.math4.legacy.optim.nonlinear.scalar.grad
+ ient,org.apache.commons.math4.legacy.optim.nonlinear.scalar.noderiv,org
+ .apache.commons.math4.legacy.optim.univariate,org.apache.commons.math4.
+ legacy.random,org.apache.commons.math4.legacy.special,org.apache.common
+ s.math4.legacy.stat,org.apache.commons.math4.legacy.stat.correlation,or
+ g.apache.commons.math4.legacy.stat.descriptive,org.apache.commons.math4
+ .legacy.stat.descriptive.moment,org.apache.commons.math4.legacy.stat.de
+ scriptive.rank,org.apache.commons.math4.legacy.stat.descriptive.summary
+ ,org.apache.commons.math4.legacy.stat.inference,org.apache.commons.math
+ 4.legacy.stat.interval,org.apache.commons.math4.legacy.stat.ranking,org
+ .apache.commons.math4.legacy.stat.regression,org.apache.commons.math4.l
+ egacy.util,org.keyfitz.jburdick.fractions
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.8))"
+Tool: Bnd-6.4.1.202306080939

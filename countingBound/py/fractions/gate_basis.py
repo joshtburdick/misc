@@ -100,9 +100,23 @@ class UnboundedFanInNandBasis:
         f[0] = 0
         return f
 
-    def expected_gates(self, num_inputs, lg_num_functions):
+    def expected_gates(self, num_inputs, num_functions):
         """Lower bound on E[ # gates ] to compute some # functions.
 
+        Note that this won't, in general, be an integer.
+        num_inputs: the number of inputs to the circuit
+        num_functions: the number of functions (this can be a numpy array)
+        Returns: a numpy array of the same shape as num_functions,
+        such that the i'th element is the expected number of gates
+        needed to compute num_functions[i] functions.
+        """
+        return expected_num_gates(num_inputs, num_functions,
+            max_fan_in=None))
+
+    def expected_gates_1(self, num_inputs, lg_num_functions):
+        """Lower bound on E[ # gates ] to compute some # functions.
+
+        This is similar to expected_gates(), but it's a bit faster.
         Note that this won't, in general, be an integer.
         num_inputs: the number of inputs to the circuit
         lg_num_functions: the number of functions (on log_2 scale);
@@ -140,6 +154,11 @@ class UnboundedFanInNandBasis:
         then ORs the results together.
         """
         return num_or + 1
+
+    def xor_upper_bound(self):
+        """Upper bound on computing XOR of two functions."""
+        # unbounded fan-in doesn't help here
+        return 4
 
     def zonked_gates(self):
         """Number of gates zonked by feeding in a zero to one vertex."""
@@ -180,6 +199,20 @@ class TwoInputNandBasis:
         # FIXME double-check this
         return f
 
+    def expected_gates(self, num_inputs, num_functions):
+        """Lower bound on E[ # gates ] to compute some # functions.
+
+        Note that this will be an integer (although the expected value
+        may be slightly higher.)
+        num_inputs: the number of inputs to the circuit
+        num_functions: the number of functions (this can be a numpy array)
+        Returns: a numpy array of the same shape as num_functions,
+        such that the i'th element is the expected number of gates
+        needed to compute num_functions[i] functions.
+        """
+        return expected_num_gates(num_inputs, num_functions,
+            max_fan_in=2)
+
     def and_upper_bound(self):
         """Upper bound on computing AND of two functions."""
         # we can use a NAND, and then invert the output
@@ -208,6 +241,10 @@ class TwoInputNandBasis:
         # ??? I think that, since the AND circuits all end with inverters,
         # we can just drop the final inverters, and use NAND gates to compute OR ?
         return num_or * gates_for_and + (num_or - 1)
+
+    def xor_upper_bound(self):
+        """Upper bound on computing XOR of two functions."""
+        return 4
 
     def zonked_gates(self):
         """Number of gates zonked by feeding in a zero to one vertex."""

@@ -90,15 +90,41 @@ class LpParity:
                     for c in range(self.num_possible_cliques+1)],
                 '<=', num_functions[g])
 
-    def add_step_bound(self):
-        """Adds 'step' bounds from the random walk.
+    def add_bounce_down_bound(self):
+        """Adds 'bounce down' bound.
+
+        This bounds the number of gates for CLIQUE-PARITY
+        for different numbers of cliques, after one edge
+        is zeroed out.
+        """
+
+
+        # loop through possible numbers of cliques after bounce
+        for i in range(self.max_cliques-self.max_cliques_hit+1):
+            # first, compute the hypergeometric distribution, for the
+            # number of cliques before the bounce down
+            hyperg = [hyperg_frac(self.max_cliques, self.max_cliques_hit, i, j)
+                for j in range(self.max_cliques_hit+1)]
+            # now, add the constraints
+            A = [(("A", i), hyperg[j])
+                for j in range(self.max_cliques_hit+1)]
+            for j in range(self.max_cliques_hit):
+                A.append(("A", i+j))
+            # add the lower bound
+            self.lp.add_constraint(
+                A + [(("B", i), -1)],
+                "<=",
+                0)  # FIXME: this is a placeholder
+
+
+
+
+
+    def add_bounce_up_bound(self):
+        """Adds 'bounce up' bound.
 
         """
-        # the bounce "down":
 
-
-
-        # the bounce "up":
 
 
     def add_level_bound(self):

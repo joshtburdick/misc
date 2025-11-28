@@ -153,7 +153,21 @@ class UnboundedFanInNandBasis:
         This computes the AND of `num_and` inputs, `num_or` times, and
         then ORs the results together.
         """
+        # Because of unbounded fan-in, we can use NAND gates to compute
+        # the ANDs, and then compute the OR using a final NAND gate.
         return num_or + 1
+
+    def xor_of_and_upper_bound(self, num_and, num_xor):
+        """Upper bound of XORing some ANDs together.
+
+        This computes the AND of `num_and` inputs, `num_xor` times, and
+        then XORs the results together.
+        """
+        # Here, we can use two NAND gates per AND. The second NAND gate
+        # will be an inverter, which we can use one of in computing XOR.
+        # I think this means we need an additional three NAND gates per XOR.
+        # ??? can we do better?
+        return 2 * num_xor + 3 * num_xor - 1)
 
     def xor_upper_bound(self):
         """Upper bound on computing XOR of two functions."""
@@ -241,6 +255,17 @@ class TwoInputNandBasis:
         # ??? I think that, since the AND circuits all end with inverters,
         # we can just drop the final inverters, and use NAND gates to compute OR ?
         return num_or * gates_for_and + (num_or - 1)
+
+    def xor_of_and_upper_bound(self, num_and, num_xor):
+        """Upper bound of XORing some ANDs together.
+
+        This computes the AND of `num_and` inputs, `num_xor` times, and
+        then XORs the results together.
+        """
+        gates_for_and = 2 * (num_and-1)
+        # ??? Again, since the AND circuits all end with inverters,
+        # we can use the final inverters as part of the XOR circuit ?
+        return num_xor * gates_for_and + 2 * (num_xor - 1)
 
     def xor_upper_bound(self):
         """Upper bound on computing XOR of two functions."""

@@ -71,6 +71,16 @@ class LpParity:
 
         self.basis = gate_basis.TwoInputNandBasis()
 
+        # Upper bound on number of gates hit by zeroing an edge
+        # (as a function of number of cliques hit).
+        self.num_gates_hit_upper_bound = np.array([0]
+            + [self.basis.xor_of_and_upper_bound(self.edges_per_clique, i)
+                for i in range(1, self.max_cliques_hit)])
+
+        # Lower bound on number of gates hit by zeroing an edge
+        # (again, as a function of number of cliques hit).        
+        self.num_gates_hit_lower_bound = np.array([0] + [1] * self.max_cliques_hit())
+
         # for debugging: directory in which to save LP problem files
         self.lp_save_dir = None
 
@@ -98,11 +108,10 @@ class LpParity:
         is zeroed out.
         """
 
-
         # loop through possible numbers of cliques after bounce
         for i in range(self.max_cliques-self.max_cliques_hit+1):
-            # first, compute the hypergeometric distribution, for the
-            # number of cliques before the bounce down
+            # First, compute the hypergeometric distribution, for the
+            # number of cliques which we hit in the bounce down.
             hyperg = [hyperg_frac(self.max_cliques, self.max_cliques_hit, i, j)
                 for j in range(self.max_cliques_hit+1)]
             # now, add the constraints
@@ -110,12 +119,17 @@ class LpParity:
                 for j in range(self.max_cliques_hit+1)]
             for j in range(self.max_cliques_hit):
                 A.append(("A", i+j))
-            # add the lower bound
+            # The lower bound: we can't have lost more gates than
+            # (roughly) a constant times the number of cliques we hit.
             self.lp.add_constraint(
-                A + [(("B", i), -1)],
+                [(("B", i), -1)] + A,
+                ">=",
+                0)  # FIXME
+            # the upper bound: we hit at least one gate.
+            self.lp.add_constraint(
+                [(("B", i), -1)] + A,
                 "<=",
-                0)  # FIXME: this is a placeholder
-
+                1)
 
 
 
@@ -124,6 +138,8 @@ class LpParity:
         """Adds 'bounce up' bound.
 
         """
+
+
 
 
 
@@ -140,13 +156,14 @@ class LpParity:
                     self.lp.add_constraint(
                         [(("A", xor), 1), (("A", i), -1), (("A", j), -1)],
                         "<=",
-                        4)
+                        # We need to XOR these together.
+                        self.basis.xor_upper_bound)
 
     def add_no_cliques_constraint(self):
         """Adds trivial constraint, on finding no cliques."""
         # FIXME move this to the "levels" bound
-        # ... that is, finding zero cliques requires one NAND gate
-        self.lp.add_constraint([(("A", 0), 1)], "=", 1)
+        # ... that is, finding zero cliques requires no NAND gate
+        self.lp.add_constraint([(("A", 0), 1)], "=", 0)
 
     def get_all_bounds(self):
         """Gets bounds for each possible number of cliques.

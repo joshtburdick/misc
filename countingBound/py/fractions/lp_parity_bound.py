@@ -23,6 +23,10 @@ import simplex_algorithm_helper
 def comb(n, k):
     return scipy.special.comb(n, k, exact=True)
 
+# Binomial distribution, returning an exact fractions.Fraction .
+def binom_frac(n, k):
+    return fractions.Fraction(comb(n, k), 2**n)
+
 # Hypergeometric distribution, returning an exact fractions.Fraction .
 def hyperg_frac(N, K, n, k):
     # based on https://en.wikipedia.org/wiki/Hypergeometric_distribution
@@ -58,7 +62,8 @@ class LpParity:
         self.max_cliques = comb(n, k)
         # number of cliques which could be "hit" by zeroing an edge
         self.max_cliques_hit = comb(n-2, k-2)
- 
+        # number of edges per clique
+        self.edges_per_clique = comb(k, 2)
         # the variables
         self.expected_num_gates_vars = (
             [("A", c) for c in range(0, self.max_cliques + 1)]
@@ -79,7 +84,7 @@ class LpParity:
 
         # Lower bound on number of gates hit by zeroing an edge
         # (again, as a function of number of cliques hit).        
-        self.num_gates_hit_lower_bound = np.array([0] + [1] * self.max_cliques_hit())
+        self.num_gates_hit_lower_bound = np.array([0] + [1] * self.max_cliques_hit)
 
         # for debugging: directory in which to save LP problem files
         self.lp_save_dir = None
@@ -107,40 +112,55 @@ class LpParity:
         for different numbers of cliques, after one edge
         is zeroed out.
         """
-
-        # loop through possible numbers of cliques after bounce
+        # loop through possible numbers of cliques after bounce down
         for i in range(self.max_cliques-self.max_cliques_hit+1):
-            # First, compute the hypergeometric distribution, for the
-            # number of cliques which we hit in the bounce down.
-            hyperg = [hyperg_frac(self.max_cliques, self.max_cliques_hit, i, j)
-                for j in range(self.max_cliques_hit+1)]
+            # First, compute the binomial distribution, for the number
+            # of cliques before the bounce down.
+            p = np.array([binom_frac(self.max_cliques_hit, j)
+                for j in range(self.max_cliques_hit+1)])
             # now, add the constraints
-            A = [(("A", i), hyperg[j])
-                for j in range(self.max_cliques_hit+1)]
-            for j in range(self.max_cliques_hit):
-                A.append(("A", i+j))
+            A = [(("A", i+j), p[j])
+                for j in range(p.shape[0])]
             # The lower bound: we can't have lost more gates than
             # (roughly) a constant times the number of cliques we hit.
+            # FIXME: check >= or <= for all of these
             self.lp.add_constraint(
                 [(("B", i), -1)] + A,
                 ">=",
-                0)  # FIXME
+                (-p * self.num_gates_hit_upper_bound).sum())
             # the upper bound: we hit at least one gate.
             self.lp.add_constraint(
                 [(("B", i), -1)] + A,
                 "<=",
-                1)
-
-
-
+                (p * self.num_gates_hit_lower_bound).sum())
 
     def add_bounce_up_bound(self):
         """Adds 'bounce up' bound.
 
         """
-
-
-
+        # loop through possible numbers of cliques after bounce up
+        for i in range(self.max_cliques+1):
+            # First, compute the range of how many cliques we could
+            # have added on the bounce up.
+            j_range = range(max(0, i-self.max_cliques_hit), min(i, self.max_cliques_hit)+1)
+            # Now, compute the hypergeometric distribution for how likely each
+            # of those is.
+            p = np.array([hyperg_frac(self.max_cliques, self.max_cliques_hit, i, j)
+                for j in j_range])
+            # Now, add the constraints.
+            A = [(("B", i-j), p[j])
+                for j in range(p.shape[0])]
+            # The lower bound: we (probably) added at least one gate.
+            self.lp.add_constraint(
+                [(("B", i), -1)] + A,
+                "<=",
+                (p * self.num_gates_hit_lower_bound).sum())
+            # The upper bound: we can't have added more gates than
+            # (roughly) a constant times the number of cliques we added.
+            self.lp.add_constraint(
+                [(("B", i), -1)] + A,
+                ">=",
+                (-p * self.num_gates_hit_upper_bound).sum())
 
 
     def add_level_bound(self):

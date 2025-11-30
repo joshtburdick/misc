@@ -118,21 +118,21 @@ class LpParity:
             # of cliques before the bounce down.
             p = np.array([binom_frac(self.max_cliques_hit, j)
                 for j in range(self.max_cliques_hit+1)])
-            # now, add the constraints
-            A = [(("A", i+j), p[j])
+            # the coefficients for the constraint
+            coefs = [(("B", i), 1)] + [(("A", i+j), -p[j])
                 for j in range(p.shape[0])]
             # The lower bound: we can't have lost more gates than
             # (roughly) a constant times the number of cliques we hit.
             # FIXME: check >= or <= for all of these
             self.lp.add_constraint(
-                [(("B", i), -1)] + A,
-                ">=",
-                (-p * self.num_gates_hit_upper_bound).sum())
+                    coefs,
+                    ">=",
+                    (-p * self.num_gates_hit_upper_bound).sum())
             # the upper bound: we hit at least one gate.
             self.lp.add_constraint(
-                [(("B", i), -1)] + A,
-                "<=",
-                (p * self.num_gates_hit_lower_bound).sum())
+                    coefs,
+                    "<=",
+                    (p * self.num_gates_hit_lower_bound).sum())
 
     def add_bounce_up_bound(self):
         """Adds 'bounce up' bound.
@@ -148,18 +148,18 @@ class LpParity:
             p = np.array([hyperg_frac(self.max_cliques, self.max_cliques_hit, i, j)
                 for j in j_range])
             # Now, add the constraints.
-            A = [(("B", i-j), p[j])
+            coefs = [(("A", i), 1)] + [(("B", i-j), p[j])
                 for j in range(p.shape[0])]
             # The lower bound: we (probably) added at least one gate.
             self.lp.add_constraint(
-                [(("B", i), -1)] + A,
-                "<=",
+                coefs,
+                ">=",
                 (p * self.num_gates_hit_lower_bound).sum())
             # The upper bound: we can't have added more gates than
             # (roughly) a constant times the number of cliques we added.
             self.lp.add_constraint(
-                [(("B", i), -1)] + A,
-                ">=",
+                coefs,
+                "<=",
                 (-p * self.num_gates_hit_upper_bound).sum())
 
 

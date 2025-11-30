@@ -111,7 +111,7 @@ class UnboundedFanInNandBasis:
         needed to compute num_functions[i] functions.
         """
         return expected_num_gates(num_inputs, num_functions,
-            max_fan_in=None))
+            max_fan_in=None)
 
     def expected_gates_1(self, num_inputs, lg_num_functions):
         """Lower bound on E[ # gates ] to compute some # functions.
@@ -167,7 +167,7 @@ class UnboundedFanInNandBasis:
         # will be an inverter, which we can use one of in computing XOR.
         # I think this means we need an additional three NAND gates per XOR.
         # ??? can we do better?
-        return 2 * num_xor + 3 * num_xor - 1)
+        return 2 * num_xor + 3 * num_xor - 1
 
     def xor_upper_bound(self):
         """Upper bound on computing XOR of two functions."""

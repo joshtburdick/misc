@@ -56,8 +56,9 @@ class LpParity:
         self.k = k
         if k < 3:
             raise ValueError('k must be >= 3')
-        self.max_gates = max_gates
 
+        # number of inputs to the circuit
+        self.num_inputs = comb(n, 2)
         # number of possible cliques
         self.max_cliques = comb(n, k)
         # number of cliques which could be "hit" by zeroing an edge
@@ -72,15 +73,16 @@ class LpParity:
 
         # wrapper for LP solver
         self.lp = pulp_helper.PuLP_Helper(
-             self.expected_num_gates_vars + self.num_gates_dist_vars)
+             self.expected_num_gates_vars)
 
         self.basis = gate_basis.TwoInputNandBasis()
 
         # Upper bound on number of gates hit by zeroing an edge
         # (as a function of number of cliques hit).
         self.num_gates_hit_upper_bound = np.array([0]
-            + [self.basis.xor_of_and_upper_bound(self.edges_per_clique, i)
-                for i in range(1, self.max_cliques_hit)])
+            + [(self.basis.xor_of_and_upper_bound(self.edges_per_clique, i)
+                + self.basis.xor_upper_bound())
+                for i in range(1, self.max_cliques_hit + 1)])
 
         # Lower bound on number of gates hit by zeroing an edge
         # (again, as a function of number of cliques hit).        
@@ -92,18 +94,29 @@ class LpParity:
     def add_counting_bound(self, include_B_bound=True):
         """Adds counting bounds, based on number of functions.
 
-        This is a lower bound on the number of functions with
-        some number of gates.
+        For each "level" of number of cliques, we bound the
+        number of functions with that many cliques.
         """
-        # number of possible functions for each possible number of gates
-        # (with number of inputs based on number of vertices)
-        num_functions = self.basis.num_functions(comb(self.n, 2), self.max_gates+1)
-        # upper-bound "total number of functions with this many gates"
-        for g in range(1, self.max_gates+1):
+        # first, compute the number of gates for however many functions have
+        # a given number of cliques
+        num_functions = np.array([comb(self.max_cliques, i)
+                for i in np.arange(self.max_cliques+1)])
+        num_gates = self.basis.expected_num_gates(self.num_inputs,
+            num_functions)
+        for i in range(self.max_cliques+1):
             self.lp.add_constraint(
-                [((c, g), 1)
-                    for c in range(self.num_possible_cliques+1)],
-                '<=', num_functions[g])
+                [(("A", i), 1)],
+                '>=',
+                num_gates[i])
+        # similar bound, for B variables (after bounce down)
+        num_gates = self.basis.expected_num_gates(self.num_inputs,
+            np.array([comb(self.max_cliques+1-self.max_cliques_hit, i)
+                for i in np.arange(self.max_cliques+1-self.max_cliques_hit)]))
+        for i in range(self.max_cliques+1-self.max_cliques_hit):
+            self.lp.add_constraint(
+                [(("B", i), 1)],
+                '>=',
+                num_gates[i])
 
     def add_bounce_down_bound(self):
         """Adds 'bounce down' bound.
@@ -123,7 +136,6 @@ class LpParity:
                 for j in range(p.shape[0])]
             # The lower bound: we can't have lost more gates than
             # (roughly) a constant times the number of cliques we hit.
-            # FIXME: check >= or <= for all of these
             self.lp.add_constraint(
                     coefs,
                     ">=",
@@ -132,7 +144,7 @@ class LpParity:
             self.lp.add_constraint(
                     coefs,
                     "<=",
-                    (p * self.num_gates_hit_lower_bound).sum())
+                    (-p * self.num_gates_hit_lower_bound).sum())
 
     def add_bounce_up_bound(self):
         """Adds 'bounce up' bound.
@@ -142,37 +154,37 @@ class LpParity:
         for i in range(self.max_cliques+1):
             # First, compute the range of how many cliques we could
             # have added on the bounce up.
-            j_range = range(max(0, i-self.max_cliques_hit), min(i, self.max_cliques_hit)+1)
-            # Now, compute the hypergeometric distribution for how likely each
-            # of those is.
+            j_range = np.arange(max(0, i-(self.max_cliques-self.max_cliques_hit)),
+                            min(i, self.max_cliques_hit)+1)
+            # Next, compute the hypergeometric distribution for how likely each of those is.
             p = np.array([hyperg_frac(self.max_cliques, self.max_cliques_hit, i, j)
                 for j in j_range])
+            print(f"i = {i}, j_range = {j_range}, p = {p}")
             # Now, add the constraints.
-            coefs = [(("A", i), 1)] + [(("B", i-j), p[j])
-                for j in range(p.shape[0])]
+            coefs = [(("A", i), 1)] + [(("B", i-j_range[k]), -p[k])
+                for k in range(p.shape[0])]
             # The lower bound: we (probably) added at least one gate.
             self.lp.add_constraint(
                 coefs,
                 ">=",
-                (p * self.num_gates_hit_lower_bound).sum())
+                (p * self.num_gates_hit_lower_bound[j_range]).sum())
             # The upper bound: we can't have added more gates than
             # (roughly) a constant times the number of cliques we added.
             self.lp.add_constraint(
                 coefs,
                 "<=",
-                (-p * self.num_gates_hit_upper_bound).sum())
+                (p * self.num_gates_hit_upper_bound[j_range]).sum())
 
 
-    def add_level_bound(self):
+    def add_combining_bound(self):
         """Adds constraints, based on combining "levels" of circuits.
 
         """
-        N = self.num_possible_cliques
         # loop through pairs of sizes we could combine
-        for i in range(self.num_possible_cliques+1):
-            for j in range(i, self.num_possible_cliques+1):
+        for i in range(self.max_cliques):
+            for j in range(i+1, self.max_cliques+1):
                 # loop through the sizes obtainable by XORing them together
-                for xor in range(j-i, min(j+i, self.num_possible_cliques)+1, 2):
+                for xor in range(j-i, min(j+i, self.max_cliques)+1, 2):
                     self.lp.add_constraint(
                         [(("A", xor), 1), (("A", i), -1), (("A", j), -1)],
                         "<=",
@@ -193,39 +205,42 @@ class LpParity:
         CLIQUE is minimized.
         """
         # solve, minimizing number of gates for CLIQUE
-        r = self.lp.solve(("A", self.num_possible_cliques))
+        r = self.lp.solve(("A", self.max_cliques))
         if not r:
             return None
         # for now, we only get bounds for "expected number of gates"
         # for each number of cliques
-        n_cliques = range(self.num_possible_cliques+1)
+        n_cliques = range(self.max_cliques+1)
         bounds = [r[("A", num_cliques)]
-            for num_cliques in range(self.num_possible_cliques+1)]
+            for num_cliques in range(self.max_cliques+1)]
         return pandas.DataFrame({
                 'Num. vertices': self.n,
                 'Num. cliques': n_cliques,
                 'Min. gates': bounds})
 
-def get_bounds(n, k, max_gates, constraints_label,
-        use_counting_bound, use_combining_bound, use_no_cliques_bound):
+def get_bounds(n, k, constraints_label,
+        use_counting_bound, use_step_bound, use_combining_bound):
     """Gets bounds with some set of constraints.
 
-    n, k, max_gates: problem size
+    n, k: problem size
     constraints_label: label to use for this set of constraints
     use_counting_bound, use_step_bound, use_level_bound:
         whether to use each of these groups of constraints
     """
     # ??? track resource usage?
-    sys.stderr.write(f'[bounding with n={n}, k={k}, max_gates={max_gates}, label={constraints_label}]\n')
+    sys.stderr.write(f'[bounding with n={n}, k={k}, label={constraints_label}]\n')
     bound = LpParity(n, k)
+
     if use_counting_bound:
         bound.add_counting_bound()
     if use_step_bound:
-        bound.add_level_bound()
-    if use_level_bound:
-        bound.add_level_bound()
-    # pdb.set_trace()
+        bound.add_bounce_down_bound()
+        bound.add_bounce_up_bound()
+    if use_combining_bound:
+        bound.add_combining_bound()
     b = bound.get_all_bounds()
+    if b is None:
+        return None
     b['Constraints'] = constraints_label
     return b.iloc[:,[3,0,1,2]]
 
@@ -236,8 +251,6 @@ def parse_args():
         help="Number of vertices")
     parser.add_argument("k", type=int,
         help="Size of clique")
-    parser.add_argument("max_gates", type=int,
-        help="Maximum number of gates to consider")
     parser.add_argument("--dump-lp",
         help="Dump LP problem statement to a file",
         action="store_true")
@@ -252,14 +265,10 @@ if __name__ == '__main__':
     args = parse_args()
     n = args.n
     k = args.k
-    max_gates = args.max_gates
-
     bounds = pandas.concat([
-        get_bounds(n, k, max_gates, 'Counting', True, False, False),
-        get_bounds(n, k, max_gates, 'Combining', False, True, False),
-        get_bounds(n, k, max_gates, 'Counting and combining', True, True, False),
-        get_bounds(n, k, max_gates, 'Counting, combining, and no cliques',
-            True, True, True)
+        get_bounds(n, k, 'Counting', True, False, False),
+        get_bounds(n, k, 'Counting and step', True, True, False),
+        # get_bounds(n, k, 'Counting, step, and combining', True, True, True),
     ])
     if args.result_file:
         with open(args.result_file, "wt") as f:

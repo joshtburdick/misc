@@ -39,7 +39,7 @@ def function_counts(num_inputs, max_fan_in=2):
         else:
             num_functions *= 2 ** num_gate_inputs
 
-def expected_num_gates(num_inputs, num_functions, max_fan_in=2):
+def get_expected_num_gates(num_inputs, num_functions, max_fan_in=2):
     """Lower bound on E[ # gates ] to compute some # functions.
 
     Note that we don't round this up, even though the expected number
@@ -57,16 +57,16 @@ def expected_num_gates(num_inputs, num_functions, max_fan_in=2):
     max_functions = num_functions.max()
     total_functions = 0
     num_functions_implementable = []
-    for num_gates, num_functions in function_counts(num_inputs, max_fan_in):
-        total_functions += num_functions
-        num_functions_implementable.append(num_functions)
+    for num_gates_1, num_functions_1 in function_counts(num_inputs, max_fan_in):
+        total_functions += num_functions_1
+        num_functions_implementable.append(num_functions_1)
         if total_functions > max_functions:
             break
-    # Now, for each number of functions, compute the expected number of gates
+    # Now, for each number of functions, compute the epected number of gates
     # needed to implement it.
     num_functions_implementable = np.array(num_functions_implementable)
     cumu_num_functions_implementable = np.cumsum(num_functions_implementable)
-    num_gates = np.range(len(num_functions_implementable))
+    num_gates = np.arange(len(num_functions_implementable))
     expected_num_gates = num_gates * num_functions_implementable / cumu_num_functions_implementable
     idx = np.searchsorted(cumu_num_functions_implementable, num_functions,
                               side="right")
@@ -100,7 +100,7 @@ class UnboundedFanInNandBasis:
         f[0] = 0
         return f
 
-    def expected_gates(self, num_inputs, num_functions):
+    def expected_num_gates(self, num_inputs, num_functions):
         """Lower bound on E[ # gates ] to compute some # functions.
 
         Note that this won't, in general, be an integer.
@@ -110,7 +110,7 @@ class UnboundedFanInNandBasis:
         such that the i'th element is the expected number of gates
         needed to compute num_functions[i] functions.
         """
-        return expected_num_gates(num_inputs, num_functions,
+        return get_expected_num_gates(num_inputs, num_functions,
             max_fan_in=None)
 
     def expected_gates_1(self, num_inputs, lg_num_functions):
@@ -213,7 +213,7 @@ class TwoInputNandBasis:
         # FIXME double-check this
         return f
 
-    def expected_gates(self, num_inputs, num_functions):
+    def expected_num_gates(self, num_inputs, num_functions):
         """Lower bound on E[ # gates ] to compute some # functions.
 
         Note that this will be an integer (although the expected value
@@ -224,7 +224,7 @@ class TwoInputNandBasis:
         such that the i'th element is the expected number of gates
         needed to compute num_functions[i] functions.
         """
-        return expected_num_gates(num_inputs, num_functions,
+        return get_expected_num_gates(num_inputs, num_functions,
             max_fan_in=2)
 
     def and_upper_bound(self):

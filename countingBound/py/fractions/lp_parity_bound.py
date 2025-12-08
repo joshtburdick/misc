@@ -189,12 +189,13 @@ class LpParity:
                         [(("A", xor), 1), (("A", i), -1), (("A", j), -1)],
                         "<=",
                         # We need to XOR these together.
-                        self.basis.xor_upper_bound)
+                        self.basis.xor_upper_bound())
 
     def add_no_cliques_constraint(self):
         """Adds trivial constraint, on finding no cliques."""
         # FIXME move this to the "levels" bound
         # ... that is, finding zero cliques requires no NAND gate
+        # is this even needed?
         self.lp.add_constraint([(("A", 0), 1)], "=", 0)
 
     def get_all_bounds(self):
@@ -230,6 +231,7 @@ def get_bounds(n, k, constraints_label,
     # ??? track resource usage?
     sys.stderr.write(f'[bounding with n={n}, k={k}, label={constraints_label}]\n')
     bound = LpParity(n, k)
+    bound.add_no_cliques_constraint()
 
     if use_counting_bound:
         bound.add_counting_bound()
@@ -268,7 +270,7 @@ if __name__ == '__main__':
     bounds = pandas.concat([
         get_bounds(n, k, 'Counting', True, False, False),
         get_bounds(n, k, 'Counting and step', True, True, False),
-        # get_bounds(n, k, 'Counting, step, and combining', True, True, True),
+ #       get_bounds(n, k, 'Counting, step, and combining', True, True, True),
     ])
     if args.result_file:
         with open(args.result_file, "wt") as f:

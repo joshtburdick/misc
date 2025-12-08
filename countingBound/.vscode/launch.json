@@ -9,6 +9,10 @@
             "type": "debugpy",
             "request": "launch",
             "program": "${file}",
+            "args": [
+                "5",
+                "3",
+            ],
             "python": "${workspaceFolder}/py/fractions/venv1/bin/python"
         }
     ]

@@ -23,8 +23,26 @@ def fraction_covering_hypergraphs(n, k):
     counter = hypergraph_counter.HypergraphCounter(n, k)
     function_counts = counter.count_hypergraphs_exact_vertices()[n]
     total = function_counts.sum()
-    covering = function_counts[comb(n-1, k, exact=True)+1:].sum()
-    return covering / total
+    threshold = comb(n-1, k, exact=True) + 1
+    covering = function_counts[threshold:].sum()
+    return {
+        'n': n,
+        'k': k,
+        'total': total,
+        'covering': covering,
+        'threshold': threshold,
+        'fraction': covering / total
+    }
+
+
+
+for k in range(3, 7):
+    for n in range(2*k-2, 2*k+3):
+        stats = fraction_covering_hypergraphs(n, k)
+        print(f"n={n}, k={k}: {stats['fraction']:.3f} (total={stats['total']}, covering={stats['covering']}, threshold={stats['threshold']})")
+
+sys.exit(0)
+
 
 
 if len(sys.argv) != 4:
@@ -36,5 +54,5 @@ n_high = int(sys.argv[2])
 k = int(sys.argv[3])
 
 for n in range(n_low, n_high+1):
-    fraction = fraction_covering_hypergraphs(n, k)
-    print(f"n={n}, k={k}: {fraction:.3f}")
+    stats = fraction_covering_hypergraphs(n, k)
+    print(f"n={n}, k={k}: {stats['fraction']:.3f} (total={stats['total']}, covering={stats['covering']}, threshold={stats['threshold']})")

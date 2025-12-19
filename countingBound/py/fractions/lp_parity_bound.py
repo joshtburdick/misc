@@ -175,10 +175,37 @@ class LpParity:
                 "<=",
                 (p * self.num_gates_hit_upper_bound[j_range]).sum())
 
-
     def add_combining_bound(self):
         """Adds constraints, based on combining "levels" of circuits.
 
+        This only combines levels that are "efficient" in the sense that
+        either the sets of cliques A and B are disjoint, or the set of cliques
+        A is a subset of the set of cliques B.
+        """
+        # loop through pairs of sizes we could combine
+
+        for i in range(self.max_cliques):
+            for j in range(i+1, self.max_cliques+1):
+                # Given a set of j cliques, we can remove i cliques from it.
+                self.lp.add_constraint(
+                    [(("A", j-i), 1), (("A", i), -1), (("A", j), -1)],
+                        "<=",
+                        # We need to XOR these together.
+                        self.basis.xor_upper_bound()) 
+            # we also can combine these, to get a set of i+j cliques (so long as i+j <= max_clique)
+            if i+j <= self.max_cliques:
+                self.lp.add_constraint(
+                    [(("A", i+j), 1), (("A", i), -1), (("A", j), -1)],
+                    "<=",
+                    # We need to XOR these together.
+                    self.basis.xor_upper_bound()) 
+
+    def add_big_combining_bound(self):
+        """Adds constraints, based on combining "levels" of circuits.
+
+        This combines all levels using XOR, including "inefficient" combinations
+        in which some cliques are "cancelled out" (e.g. computing CLIQUE-PARITY
+        for 3 cliques, by XORing together CLIQUE-PARITY circuits for 2 and 7 cliques).
         """
         # loop through pairs of sizes we could combine
         for i in range(self.max_cliques):
@@ -270,7 +297,7 @@ if __name__ == '__main__':
     bounds = pandas.concat([
         get_bounds(n, k, 'Counting', True, False, False),
         get_bounds(n, k, 'Counting and step', True, True, False),
- #       get_bounds(n, k, 'Counting, step, and combining', True, True, True),
+        get_bounds(n, k, 'Counting, step, and combining', True, True, True),
     ])
     if args.result_file:
         with open(args.result_file, "wt") as f:

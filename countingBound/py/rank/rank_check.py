@@ -36,10 +36,11 @@ def fraction_covering_hypergraphs(n, k):
 
 
 
-for k in range(3, 7):
-    for n in range(2*k-2, 2*k+3):
-        stats = fraction_covering_hypergraphs(n, k)
-        print(f"n={n}, k={k}: {stats['fraction']:.3f} (total={stats['total']}, covering={stats['covering']}, threshold={stats['threshold']})")
+for n in range(5, 14):
+    k = n // 2 + 1
+    stats = fraction_covering_hypergraphs(n, k)
+    print(f"n={n}, k={k}: {stats['fraction']:.3f}")
+    
 
 sys.exit(0)
 
@@ -54,5 +55,5 @@ n_high = int(sys.argv[2])
 k = int(sys.argv[3])
 
 for n in range(n_low, n_high+1):
-    stats = fraction_covering_hypergraphs(n, k)
-    print(f"n={n}, k={k}: {stats['fraction']:.3f} (total={stats['total']}, covering={stats['covering']}, threshold={stats['threshold']})")
+    fraction = fraction_covering_hypergraphs(n, k)
+    print(f"n={n}, k={k}: {fraction:.3f}")

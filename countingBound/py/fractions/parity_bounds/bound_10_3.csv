@@ -1,0 +1,364 @@
+Constraints,Num. vertices,Num. cliques,Min. gates
+Counting,10,0,0.0
+Counting,10,1,0.99907578558278
+Counting,10,2,0.99907578558278
+Counting,10,3,1.99822688352635
+Counting,10,4,1.99822688352635
+Counting,10,5,2.99744888720343
+Counting,10,6,2.99744888720343
+Counting,10,7,2.99744888720343
+Counting,10,8,3.99673458269901
+Counting,10,9,3.99673458269901
+Counting,10,10,4.99607830573288
+Counting,10,11,4.99607830573288
+Counting,10,12,4.99607830573288
+Counting,10,13,4.99607830573288
+Counting,10,14,5.99547497650454
+Counting,10,15,5.99547497650454
+Counting,10,16,5.99547497650454
+Counting,10,17,6.9949200295024
+Counting,10,18,6.9949200295024
+Counting,10,19,6.9949200295024
+Counting,10,20,6.9949200295024
+Counting,10,21,6.9949200295024
+Counting,10,22,7.99440935344808
+Counting,10,23,7.99440935344808
+Counting,10,24,7.99440935344808
+Counting,10,25,7.99440935344808
+Counting,10,26,7.99440935344808
+Counting,10,27,8.99393923982181
+Counting,10,28,8.99393923982181
+Counting,10,29,8.99393923982181
+Counting,10,30,8.99393923982181
+Counting,10,31,8.99393923982181
+Counting,10,32,8.99393923982181
+Counting,10,33,8.99393923982181
+Counting,10,34,9.99350633723693
+Counting,10,35,9.99350633723693
+Counting,10,36,9.99350633723693
+Counting,10,37,9.99350633723693
+Counting,10,38,9.99350633723693
+Counting,10,39,9.99350633723693
+Counting,10,40,9.99350633723693
+Counting,10,41,9.99350633723693
+Counting,10,42,9.99350633723693
+Counting,10,43,10.9931076122888
+Counting,10,44,10.9931076122888
+Counting,10,45,10.9931076122888
+Counting,10,46,10.9931076122888
+Counting,10,47,10.9931076122888
+Counting,10,48,10.9931076122888
+Counting,10,49,10.9931076122888
+Counting,10,50,10.9931076122888
+Counting,10,51,10.9931076122888
+Counting,10,52,10.9931076122888
+Counting,10,53,10.9931076122888
+Counting,10,54,10.9931076122888
+Counting,10,55,10.9931076122888
+Counting,10,56,10.9931076122888
+Counting,10,57,10.9931076122888
+Counting,10,58,10.9931076122888
+Counting,10,59,10.9931076122888
+Counting,10,60,10.9931076122888
+Counting,10,61,10.9931076122888
+Counting,10,62,10.9931076122888
+Counting,10,63,10.9931076122888
+Counting,10,64,10.9931076122888
+Counting,10,65,10.9931076122888
+Counting,10,66,10.9931076122888
+Counting,10,67,10.9931076122888
+Counting,10,68,10.9931076122888
+Counting,10,69,10.9931076122888
+Counting,10,70,10.9931076122888
+Counting,10,71,10.9931076122888
+Counting,10,72,10.9931076122888
+Counting,10,73,10.9931076122888
+Counting,10,74,10.9931076122888
+Counting,10,75,10.9931076122888
+Counting,10,76,10.9931076122888
+Counting,10,77,10.9931076122888
+Counting,10,78,9.99350633723693
+Counting,10,79,9.99350633723693
+Counting,10,80,9.99350633723693
+Counting,10,81,9.99350633723693
+Counting,10,82,9.99350633723693
+Counting,10,83,9.99350633723693
+Counting,10,84,9.99350633723693
+Counting,10,85,9.99350633723693
+Counting,10,86,9.99350633723693
+Counting,10,87,8.99393923982181
+Counting,10,88,8.99393923982181
+Counting,10,89,8.99393923982181
+Counting,10,90,8.99393923982181
+Counting,10,91,8.99393923982181
+Counting,10,92,8.99393923982181
+Counting,10,93,8.99393923982181
+Counting,10,94,7.99440935344808
+Counting,10,95,7.99440935344808
+Counting,10,96,7.99440935344808
+Counting,10,97,7.99440935344808
+Counting,10,98,7.99440935344808
+Counting,10,99,6.9949200295024
+Counting,10,100,6.9949200295024
+Counting,10,101,6.9949200295024
+Counting,10,102,6.9949200295024
+Counting,10,103,6.9949200295024
+Counting,10,104,5.99547497650454
+Counting,10,105,5.99547497650454
+Counting,10,106,5.99547497650454
+Counting,10,107,4.99607830573288
+Counting,10,108,4.99607830573288
+Counting,10,109,4.99607830573288
+Counting,10,110,4.99607830573288
+Counting,10,111,3.99673458269901
+Counting,10,112,3.99673458269901
+Counting,10,113,2.99744888720343
+Counting,10,114,2.99744888720343
+Counting,10,115,2.99744888720343
+Counting,10,116,1.99822688352635
+Counting,10,117,1.99822688352635
+Counting,10,118,0.99907578558278
+Counting,10,119,0.99907578558278
+Counting,10,120,0.0
+Counting and step,10,0,0.0
+Counting and step,10,1,0.999137399877262
+Counting and step,10,2,1.12456960603148
+Counting and step,10,3,1.99822688352635
+Counting and step,10,4,2.22020359054047
+Counting and step,10,5,2.99744888720343
+Counting and step,10,6,3.29118251955087
+Counting and step,10,7,3.38232760373697
+Counting and step,10,8,3.99673458269901
+Counting and step,10,9,4.36056263344564
+Counting and step,10,10,4.99607830573288
+Counting and step,10,11,4.99607830573288
+Counting and step,10,12,5.39420708548685
+Counting and step,10,13,5.56728763391868
+Counting and step,10,14,5.99547497650454
+Counting and step,10,15,6.40124493048878
+Counting and step,10,16,6.61667631686266
+Counting and step,10,17,6.9949200295024
+Counting and step,10,18,6.9949200295024
+Counting and step,10,19,7.38387417212782
+Counting and step,10,20,7.64554213513305
+Counting and step,10,21,7.76025141318145
+Counting and step,10,22,7.99440935344808
+Counting and step,10,23,7.99440935344808
+Counting and step,10,24,8.3770221032778
+Counting and step,10,25,8.6335864579413
+Counting and step,10,26,20.0634661344347
+Counting and step,10,27,8.99393923982181
+Counting and step,10,28,8.99393923982181
+Counting and step,10,29,8.99418775361453
+Counting and step,10,30,9.26098528764948
+Counting and step,10,31,9.56988757019418
+Counting and step,10,32,9.78691580332994
+Counting and step,10,33,10.4108570698947
+Counting and step,10,34,9.99350633723693
+Counting and step,10,35,9.99350633723693
+Counting and step,10,36,9.99388078356576
+Counting and step,10,37,10.1766648986059
+Counting and step,10,38,10.4586109969152
+Counting and step,10,39,10.7198717161989
+Counting and step,10,40,10.8784019749659
+Counting and step,10,41,10.9437516495249
+Counting and step,10,42,12.6964392574241
+Counting and step,10,43,10.9931076122888
+Counting and step,10,44,10.9931076122888
+Counting and step,10,45,10.9931076122888
+Counting and step,10,46,10.9931076122888
+Counting and step,10,47,10.9931076122888
+Counting and step,10,48,10.9931076122888
+Counting and step,10,49,10.9931076122888
+Counting and step,10,50,10.9931076122888
+Counting and step,10,51,10.9931076122888
+Counting and step,10,52,10.9931076122888
+Counting and step,10,53,10.9931076122888
+Counting and step,10,54,10.9935036117707
+Counting and step,10,55,11.0390554694923
+Counting and step,10,56,11.1722446077757
+Counting and step,10,57,11.4046902530327
+Counting and step,10,58,12.6560640736676
+Counting and step,10,59,11.8641174334389
+Counting and step,10,60,11.95640834324
+Counting and step,10,61,11.9595710083439
+Counting and step,10,62,37.6730350838854
+Counting and step,10,63,11.6872453639145
+Counting and step,10,64,11.4272518501893
+Counting and step,10,65,11.1895326516873
+Counting and step,10,66,11.0491302768001
+Counting and step,10,67,11.0002107208916
+Counting and step,10,68,10.9931076122888
+Counting and step,10,69,10.9931076122888
+Counting and step,10,70,10.9931076122888
+Counting and step,10,71,10.9931076122888
+Counting and step,10,72,10.9931076122888
+Counting and step,10,73,10.993132099763
+Counting and step,10,74,10.9931957997586
+Counting and step,10,75,10.9932498062766
+Counting and step,10,76,10.9932954117806
+Counting and step,10,77,10.9933337618636
+Counting and step,10,78,15.6777918445909
+Counting and step,10,79,10.9911661627098
+Counting and step,10,80,10.9771202021129
+Counting and step,10,81,10.9208659134725
+Counting and step,10,82,10.7747886226681
+Counting and step,10,83,10.5225994134816
+Counting and step,10,84,10.2397347354486
+Counting and step,10,85,10.0511316663025
+Counting and step,10,86,9.99350633723693
+Counting and step,10,87,10.3838946491343
+Counting and step,10,88,9.96314864028464
+Counting and step,10,89,9.87587133459408
+Counting and step,10,90,9.67541030633009
+Counting and step,10,91,9.37471188170724
+Counting and step,10,92,9.10499634626749
+Counting and step,10,93,8.99393923982181
+Counting and step,10,94,9.07407789008837
+Counting and step,10,95,8.93676105991889
+Counting and step,10,96,8.79726632610102
+Counting and step,10,97,8.51825008236573
+Counting and step,10,98,8.18166454581165
+Counting and step,10,99,7.99079637495917
+Counting and step,10,100,7.96910274763997
+Counting and step,10,101,7.8823225355271
+Counting and step,10,102,7.65157417106475
+Counting and step,10,103,7.2768983428773
+Counting and step,10,104,6.98452152004465
+Counting and step,10,105,6.93472218518
+Counting and step,10,106,6.76008972639904
+Counting and step,10,107,6.37905438097054
+Counting and step,10,108,5.96355206156184
+Counting and step,10,109,5.83826890721246
+Counting and step,10,110,5.48249931746323
+Counting and step,10,111,4.98299936231058
+Counting and step,10,112,4.90758723858143
+Counting and step,10,113,4.60573928010353
+Counting and step,10,114,3.9938349038581
+Counting and step,10,115,3.96208069936458
+Counting and step,10,116,3.75294093290623
+Counting and step,10,117,2.98687062977106
+Counting and step,10,118,2.86892497673366
+Counting and step,10,119,1.99907578558278
+Counting and step,10,120,1.99907578558278
+"Counting, step, and combining",10,0,0.0
+"Counting, step, and combining",10,1,0.999137399877262
+"Counting, step, and combining",10,2,1.12456960603148
+"Counting, step, and combining",10,3,1.99822688352635
+"Counting, step, and combining",10,4,2.22020359054047
+"Counting, step, and combining",10,5,2.99744888720343
+"Counting, step, and combining",10,6,3.29118251955087
+"Counting, step, and combining",10,7,3.38232760373697
+"Counting, step, and combining",10,8,3.99673458269901
+"Counting, step, and combining",10,9,4.36056263344564
+"Counting, step, and combining",10,10,4.99607830573288
+"Counting, step, and combining",10,11,4.99607830573288
+"Counting, step, and combining",10,12,5.39420708548685
+"Counting, step, and combining",10,13,5.56728763391868
+"Counting, step, and combining",10,14,5.99547497650454
+"Counting, step, and combining",10,15,6.40124493048878
+"Counting, step, and combining",10,16,6.61667631686266
+"Counting, step, and combining",10,17,6.9949200295024
+"Counting, step, and combining",10,18,6.9949200295024
+"Counting, step, and combining",10,19,7.38387417212782
+"Counting, step, and combining",10,20,7.64554213513305
+"Counting, step, and combining",10,21,7.88962857907977
+"Counting, step, and combining",10,22,7.99440935344808
+"Counting, step, and combining",10,23,7.99440935344808
+"Counting, step, and combining",10,24,8.33506739629315
+"Counting, step, and combining",10,25,8.6335864579413
+"Counting, step, and combining",10,26,13.9930766396991
+"Counting, step, and combining",10,27,8.99393923982181
+"Counting, step, and combining",10,28,8.99393923982181
+"Counting, step, and combining",10,29,8.99418775361453
+"Counting, step, and combining",10,30,13.7940651341068
+"Counting, step, and combining",10,31,9.56988757019418
+"Counting, step, and combining",10,32,9.78691580332994
+"Counting, step, and combining",10,33,9.88908503133143
+"Counting, step, and combining",10,34,9.99350633723693
+"Counting, step, and combining",10,35,9.99350633723693
+"Counting, step, and combining",10,36,9.99388078356576
+"Counting, step, and combining",10,37,10.4360688263724
+"Counting, step, and combining",10,38,16.7738644082509
+"Counting, step, and combining",10,39,16.0683212555563
+"Counting, step, and combining",10,40,15.9428890494021
+"Counting, step, and combining",10,41,10.9437516495249
+"Counting, step, and combining",10,42,10.9629584108208
+"Counting, step, and combining",10,43,10.9931076122888
+"Counting, step, and combining",10,44,10.9931076122888
+"Counting, step, and combining",10,45,10.9931076122888
+"Counting, step, and combining",10,46,10.9931076122888
+"Counting, step, and combining",10,47,10.9931076122888
+"Counting, step, and combining",10,48,10.9931076122888
+"Counting, step, and combining",10,49,10.9931076122888
+"Counting, step, and combining",10,50,10.9931076122888
+"Counting, step, and combining",10,51,10.9931076122888
+"Counting, step, and combining",10,52,10.9931076122888
+"Counting, step, and combining",10,53,10.9931076122888
+"Counting, step, and combining",10,54,10.9935036117707
+"Counting, step, and combining",10,55,11.0390554694923
+"Counting, step, and combining",10,56,11.1722446077757
+"Counting, step, and combining",10,57,11.4046902530327
+"Counting, step, and combining",10,58,13.0013628580124
+"Counting, step, and combining",10,59,11.8641174334389
+"Counting, step, and combining",10,60,11.95640834324
+"Counting, step, and combining",10,61,11.9595710083439
+"Counting, step, and combining",10,62,13.5021201797462
+"Counting, step, and combining",10,63,11.6872453639145
+"Counting, step, and combining",10,64,11.4272518501893
+"Counting, step, and combining",10,65,11.1895326516873
+"Counting, step, and combining",10,66,11.0491302768001
+"Counting, step, and combining",10,67,11.0002107208916
+"Counting, step, and combining",10,68,10.9931076122888
+"Counting, step, and combining",10,69,10.9931076122888
+"Counting, step, and combining",10,70,10.9931076122888
+"Counting, step, and combining",10,71,10.9931076122888
+"Counting, step, and combining",10,72,10.9931076122888
+"Counting, step, and combining",10,73,10.993132099763
+"Counting, step, and combining",10,74,10.9931957997586
+"Counting, step, and combining",10,75,10.9932498062766
+"Counting, step, and combining",10,76,10.9932954117806
+"Counting, step, and combining",10,77,10.9933337618636
+"Counting, step, and combining",10,78,10.9932254613917
+"Counting, step, and combining",10,79,10.9911661627098
+"Counting, step, and combining",10,80,10.9771202021129
+"Counting, step, and combining",10,81,15.6471690195131
+"Counting, step, and combining",10,82,10.7747886226681
+"Counting, step, and combining",10,83,10.5225994134816
+"Counting, step, and combining",10,84,10.2397347354486
+"Counting, step, and combining",10,85,10.0511316663025
+"Counting, step, and combining",10,86,9.99350633723693
+"Counting, step, and combining",10,87,10.3838946491343
+"Counting, step, and combining",10,88,9.96314864028464
+"Counting, step, and combining",10,89,9.87587133459408
+"Counting, step, and combining",10,90,9.67541030633009
+"Counting, step, and combining",10,91,9.37471188170724
+"Counting, step, and combining",10,92,9.10499634626749
+"Counting, step, and combining",10,93,8.99393923982181
+"Counting, step, and combining",10,94,9.07407789008837
+"Counting, step, and combining",10,95,8.93676105991889
+"Counting, step, and combining",10,96,8.79726632610102
+"Counting, step, and combining",10,97,8.51825008236573
+"Counting, step, and combining",10,98,8.18166454581165
+"Counting, step, and combining",10,99,7.99079637495917
+"Counting, step, and combining",10,100,7.96910274763997
+"Counting, step, and combining",10,101,7.8823225355271
+"Counting, step, and combining",10,102,7.65157417106475
+"Counting, step, and combining",10,103,7.2768983428773
+"Counting, step, and combining",10,104,6.98452152004465
+"Counting, step, and combining",10,105,6.93472218518
+"Counting, step, and combining",10,106,6.76008972639904
+"Counting, step, and combining",10,107,6.37905438097054
+"Counting, step, and combining",10,108,5.96355206156184
+"Counting, step, and combining",10,109,5.83826890721246
+"Counting, step, and combining",10,110,5.48249931746323
+"Counting, step, and combining",10,111,4.98299936231058
+"Counting, step, and combining",10,112,4.90758723858143
+"Counting, step, and combining",10,113,8.99297230373536
+"Counting, step, and combining",10,114,3.9938349038581
+"Counting, step, and combining",10,115,3.96208069936458
+"Counting, step, and combining",10,116,3.75294093290623
+"Counting, step, and combining",10,117,2.98687062977106
+"Counting, step, and combining",10,118,2.86892497673366
+"Counting, step, and combining",10,119,1.99907578558278
+"Counting, step, and combining",10,120,1.99907578558278

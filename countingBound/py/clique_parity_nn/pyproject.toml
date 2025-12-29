@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "clique_parity_nn"
+version = "0.1.0"
+description = "Compare clique detection vs clique parity computation difficulty using JAX/Flax."
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "jax",
+    "jaxlib",
+    "flax",
+    "optax",
+    "numpy",
+    "networkx",
+]

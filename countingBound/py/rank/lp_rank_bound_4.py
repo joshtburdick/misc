@@ -48,6 +48,11 @@ class LpVertexZeroing:
         Each variable (currently) will be the expected rank of functions
         with _up to_ v vertices.
 
+        TODO: add constraint on average of _all_ the groups of cliques.
+        Questions:
+        - should this use the counts for graphs with "up to v vertices"?
+          or "exactly v vertices"?
+
         n: number of vertices in the graph
         k: number of vertices in a clique (>= 3)
         """
@@ -75,10 +80,8 @@ class LpVertexZeroing:
         self.counts_exact_vertices = counter.count_hypergraphs_exact_vertices()
 
     def add_average_rank_constraints(self):
-        """Adds equality constraints on average rank of all of the functions.
+        """Adds constraints on average rank of all of the functions.
 
-        Idea: possibly this should just be a weighted average of all
-        possible relevant functions?
         There is one of these for each possible number of vertices included.
 
         ??? We could also include something like add_counting_lower_bound(),
@@ -93,12 +96,12 @@ class LpVertexZeroing:
             # I no longer think it implies an upper bound
             # (of vertex-zeroed functions "above" all of these)
             num_functions = f.sum()
-            # bound the weighted average of these
-            w = f / num_functions
+            # pdb.set_trace()
+            # to avoid fractions, multiply both sides by num_functions
             self.lp.add_constraint(
-                [((v, c), w[c]) for c in range(f.shape[0])],
+                [((v, c), f[c]) for c in range(f.shape[0])],
                 '>=',
-                (num_functions-1) / 2.)
+                num_functions * (num_functions-1) / 2)
 
     def add_zeroing_upper_bound(self):
         """Adds upper bound based on the number of functions "above".
@@ -284,7 +287,8 @@ if __name__ == '__main__':
     # ??? do we need the "base case" of only one clique?
     bound.add_average_rank_constraints()
     bound.add_zeroing_upper_bound()
-    bound.add_vertex_zeroing_constraints()
+    # this doesn't seem necessary
+    # bound.add_vertex_zeroing_constraints()
 
     # get bound
     b = bound.get_bounds_on_average(num_levels_below)

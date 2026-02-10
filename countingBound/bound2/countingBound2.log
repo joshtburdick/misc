@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025/Homebrew) (preloaded format=pdflatex 2025.3.15)  9 FEB 2026 23:42
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025/Homebrew) (preloaded format=pdflatex 2025.3.15)  10 FEB 2026 00:53
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -439,7 +439,7 @@ ap/pdftex.map}] (./countingBound2.toc)
 
 
 [2]
-<bounce.pdf, id=138, 249.72725pt x 153.57375pt>
+<bounce.pdf, id=149, 249.72725pt x 153.57375pt>
 File: bounce.pdf Graphic file (type pdf)
 <use bounce.pdf>
 Package pdftex.def Info: bounce.pdf  used on input line 87.
@@ -459,7 +459,7 @@ Package amsmath Warning: Foreign command \atopwithdelims;
 [5]
 
 [6]
-<walking_bounds_0.pdf, id=198, 578.16pt x 216.81pt>
+<walking_bounds_0.pdf, id=208, 578.16pt x 216.81pt>
 File: walking_bounds_0.pdf Graphic file (type pdf)
 <use walking_bounds_0.pdf>
 Package pdftex.def Info: walking_bounds_0.pdf  used on input line 343.
@@ -469,7 +469,7 @@ Package pdftex.def Info: walking_bounds_0.pdf  used on input line 343.
 [7 <./walking_bounds_0.pdf>]
 
 [8]
-<bounds_13_3_6.pdf, id=247, 433.62pt x 252.945pt>
+<bounds_13_3_6.pdf, id=257, 433.62pt x 252.945pt>
 File: bounds_13_3_6.pdf Graphic file (type pdf)
 <use bounds_13_3_6.pdf>
 Package pdftex.def Info: bounds_13_3_6.pdf  used on input line 480.
@@ -479,14 +479,32 @@ Package pdftex.def Info: bounds_13_3_6.pdf  used on input line 480.
 [9]
 
 [10 <./bounds_13_3_6.pdf>]
-<ip_parity_nand_8_3_9.pdf, id=296, 433.62pt x 252.945pt>
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 539.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 539.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 583.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 583.
+
+<ip_parity_nand_8_3_9.pdf, id=307, 433.62pt x 252.945pt>
 File: ip_parity_nand_8_3_9.pdf Graphic file (type pdf)
 <use ip_parity_nand_8_3_9.pdf>
-Package pdftex.def Info: ip_parity_nand_8_3_9.pdf  used on input line 535.
+Package pdftex.def Info: ip_parity_nand_8_3_9.pdf  used on input line 589.
 (pdftex.def)             Requested size: 422.77664pt x 246.63388pt.
 
 
-[11{/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/enc/dvips/cm
+[11]
+
+[12{/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/enc/dvips/cm
 -super/cm-super-ts1.enc} <./ip_parity_nand_8_3_9.pdf>] (./countingBound2.bbl
 Underfull \hbox (badness 10000) in paragraph at lines 30--35
 []\OT1/cmr/m/n/12 Scott Aaron-son.  P ?= NP.  Avail-able on-line at
@@ -494,7 +512,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 30--35
 
 )
 
-[12] (./countingBound2.aux)
+[13] (./countingBound2.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
@@ -504,13 +522,13 @@ L3 programming layer <2025-01-18>
 LaTeX Warning: There were multiply-defined labels.
 
 Package rerunfilecheck Info: File `countingBound2.out' has not changed.
-(rerunfilecheck)             Checksum: F2BA5F29DF0C29A23CDE19241A1853E9;3593.
+(rerunfilecheck)             Checksum: A9E6B209FA86392F548B47C0FF127BD4;4203.
  ) 
 Here is how much of TeX's memory you used:
- 10066 strings out of 473190
- 156322 string characters out of 5704335
- 551398 words of memory out of 5000000
- 33135 multiletter control sequences out of 15000+600000
+ 10081 strings out of 473190
+ 156575 string characters out of 5704335
+ 553474 words of memory out of 5000000
+ 33144 multiletter control sequences out of 15000+600000
  571542 words of font info for 84 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  75i,6n,79p,949b,571s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -542,10 +560,10 @@ r/texlive/20250308_1/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb
 msfonts/cm/cmtt12.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist
 /fonts/type1/public/amsfonts/symbols/msam10.pfb></opt/homebrew/Cellar/texlive/2
 0250308_1/share/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb>
-Output written on countingBound2.pdf (12 pages, 320480 bytes).
+Output written on countingBound2.pdf (13 pages, 324927 bytes).
 PDF statistics:
- 454 PDF objects out of 1000 (max. 8388607)
- 296 compressed objects within 3 object streams
- 59 named destinations out of 1000 (max. 500000)
- 189 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 475 PDF objects out of 1000 (max. 8388607)
+ 315 compressed objects within 4 object streams
+ 65 named destinations out of 1000 (max. 500000)
+ 205 words of extra memory for PDF output out of 10000 (max. 10000000)
 

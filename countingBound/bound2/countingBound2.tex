@@ -511,22 +511,76 @@ What bound would this give for CLIQUE, if the LP {\em didn't} crash?
 Another problem related to CLIQUE is 
 counting the number of cliques in a graph ({\em mod} 2; that is, the parity
 of the number of cliques) to
-detecting (at least one) cliques.
+detecting (at least one) cliques; we refer to this as $CLIQUE-PARITY$.
 \cite{goldreich2025counting} shows that the complexity of this (presumably harder)
 problem is between detecting cliques and counting cliques. If it's a harder
-problem, then it should be (probably infinitesimally) easier to prove lower bounds
-about it...
+problem, then hopefully it might be easier to prove lower bounds
+about it.
 
 We might also consider ``buggy'' versions of this (counting the parity of only
-some subset of the possible cliques). This gives $2^N$ distinct functions (by
-essentially the same argument as for $BUGGYCLIQUE$).
+some subset of the possible cliques), which we refer to as $BUGGY-CLIQUE-PARITY$,
+or $BCP$ for short.
+Many properties of $CLIQUE-PARITY$ hold for $BUGGY-CLIQUE-PARITY$ as well.
+For instance, we know that there are $2^N$ distinct functions
+in $BUGGY-CLIQUE-PARITY$ (by essentially the same argument as for $BUGGYCLIQUE$);
+thus, the counting argument also bounds $BUGGY-CLIQUE-PARITY$.
 
-A nice feature of this problem is that we can combine circuits using XOR.
+However, we can bound $BUGGY-CLIQUE-PARITY$ in more ways than we can bound $BUGGYCLIQUE$.
+We define the ``parity circuit size'' analogously to $BUGGY-CLIQUE$:
+
+\begin{defn} \label{defn:parityCircuitSize}
+
+Define $BCP_A$ to be the smallest circuit (by number of unbounded fan-in NAND gates)
+which computes the parity of the number of cliques in $A$.
+($|BCP_A|$ is the number of gates in that circuit.)
+
+\end{defn}
+
+\subsection{Additional bounds on $BUGGY-CLIQUE-PARITY$}
+
+A nice feature of this problem is that we can XOR sets of cliques together by combining circuits using XOR.
+
+\begin{thm}
+\label{parityXorCombining}
 Suppose we have sets of cliques $A$ and $B$, and corresponding minimal circuits
-computing $CLIQUE-PARITY$ for $A$ and $B$. If $A$ and $B$ are distinct, then
-XORing the circuits together computes $CLIQUE-PARITY(A \cup B)$. If $A \subset B$,
-then XORing the circuits together computes $CLIQUE-PARITY(B-A)$. $A$ and $B$ might
-also overlap, in which case the cliques in $A \cap B$ ``cancel out''.
+$BCP_A$ and $BCP_B$, computing $BUGGY-CLIQUE-PARITY$ for those sets.
+Then the circuit $BCP_A \oplus BCP_B$ (that is, the circuit obtained by XORing the two circuits together) 
+computes $BCP_{A \cdot B}$.
+\end{thm}
+\begin{proof}
+
+Let $A' = A - B$, $B' = B - A$, and $U = A \cap B$. We have that
+$A$, $B$, and $U$ are pairwise disjoint, and $A = A' \cup U$ and $B = B' \cup U$.
+
+FIXME
+
+\end{proof}
+
+We can also bound the circuit size $|BCP_A$, for any given $A \in 2^C$,
+in terms of the expected circuit size $E_X[|BCP_A|]$, where $X \in 2^C$.
+
+\begin{thm}
+\label{parityMaxBound}
+Let $A \in 2^C$ be a set of cliques.
+Then $|BCP_A| \le 2 E_X[|BCP_X|] + 4$.
+\end{thm}
+\begin{proof}
+
+For each $X \in 2^C$, construct the circuit $BCP_X \oplus BCP_{A \oplus X}$.
+By Theorem \ref{parityXorCombining}, this circuit computes $BCP_{A \oplus X \oplus X} = BCP_A$.
+
+The number of gates in this circuit is $|BCP_X| + |BCP_{A \oplus X}| + 4$.
+
+If we do this for all $X \in 2^C$, we're using each circuit twice (once as $BCP_X$ and once as $BCP_{A \oplus X}$),
+so the average cost is at most $2 E_X[|BCP_X|] + 4$. (The ``+4'' is for the XOR gate.)
+
+\end{proof}
+
+
+
+
+
+\subsection{Bounds on $BUGGY-CLIQUE-PARITY$ using linear programming}
 
 \begin{figure}
 

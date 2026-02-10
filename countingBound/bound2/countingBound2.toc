@@ -17,5 +17,7 @@
 \contentsline {subsection}{\numberline {2.5}Bound on finding zero cliques}{9}{subsection.2.5}%
 \contentsline {section}{\numberline {3}Results}{9}{section.3}%
 \contentsline {section}{\numberline {4}Bounding the {\em parity} of the number of cliques}{10}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Additional bounds on $BUGGY-CLIQUE-PARITY$}{11}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Bounds on $BUGGY-CLIQUE-PARITY$ using linear programming}{11}{subsection.4.2}%
 \contentsline {section}{\numberline {5}Conclusion}{12}{section.5}%
-\contentsline {section}{\numberline {6}Acknowledgements}{12}{section.6}%
+\contentsline {section}{\numberline {6}Acknowledgements}{13}{section.6}%

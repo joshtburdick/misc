@@ -56,23 +56,11 @@ class LpParityLayers:
         # symmetric around N/2.
         self.layers = self.make_layers(num_layers)
 
-
-
-
-        self.expected_num_gates_vars = []
-        self.num_gates_dist_vars = []
-        for c in range(0, comb(n, k) + 1):
-            # variables for expected number of gates, for each number of cliques
-            self.expected_num_gates_vars += [("E", c)]
-            for g in range(1, max_gates+1):
-                # variables for counts of numbers of functions
-                # with some number of gates
-                self.num_gates_dist_vars += [(c, g)]
+        vars = ["clique_parity"]
+        for v, layers in self.layers.items():
+            vars += [(v, (a, b)) for a, b in layers]
         # wrapper for LP solver
-        self.lp = pulp_helper.PuLP_Helper(
-             self.expected_num_gates_vars + self.num_gates_dist_vars)
-        # self.lp = simplex_algorithm_helper.SimplexAlgorithmHelper(
-        #      self.expected_num_gates_vars + self.num_gates_dist_vars, verbosity=0)
+        self.lp = pulp_helper.PuLP_Helper(vars)
 
         # number of possible cliques
         self.num_possible_cliques = comb(n, k)
@@ -99,35 +87,22 @@ class LpParityLayers:
             return low + [middle] + high
         return {v: make_layer(v) for v in num_layers}
 
-
-
-    def add_level_constraints(self):
-        """Adds constraints on functions at some "level"
-
-        By "level", we mean "number of cliques".
-
-        The constraints (both of which are equalities) are:
-        - on the total number of functions at that "level", and
-        - connecting the counts with that "level"'s expected gate count
-        """
-        # loop through number of cliques
-        for c in range(self.num_possible_cliques+1):
-            num_functions = comb(self.num_possible_cliques, c)
-            # add constraint that these sum to the number of functions
+    def add_parity_bound(self):
+        """Adds parity bound."""
+        for i in range(self.num_layers // 2):
+            low_layer = self.layers[i]
+            high_layer = self.layers[self.num_layers - i - 1]
             self.lp.add_constraint(
-                [((c, i), 1) for i in range(1, self.max_gates+1)],
-                '=', num_functions)
-            # add constraint defining expected number of gates
-            A = [((c, i), i)
-                for i in range(1, self.max_gates+1)]
-            self.lp.add_constraint(A + [(("E", c), -num_functions)],
-                '=', 0)
+                [("clique_parity", -1), ((self.v, high_layer), 1), ((self.v, low_layer), -1)],
+                ">=",
+                self.basis.xor_upper_bound(2))
 
-    def add_counting_bound(self):
+    def add_counting_bounds(self):
         """Adds counting bounds, for a given number of gates.
 
-        This is a lower bound on the number of functions with
-        some number of gates.
+        This adds a counting lower bound, on the average of the layers,
+        for each number of vertices.
+        (We could also add constraints for each layer, individually.)
         """
         # number of possible functions for each possible number of gates
         # (with number of inputs based on number of vertices)

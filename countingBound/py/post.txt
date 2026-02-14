@@ -1,0 +1,9 @@
+
+
+Github's <a href="https://archiveprogram.github.com/">Arctic Code Vault</a> archived a 2020 snapshot of all code hosted on it.
+
+
+This would track changes to a chunk of software. This would probably only be of interest to a limited number of historians, though; and it's a tiny snippet of "all the data".
+
+
+

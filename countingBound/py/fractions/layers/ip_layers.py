@@ -54,25 +54,44 @@ class IpLayers:
         if k < 3:
             raise ValueError('k must be >= 3')
 
-        # Make the layers. Note that we require these to be symmetric around N/2.
-        # The number of cliques in layer i is iterated over by
-        # range(layers[i], layers[i+1]) for i in range(num_layers).
+        # Number of possible cliques
+        self.num_possible_cliques = comb(n, k)
+
+        # The layers, as tuples (a, b), which represent the interval [a, b).
+        # Note that we require these to be symmetric around N/2.
         self.layers = self.make_layers(num_layers)
 
-        vars = ["clique_parity"]
-        for v, layers in self.layers.items():
-            vars += [(v, (a, b)) for a, b in layers]
+        # The variables for the LP.
+        vars = []
+        # Counts for each number of vertices,
+        # layer (denoted by just the lower endpoint), and number of gates.
+        for v in range(self.k, self.n+1):
+            max_cliques_for_v = comb(v, self.k)
+            for l1, l2 in self.layers:
+                if l2 <= max_cliques_for_v:
+                    vars += [((v, l1, g) for g in range(self.max_gates+1)]
+        # Average for each number of vertices.
+        for v in range(self.k, self.n+1):
+            vars += [("V", v)]
+        # Average for each layer.
+        for l1, l2 in self.layers:
+            vars += [("L", l1)]
+
         # wrapper for LP solver
         self.lp = pulp_helper.PuLP_Helper(vars)
 
-        # number of possible cliques
-        self.num_possible_cliques = comb(n, k)
-
         self.basis = gate_basis.TwoInputNandBasis()
-        self.rng = np.random.default_rng()
+
+        # Counts of functions in each layer, with each possible
+        # number of vertices.
+        
+
 
         # for debugging: directory in which to save LP problem files
         self.lp_save_dir = None
+
+
+
 
     def make_layers(self, num_layers):
         """Makes the layers for the LP.
@@ -83,13 +102,14 @@ class IpLayers:
         (The layers won't, in general, be the same height; but this
         tries to make them as similar as possible.)
 
-        num_layers: must be odd.
+        num_layers: currently must be odd.
         """
         if num_layers % 2 == 0:
             raise ValueError('num_layers must be odd')
         height = self.max_cliques // num_layers
-        a = range(0, self.max_cliques, height)
-        return a + [self.max_cliques-i for i in reversed(a)]
+        endpoints = range(0, self.max_cliques, height)
+        endpoints += [self.max_cliques-i for i in reversed(endpoints)]
+        return [(endpoints[i], endpoints[i+1]) for i in range(num_layers)]
 
     def add_parity_bound(self):
         """Adds parity bound."""
@@ -104,57 +124,20 @@ class IpLayers:
     def add_counting_bounds(self):
         """Adds counting bounds, for a given number of gates.
 
-        This adds a counting lower bound, on the average of the layers,
-        for each number of vertices.
-        (We could also add constraints for each layer, individually;
-        it's not clear which will work better.)
+        This adds a counting lower bound, for any given number of gates.
         """
-        for v in range(self.k, self.n+1):
-            num_gates = self.basis.expected_num_gates(
-                comb(v, 2),
-                comb(v, self.k))
-            
+        # FIXME
 
 
-        # number of possible functions for each possible number of gates
-        # (with number of inputs based on number of vertices)
-        num_functions = self.basis.num_functions(comb(self.n, 2), self.max_gates+1)
-        # upper-bound "total number of functions with this many gates"
-        for g in range(1, self.max_gates+1):
+    def add_zeroing_bound(self):
+        """Adds bound from zeroing out one vertex."""
+        for v in range(self.k, self.n):
+            # "at least one NAND gate was hit"
             self.lp.add_constraint(
-                [((c, g), 1)
-                    for c in range(self.num_possible_cliques+1)],
-                '<=', num_functions[g])
-
-
-
-
-    def num_gates_upper_bound(self, num_cliques):
-        """Naive upper bound on computing parity of some number of cliques."""
-        if num_cliques == 0:
-            return 1
-        # number of gates to detect each individual clique, by ANDing the edges
-        gates_for_cliques = num_cliques * 2 * (comb(k,2)-1)
-        # number of gates to XOR these together
-        gates_for_xor = 4 * (num_cliques-1)
-        return gates_for_cliques + gates_for_xor
-
-    def add_small_constraint(self):
-        """Adds constraint on computing parity of small sets of cliques."""
-        for i in range(self.num_possible_cliques // 2):
-            self.lp.add_constraint([(("E", i), 1)],
-                "<=",
-                self.num_gates_upper_bound(i))
-
-    def add_large_constraint(self):
-        """Adds constraint on computing parity of large sets of cliques."""
-        N = self.num_possible_cliques
-        for i in range(1, N // 2):
-            # this bounds "the number of gates to find parity of 'a few less'
-            # than N cliques", relative to finding the parity of all of them
-            self.lp.add_constraint([(("E", N-i), 1), (("E", N), -1)],
-                "<=", 
-                self.num_gates_upper_bound(i) + 4)
+                [(("V", v+1), 1), (("V", v), -1)],
+                ">=",
+                1
+            )
 
     def get_all_bounds(self):
         """Gets bounds for each possible number of cliques.
@@ -163,8 +146,8 @@ class IpLayers:
         in the scenario that the number of gates for
         CLIQUE is minimized.
         """
-        # solve, minimizing number of gates for CLIQUE
-        r = self.lp.solve(("E", self.num_possible_cliques))
+        # solve, minimizing number of gates in "highest layer"
+        r = self.lp.solve(("L", self.layers[-1][0]))
         if not r:
             return None
         # for now, we only get bounds for "expected number of gates"

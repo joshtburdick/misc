@@ -102,8 +102,16 @@ class LpParityLayers:
 
         This adds a counting lower bound, on the average of the layers,
         for each number of vertices.
-        (We could also add constraints for each layer, individually.)
+        (We could also add constraints for each layer, individually;
+        it's not clear which will work better.)
         """
+        for v in range(self.k, self.n+1):
+            num_gates = self.basis.expected_num_gates(
+                comb(v, 2),
+                comb(v, self.k))
+            
+
+
         # number of possible functions for each possible number of gates
         # (with number of inputs based on number of vertices)
         num_functions = self.basis.num_functions(comb(self.n, 2), self.max_gates+1)
@@ -113,6 +121,9 @@ class LpParityLayers:
                 [((c, g), 1)
                     for c in range(self.num_possible_cliques+1)],
                 '<=', num_functions[g])
+
+
+
 
     def num_gates_upper_bound(self, num_cliques):
         """Naive upper bound on computing parity of some number of cliques."""

@@ -1,0 +1,55 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{fullpage}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{booktabs}
+
+\theoremstyle{definition}
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{corr}[thm]{Corrolary}
+\newtheorem{defn}{Definition}[section]
+\newtheorem{conj}{Conjecture}[section]
+\newtheorem{prob}{Open problem}[section]
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+\newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
+\newcommand{\bigC}[0]{\mathcal{C}}
+\begin{document}
+\emergencystretch 3em
+\title{Is detecting more cliques harder?}
+
+\author{Josh Burdick ({\tt josh.t.burdick@gmail.com})}
+
+\maketitle
+
+\begin{abstract}
+
+
+
+Shannon's counting argument \cite{shannon_synthesis_1949} shows that many functions are hard to compute.
+However, it is nonconstructive, and so doesn't explicitly state a
+hard-to-compute function. Attempts have been made to apply counting arguments to other problems
+such as CLIQUE \cite{buggyclique}, without success.
+Here, we define a random walk on a $d$-regular graph whose vertices are
+sets of cliques. We state a (huge) integer programming
+problem which appears to bound the circuit complexity of CLIQUE. We show solutions
+of that problem (for {\em tiny} cases -- $n=7, k=3$).
+
+\end{abstract}
+
+\newpage
+
+\tableofcontents
+
+\vspace{5mm}
+
+\section{Graphs with more vertices require more gates, {\em on average}}
+
+
+
+\bibliography{references}
+\bibliographystyle{unsrt}
+
+\end{document}

@@ -26,13 +26,10 @@ import simplex_algorithm_helper
 def comb(n, k):
     return scipy.special.comb(n, k, exact=True)
 
-# Hypergeometric distribution, returning an exact fractions.Fraction .
-def hyperg_frac(N, K, n, k):
-    # based on https://en.wikipedia.org/wiki/Hypergeometric_distribution
-    # note that we don't try to optimize this
-    return fractions.Fraction(
-        comb(K, k) * comb(N-K, n-k),
-        comb(N, n))
+def group_by_key(items, key_func):
+    """This groups items by a key function, without sorting."""
+    items = sorted(items, key=key_func)
+    return itertools.groupby(items, key=key_func)
 
 class IpLayers:
     """Attempt at bound for "layers" of the clique problem.
@@ -58,40 +55,31 @@ class IpLayers:
         self.num_possible_cliques = comb(n, k)
 
         # The layers, as tuples (a, b), which represent the interval [a, b).
-        # Note that we require these to be symmetric around N/2.
         self.layers = self.make_layers(num_layers)
+
+        # Number of functions for each group (num. vertices, layer).
+        self.counts_by_group = self.get_counts_by_group()
 
         # The variables for the LP.
         vars = []
-        # Counts for each number of vertices,
-        # layer (denoted by just the lower endpoint), and number of gates.
-        for v in range(self.k, self.n+1):
-            max_cliques_for_v = comb(v, self.k)
-            for l1, l2 in self.layers:
-                if l2 <= max_cliques_for_v:
-                    vars += [((v, l1, g) for g in range(self.max_gates+1)]
-        # Average for each number of vertices.
+        # Loop through the (num. vertices, layer) pairs.
+        for ((v, layer, group_size) in self.counts_by_group.items()):
+            # Counts number of gates, for functions in each group.
+            vars += [((v, layer, g) for g in range(self.max_gates+1))]
+        # Expected number of gates, for each group.
+        for v, layer in self.counts_by_group:
+            vars += [("E", v, layer)]
+        # Averages, by number of vertices, and layer
         for v in range(self.k, self.n+1):
             vars += [("V", v)]
-        # Average for each layer.
         for l1, l2 in self.layers:
             vars += [("L", l1)]
-
         # wrapper for LP solver
         self.lp = pulp_helper.PuLP_Helper(vars)
-
+        # basis for gates
         self.basis = gate_basis.TwoInputNandBasis()
-
-        # Counts of functions in each layer, with each possible
-        # number of vertices.
-        
-
-
         # for debugging: directory in which to save LP problem files
         self.lp_save_dir = None
-
-
-
 
     def make_layers(self, num_layers):
         """Makes the layers for the LP.
@@ -102,6 +90,9 @@ class IpLayers:
         (The layers won't, in general, be the same height; but this
         tries to make them as similar as possible.)
 
+        FIXME: the "layers balanced about N/2" may not actually be necessary;
+        it would be nice to simplify this.
+
         num_layers: currently must be odd.
         """
         if num_layers % 2 == 0:
@@ -111,23 +102,53 @@ class IpLayers:
         endpoints += [self.max_cliques-i for i in reversed(endpoints)]
         return [(endpoints[i], endpoints[i+1]) for i in range(num_layers)]
 
-    def add_parity_bound(self):
-        """Adds parity bound."""
-        for i in range(self.num_layers // 2):
-            low_layer = self.layers[i]
-            high_layer = self.layers[self.num_layers - i - 1]
+    def get_counts_by_group(self):
+        """Gets number of functions, for each possible (num. vertices, layer).
+        
+        Returns a dictionary mapping (num. vertices, layer) to number of functions.
+        Note that many of the groups will be empty, and so this will not include
+        all possible (num. vertices, layer) pairs.
+        """
+        hypergraph_counts = hypergraph_counts.HypergraphCounts(self.n, self.k)
+        counts_by_num_vertices = hypergraph_counts.count_hypergraphs_exact_vertices()
+        counts_by_group = {}
+        for v in range(self.k, self.n+1):
+            for l1, l2 in self.layers:
+                if l1 <= len(counts_by_num_vertices[v]):
+                    counts_by_group[(v, l1)] = counts_by_num_vertices[v][l1..l2].sum()
+        # check that these add up to the total number of functions
+        assert sum(counts_by_group.values()) == 2 ** self.num_possible_cliques
+        return counts_by_group
+
+    def add_averaging_constraints(self):
+        """Adds constraints on the average number of gates for each group."""
+        for v, layer in self.counts_by_group:
+            A = [((v, layer, g), g) for g in range(self.max_gates+1)]
+            # "expected number of gates" = sum(counts * gates) / sum(counts)
             self.lp.add_constraint(
-                [("clique_parity", -1), ((self.v, high_layer), 1), ((self.v, low_layer), -1)],
-                ">=",
-                self.basis.xor_upper_bound(2))
+                [(("E", v, layer), -1)] + A,
+                "=",
+                self.counts_by_group[(v, layer)]
+            )
+            # add constraints on the number of functions in each group
+            A = [((v, layer, g), 1) for g in range(self.max_gates+1)]
+            self.lp.add_constraint(
+                "=",
+                self.counts_by_group[(v, layer)]
+            )
 
     def add_counting_bounds(self):
-        """Adds counting bounds, for a given number of gates.
-
-        This adds a counting lower bound, for any given number of gates.
-        """
-        # FIXME
-
+        """Adds counting bounds, for a given number of gates."""
+        num_possible_functions = self.basis.num_functions(
+            comb(self.n, 2),
+            max_gates
+        )
+        for g in range(self.max_gates+1):
+            self.lp.add_constraint(
+                [((v, layer, g), 1) for v, layer in self.counts_by_group],
+                "<=",
+                num_possible_functions[g]
+            )
 
     def add_zeroing_bound(self):
         """Adds bound from zeroing out one vertex."""
@@ -175,10 +196,9 @@ def get_bounds(n, k, max_gates, constraints_label,
     bound.add_level_constraints()
     if use_counting_bound:
         bound.add_counting_bound()
-    if use_small_bound:
-        bound.add_small_constraint()
-    if use_large_bound:
-        bound.add_large_constraint()
+    if use_zeroing_bound:
+        bound.add_zeroing_bound()
+
     b = bound.get_all_bounds()
     b['Constraints'] = constraints_label
     return b.iloc[:,[3,0,1,2]]
@@ -190,6 +210,8 @@ def parse_args():
         help="Number of vertices")
     parser.add_argument("k", type=int,
         help="Size of clique")
+    parser.add_argument("num_layers", type=int,
+        help="Number of layers")
     parser.add_argument("max_gates", type=int,
         help="Maximum number of gates to consider")
     parser.add_argument("--dump-lp",
@@ -202,14 +224,11 @@ def parse_args():
         help="Write result to indicated file (rather than stdout)")
     return parser.parse_args()
 
-
-
-
-
 if __name__ == '__main__':
     args = parse_args()
     n = args.n
     k = args.k
+    num_layers = args.num_layers
     max_gates = args.max_gates
 
     gate_range = range(args.max_gates, 10000) if args.max_gates_search else [args.max_gates]
@@ -230,6 +249,6 @@ if __name__ == '__main__':
                 bounds.to_csv(sys.stdout, index=False)
             print(f"***** wrote bound with max_gates={max_gates}")
             sys.exit(0)
+        # XXX
         except TypeError:
             print(f"***** failed with max_gates={max_gates}; retrying")
-

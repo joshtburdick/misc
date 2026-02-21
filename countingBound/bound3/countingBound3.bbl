@@ -1,0 +1,13 @@
+\begin{thebibliography}{1}
+
+\bibitem{shannon_synthesis_1949}
+Claude~E Shannon.
+\newblock The synthesis of two-terminal switching circuits.
+\newblock {\em Bell System Technical Journal}, 28(1):59--98, 1949.
+
+\bibitem{buggyclique}
+Josh Burdick.
+\newblock How hard is it to detect {\em some} cliques?
+\newblock {\em SIGACT News}, 55(2):38–52, Jun 2024.
+
+\end{thebibliography}

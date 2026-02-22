@@ -44,6 +44,9 @@ def group_by_key(items, key_func):
         result[key].append(item)
     return result
 
+def flatten(nested_list):
+    return list(itertools.chain.from_iterable(nested_list))
+
 class IpLayers:
     """Attempt at bound for "layers" of the clique problem.
     """
@@ -212,10 +215,11 @@ class IpLayers:
         r = self.lp.solve(("L", self.layers[-1][0]))
         if not r:
             return None
-        # get bounds for "expected number of gates"
-        # for functions in each layer
-        n_cliques = [(l1+l2)/2 for l1, l2 in self.layers]
-        bounds = [r[("L", l1)] for l1, l2 in self.layers]
+        # Get bounds for "expected number of gates" for functions in
+        # each layer. To simplify plotting, we include the two endpoints
+        # of each layer.
+        n_cliques = flatten([[l1,l2-1] for l1, l2 in self.layers])
+        bounds = flatten([[r[("L", l1)]] * 2 for l1, l2 in self.layers])
         return pandas.DataFrame({
                 'Num. levels': self.num_layers,
                 'Num. cliques': n_cliques,
@@ -278,4 +282,3 @@ if __name__ == '__main__':
             bounds.to_csv(f, index=False)
     else:
         bounds.to_csv(sys.stdout, index=False)
-    print(f"***** wrote bound with max_gates={max_gates}")

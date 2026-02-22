@@ -9,6 +9,7 @@ import pdb
 import sys
 
 sys.path.append("..")   # XXX
+sys.path.append("../..")   # XXX
 
 import numpy as np
 import pandas
@@ -21,15 +22,27 @@ import pulp_helper
 import scip_helper
 # import exact_simplex_helper
 import simplex_algorithm_helper
+import hypergraph_counter
 
 # Wrapper for comb(), with exact arithmetic.
 def comb(n, k):
     return scipy.special.comb(n, k, exact=True)
 
 def group_by_key(items, key_func):
-    """This groups items by a key function, without sorting."""
-    items = sorted(items, key=key_func)
-    return itertools.groupby(items, key=key_func)
+    """This groups items by a key function.
+    
+    items: iterable of items to group
+    key_func: function to compute key for each item
+    
+    Returns a dictionary mapping keys to lists of items.
+    """
+    result = {}
+    for item in items:
+        key = key_func(item)
+        if key not in result:
+            result[key] = []
+        result[key].append(item)
+    return result
 
 class IpLayers:
     """Attempt at bound for "layers" of the clique problem.
@@ -63,17 +76,18 @@ class IpLayers:
         # The variables for the LP.
         vars = []
         # Loop trough the (num. vertices, layer) pairs.
-        for ((v, layer), group_size) in self.counts_by_group.items():
-            # Counts number of gates, for functions in each group.
-            vars += [((v, layer, g) for g in range(self.max_gates+1))]
-        # Expected number of gates, for each group.
         for v, layer in self.counts_by_group:
+            # Expected number of gates, for each group.
             vars += [("E", v, layer)]
+            # Counts of functions with some number of gates.
+            for g in range(self.max_gates+1):
+                vars += [(v, layer, g)]
         # Averages, by number of vertices, and layer
         for v in range(self.k, self.n+1):
             vars += [("V", v)]
         for l1, l2 in self.layers:
             vars += [("L", l1)]
+        # pdb.set_trace()
         # wrapper for LP solver
         self.lp = pulp_helper.PuLP_Helper(vars)
         # basis for gates
@@ -95,12 +109,8 @@ class IpLayers:
 
         num_layers: currently must be odd.
         """
-        if num_layers % 2 == 0:
-            raise ValueError('num_layers must be odd')
-        height = self.num_possible_cliques // num_layers
-        endpoints = range(0, self.num_possible_cliques, height)
-        endpoints += [self.num_possible_cliques-i for i in reversed(endpoints)]
-        return [(endpoints[i], endpoints[i+1]) for i in range(num_layers)]
+        endpoints = np.linspace(0, self.num_possible_cliques+1, num_layers+1).astype(int).tolist()
+        return list(zip(endpoints[:-1], endpoints[1:]))
 
     def get_counts_by_group(self):
         """Gets number of functions, for each possible (num. vertices, layer).
@@ -109,15 +119,17 @@ class IpLayers:
         Note that many of the groups will be empty, and so this will not include
         all possible (num. vertices, layer) pairs.
         """
-        hypergraph_counts = hypergraph_counts.HypergraphCounts(self.n, self.k)
-        counts_by_num_vertices = hypergraph_counts.count_hypergraphs_exact_vertices()
+        counter = hypergraph_counter.HypergraphCounter(self.n, self.k)
+        counts_by_num_vertices = counter.count_hypergraphs_exact_vertices()
         counts_by_group = {}
         for v in range(self.k, self.n+1):
             for l1, l2 in self.layers:
                 if l1 <= len(counts_by_num_vertices[v]):
                     counts_by_group[(v, l1)] = counts_by_num_vertices[v][l1:l2].sum()
+        # pdb.set_trace()
         # check that these add up to the total number of functions
-        assert sum(counts_by_group.values()) == 2 ** self.num_possible_cliques
+        # FIXME for now, we omit the empty function
+        assert sum(counts_by_group.values()) == 2 ** self.num_possible_cliques - 1
         return counts_by_group
 
     def add_averaging_constraints(self):
@@ -131,8 +143,8 @@ class IpLayers:
                 0
             )
             # add constraints on the number of functions in each group
-            A = [((v, layer, g), 1) for g in range(self.max_gates+1)]
             self.lp.add_constraint(
+                [((v, layer, g), 1) for g in range(self.max_gates+1)],
                 "=",
                 self.counts_by_group[(v, layer)]
             )
@@ -141,25 +153,24 @@ class IpLayers:
         """Adds marginal constraints on average (by num. vertices, and layer)
         """
         # marginalize over layers, for each number of vertices
-        counts_by_v = group_by_key(self.counts_by_group, key=lambda x: x[0])
-        for v in counts_by_v:
-            counts1 = counts_by_v[v]
-            A = [(("E", v, layer), w) for (v, layer), w in counts1.items()]
-            total_w = sum(counts1.values())
+        counts_by_v = group_by_key(self.counts_by_group.items(), lambda x: x[0][0])
+        for v, counts1 in counts_by_v.items():
+            # pdb.set_trace()
+            A = [(("E", v, layer), w) for (v, layer), w in counts1]
+            total_w = sum([w for _, w in counts1])
             self.lp.add_constraint(
                 [(("V", v), -total_w)] + A,
-                "==",
+                "=",
                 0
             )
         # marginalize over vertices, for each layer
-        counts_by_layer = group_by_key(self.counts_by_group, key=lambda x: x[1])
-        for layer in counts_by_layer:
-            counts1 = counts_by_layer[layer]
-            A = [(("E", v, layer), w) for (v, layer), w in counts1.items()]
-            total_w = sum(counts1.values())
+        counts_by_layer = group_by_key(self.counts_by_group.items(), lambda x: x[0][1])
+        for layer, counts1 in counts_by_layer.items():
+            A = [(("E", v, layer), w) for (v, layer), w in counts1]
+            total_w = sum([w for _, w in counts1])
             self.lp.add_constraint(
                 [(("L", layer), -total_w)] + A,
-                "==",
+                "=",
                 0
             )
 
@@ -201,33 +212,31 @@ class IpLayers:
             return None
         # get bounds for "expected number of gates"
         # for functions in each layer
-        bounds = [((l1+l2)/2, r[("L", l1)])
-            for l1, l2 in self.layers]
+        n_cliques = [(l1+l2)/2 for l1, l2 in self.layers]
+        bounds = [r[("L", l1)] for l1, l2 in self.layers]
         return pandas.DataFrame({
                 'Num. cliques': n_cliques,
                 'Min. gates': bounds})
 
-def get_bounds(n, k, max_gates, constraints_label,
-        use_counting_bound, use_small_bound, use_large_bound):
+def get_bounds(n, k, max_gates, constraints_label):
     """Gets bounds with some set of constraints.
 
-    n, k, max_gates: problem size
-    constraints_label: label to use for this set of constraints
-    use_counting_bound, use_small_bound, use_large_bound:
-        whether to use each of these groups of constraints
+    For now, just uses all the constraints.
+    Args:
+        n, k, max_gates: problem size
+        constraints_label: label to use for this set of constraints
     """
     # ??? track resource usage?
     sys.stderr.write(f'[bounding with n={n}, k={k}, max_gates={max_gates}, label={constraints_label}]\n')
     bound = IpLayers(n, k, max_gates, num_layers)
-    bound.add_level_constraints()
-    if use_counting_bound:
-        bound.add_counting_bound()
-    if use_zeroing_bound:
-        bound.add_zeroing_bound()
+    bound.add_averaging_constraints()
+    bound.add_marginal_constraints()
+    bound.add_counting_bounds()
+    bound.add_zeroing_bound()
 
     b = bound.get_all_bounds()
     b['Constraints'] = constraints_label
-    return b.iloc[:,[3,0,1,2]]
+    return b
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -260,13 +269,12 @@ if __name__ == '__main__':
     gate_range = range(args.max_gates, 10000) if args.max_gates_search else [args.max_gates]
 
     for max_gates in gate_range:
-        try:
+        # for now, not retrying this.
+        # FIXME if this fails, raise a more sensible exception
+        # than "TypeError".
+ #       try:
             bounds = pandas.concat([
-                get_bounds(n, k, max_gates, 'Counting', True, False, False),
-                get_bounds(n, k, max_gates, 'Counting and small', True, True, False),
-                get_bounds(n, k, max_gates, 'Counting and large', True, False, True),
-                get_bounds(n, k, max_gates, 'Counting, small and large',
-                    True, True, True)
+                get_bounds(n, k, max_gates, 'All constraints')
             ])
             if args.result_file:
                 with open(args.result_file, "wt") as f:
@@ -276,5 +284,5 @@ if __name__ == '__main__':
             print(f"***** wrote bound with max_gates={max_gates}")
             sys.exit(0)
         # XXX
-        except TypeError:
-            print(f"***** failed with max_gates={max_gates}; retrying")
+  #      except TypeError:
+  #          print(f"***** failed with max_gates={max_gates}; retrying")

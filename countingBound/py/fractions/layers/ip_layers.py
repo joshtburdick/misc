@@ -61,6 +61,8 @@ class IpLayers:
         self.n = n
         self.k = k
         self.max_gates = max_gates
+        self.num_layers = num_layers
+
         if k < 3:
             raise ValueError('k must be >= 3')
 
@@ -215,19 +217,20 @@ class IpLayers:
         n_cliques = [(l1+l2)/2 for l1, l2 in self.layers]
         bounds = [r[("L", l1)] for l1, l2 in self.layers]
         return pandas.DataFrame({
+                'Num. levels': self.num_layers,
                 'Num. cliques': n_cliques,
                 'Min. gates': bounds})
 
-def get_bounds(n, k, max_gates, constraints_label):
+def get_bounds(n, k, max_gates, num_layers):
     """Gets bounds with some set of constraints.
 
     For now, just uses all the constraints.
     Args:
         n, k, max_gates: problem size
-        constraints_label: label to use for this set of constraints
+        num_layers: number of layers
     """
     # ??? track resource usage?
-    sys.stderr.write(f'[bounding with n={n}, k={k}, max_gates={max_gates}, label={constraints_label}]\n')
+    sys.stderr.write(f'[bounding with n={n}, k={k}, max_gates={max_gates}, num_layers={num_layers}]\n')
     bound = IpLayers(n, k, max_gates, num_layers)
     bound.add_averaging_constraints()
     bound.add_marginal_constraints()
@@ -235,7 +238,6 @@ def get_bounds(n, k, max_gates, constraints_label):
     bound.add_zeroing_bound()
 
     b = bound.get_all_bounds()
-    b['Constraints'] = constraints_label
     return b
 
 def parse_args():
@@ -245,10 +247,10 @@ def parse_args():
         help="Number of vertices")
     parser.add_argument("k", type=int,
         help="Size of clique")
-    parser.add_argument("num_layers", type=int,
-        help="Number of layers")
     parser.add_argument("max_gates", type=int,
         help="Maximum number of gates to consider")
+    parser.add_argument("num_layers", type=str,
+        help="Number of layers, which can be a comma-separated list of integers (e.g. '10' or '10,12,14')")
     parser.add_argument("--dump-lp",
         help="Dump LP problem statement to a file",
         action="store_true")
@@ -266,23 +268,14 @@ if __name__ == '__main__':
     num_layers = args.num_layers
     max_gates = args.max_gates
 
-    gate_range = range(args.max_gates, 10000) if args.max_gates_search else [args.max_gates]
-
-    for max_gates in gate_range:
-        # for now, not retrying this.
-        # FIXME if this fails, raise a more sensible exception
-        # than "TypeError".
- #       try:
-            bounds = pandas.concat([
-                get_bounds(n, k, max_gates, 'All constraints')
-            ])
-            if args.result_file:
-                with open(args.result_file, "wt") as f:
-                    bounds.to_csv(f, index=False)
-            else:
-                bounds.to_csv(sys.stdout, index=False)
-            print(f"***** wrote bound with max_gates={max_gates}")
-            sys.exit(0)
-        # XXX
-  #      except TypeError:
-  #          print(f"***** failed with max_gates={max_gates}; retrying")
+    bounds = [
+        get_bounds(n, k, max_gates, int(num_layers))
+        for num_layers in args.num_layers.split(',')
+    ]
+    bounds = pandas.concat(bounds)
+    if args.result_file:
+        with open(args.result_file, "wt") as f:
+            bounds.to_csv(f, index=False)
+    else:
+        bounds.to_csv(sys.stdout, index=False)
+    print(f"***** wrote bound with max_gates={max_gates}")

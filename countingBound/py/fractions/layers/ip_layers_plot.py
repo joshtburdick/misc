@@ -21,10 +21,16 @@ def plot_bounds(bound_file, output_file):
         b['Num. levels'] = b['Num. levels'].astype('category')
     
     plt.figure(figsize=(6,4.))
-    # "overlapping lines version"
     g = sns.lineplot(data=b, x='Num. cliques', y='Min. gates',
-        hue='Num. levels', alpha=0.85, lw=1.5, marker='o', markersize=3)
-    
+        hue='Num. levels', alpha=0.85, lw=1)
+
+    # emphasize the line for what was averaged
+    # pdb.set_trace()
+    # max_cliques = b['Num. cliques'].max()
+    # levels = b['Num. levels'].max()
+    # b_avg = b[(b['Num. cliques'] == max_cliques) & (b['Num. levels'] == levels)]
+    # plt.plot(b_avg['Num. cliques'], b_avg['Min. gates'], 'k-', lw=2)
+
     plt.xlabel('Number of cliques')
     plt.ylabel('Number of NAND gates')
 

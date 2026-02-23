@@ -3,16 +3,6 @@ Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: countingBound3.aux
 The style file: unsrt.bst
 Database file #1: references.bib
-I was expecting a `,' or a `}'---line 52 of file references.bib
- : 
- : @MISC{Razborov85lowerbounds,
-(Error may have been on previous line)
-I'm skipping whatever remains of this entry
-I was expecting a `,' or a `}'---line 313 of file references.bib
- :     
- :     author = {Luca Trevisan},
-(Error may have been on previous line)
-I'm skipping whatever remains of this entry
 You've used 2 entries,
             1791 wiz_defined-function locations,
             462 strings with 3810 characters,
@@ -54,4 +44,3 @@ warning$ -- 0
 while$ -- 5
 width$ -- 3
 write$ -- 24
-(There were 2 error messages)

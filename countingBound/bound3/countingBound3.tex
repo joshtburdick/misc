@@ -35,8 +35,8 @@ Here, we consider a weaker question: how hard is it to detect {\em most}
 of the cliques in a graph? We combine the counting argument with random
 restrictions, using linear programming for tiny graphs ($n=8, k=3$). Although we don't get a bound
 on CLIQUE, we do get average bounds on the complexity of detecting {\em most}
-of the cliques in a graph. There is a trade-off: the more ``largest''
-cliques we try to detect, the weaker the bound we get; the bound
+of the cliques in a graph. There is a trade-off: the more ``large''
+sets of cliques we try to detect, the weaker the bound we get. The bound
 essentially vanishes at CLIQUE.
 
 \end{abstract}
@@ -105,12 +105,12 @@ We then add variables for the average number of gates in each of
 these groups.
 
 \[
-|E[C_{V_v \cap L_l}] = \frac{1}{w_{l,v}} \left( \sum_{g=1}^G g x_{l,v,g} \right)
+|E[|C_{V_v \cap L_l}|] = \frac{1}{w_{l,v}} \left( \sum_{g=1}^G g x_{l,v,g} \right)
 \]
 
 We also define variables for
-the marginal distributions for each number of vertices, $E_[|\bigC_{V_v})]$,
-and each layer, $E_[|\bigC_{L_l})]$. These are defined using constraints
+the marginal distributions for each number of vertices, $E[|\bigC_{V_v})]$,
+and each layer, $E[|\bigC_{L_l})]$. These are defined using constraints
 based on the weights $w_{l,v}$, in the obvious way.
 
 \subsection{Counting constraints}
@@ -136,30 +136,18 @@ Since we're using NAND gates, we know that we ``hit'' least one NAND gate.
 Thus, we have the constraint:
 
 \[
-E[|\bigC_{V_n}|] \ge E[|\bigC_{V_{n-1}}|] + 1
+E[|\bigC_{V_j}|] \ge E[|\bigC_{V_{nj1}}|] + 1
 \]
 
-On its own, this constraint is not very useful; it only implies a lower
-bound of $n-k$ gates, which is not very interesting.
+On its own, this constraint is not very useful.
+For instance, it only implies a lower
+bound of $n-k$ gates for any of the functions in $BUGGYCLIQUE$, which is not very interesting.
 
 \section{Results}
 
-Having set this up, we minimize the number of gates in the highest layer,
+Having set up the LP, we minimize the number of gates in the highest layer,
 $E[|\bigC_{L_L}|]$ for different
-values of $L$, using up to 90 gates.
-
-The results are shown in Figure~\ref{fig:bounds0}.
-Note that what was minimized was only the average number of gates in the
-highest layer. The bounds for the other layers are just one possible
-feasible solution to the LP.
-
-(FIXME Emphasize the right-most line for each level, e.g. by making it darker
-and/or thicker).
-
-At the bottom-right corner, it looks like the bound for the top {\em third}
-of the cliques is near the lower bound for the entire set of 
-$BUGGYCLIQUE$ functions. However, the bound drops off rapidly as we
-increase the number of layers.
+numbers of layers $L$, using up to 90 gates.
 
 \begin{figure}
 
@@ -176,6 +164,19 @@ one possible feasible solution for the LP.
 \label{fig:bounds0}
 
 \end{figure}
+
+The results are shown in Figure~\ref{fig:bounds0}.
+Note that what was minimized was only the average number of gates in the
+highest layer. The bounds for the other layers are just one possible
+feasible solution to the LP.
+
+(FIXME Emphasize the right-most line for each level, e.g. by making it darker
+and/or thicker).
+
+At the bottom-right corner, it looks like the bound for the top {\em third}
+of the cliques is near the lower bound for the entire set of 
+$BUGGYCLIQUE$ functions. However, the bound drops off rapidly as we
+increase the number of layers.
 
 \section{Conclusion}
 

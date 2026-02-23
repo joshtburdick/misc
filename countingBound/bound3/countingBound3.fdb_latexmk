@@ -1,15 +1,15 @@
 # Fdb version 4
-["bibtex countingBound3"] 1771869919.01034 "countingBound3.aux" "countingBound3.bbl" "countingBound3" 1771871147.54681 0
+["bibtex countingBound3"] 1771873654.23948 "countingBound3.aux" "countingBound3.bbl" "countingBound3" 1771874322.54948 0
   "./references.bib" 1771782543.13365 20544 236a02d3b6f4dc15d2bddc1835da0512 ""
   "/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/bibtex/bst/base/unsrt.bst" 1741388039 18030 1376b4b231b50c66211e47e42eda2875 ""
-  "countingBound3.aux" 1771871147.29032 1897 071f018b3aee5cb8bbc83f2bcbad4e04 "pdflatex"
+  "countingBound3.aux" 1771874322.27514 1896 3ea23eb7d5cbd12d3ccb838fa7cb540e "pdflatex"
   (generated)
   "countingBound3.bbl"
   "countingBound3.blg"
   (rewritten before read)
-["pdflatex"] 1771871146.59852 "/Users/joshuaburdick/git/misc/countingBound/bound3/countingBound3.tex" "countingBound3.pdf" "countingBound3" 1771871147.547 0
-  "../py/fractions/layers/bounds/ip_layers_8_3_90.pdf" 1771869581.26393 13432 52ec0d7b1b4ce92e9853549cdb459fd0 ""
-  "/Users/joshuaburdick/git/misc/countingBound/bound3/countingBound3.tex" 1771871146.72611 7693 a65b3b7128a84b5c3b9286aac16e9586 ""
+["pdflatex"] 1771874321.2807 "/Users/joshuaburdick/git/misc/countingBound/bound3/countingBound3.tex" "countingBound3.pdf" "countingBound3" 1771874322.54965 0
+  "../py/fractions/layers/bounds/ip_layers_8_3_90.pdf" 1771874303.11888 13432 d987fde3aa3623714941c79986d20b67 ""
+  "/Users/joshuaburdick/git/misc/countingBound/bound3/countingBound3.tex" 1771874321.80493 8157 875639c9a751e220fe92b5a01c4c8661 ""
   "/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/map/fontname/texfonts.map" 1741388039 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/map/pdftex/updmap/pdftex.map" 1741388039 5466553 2748998d7db8078826afa1f272036265 ""
   "/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1741388039 1004 54797486969f23fa377b128694d548df ""
@@ -49,6 +49,7 @@
   "/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb" 1741388039 32734 69e00a6b65cedb993666e42eedb3d48f ""
   "/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb" 1741388039 32726 0a1aea6fcd6468ee2cf64d891f5c43c8 ""
   "/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb" 1741388039 32569 5e5ddc8df908dea60932f3c484a54c0d ""
+  "/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb" 1741388039 32587 1788b0c1c5b39540c96f5e42ccd6dae8 ""
   "/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb" 1741388039 32626 4f5c1b83753b1dd3a97d1b399a005b4b ""
   "/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb" 1741388039 37944 359e864bd06cde3b1cf57bb20757fb06 ""
   "/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb" 1741388039 36118 fad905eba93cff5bce1e185fe980a177 ""
@@ -107,10 +108,10 @@
   "/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/url/url.sty" 1741388039 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
   "/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/web2c/texmf.cnf" 1741388039 42151 79f67285bdd95beca4d137b380b4b9e5 ""
   "/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-var/web2c/pdftex/pdflatex.fmt" 1741388039 3346141 1288109d02d1c772df65535881471649 ""
-  "countingBound3.aux" 1771871147.29032 1897 071f018b3aee5cb8bbc83f2bcbad4e04 "pdflatex"
-  "countingBound3.bbl" 1771869919.1134 375 e3b4d3d7bc09874393e0f5aba9d65b9e "bibtex countingBound3"
-  "countingBound3.out" 1771871147.29098 883 305f2fb8e7432812c0285279ca5431a5 "pdflatex"
-  "countingBound3.tex" 1771871146.72611 7693 a65b3b7128a84b5c3b9286aac16e9586 ""
+  "countingBound3.aux" 1771874322.27514 1896 3ea23eb7d5cbd12d3ccb838fa7cb540e "pdflatex"
+  "countingBound3.bbl" 1771873654.35585 375 e3b4d3d7bc09874393e0f5aba9d65b9e "bibtex countingBound3"
+  "countingBound3.out" 1771874322.27587 883 305f2fb8e7432812c0285279ca5431a5 "pdflatex"
+  "countingBound3.tex" 1771874321.80493 8157 875639c9a751e220fe92b5a01c4c8661 ""
   (generated)
   "countingBound3.aux"
   "countingBound3.log"

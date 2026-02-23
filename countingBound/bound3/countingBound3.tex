@@ -136,7 +136,7 @@ Since we're using NAND gates, we know that we ``hit'' least one NAND gate.
 Thus, we have the constraint:
 
 \[
-E[|\bigC_{V_j}|] \ge E[|\bigC_{V_{nj1}}|] + 1
+E[|\bigC_{V_v}|] \ge E[|\bigC_{V_{v-1}}|] + 1
 \]
 
 On its own, this constraint is not very useful.
@@ -155,7 +155,7 @@ numbers of layers $L$, using up to 90 gates.
 
 \includegraphics[width=0.9\textwidth]{../py/fractions/layers/bounds/ip\_layers\_8\_3\_90.pdf}
 
-\caption{ Bounds for layers of $BUGGYCLIQUE$ with $n=8$ and $k=3$,
+\caption{Bounds for layers of $BUGGYCLIQUE$ with $n=8$ and $k=3$,
 with the number of cliques divided into different numbers of layers.
 In each case, the LP minimized the {\em average} number of gates
 in the highest layer; the bounds for the other layers show
@@ -173,6 +173,13 @@ feasible solution to the LP.
 (FIXME Emphasize the right-most line for each level, e.g. by making it darker
 and/or thicker).
 
+It may look incorrect, or at least surprising, that the LP is conjecturing
+that finding small sets of cliques is in fact harder. One explanation
+would be that as the LP pushes the average for the functions with 
+many cliques down, it ``pushes out'' the functions with few cliques, making it appear that they are harder to compute.
+(Indeed, it seems possible that adding the naive upper bound, for the lower layer,
+would improve the bounds for the top layer.)
+
 At the bottom-right corner, it looks like the bound for the top {\em third}
 of the cliques is near the lower bound for the entire set of 
 $BUGGYCLIQUE$ functions. However, the bound drops off rapidly as we
@@ -186,7 +193,7 @@ layers.
 
 We emphasize that these are {\em average-case} bounds. $CLIQUE$ is only
 one of a very large number of functions, and so even when the bound
-on the highest layer is high, $CLIQUE$ might still be easy to compute.
+on the highest layer is large-ish, $CLIQUE$ might still be easy to compute.
 
 The motivation for using ``layers'' was to get a non-trivial bound.
 However, the resulting LP has many fewer variables than previous attempts

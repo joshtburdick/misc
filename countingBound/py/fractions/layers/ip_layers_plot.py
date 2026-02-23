@@ -29,7 +29,7 @@ def plot_bounds(bound_file, output_file):
     # max_cliques = b['Num. cliques'].max()
     # levels = b['Num. levels'].max()
     # b_avg = b[(b['Num. cliques'] == max_cliques) & (b['Num. levels'] == levels)]
-    # plt.plot(b_avg['Num. cliques'], b_avg['Min. gates'], 'k-', lw=2)
+    # plt.plot(b_avg['Num. cliqfues'], b_avg['Min. gates'], 'k-', lw=2)
 
     plt.xlabel('Number of cliques')
     plt.ylabel('Number of NAND gates')

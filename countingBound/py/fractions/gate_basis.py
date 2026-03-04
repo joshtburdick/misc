@@ -45,7 +45,7 @@ def get_expected_num_gates(num_inputs, num_functions, max_fan_in=2):
     Note that we don't round this up, even though the expected number
     of gates may be slightly higher.    
     num_inputs: number of inputs to the circuit
-    num_functions: number of functions (this can be a numpy array)
+    num_functions: number of functions (as a numpy array)
     max_fan_in: maximum number of inputs (None for "unbounded")
     Returns: a numpy array of the same shape as num_functions,
     such that the i'th element is the expected number of gates
@@ -62,7 +62,7 @@ def get_expected_num_gates(num_inputs, num_functions, max_fan_in=2):
         num_functions_implementable.append(num_functions_1)
         if total_functions > max_functions:
             break
-    # Now, for each number of functions, compute the epected number of gates
+    # Now, for each number of functions, compute the expected number of gates
     # needed to implement it.
     num_functions_implementable = np.array(num_functions_implementable)
     cumu_num_functions_implementable = np.cumsum(num_functions_implementable)

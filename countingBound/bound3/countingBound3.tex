@@ -128,7 +128,28 @@ martini glass). Thus, for a given number of gates $g$, we have:
 This will depend on the basis used; here, we only use 2-input
 NAND gates.
 
-\subsection{Zeroing constraints}
+\subsection{Constraints using restrictions}
+
+Restrictions (FIXME) are a standard tool in circuit complexity.
+After setting an input of a circuit to a constant, some gates
+may also have their inputs fixed to a constant.
+Since we're using NAND gates, we know that feeding in
+a 0 to some input will remove at least one gate. (Here, we
+only consider feeding in 0's.)
+
+We want to show that sets of cliques with more vertices
+require more gates to detect, on average. We can visualize this
+as a tree; we want to show that each level of the tree is higher.
+
+We need to be slightly careful here, though; it's perfectly possible
+for the averages at a given level in such a tree to not be increasing.
+
+(FIXME add counterexample)
+
+However, if we make sure that the degree of nodes at each level
+is the same, then the average at each level will be increasing.
+
+
 
 Suppose we have a set of cliques $A \subseteq V_n$, and we restrict
 all the edges in some vertex to be 0. The resulting graph has $n-1$ vertices.

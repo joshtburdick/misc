@@ -67,6 +67,7 @@ class LpParity:
             self.vars += [("E", c)]
         for v in range(k, n+1):
             # averages by number of vertices
+            # ("U" is "up to", "V" is "exactly")
             self.vars += [("U", v), ("V", v)]
             # averages by number of vertices and cliques
             for c in range(0, comb(n, k) + 1):
@@ -74,7 +75,7 @@ class LpParity:
             # counts of numbers of functions with some number of gates
             # (with up to some number of vertices)
             for g in range(1, max_gates+1):
-                self.num_gates_dist_vars += [(v, g)]
+                self.vars += [("G", v, g)]
 
         # wrapper for LP solver
         self.lp = pulp_helper.PuLP_Helper(self.vars)
@@ -135,12 +136,42 @@ class LpParity:
         gates_for_xor = 4 * (num_cliques-1)
         return gates_for_cliques + gates_for_xor
 
-    def add_small_constraint(self):
-        """Adds constraint on computing parity of small sets of cliques."""
-        for i in range(self.num_possible_cliques // 2):
-            self.lp.add_constraint([(("E", i), 1)],
-                "<=",
-                self.num_gates_upper_bound(i))
+
+
+
+    def add_zeroing_constraint(self):
+        """Constraint based on zeroing out one vertex.
+
+
+
+        """
+        # number of vertices in the larger graph
+        for v in range(self.k+1, self.n+1):
+            # number of cliques "hit" by zeroing out edges connected to one vertex
+            num_hit_cliques = comb(v-1, self.k-1)
+            # probability that we hit at least one clique
+            prob_hit_at_least_one_clique = 1 - 2 ** (-num_hit_cliques)
+            self.lp.add_constraint(
+                [(("U", v), 1), (("U", v-1), -1)],
+                ">=", -prob_hit_at_least_one_clique)
+
+    def add_one_clique_constraint(self):
+        """Constraint on the number of gates to detect one clique."""
+        # FIXME currently this is hard-coded for unbounded fan-in
+        self.lp.add_constraint([(("E", 1), 1)], "=", 2)
+
+    def add_smoothing_constraint(self):
+        """Constraint on computing parity with one clique added or removed."""
+        # number of gates to detect one clique, and XOR it with the rest
+        # ??? can this be reduced?
+        delta_gates = 6
+        for i in range(self.num_possible_cliques):
+            self.lp.add_constraint(
+                [(("E", i), 1), (("E", i+1), -1)],
+                "<=", delta_gates)
+            self.lp.add_constraint(
+                [(("E", i), 1), (("E", i+1), -1)],
+                ">=", -delta_gates)
 
     def add_large_constraint(self):
         """Adds constraint on computing parity of large sets of cliques."""

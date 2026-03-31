@@ -16,6 +16,7 @@ import scipy.stats
 sys.path.append("..")   # XXX
 
 import gate_basis
+import hypergraph_counter
 import pulp_helper
 
 # Wrapper for comb(), with exact arithmetic.
@@ -85,6 +86,10 @@ class LpParity:
 
         self.basis = gate_basis.TwoInputNandBasis()
 
+        # counts of hypergraphs with exactly some number of vertices
+        self.hc = hypergraph_counter.HypergraphCounter(self.n, self.k)
+        self.hypergraph_counts = self.hc.count_hypergraphs_exact_vertices()
+
         # for debugging: directory in which to save LP problem files
         self.lp_save_dir = None
 
@@ -97,6 +102,11 @@ class LpParity:
         - on the total number of functions at that "level", and
         - connecting the counts with that "level"'s expected gate count
         """
+
+
+
+
+        # FIXME..........
         # loop through number of cliques
         for c in range(self.num_possible_cliques+1):
             num_functions = comb(self.num_possible_cliques, c)
@@ -108,6 +118,26 @@ class LpParity:
             A = [((c, i), i)
                 for i in range(1, self.max_gates+1)]
             self.lp.add_constraint(A + [(("E", c), -num_functions)],
+                '=', 0)
+
+    def add_averaging_constraints(self):
+        """Adds constraints that connect the "up to v" and "exactly v" variables.
+        """
+        num_hypergraphs_by_num_vertices = {
+            v: counts.sum()
+            for v, counts in self.hypergraph_counts.items()
+        }
+        # This will be the total number of hypergraphs with up to and including
+        # v vertices.
+        total_hypergraphs = 0
+        for v in range(self.k, self.n+1):
+            total_hypergraphs += num_hypergraphs_by_num_vertices[v]
+            # The average number of gates in functions with up to v vertices
+            # is the weighted average of the average number of gates in functions
+            # with exactly i vertices, for k <= i <= v.
+            self.lp.add_constraint(
+                [(("V", i), num_hypergraphs_by_num_vertices[i]) for i in range(self.k, v+1)]
+                + [(("U", v), -total_hypergraphs)],
                 '=', 0)
 
     def add_counting_bound(self):
@@ -142,8 +172,9 @@ class LpParity:
     def add_zeroing_constraint(self):
         """Constraint based on zeroing out one vertex.
 
-
-
+        Note that we use the "up to v cliques" variables here. This is
+        because after we zero out one vertex, we don't know how many
+        vertices remain.
         """
         # number of vertices in the larger graph
         for v in range(self.k+1, self.n+1):
@@ -151,9 +182,11 @@ class LpParity:
             num_hit_cliques = comb(v-1, self.k-1)
             # probability that we hit at least one clique
             prob_hit_at_least_one_clique = 1 - 2 ** (-num_hit_cliques)
+            # Note that if we hit one clique (as we usually do), we _only_ can
+            # say that one NAND gate was zonked.
             self.lp.add_constraint(
                 [(("U", v), 1), (("U", v-1), -1)],
-                ">=", -prob_hit_at_least_one_clique)
+                ">=", prob_hit_at_least_one_clique)
 
     def add_one_clique_constraint(self):
         """Constraint on the number of gates to detect one clique."""

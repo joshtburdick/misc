@@ -44,10 +44,10 @@ class LpParity:
             - Each variable will be the expected number of gates in
             the sets with exactly c cliques.
         - tuples of the form (v, g), where
-            - "c" is the number of cliques
-            - "g" is the number of gates
+            - "v" is the number of vertices, with k <= v <= n
+            - "g" is the number of gates, with 1 <= g <= max_gates
             - Each variable will be the number of sets with _up to_ `v` vertices,
-              having "g" gates.
+              having _exactly_ `g` gates.
         - tuples of the form ("U", v), which are the expected number of gates
             in functions with _up to_ `v` vertices
         - tuples of the form ("V", v), which, similarly, are the expected
@@ -94,33 +94,29 @@ class LpParity:
         self.lp_save_dir = None
 
     def add_level_constraints(self):
-        """Adds constraints on functions at some "level"
+        """Adds constraints on functions at some "level".
 
-        By "level", we mean "number of cliques".
+        By "level", we mean "number of vertices".
 
         The constraints (both of which are equalities) are:
         - on the total number of functions at that "level", and
         - connecting the counts with that "level"'s expected gate count
         """
-
-
-
-
-        # FIXME..........
-        # loop through number of cliques
-        for c in range(self.num_possible_cliques+1):
-            num_functions = comb(self.num_possible_cliques, c)
+        # loop through number of vertices; note that we're counting functions
+        # with _exactly v_ vertices (as opposed to _up to v_ vertices).
+        for v in range(self.k, self.n+1):
+            num_functions = self.hypergraph_counts[v].sum()
             # add constraint that these sum to the number of functions
             self.lp.add_constraint(
-                [((c, i), 1) for i in range(1, self.max_gates+1)],
+                [((v, i), 1) for i in range(1, self.max_gates+1)],
                 '=', num_functions)
             # add constraint defining expected number of gates
-            A = [((c, i), i)
+            A = [((v, i), i)
                 for i in range(1, self.max_gates+1)]
-            self.lp.add_constraint(A + [(("E", c), -num_functions)],
+            self.lp.add_constraint(A + [(("V", v), -num_functions)],
                 '=', 0)
 
-    def add_averaging_constraints(self):
+    def add_cumulative_constraints(self):
         """Adds constraints that connect the "up to v" and "exactly v" variables.
         """
         num_hypergraphs_by_num_vertices = {
@@ -140,6 +136,33 @@ class LpParity:
                 + [(("U", v), -total_hypergraphs)],
                 '=', 0)
 
+    def add_marginal_constraints(self):
+        """Adds constraints on several 'marginal' variables.
+
+        """
+        # connect "U" with counts of number of hypergraphs needing some number
+        # of gates to detect.
+        for v in range(self.k, self.n+1):
+            n_hypergraphs = self.hypergraph_counts[v]
+            self.lp.add_constraint(
+                [((v, c), n_hypergraphs[c]) for c in range(n_hypergraphs.shape[0])]
+                + [(("U", v), -n_hypergraphs.sum())],
+                '=', 0)
+        # connect "E" with "V"
+        for c in range(self.num_possible_cliques+1):
+            n_functions = [
+                self.hypergraph_counts[v][c]
+                for v in range(self.k, self.n+1)
+                if c < self.hypergraph_counts[v].shape[0]
+            ]
+            n_functions = np.array(n_functions, dtype='object')
+            # ??? is this right?
+            self.lp.add_constraint(
+                [((v, c), n_functions[v]) for v in range(self.k, self.n+1)
+                    if c < self.hypergraph_counts[v].shape[0]]
+                + [(("E", c), -n_functions.sum())],
+                '=', 0)
+
     def add_counting_bound(self):
         """Adds counting bounds, for a given number of gates.
 
@@ -152,12 +175,16 @@ class LpParity:
         # upper-bound "total number of functions with this many gates"
         for g in range(1, self.max_gates+1):
             self.lp.add_constraint(
-                [((c, g), 1)
-                    for c in range(self.num_possible_cliques+1)],
+                [((v, g), 1)
+                    for v in range(self.k, self.n+1)],
                 '<=', num_functions[g])
 
     def num_gates_upper_bound(self, num_cliques):
-        """Naive upper bound on computing parity of some number of cliques."""
+        """Naive upper bound on computing parity of some number of cliques.
+        
+        Deprecated: the "one clique" constraint, plus the
+        "smoothing constraint", basically do the same thing.
+        """
         if num_cliques == 0:
             return 1
         # number of gates to detect each individual clique, by ANDing the edges
@@ -165,9 +192,6 @@ class LpParity:
         # number of gates to XOR these together
         gates_for_xor = 4 * (num_cliques-1)
         return gates_for_cliques + gates_for_xor
-
-
-
 
     def add_zeroing_constraint(self):
         """Constraint based on zeroing out one vertex.
@@ -190,20 +214,22 @@ class LpParity:
 
     def add_one_clique_constraint(self):
         """Constraint on the number of gates to detect one clique."""
+        # FIXME add a number for zero cliques? (what would that be?)
         # FIXME currently this is hard-coded for unbounded fan-in
         self.lp.add_constraint([(("E", 1), 1)], "=", 2)
 
     def add_smoothing_constraint(self):
         """Constraint on computing parity with one clique added or removed."""
-        # number of gates to detect one clique, and XOR it with the rest
-        # ??? can this be reduced?
-        delta_gates = 6
+        # Number of gates to detect one clique, and XOR it with the rest.
+        # For unbounded fan-in NAND gates, this is 5: 2 for the clique,
+        # and 3 for the XOR (which re-uses one one-input NAND gate).
+        delta_gates = 5
         for i in range(self.num_possible_cliques):
             self.lp.add_constraint(
-                [(("E", i), 1), (("E", i+1), -1)],
+                [(("E", i+1), 1), (("E", i), -1)],
                 "<=", delta_gates)
             self.lp.add_constraint(
-                [(("E", i), 1), (("E", i+1), -1)],
+                [(("E", i+1), 1), (("E", i), -1)],
                 ">=", -delta_gates)
 
     def add_large_constraint(self):

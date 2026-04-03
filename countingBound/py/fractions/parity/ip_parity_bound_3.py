@@ -43,7 +43,12 @@ class LpParity:
             - "c" is the number of cliques, with 0 <= c <= {n choose k}
             - Each variable will be the expected number of gates in
             the sets with exactly c cliques.
-        - tuples of the form (v, g), where
+        - tuples of the form ("E", c, v) where:
+            - "c" is the number of cliques, with 0 <= c <= {n choose k}
+            - "v" is the number of vertices, with k <= v <= n
+            - Each variable will be the expected number of gates in
+            the sets with exactly `c` cliques and exactly `v` vertices.
+        - tuples of the form ("G", v, g), where
             - "v" is the number of vertices, with k <= v <= n
             - "g" is the number of gates, with 1 <= g <= max_gates
             - Each variable will be the number of sets with _up to_ `v` vertices,
@@ -54,7 +59,8 @@ class LpParity:
             number of gates, but in functions with _exactly_ `v` vertices
         n: number of vertices in the graph
         k: number of vertices in a clique (>= 3)
-        max_gates: maximum number of gates to include
+        max_gates: maximum number of gates to consider (setting this too
+            small will result in an infeasible LP)
         """
         self.n = n
         self.k = k
@@ -108,12 +114,12 @@ class LpParity:
             num_functions = self.hypergraph_counts[v].sum()
             # add constraint that these sum to the number of functions
             self.lp.add_constraint(
-                [((v, i), 1) for i in range(1, self.max_gates+1)],
+                [(("G", v, i), 1) for i in range(1, self.max_gates+1)],
                 '=', num_functions)
             # add constraint defining expected number of gates
-            A = [((v, i), i)
+            A = [(("G", v, i), i)
                 for i in range(1, self.max_gates+1)]
-            self.lp.add_constraint(A + [(("V", v), -num_functions)],
+            self.lp.add_constraint(A + [(("E", v), -num_functions)],
                 '=', 0)
 
     def add_cumulative_constraints(self):
@@ -178,20 +184,6 @@ class LpParity:
                 [((v, g), 1)
                     for v in range(self.k, self.n+1)],
                 '<=', num_functions[g])
-
-    def num_gates_upper_bound(self, num_cliques):
-        """Naive upper bound on computing parity of some number of cliques.
-        
-        Deprecated: the "one clique" constraint, plus the
-        "smoothing constraint", basically do the same thing.
-        """
-        if num_cliques == 0:
-            return 1
-        # number of gates to detect each individual clique, by ANDing the edges
-        gates_for_cliques = num_cliques * 2 * (comb(k,2)-1)
-        # number of gates to XOR these together
-        gates_for_xor = 4 * (num_cliques-1)
-        return gates_for_cliques + gates_for_xor
 
     def add_zeroing_constraint(self):
         """Constraint based on zeroing out one vertex.

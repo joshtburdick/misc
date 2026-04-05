@@ -209,9 +209,9 @@ class LpParity:
     def add_one_clique_constraint(self):
         """Constraint on the number of gates to detect one clique."""
         # Constraint for parity of zero cliques (??? is this right?)
-        self.lp.add_constraint([(("E", 0), 1)], "=", 1)
+        self.lp.add_constraint([(("X", 0), 1)], "=", 1)
         # FIXME currently this is hard-coded for unbounded fan-in
-        self.lp.add_constraint([(("E", 1), 1)], "=", 2)
+        self.lp.add_constraint([(("X", 1), 1)], "=", 2)
 
     def add_smoothing_constraint(self):
         """Constraint on computing parity with one clique added or removed."""
@@ -223,12 +223,12 @@ class LpParity:
             # E_{i+1} <= E_i + 5, so
             # E_{i+1} - E_i <= 5
             self.lp.add_constraint(
-                [(("E", i+1), 1), (("E", i), -1)],
+                [(("X", i+1), 1), (("X", i), -1)],
                 "<=", delta_gates)
             # E_{i+1} >= E_i - 5, so
             # E_{i+1} - E_i >= -5
             self.lp.add_constraint(
-                [(("E", i+1), 1), (("E", i), -1)],
+                [(("X", i+1), 1), (("X", i), -1)],
                 ">=", -delta_gates)
 
     def add_all_cliques_constraint(self):
@@ -238,13 +238,13 @@ class LpParity:
         use it, plus an XOR, to convert a circuit which computes
         parity of i cliques, into one which computes parity of N-i cliques.
 
-        E_{n-i} <= E_n + E_i + 4
-        E_{n-i} - E_n - E_i <= 4
+        X_{n-i} <= X_n + X_i + 4
+        X_{n-i} - X_n - X_i <= 4
         """
         N = self.num_possible_cliques
         for i in range(1, N // 2):
             self.lp.add_constraint(
-                [(("E", N-i), 1), (("E", N), -1), (("E", i), -1)],
+                [(("X", N-i), 1), (("X", N), -1), (("X", i), -1)],
                 "<=", 4)
 
     def get_all_bounds(self):
@@ -328,9 +328,9 @@ if __name__ == '__main__':
         try:
             bounds = pandas.concat([
                 get_bounds(n, k, max_gates, 'Counting', True, False, False),
-                get_bounds(n, k, max_gates, 'Counting and small', True, True, False),
-                get_bounds(n, k, max_gates, 'Counting and large', True, False, True),
-                get_bounds(n, k, max_gates, 'Counting, small and large',
+                get_bounds(n, k, max_gates, 'Counting, zeroing', True, True, False),
+                get_bounds(n, k, max_gates, 'Counting, smoothing', True, False, True),
+                get_bounds(n, k, max_gates, 'Counting, zeroing, smoothing',
                     True, True, True)
             ])
             if args.result_file:

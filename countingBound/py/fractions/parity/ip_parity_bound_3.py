@@ -39,15 +39,15 @@ class LpParity:
         """Constructor gets graph info, and sets up variable names.
 
         This will have several groups of variables:
-        - tuples of the form ("E", c) where:
+        - tuples of the form ("X", c) where:
             - "c" is the number of cliques, with 0 <= c <= {n choose k}
             - Each variable will be the expected number of gates in
-            the sets with exactly c cliques.
-        - tuples of the form ("E", c, v) where:
+            the sets with `c` cliques.
+        - tuples of the form ("A", c, v) where:
             - "c" is the number of cliques, with 0 <= c <= {n choose k}
             - "v" is the number of vertices, with k <= v <= n
             - Each variable will be the expected number of gates in
-            the sets with exactly `c` cliques and exactly `v` vertices.
+            the sets with `c` cliques and _exactly_ `v` vertices.
         - tuples of the form ("G", v, g), where
             - "v" is the number of vertices, with k <= v <= n
             - "g" is the number of gates, with 1 <= g <= max_gates
@@ -71,14 +71,14 @@ class LpParity:
         self.vars = []
         for c in range(0, comb(n, k) + 1):
             # variables for expected number of gates, for each number of cliques
-            self.vars += [("E", c)]
+            self.vars += [("X", c)]
         for v in range(k, n+1):
-            # averages by number of vertices
-            # ("U" is "up to", "V" is "exactly")
-            self.vars += [("U", v), ("V", v)]
             # averages by number of vertices and cliques
             for c in range(0, comb(n, k) + 1):
-                self.vars += [("E", v, c)]
+                self.vars += [("A", v, c)]
+            # averages by number of vertices
+            # ("U" is "up to", "V" is "exactly", v vertices)
+            self.vars += [("U", v), ("V", v)]
             # counts of numbers of functions with some number of gates
             # (with up to some number of vertices)
             for g in range(1, max_gates+1):
@@ -92,7 +92,7 @@ class LpParity:
 
         self.basis = gate_basis.TwoInputNandBasis()
 
-        # counts of hypergraphs with exactly some number of vertices
+        # counts of hypergraphs with _exactly_ some number of vertices
         self.hc = hypergraph_counter.HypergraphCounter(self.n, self.k)
         self.hypergraph_counts = self.hc.count_hypergraphs_exact_vertices()
 
@@ -119,7 +119,7 @@ class LpParity:
             # add constraint defining expected number of gates
             A = [(("G", v, i), i)
                 for i in range(1, self.max_gates+1)]
-            self.lp.add_constraint(A + [(("E", v), -num_functions)],
+            self.lp.add_constraint(A + [(("V", v), -num_functions)],
                 '=', 0)
 
     def add_cumulative_constraints(self):
@@ -143,30 +143,31 @@ class LpParity:
                 '=', 0)
 
     def add_marginal_constraints(self):
-        """Adds constraints on several 'marginal' variables.
+        """Adds constraints on some 'marginal' variables.
 
         """
-        # connect "U" with counts of number of hypergraphs needing some number
-        # of gates to detect.
+        # "V", the number of gates needed to detect functions with exactly some
+        # number of vertices, is a weighted average of the numbers in
+        # "A", which is the number of gates needed, grouped by _exact_ number
+        # of vertices and number of cliques.
         for v in range(self.k, self.n+1):
             n_hypergraphs = self.hypergraph_counts[v]
             self.lp.add_constraint(
-                [((v, c), n_hypergraphs[c]) for c in range(n_hypergraphs.shape[0])]
-                + [(("U", v), -n_hypergraphs.sum())],
+                [(("A", v, c), n_hypergraphs[c]) for c in range(n_hypergraphs.shape[0])]
+                + [(("V", v), -n_hypergraphs.sum())],
                 '=', 0)
-        # connect "E" with "V"
+        # "X", the number of gates needed to detect functions with exactly some
+        # number of cliques, similarly is a weighted average of numbers in "A".
         for c in range(self.num_possible_cliques+1):
-            n_functions = [
-                self.hypergraph_counts[v][c]
+            n_functions = {
+                v: self.hypergraph_counts[v][c]
                 for v in range(self.k, self.n+1)
                 if c < self.hypergraph_counts[v].shape[0]
-            ]
-            n_functions = np.array(n_functions, dtype='object')
+            }
             # ??? is this right?
             self.lp.add_constraint(
-                [((v, c), n_functions[v]) for v in range(self.k, self.n+1)
-                    if c < self.hypergraph_counts[v].shape[0]]
-                + [(("E", c), -n_functions.sum())],
+                [(("A", v, c), f) for v, f in n_functions.items()]
+                + [(("X", c), -sum(n_functions.values()))],
                 '=', 0)
 
     def add_counting_bound(self):
@@ -181,7 +182,7 @@ class LpParity:
         # upper-bound "total number of functions with this many gates"
         for g in range(1, self.max_gates+1):
             self.lp.add_constraint(
-                [((v, g), 1)
+                [(("G", v, g), 1)
                     for v in range(self.k, self.n+1)],
                 '<=', num_functions[g])
 
@@ -206,7 +207,8 @@ class LpParity:
 
     def add_one_clique_constraint(self):
         """Constraint on the number of gates to detect one clique."""
-        # FIXME add a number for zero cliques? (what would that be?)
+        # Constraint for parity of zero cliques (??? is this right?)
+        self.lp.add_constraint([(("E", 0), 1)], "=", 1)
         # FIXME currently this is hard-coded for unbounded fan-in
         self.lp.add_constraint([(("E", 1), 1)], "=", 2)
 
@@ -214,7 +216,7 @@ class LpParity:
         """Constraint on computing parity with one clique added or removed."""
         # Number of gates to detect one clique, and XOR it with the rest.
         # For unbounded fan-in NAND gates, this is 5: 2 for the clique,
-        # and 3 for the XOR (which re-uses one one-input NAND gate).
+        # and 3 for the XOR (as it can reuse one one-input NAND gate).
         delta_gates = 5
         for i in range(self.num_possible_cliques):
             self.lp.add_constraint(
@@ -224,15 +226,21 @@ class LpParity:
                 [(("E", i+1), 1), (("E", i), -1)],
                 ">=", -delta_gates)
 
-    def add_large_constraint(self):
-        """Adds constraint on computing parity of large sets of cliques."""
+    def add_all_cliques_constraint(self):
+        """Adds constraint on computing parity of all cliques.
+
+        If we have a way to compute parity of all N cliques, we can
+        use it, plus an XOR, to convert a circuit which computes
+        parity of i cliques, into one which computes parity of N-i cliques.
+
+        E_N >= E_{N-i} - E_i + 4
+        E_{N-i} - E_i - E_n <= -4
+        """
         N = self.num_possible_cliques
         for i in range(1, N // 2):
-            # this bounds "the number of gates to find parity of 'a few less'
-            # than N cliques", relative to finding the parity of all of them
-            self.lp.add_constraint([(("E", N-i), 1), (("E", N), -1)],
-                "<=", 
-                self.num_gates_upper_bound(i) + 4)
+            self.lp.add_constraint(
+                [(("E", N), -1), (("E", N-i), 1), (("E", i), -1)],
+                "<=", -4)
 
     def get_all_bounds(self):
         """Gets bounds for each possible number of cliques.

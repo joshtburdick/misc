@@ -14,6 +14,7 @@ import scipy.special
 import scipy.stats
 
 sys.path.append("..")   # XXX
+sys.path.append("../../")   # XXX
 
 import gate_basis
 import hypergraph_counter
@@ -219,9 +220,13 @@ class LpParity:
         # and 3 for the XOR (as it can reuse one one-input NAND gate).
         delta_gates = 5
         for i in range(self.num_possible_cliques):
+            # E_{i+1} <= E_i + 5, so
+            # E_{i+1} - E_i <= 5
             self.lp.add_constraint(
                 [(("E", i+1), 1), (("E", i), -1)],
                 "<=", delta_gates)
+            # E_{i+1} >= E_i - 5, so
+            # E_{i+1} - E_i >= -5
             self.lp.add_constraint(
                 [(("E", i+1), 1), (("E", i), -1)],
                 ">=", -delta_gates)
@@ -233,14 +238,14 @@ class LpParity:
         use it, plus an XOR, to convert a circuit which computes
         parity of i cliques, into one which computes parity of N-i cliques.
 
-        E_N >= E_{N-i} - E_i + 4
-        E_{N-i} - E_i - E_n <= -4
+        E_{n-i} <= E_n + E_i + 4
+        E_{n-i} - E_n - E_i <= 4
         """
         N = self.num_possible_cliques
         for i in range(1, N // 2):
             self.lp.add_constraint(
-                [(("E", N), -1), (("E", N-i), 1), (("E", i), -1)],
-                "<=", -4)
+                [(("E", N-i), 1), (("E", N), -1), (("E", i), -1)],
+                "<=", 4)
 
     def get_all_bounds(self):
         """Gets bounds for each possible number of cliques.
@@ -250,13 +255,13 @@ class LpParity:
         CLIQUE is minimized.
         """
         # solve, minimizing number of gates for CLIQUE
-        r = self.lp.solve(("E", self.num_possible_cliques))
+        r = self.lp.solve(("X", self.num_possible_cliques))
         if not r:
             return None
         # for now, we only get bounds for "expected number of gates"
         # for each number of cliques
         n_cliques = range(self.num_possible_cliques+1)
-        bounds = [r[("E", num_cliques)]
+        bounds = [r[("X", num_cliques)]
             for num_cliques in range(self.num_possible_cliques+1)]
         return pandas.DataFrame({
                 'Num. vertices': self.n,
@@ -264,7 +269,7 @@ class LpParity:
                 'Min. gates': bounds})
 
 def get_bounds(n, k, max_gates, constraints_label,
-        use_counting_bound, use_small_bound, use_large_bound):
+        use_counting_bound, use_zeroing_bound, use_smoothing_bound):
     """Gets bounds with some set of constraints.
 
     n, k, max_gates: problem size
@@ -276,12 +281,16 @@ def get_bounds(n, k, max_gates, constraints_label,
     sys.stderr.write(f'[bounding with n={n}, k={k}, max_gates={max_gates}, label={constraints_label}]\n')
     bound = LpParity(n, k, max_gates)
     bound.add_level_constraints()
+    bound.add_cumulative_constraints()
+    bound.add_marginal_constraints()
     if use_counting_bound:
         bound.add_counting_bound()
-    if use_small_bound:
-        bound.add_small_constraint()
-    if use_large_bound:
-        bound.add_large_constraint()
+    if use_zeroing_bound:
+        bound.add_zeroing_constraint()
+    if use_smoothing_bound:
+        bound.add_one_clique_constraint()
+        bound.add_smoothing_constraint()
+        bound.add_all_cliques_constraint()
     b = bound.get_all_bounds()
     b['Constraints'] = constraints_label
     return b.iloc[:,[3,0,1,2]]
@@ -304,8 +313,6 @@ def parse_args():
     parser.add_argument("--result-file",
         help="Write result to indicated file (rather than stdout)")
     return parser.parse_args()
-
-
 
 
 

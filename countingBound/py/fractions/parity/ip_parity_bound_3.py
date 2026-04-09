@@ -40,24 +40,24 @@ class LpParity:
         """Constructor gets graph info, and sets up variable names.
 
         This will have several groups of variables:
+        (FIXME rename these somewhat?)
         - tuples of the form ("X", c) where:
             - "c" is the number of cliques, with 0 <= c <= {n choose k}
             - Each variable will be the expected number of gates in
             the sets with `c` cliques.
         - tuples of the form ("A", c, v) where:
-            - "c" is the number of cliques, with 0 <= c <= {n choose k}
+            - "c" is the number of cliques, with 0 <= c <= {v choose k}
             - "v" is the number of vertices, with k <= v <= n
             - Each variable will be the expected number of gates in
             the sets with `c` cliques and _exactly_ `v` vertices.
-        - tuples of the form ("G", v, g), where
+        - tuples of the form ("G", c, v, g), where
+            - "c" is the number of cliques, with 0 <= c <= {v choose k}
             - "v" is the number of vertices, with k <= v <= n
             - "g" is the number of gates, with 1 <= g <= max_gates
-            - Each variable will be the number of sets with _up to_ `v` vertices,
-              having _exactly_ `g` gates.
+            - Each variable will be the number of sets with `c` cliques,
+              and _exactly_ `v` vertices, having _exactly_ `g` gates.
         - tuples of the form ("U", v), which are the expected number of gates
             in functions with _up to_ `v` vertices
-        - tuples of the form ("V", v), which, similarly, are the expected
-            number of gates, but in functions with _exactly_ `v` vertices
         n: number of vertices in the graph
         k: number of vertices in a clique (>= 3)
         max_gates: maximum number of gates to consider (setting this too
@@ -71,19 +71,19 @@ class LpParity:
 
         self.vars = []
         for c in range(0, comb(n, k) + 1):
-            # variables for expected number of gates, for each number of cliques
+            # Variables for expected number of gates, for each number of cliques.
             self.vars += [("X", c)]
         for v in range(k, n+1):
-            # averages by number of vertices and cliques
-            for c in range(0, comb(n, k) + 1):
-                self.vars += [("A", v, c)]
-            # averages by number of vertices
-            # ("U" is "up to", "V" is "exactly", v vertices)
-            self.vars += [("U", v), ("V", v)]
-            # counts of numbers of functions with some number of gates
-            # (with up to some number of vertices)
-            for g in range(1, max_gates+1):
-                self.vars += [("G", v, g)]
+            # Averages by number of vertices and cliques. (When the number of vertices is large,
+            # the first few of these variables will be zero; we add them anyway.)
+            for c in range(0, comb(v, k) + 1):
+                self.vars += [("A", c, v)]
+                # Counts of numbers of functions with some number of gates
+                # (with exactly `v` vertices and `c` cliques).
+                for g in range(1, max_gates+1):
+                    self.vars += [("G", c, v, g)]
+            #   Averages by number of vertices.
+            self.vars += [("U", v)]
 
         # wrapper for LP solver
         self.lp = pulp_helper.PuLP_Helper(self.vars)
@@ -102,60 +102,38 @@ class LpParity:
 
     def add_level_constraints(self):
         """Adds constraints on functions at some "level".
+        FIXME rename to "add_set_constraints"? or something like that?
 
-        By "level", we mean "number of vertices".
-
-        The constraints (both of which are equalities) are:
-        - on the total number of functions at that "level", and
-        - connecting the counts with that "level"'s expected gate count
+        The constraint (which is an equality) is on the number of functions
+        with some number of vertices and cliques.
         """
         # loop through number of vertices; note that we're counting functions
         # with _exactly v_ vertices (as opposed to _up to v_ vertices).
         for v in range(self.k, self.n+1):
-            num_functions = self.hypergraph_counts[v].sum()
-            # add constraint that these sum to the number of functions
-            self.lp.add_constraint(
-                [(("G", v, i), 1) for i in range(1, self.max_gates+1)],
-                '=', num_functions)
-            # add constraint defining expected number of gates
-            A = [(("G", v, i), i)
-                for i in range(1, self.max_gates+1)]
-            self.lp.add_constraint(A + [(("V", v), -num_functions)],
-                '=', 0)
-
-    def add_cumulative_constraints(self):
-        """Adds constraints that connect the "up to v" and "exactly v" variables.
-        """
-        num_hypergraphs_by_num_vertices = {
-            v: counts.sum()
-            for v, counts in self.hypergraph_counts.items()
-        }
-        # This will be the total number of hypergraphs with up to and including
-        # v vertices.
-        total_hypergraphs = 0
-        for v in range(self.k, self.n+1):
-            total_hypergraphs += num_hypergraphs_by_num_vertices[v]
-            # The average number of gates in functions with up to v vertices
-            # is the weighted average of the average number of gates in functions
-            # with exactly i vertices, for k <= i <= v.
-            self.lp.add_constraint(
-                [(("V", i), num_hypergraphs_by_num_vertices[i]) for i in range(self.k, v+1)]
-                + [(("U", v), -total_hypergraphs)],
-                '=', 0)
+            for c in range(0, comb(v, k) + 1):
+                num_functions = self.hypergraph_counts[v][c]
+                # add constraint that these sum to the number of functions
+                self.lp.add_constraint(
+                    [(("G", c, v, g), 1) for g in range(1, self.max_gates+1)],
+                    '=', num_functions)
 
     def add_marginal_constraints(self):
         """Adds constraints on some 'marginal' variables.
 
         """
-        # "V", the number of gates needed to detect functions with exactly some
+        # "U", the number of gates needed to detect functions with up to some
         # number of vertices, is a weighted average of the numbers in
         # "A", which is the number of gates needed, grouped by _exact_ number
         # of vertices and number of cliques.
+        total_hypergraphs = 0
+        A = []
         for v in range(self.k, self.n+1):
+            # We add in the number of hypergraphs with exactly v vertices,
+            # and any number of cliques (since `U` is for "up to v vertices").
             n_hypergraphs = self.hypergraph_counts[v]
-            self.lp.add_constraint(
-                [(("A", v, c), n_hypergraphs[c]) for c in range(n_hypergraphs.shape[0])]
-                + [(("V", v), -n_hypergraphs.sum())],
+            total_hypergraphs += n_hypergraphs.sum()
+            A += [(("A", c, v), n_hypergraphs[c]) for c in range(n_hypergraphs.shape[0])]
+            self.lp.add_constraint(A + [(("U", v), -total_hypergraphs)],
                 '=', 0)
         # "X", the number of gates needed to detect functions with exactly some
         # number of cliques, similarly is a weighted average of numbers in "A".
@@ -167,24 +145,26 @@ class LpParity:
             }
             # ??? is this right?
             self.lp.add_constraint(
-                [(("A", v, c), f) for v, f in n_functions.items()]
+                [(("A", c, v), f) for v, f in n_functions.items()]
                 + [(("X", c), -sum(n_functions.values()))],
                 '=', 0)
 
     def add_counting_bound(self):
         """Adds counting bounds, for a given number of gates.
 
-        This is a lower bound on the number of functions with
+        This is an upper bound on the number of functions with
         some number of gates.
         """
         # number of possible functions for each possible number of gates
         # (with number of inputs based on number of vertices)
         num_functions = self.basis.num_functions(comb(self.n, 2), self.max_gates+1)
-        # upper-bound "total number of functions with this many gates"
+        # The entries in `G` are essentially the counts which go in to computing
+        # the averages `A`. Therefore, find variables which are named `A`.
+        A_vars = [v for v in self.vars if v[0] == "A"]
+        # for each number of gates, upper-bound "total number of functions with this many gates"
         for g in range(1, self.max_gates+1):
             self.lp.add_constraint(
-                [(("G", v, g), 1)
-                    for v in range(self.k, self.n+1)],
+                [(("G", c, v, g), 1) for _, c, v in A_vars],
                 '<=', num_functions[g])
 
     def add_zeroing_constraint(self):
@@ -238,6 +218,8 @@ class LpParity:
         use it, plus an XOR, to convert a circuit which computes
         parity of i cliques, into one which computes parity of N-i cliques.
 
+        (It's not clear that this is useful.)
+
         X_{n-i} <= X_n + X_i + 4
         X_{n-i} - X_n - X_i <= 4
         """
@@ -281,7 +263,6 @@ def get_bounds(n, k, max_gates, constraints_label,
     sys.stderr.write(f'[bounding with n={n}, k={k}, max_gates={max_gates}, label={constraints_label}]\n')
     bound = LpParity(n, k, max_gates)
     bound.add_level_constraints()
-    bound.add_cumulative_constraints()
     bound.add_marginal_constraints()
     if use_counting_bound:
         bound.add_counting_bound()

@@ -116,6 +116,12 @@ class LpParity:
                 self.lp.add_constraint(
                     [(("G", c, v, g), 1) for g in range(1, self.max_gates+1)],
                     '=', num_functions)
+                # add constraint that `A` is the expected value of the
+                # distribution implied by the counts in `G`.
+                self.lp.add_constraint(
+                    [(("A", c, v), num_functions)]
+                    + [(("G", c, v, g), -g) for g in range(1, self.max_gates+1)],
+                    '=', 0)
 
     def add_marginal_constraints(self):
         """Adds constraints on some 'marginal' variables.
@@ -240,6 +246,7 @@ class LpParity:
         r = self.lp.solve(("X", self.num_possible_cliques))
         if not r:
             return None
+        # pdb.set_trace()
         # for now, we only get bounds for "expected number of gates"
         # for each number of cliques
         n_cliques = range(self.num_possible_cliques+1)
@@ -271,7 +278,7 @@ def get_bounds(n, k, max_gates, constraints_label,
     if use_smoothing_bound:
         bound.add_one_clique_constraint()
         bound.add_smoothing_constraint()
-        bound.add_all_cliques_constraint()
+        # bound.add_all_cliques_constraint()
     b = bound.get_all_bounds()
     b['Constraints'] = constraints_label
     return b.iloc[:,[3,0,1,2]]
@@ -308,9 +315,9 @@ if __name__ == '__main__':
     for max_gates in gate_range:
         try:
             bounds = pandas.concat([
-                get_bounds(n, k, max_gates, 'Counting', True, False, False),
-                get_bounds(n, k, max_gates, 'Counting, zeroing', True, True, False),
-                get_bounds(n, k, max_gates, 'Counting, smoothing', True, False, True),
+                # get_bounds(n, k, max_gates, 'Counting', True, False, False),
+                # get_bounds(n, k, max_gates, 'Counting, zeroing', True, True, False),
+                # get_bounds(n, k, max_gates, 'Counting, smoothing', True, False, True),
                 get_bounds(n, k, max_gates, 'Counting, zeroing, smoothing',
                     True, True, True)
             ])

@@ -1,2 +1,14 @@
 solution status: optimal solution found
-objective value:                                    0
+objective value:                                    1
+x__x_4_4_                                           1 	(obj:1)
+x__g_3_0_0_                                         1 	(obj:0)
+x__g_3_1_0_                                         1 	(obj:0)
+x__g_4_0_0_                                         1 	(obj:0)
+x__g_4_1_7_                                         4 	(obj:0)
+x__x_4_1_                                           7 	(obj:0)
+x__g_4_2_7_                                         6 	(obj:0)
+x__x_4_2_                                           7 	(obj:0)
+x__g_4_3_7_                                         4 	(obj:0)
+x__x_4_3_                                           7 	(obj:0)
+x__g_4_4_0_                         0.857142857142857 	(obj:0)
+x__g_4_4_7_                         0.142857142857143 	(obj:0)

@@ -1,0 +1,318 @@
+#!/usr/bin/env python3
+# Attempt at average bounds on circuit size, for large random sets of cliques.
+# FIXME
+# - in level constraints, the expected value variables should include all
+#   functions with <= that number of vertices.
+# - use argparse
+# - compute "canonical" solution (first finding the minimum for the objective
+#   function, then finding a solution with the minimum total expected number of
+#   gates, which has the same value for the objective function).
+
+import argparse
+import fractions
+import itertools
+import math
+import pdb
+import sys
+
+import numpy as np
+import pandas
+import scipy.special
+import scipy.stats
+
+import gate_basis
+import scip_helper
+
+sys.path.append("..")
+
+import hypergraph_counter
+
+# Wrapper for comb(), with exact arithmetic.
+def comb(n, k):
+    return scipy.special.comb(n, k, exact=True)
+
+# Hypergeometric distribution, returning an exact fractions.fraction .
+def hyperg_frac(N, K, n, k):
+    # based on https://en.wikipedia.org/wiki/Hypergeometric_distribution
+    # note that we don't try to optimize this
+    return fractions.Fraction(
+        comb(K, k) * comb(N-K, n-k),
+        comb(N, n))
+
+class LpVertexZeroing:
+    """Attempt at bound by zeroing out vertices.
+    """
+
+    def __init__(self, n, k, max_gates):
+        """Constructor gets graph info, and sets up variable names.
+
+        This will have several groups of variables:
+        - Tuples of the form ("g", v, c, gates) where:
+            - `v` is as above
+            - `c` is as above
+            - `gates` is the number of gates
+            - Each variable will be the number of sets of cliques
+              (with `c` cliques and _exactly_ `v` vertices), with smallest
+              circuit having exactly `gates` gates.
+        - Tuples of the form ("v", v, c) where:
+            - `v` is the number of vertices, with k <= v <= n
+            - `c` is the number of cliques, with 0 <= c <= {n choose v}
+            - Each variable will be the expected number of gates in
+            the sets of cliques of size `c`, using _exactly_ `v` vertices.
+        - Tuples of the form ("u", v, c) which are like "v", but for
+          the case where the sets of cliques use _up to_ `v` vertices.
+
+        n: number of vertices in the graph
+        k: number of vertices in a clique (>= 3)
+        max_gates: maximum number of gates to include
+        """
+        self.n = n
+        self.k = k
+        if k < 3:
+            raise ValueError('k must be >= 3')
+        self.max_gates = max_gates
+        # number of possible cliques (in the k-uniform hypergraph on n vertices)
+        self.num_possible_cliques = comb(n, k)
+        
+        # counts of hypergraphs with exactly some number of vertices
+        self.hc = hypergraph_counter.HypergraphCounter(self.n, self.k)
+        self.hypergraph_counts = self.hc.count_hypergraphs_exact_vertices()
+
+        # Variables for expected number of gates; initially just the 0-clique case.
+        self.expected_num_gates_vars = [("v", k-1, 0), ("u", k-1, 0)]
+        # Variables for counts of numbers of functions (for which we don't
+        # include the 0-clique case).
+        self.num_gates_dist_vars = []
+        for v in range(k, n+1):
+            for c in range(comb(v, k) + 1):
+                self.expected_num_gates_vars += [("v", v, c), ("u", v, c)]
+                self.num_gates_dist_vars += [("g", v, c, g) for g in range(max_gates+1)]
+
+        # wrapper for LP solver
+        self.lp = scip_helper.SCIP_Helper(
+            self.expected_num_gates_vars + self.num_gates_dist_vars)
+
+        # self.basis = gate_basis.UnboundedFanInNandBasis()
+        self.basis = gate_basis.TwoInputNandBasis()
+
+    def add_averaging_constraints(self):
+        """Adds averaging constraints.
+
+        These include:
+        - constraining the total number of functions in each group
+          (from `self.hypergraph_counts`)
+        - connecting `v`, the expected number of gates in each group 
+          and `g`, the number of functions with a given number of gates
+        - connecting `v` and `u` (since `u` averages together several
+          levels of `v`)
+        """
+        # loop through the groups of functions
+        for v in range(self.k, self.n+1):
+            num_possible_cliques = comb(v, self.k)
+            for c in range(num_possible_cliques+1):
+                num_functions = self.hypergraph_counts[v][c]
+                # add constraint that these sum to the number of functions
+                self.lp.add_constraint(
+                    [(("g", v, c, i), 1) for i in range(self.max_gates+1)],
+                    '=', num_functions)
+                # add constraint defining expected number of gates
+                A = [(("g", v, c, i), i)
+                    for i in range(1, self.max_gates+1)]
+                self.lp.add_constraint(A + [(("u", v, c), -num_functions)],
+                    '=', 0)
+
+        # add constraints connecting "u" and "v"
+        for max_v in range(self.k, self.n+1):
+            num_possible_cliques = comb(max_v, self.k)
+            for c in range(num_possible_cliques + 1):
+                A = []
+                total_functions = 0
+                for v in range(self.k, max_v+1):
+                    if c <= self.hypergraph_counts[v].shape[0]-1:
+                        num_functions = self.hypergraph_counts[v][c]
+                        A.append((("v", v, c), num_functions))
+                        total_functions += num_functions
+                self.lp.add_constraint([(("u", max_v, c), -total_functions)] + A, '=', 0)
+
+        # add constraints for the "zero" functions
+        self.lp.add_constraint([(("u", k-1, 0), 1)], "=", 1)
+        self.lp.add_constraint([(("v", k-1, 0), 1)], "=", 1)
+
+    def add_counting_bound(self):
+        """Adds counting bounds, for a given number of gates.
+
+        This is an upper bound on the number of functions with
+        some number of gates. (Hopefully, this will force some functions
+        to need a larger number of gates, giving a lower bound.)
+
+        Note that many sets of cliques will be the same, up to isomorphism;
+        we count these as separate. (This is because, for instance, if n=6,
+        if we zero out one vertex, the remaining cliques count as distinct circuits,
+        even though they're the same, up to edge labelling.)
+        """
+        num_functions = self.basis.num_functions(self.num_possible_cliques, self.max_gates)
+        # note that this doesn't include the empty set of cliques
+        for g in range(1, self.max_gates+1):
+            self.lp.add_constraint([(("g", v, c, g), 1)
+                for (t, v, c) in self.expected_num_gates_vars
+                if t == "u"],
+                '<=', num_functions[g]-1)
+
+    def add_vertex_zeroing_constraints_1(self):
+        """Adds constraints from zeroing out vertices.
+
+        Deprecated in favor of `add_vertex_zeroing_constraints`
+        (which hopefully will be simpler).
+
+        The sets of cliques are:
+        C: the cliques in the larger set, using (up to) k+1 vertices
+        B: the cliques zeroed by feeding in zeros to a vertex of C
+        A: the cliques which are left over
+        """
+        # loop through number of vertices in larger graph
+        for v in range(self.k+1, self.n+1):
+            # loop through number of cliques in that graph
+            # (note that the trivial bound when C_size==0 is implied by the
+            # overall "box" constraints on all the variables)
+            for C_size in range(1, comb(v, k)+1):
+                # Maximum number of cliques we might hit,
+                # _assuming that only v vertices are present_.
+                # (If we pick a vertex randomly, and miss all of the
+                # cliques, we get to "re-roll".)
+                num_cliques_hitting_vertex = comb(v-1, k-1)
+                # Bounds on number of cliques zeroed.
+                # The min is at least 1 (assuming we can "re-roll"), and no
+                # more than the difference between the number of cliques in the
+                # larger set, and the number left over.
+                min_zeroed = max(1, C_size - comb(v-1, k))
+                # The max is limited by the current number of vertices (and how
+                # many cliques hit one vertex), and the number of cliques.
+                max_zeroed = min(num_cliques_hitting_vertex, C_size)
+                # the range of possible number of cliques zeroed ...
+                B_size = np.arange(min_zeroed, max_zeroed+1)
+                # ... and the number left over
+                A_size = C_size - B_size
+                # the probability of some number of cliques being hit
+                # (again, assuming that only v vertices are "in use" by
+                # the hyperedges)
+                def p_zonk(x):
+                    return hyperg_frac(comb(v, k),
+                        C_size,
+                        num_cliques_hitting_vertex,
+                        x)
+                # the probability of at least one clique being hit
+                # (if this happens, we get to "re-roll", so we assume it doesn't)
+                # Note that since this we assume at least one clique is hit,
+                # we normalize by this probability.
+                p_at_least_one_hit = 1 - p_zonk(0)
+                # ??? does this give the same answer?
+                # p_at_least_one_hit = np.array([p_zonk(z1) for z1 in z]).sum()
+
+                # The constraint on the rank of the v-vertex set in C (which is "hit")
+                # is the expected rank of what's left in A, after zonking,
+                # plus one (since we must have zonked at least one NAND gate)
+                A = [(("u", v, C_size), 1)]
+                A += [(("u", v-1, C_size-j), -p_zonk(j) / p_at_least_one_hit)
+                    for j in B_size]
+                # pdb.set_trace()
+                # We presumably "hit" a clique; depending on the basis, this
+                # may mean that we also "knocked out" a gate.
+                self.lp.add_constraint(A, '>', self.basis.zonked_gates())
+
+    def add_vertex_zeroing_constraints(self):
+        """Adds constraints from zeroing out vertices.
+        """
+        # loop through number of vertices in larger graph
+        for v in range(self.k+1, self.n+1):
+            max_cliques_before_zeroing = comb(v, k)
+            # max number of cliques that can be "hit" by a vertex
+            max_cliques_hit_by_vertex = comb(v-1, k-1)
+            # loop through number of cliques in that graph
+            for num_cliques_in_set in range(1, max_cliques_before_zeroing+1):
+                # possible number of cliques "hit"
+                max_num_cliques_hit = min(
+                    max_cliques_hit_by_vertex,
+                    num_cliques_in_set)
+                # probability of each number of cliques being "hit"
+                # (these may be zero; the LP should ignore those terms)
+                p_hit = np.array([hyperg_frac(max_cliques_before_zeroing,
+                    num_cliques_in_set,
+                    max_cliques_hit_by_vertex,
+                    h)
+                    for h in range(max_num_cliques_hit+1)])
+                # we assume that at least one clique is hit (if we "miss"
+                # all the cliques, we get to "re-roll")
+                p_hit[0] = 0
+                p_hit /= p_hit.sum()
+                # the coefficients of the constraint             
+                A = [(("u", v, num_cliques_in_set), 1.)]
+                A += [(("u", v-1, num_cliques_in_set-h), -p_hit[h])
+                    for h in range(1, max_num_cliques_hit+1)]
+                # FIXME support using a different gate basis?
+                # the lower bound: we hit at least one gate
+                # (using the unbounded-fan-in NAND basis)
+                self.lp.add_constraint(A, '>', 1.0)
+                # FIXME add upper bound?
+                # pdb.set_trace()
+
+
+    def get_all_bounds(self):
+        """Gets bounds for each possible number of cliques.
+
+        This is the bounds for each possible number of cliques,
+        in the scenario that the number of gates for CLIQUE (or functions
+        detecting many cliques) is minimized.
+        """
+        # solve, minimizing number of gates for CLIQUE
+        r = self.lp.solve(("u", self.n, self.num_possible_cliques))
+        if not r:
+            return None
+        # for now, we only get bounds for "expected number of gates"
+        # for each number of cliques
+        n_cliques = range(1, self.num_possible_cliques+1)
+        bounds = [r[("u", self.n, c)] for c in n_cliques]
+        return pandas.DataFrame({
+                'Num. vertices': self.n,
+                'Num. cliques': n_cliques,
+                'Min. gates': bounds})
+        # FIXME return value of objective function?
+
+def get_bounds(n, k, max_gates, constraints_label,
+        use_counting_bound, use_vertex_zeroing, use_upper_bound):
+    """Gets bounds with some set of constraints.
+
+    n, k, max_gates: problem size
+    constraints_label: label to use for this set of constraints
+    use_counting_bound, use_vertex_zeroing, use_upper_bound: whether to use
+        each of these constraints
+    """  
+    # ??? track resource usage?
+    sys.stderr.write(f'[bounding with n={n}, k={k}, max_gates={max_gates}, label={constraints_label}]\n')
+    bound = LpVertexZeroing(n, k, max_gates)
+    bound.add_averaging_constraints()
+    if use_counting_bound:
+        bound.add_counting_bound()
+    if use_vertex_zeroing:
+        bound.add_vertex_zeroing_constraints_1()
+    if use_upper_bound:
+        # FIXME this doesn't yet do anything
+        bound.add_upper_bound()
+    b = bound.get_all_bounds()
+    b['Constraints'] = constraints_label
+    return b.iloc[:,[3,0,1,2]]
+
+if __name__ == '__main__':
+    n = int(sys.argv[1])
+    k = int(sys.argv[2])
+    max_gates = int(sys.argv[3])
+    min_cliques = int(sys.argv[4])
+    # output_file = sys.argv[3]
+
+    bounds = pandas.concat([
+        get_bounds(n, k, max_gates, 'Counting', True, False, False),
+        get_bounds(n, k, max_gates, 'Zeroing', False, True, False),
+#        get_bounds(n, k, max_gates, 'Counting and zeroing', True, True, False),
+#        get_bounds(n, k, max_gates, 'All', True, True, True)
+    ])
+    bounds.to_csv(sys.stdout, index=False)
+

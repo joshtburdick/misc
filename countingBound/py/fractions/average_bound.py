@@ -158,11 +158,8 @@ class LpVertexZeroing:
                 if t == "u"],
                 '<=', num_functions[g]-1)
 
-    def add_vertex_zeroing_constraints_1(self):
+    def add_vertex_zeroing_constraints(self, use_lower_bound, use_upper_bound):
         """Adds constraints from zeroing out vertices.
-
-        Deprecated in favor of `add_vertex_zeroing_constraints`
-        (which hopefully will be simpler).
 
         The sets of cliques are:
         C: the cliques in the larger set, using (up to) k+1 vertices
@@ -195,66 +192,31 @@ class LpVertexZeroing:
                 # the probability of some number of cliques being hit
                 # (again, assuming that only v vertices are "in use" by
                 # the hyperedges)
-                def p_zonk(x):
-                    return hyperg_frac(comb(v, k),
-                        C_size,
-                        num_cliques_hitting_vertex,
-                        x)
-                # the probability of at least one clique being hit
-                # (if this happens, we get to "re-roll", so we assume it doesn't)
-                # Note that since this we assume at least one clique is hit,
-                # we normalize by this probability.
-                p_at_least_one_hit = 1 - p_zonk(0)
-                # ??? does this give the same answer?
-                # p_at_least_one_hit = np.array([p_zonk(z1) for z1 in z]).sum()
-
-                # The constraint on the rank of the v-vertex set in C (which is "hit")
-                # is the expected rank of what's left in A, after zonking,
-                # plus one (since we must have zonked at least one NAND gate)
-                A = [(("u", v, C_size), 1)]
-                A += [(("u", v-1, C_size-j), -p_zonk(j) / p_at_least_one_hit)
-                    for j in B_size]
-                # pdb.set_trace()
-                # We presumably "hit" a clique; depending on the basis, this
-                # may mean that we also "knocked out" a gate.
-                self.lp.add_constraint(A, '>', self.basis.zonked_gates())
-
-    def add_vertex_zeroing_constraints(self):
-        """Adds constraints from zeroing out vertices.
-        """
-        # loop through number of vertices in larger graph
-        for v in range(self.k+1, self.n+1):
-            max_cliques_before_zeroing = comb(v, k)
-            # max number of cliques that can be "hit" by a vertex
-            max_cliques_hit_by_vertex = comb(v-1, k-1)
-            # loop through number of cliques in that graph
-            for num_cliques_in_set in range(1, max_cliques_before_zeroing+1):
-                # possible number of cliques "hit"
-                max_num_cliques_hit = min(
-                    max_cliques_hit_by_vertex,
-                    num_cliques_in_set)
-                # probability of each number of cliques being "hit"
-                # (these may be zero; the LP should ignore those terms)
-                p_hit = np.array([hyperg_frac(max_cliques_before_zeroing,
-                    num_cliques_in_set,
-                    max_cliques_hit_by_vertex,
+                p_hit = np.array([hyperg_frac(
+                    comb(v, k),
+                    C_size,
+                    num_cliques_hitting_vertex,
                     h)
-                    for h in range(max_num_cliques_hit+1)])
-                # we assume that at least one clique is hit (if we "miss"
-                # all the cliques, we get to "re-roll")
-                p_hit[0] = 0
+                    for h in B_size])
+                # The above calculation omits the possibility of missing all of the cliques.
+                # We argue that we can ignore this possibility (since for a non-empty set of
+                # cliques, there's always _some_ vertex which will hit >= 1 clique).)
+                # Therefore, we normalize this (by dividing by the sum).
                 p_hit /= p_hit.sum()
-                # the coefficients of the constraint             
-                A = [(("u", v, num_cliques_in_set), 1.)]
-                A += [(("u", v-1, num_cliques_in_set-h), -p_hit[h])
-                    for h in range(1, max_num_cliques_hit+1)]
-                # FIXME support using a different gate basis?
-                # the lower bound: we hit at least one gate
-                # (using the unbounded-fan-in NAND basis)
-                self.lp.add_constraint(A, '>', 1.0)
-                # FIXME add upper bound?
+                # These coefficients are the difference between the expected number of gates
+                # in A (before zeroing out a vertex) and C (after zeroing out a vertex).
+                A = [(("u", v, C_size), 1)]
+                A += [(("u", v-1, C_size[i]), -p_hit[i]) for i in range(B_size.size)]
                 # pdb.set_trace()
-
+                # Lower bound: we "hit" a clique, and so we must have zonked at least
+                # one NAND gate. (For other bases, this might not be guaranteed...)
+                if use_lower_bound:self.lp.add_constraint(A, ">", self.basis.zonked_gates())
+                # Upper bound: The number of gates "zonked" (in B) is no more than
+                # the number of cliques "hit" (in B), since we could have implemented
+                # C by taking the circuit for A, and "patching" it to include the cliques in B,
+                # (Note that this only holds for the unbounded-fan-in NAND gate basis.)
+                if use_upper_bound:
+                    self.lp.add_constraint(A, "<", (p_hit * B_size).sum())
 
     def get_all_bounds(self):
         """Gets bounds for each possible number of cliques.
@@ -283,8 +245,10 @@ def get_bounds(n, k, max_gates, constraints_label,
 
     n, k, max_gates: problem size
     constraints_label: label to use for this set of constraints
-    use_counting_bound, use_vertex_zeroing, use_upper_bound: whether to use
-        each of these constraints
+    use_counting_bound, use_zeroing_lower_bound, use_zeroing_upper_bound:
+        whether to use each of these constraints
+    Returns:
+        A pandas DataFrame with columns ['Num. vertices', 'Num. cliques', 'Min. gates']
     """  
     # ??? track resource usage?
     sys.stderr.write(f'[bounding with n={n}, k={k}, max_gates={max_gates}, label={constraints_label}]\n')
@@ -310,7 +274,7 @@ if __name__ == '__main__':
 
     bounds = pandas.concat([
         get_bounds(n, k, max_gates, 'Counting', True, False, False),
-        get_bounds(n, k, max_gates, 'Zeroing', False, True, False),
+#        get_bounds(n, k, max_gates, 'Zeroing', False, True, False),
 #        get_bounds(n, k, max_gates, 'Counting and zeroing', True, True, False),
 #        get_bounds(n, k, max_gates, 'All', True, True, True)
     ])

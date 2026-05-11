@@ -86,8 +86,10 @@ class LpVertexZeroing:
         for v in range(k, n+1):
             for c in range(comb(v, k) + 1):
                 self.expected_num_gates_vars += [("v", v, c), ("u", v, c)]
-                self.num_gates_dist_vars += [("g", v, c, g) for g in range(max_gates+1)]
-
+                self.num_gates_dist_vars += [("g", v, c, g) for g in range(1, max_gates+1)]
+        # presumably, since these counts start at 1 gste, we don't need to constrain
+        # the expected number of gates to be >= 1
+        
         # wrapper for LP solver
         self.lp = scip_helper.SCIP_Helper(
             self.expected_num_gates_vars + self.num_gates_dist_vars)
@@ -113,7 +115,7 @@ class LpVertexZeroing:
                 num_functions = self.hypergraph_counts[v][c]
                 # add constraint that these sum to the number of functions
                 self.lp.add_constraint(
-                    [(("g", v, c, i), 1) for i in range(self.max_gates+1)],
+                    [(("g", v, c, i), 1) for i in range(1, self.max_gates+1)],
                     '=', num_functions)
                 # add constraint defining expected number of gates
                 A = [(("g", v, c, i), i)
@@ -135,8 +137,8 @@ class LpVertexZeroing:
                 self.lp.add_constraint([(("u", max_v, c), -total_functions)] + A, '=', 0)
 
         # add constraints for the "zero" functions
-        self.lp.add_constraint([(("u", k-1, 0), 1)], "=", 1)
-        self.lp.add_constraint([(("v", k-1, 0), 1)], "=", 1)
+        self.lp.add_constraint([(("u", self.k-1, 0), 1)], "=", 1)
+        self.lp.add_constraint([(("v", self.k-1, 0), 1)], "=", 1)
 
     def add_counting_bound(self):
         """Adds counting bounds, for a given number of gates.
@@ -155,7 +157,7 @@ class LpVertexZeroing:
         for g in range(1, self.max_gates+1):
             self.lp.add_constraint([(("g", v, c, g), 1)
                 for (t, v, c) in self.expected_num_gates_vars
-                if t == "u"],
+                if t == "u" and v >= self.k],
                 '<=', num_functions[g]-1)
 
     def add_vertex_zeroing_constraints(self, use_lower_bound, use_upper_bound):
@@ -265,16 +267,22 @@ def get_bounds(n, k, max_gates, constraints_label,
     b['Constraints'] = constraints_label
     return b.iloc[:,[3,0,1,2]]
 
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('n', type=int, help='number of vertices')
+    parser.add_argument('k', type=int, help='size of cliques')
+    parser.add_argument('max_gates', type=int, help='maximum number of gates')
+    parser.add_argument('band_width', type=int, help='width of highest possible number of cliques to minimize')
+    return parser.parse_args()
+
 if __name__ == '__main__':
-    n = int(sys.argv[1])
-    k = int(sys.argv[2])
-    max_gates = int(sys.argv[3])
-    min_cliques = int(sys.argv[4])
+    args = parse_args() 
     # output_file = sys.argv[3]
 
     bounds = pandas.concat([
-        get_bounds(n, k, max_gates, 'Counting', True, False, False),
-#        get_bounds(n, k, max_gates, 'Zeroing', False, True, False),
+        get_bounds(args.n, args.k, args.max_gates, 'Counting', True, False, False),
+#        get_bounds(args.n, args.k, args.max_gates, 'Counting, zeroing lower bound', True, True, False),
+
 #        get_bounds(n, k, max_gates, 'Counting and zeroing', True, True, False),
 #        get_bounds(n, k, max_gates, 'All', True, True, True)
     ])

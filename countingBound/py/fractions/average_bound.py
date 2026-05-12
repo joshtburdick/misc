@@ -21,7 +21,7 @@ import scipy.special
 import scipy.stats
 
 import gate_basis
-import scip_helper
+import pulp_helper
 
 sys.path.append("..")
 
@@ -91,7 +91,7 @@ class LpVertexZeroing:
         # the expected number of gates to be >= 1
         
         # wrapper for LP solver
-        self.lp = scip_helper.SCIP_Helper(
+        self.lp = pulp_helper.PuLP_Helper(
             self.expected_num_gates_vars + self.num_gates_dist_vars)
 
         # self.basis = gate_basis.UnboundedFanInNandBasis()
@@ -173,17 +173,17 @@ class LpVertexZeroing:
             # loop through number of cliques in that graph
             # (note that the trivial bound when C_size==0 is implied by the
             # overall "box" constraints on all the variables)
-            for C_size in range(1, comb(v, k)+1):
+            for C_size in range(1, comb(v, self.k)+1):
                 # Maximum number of cliques we might hit,
                 # _assuming that only v vertices are present_.
                 # (If we pick a vertex randomly, and miss all of the
                 # cliques, we get to "re-roll".)
-                num_cliques_hitting_vertex = comb(v-1, k-1)
+                num_cliques_hitting_vertex = comb(v-1, self.k-1)
                 # Bounds on number of cliques zeroed.
                 # The min is at least 1 (assuming we can "re-roll"), and no
                 # more than the difference between the number of cliques in the
                 # larger set, and the number left over.
-                min_zeroed = max(1, C_size - comb(v-1, k))
+                min_zeroed = max(1, C_size - comb(v-1, self.k))
                 # The max is limited by the current number of vertices (and how
                 # many cliques hit one vertex), and the number of cliques.
                 max_zeroed = min(num_cliques_hitting_vertex, C_size)
@@ -195,7 +195,7 @@ class LpVertexZeroing:
                 # (again, assuming that only v vertices are "in use" by
                 # the hyperedges)
                 p_hit = np.array([hyperg_frac(
-                    comb(v, k),
+                    comb(v, self.k),
                     C_size,
                     num_cliques_hitting_vertex,
                     h)
@@ -208,17 +208,18 @@ class LpVertexZeroing:
                 # These coefficients are the difference between the expected number of gates
                 # in A (before zeroing out a vertex) and C (after zeroing out a vertex).
                 A = [(("u", v, C_size), 1)]
-                A += [(("u", v-1, C_size[i]), -p_hit[i]) for i in range(B_size.size)]
+                A += [(("u", v-1, B_size[i]), -p_hit[i]) for i in range(1, B_size.size)]
                 # pdb.set_trace()
                 # Lower bound: we "hit" a clique, and so we must have zonked at least
                 # one NAND gate. (For other bases, this might not be guaranteed...)
-                if use_lower_bound:self.lp.add_constraint(A, ">", self.basis.zonked_gates())
+                if use_lower_bound:
+                    self.lp.add_constraint(A, ">=", self.basis.zonked_gates())
                 # Upper bound: The number of gates "zonked" (in B) is no more than
                 # the number of cliques "hit" (in B), since we could have implemented
                 # C by taking the circuit for A, and "patching" it to include the cliques in B,
                 # (Note that this only holds for the unbounded-fan-in NAND gate basis.)
                 if use_upper_bound:
-                    self.lp.add_constraint(A, "<", (p_hit * B_size).sum())
+                    self.lp.add_constraint(A, "<=", (p_hit * B_size).sum())
 
     def get_all_bounds(self):
         """Gets bounds for each possible number of cliques.
@@ -242,7 +243,7 @@ class LpVertexZeroing:
         # FIXME return value of objective function?
 
 def get_bounds(n, k, max_gates, constraints_label,
-        use_counting_bound, use_vertex_zeroing, use_upper_bound):
+        use_counting_bound, use_zeroing_lower_bound, use_zeroing_upper_bound):
     """Gets bounds with some set of constraints.
 
     n, k, max_gates: problem size
@@ -258,11 +259,8 @@ def get_bounds(n, k, max_gates, constraints_label,
     bound.add_averaging_constraints()
     if use_counting_bound:
         bound.add_counting_bound()
-    if use_vertex_zeroing:
-        bound.add_vertex_zeroing_constraints_1()
-    if use_upper_bound:
-        # FIXME this doesn't yet do anything
-        bound.add_upper_bound()
+    bound.add_vertex_zeroing_constraints(use_zeroing_lower_bound, use_zeroing_upper_bound)
+
     b = bound.get_all_bounds()
     b['Constraints'] = constraints_label
     return b.iloc[:,[3,0,1,2]]

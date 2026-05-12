@@ -79,7 +79,11 @@ class LpVertexZeroing:
         self.hypergraph_counts = self.hc.count_hypergraphs_exact_vertices()
 
         # Variables for expected number of gates; initially just the 0-clique case.
-        self.expected_num_gates_vars = [("v", k-1, 0), ("u", k-1, 0)]
+        self.expected_num_gates_vars = []
+        for v in range(k-1, n+1):
+            self.expected_num_gates_vars += [("v", v, 0), ("u", v, 0)]
+
+        # [('v', k-1, 0), ('u', k-1, 0)]
         # Variables for counts of numbers of functions (for which we don't
         # include the 0-clique case).
         self.num_gates_dist_vars = []
@@ -136,9 +140,10 @@ class LpVertexZeroing:
                         total_functions += num_functions
                 self.lp.add_constraint([(("u", max_v, c), -total_functions)] + A, '=', 0)
 
-        # add constraints for the "zero" functions
-        self.lp.add_constraint([(("u", self.k-1, 0), 1)], "=", 1)
-        self.lp.add_constraint([(("v", self.k-1, 0), 1)], "=", 1)
+        # add constraints for sets of zero cliques
+        for v in range(self.k-1, self.n+1):
+            self.lp.add_constraint([(("u", v, 0), 1)], "=", 1)
+            self.lp.add_constraint([(("v", v, 0), 1)], "=", 1)
 
     def add_counting_bound(self):
         """Adds counting bounds, for a given number of gates.
@@ -208,7 +213,7 @@ class LpVertexZeroing:
                 # These coefficients are the difference between the expected number of gates
                 # in A (before zeroing out a vertex) and C (after zeroing out a vertex).
                 A = [(("u", v, C_size), 1)]
-                A += [(("u", v-1, B_size[i]), -p_hit[i]) for i in range(1, B_size.size)]
+                A += [(("u", v-1, A_size[i]), -p_hit[i]) for i in range(1, B_size.size)]
                 # pdb.set_trace()
                 # Lower bound: we "hit" a clique, and so we must have zonked at least
                 # one NAND gate. (For other bases, this might not be guaranteed...)
@@ -218,8 +223,10 @@ class LpVertexZeroing:
                 # the number of cliques "hit" (in B), since we could have implemented
                 # C by taking the circuit for A, and "patching" it to include the cliques in B,
                 # (Note that this only holds for the unbounded-fan-in NAND gate basis.)
+                upper_bound = (p_hit * B_size).sum() + 1
+                print(f"v={v}, C_size={C_size}, B_size={B_size}, p_hit={p_hit}, upper_bound={upper_bound}")
                 if use_upper_bound:
-                    self.lp.add_constraint(A, "<=", (p_hit * B_size).sum())
+                    self.lp.add_constraint(A, "<=", upper_bound)
 
     def get_all_bounds(self):
         """Gets bounds for each possible number of cliques.
@@ -234,7 +241,7 @@ class LpVertexZeroing:
             return None
         # for now, we only get bounds for "expected number of gates"
         # for each number of cliques
-        n_cliques = range(1, self.num_possible_cliques+1)
+        n_cliques = range(self.num_possible_cliques+1)
         bounds = [r[("u", self.n, c)] for c in n_cliques]
         return pandas.DataFrame({
                 'Num. vertices': self.n,
@@ -279,10 +286,8 @@ if __name__ == '__main__':
 
     bounds = pandas.concat([
         get_bounds(args.n, args.k, args.max_gates, 'Counting', True, False, False),
-#        get_bounds(args.n, args.k, args.max_gates, 'Counting, zeroing lower bound', True, True, False),
-
-#        get_bounds(n, k, max_gates, 'Counting and zeroing', True, True, False),
-#        get_bounds(n, k, max_gates, 'All', True, True, True)
+        get_bounds(args.n, args.k, args.max_gates, 'Counting, zeroing lower', True, True, False),
+        get_bounds(args.n, args.k, args.max_gates, 'Counting, zeroing upper', True, False, True),
+        get_bounds(args.n, args.k, args.max_gates, 'Counting, zeroing lower and upper', True, True, True),
     ])
     bounds.to_csv(sys.stdout, index=False)
-

@@ -134,7 +134,7 @@ class LpVertexZeroing:
                 A = []
                 total_functions = 0
                 for v in range(self.k, max_v+1):
-                    if c <= self.hypergraph_counts[v].shape[0]-1:
+                    if c < self.hypergraph_counts[v].shape[0]:
                         num_functions = self.hypergraph_counts[v][c]
                         A.append((("v", v, c), num_functions))
                         total_functions += num_functions
@@ -213,7 +213,7 @@ class LpVertexZeroing:
                 # These coefficients are the difference between the expected number of gates
                 # in A (before zeroing out a vertex) and C (after zeroing out a vertex).
                 A = [(("u", v, C_size), 1)]
-                A += [(("u", v-1, A_size[i]), -p_hit[i]) for i in range(1, B_size.size)]
+                A += [(("u", v-1, A_size[i]), -p_hit[i]) for i in range(B_size.size)]
                 # pdb.set_trace()
                 # Lower bound: we "hit" a clique, and so we must have zonked at least
                 # one NAND gate. (For other bases, this might not be guaranteed...)
@@ -223,7 +223,7 @@ class LpVertexZeroing:
                 # the number of cliques "hit" (in B), since we could have implemented
                 # C by taking the circuit for A, and "patching" it to include the cliques in B,
                 # (Note that this only holds for the unbounded-fan-in NAND gate basis.)
-                upper_bound = (p_hit * B_size).sum() + 1
+                upper_bound = (p_hit * B_size).sum()
                 print(f"v={v}, C_size={C_size}, B_size={B_size}, p_hit={p_hit}, upper_bound={upper_bound}")
                 if use_upper_bound:
                     self.lp.add_constraint(A, "<=", upper_bound)

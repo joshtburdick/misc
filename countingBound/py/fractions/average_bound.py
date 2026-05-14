@@ -228,15 +228,24 @@ class LpVertexZeroing:
                 if use_upper_bound:
                     self.lp.add_constraint(A, "<=", upper_bound)
 
-    def get_all_bounds(self):
+    def get_all_bounds(self, band_width):
         """Gets bounds for each possible number of cliques.
 
         This is the bounds for each possible number of cliques,
         in the scenario that the number of gates for CLIQUE (or functions
         detecting many cliques) is minimized.
         """
-        # solve, minimizing number of gates for CLIQUE
-        r = self.lp.solve(("u", self.n, self.num_possible_cliques))
+        # construct objective function, minimizing gates for
+        # the band of highest clique counts, up to "band_width" below
+        num_functions = np.array([
+            comb(self.num_possible_cliques, self.k-i)
+            for i in range(band_width)],
+            dtype=fractions.Fraction)
+        p_functions = num_functions / (num_functions.sum() + 1)
+        objective = {("u", self.n, self.num_possible_cliques - i): p_functions[i]
+            for i in range(band_width)}
+        r = self.lp.solve_with_objective(objective)
+        
         if not r:
             return None
         # for now, we only get bounds for "expected number of gates"
@@ -249,11 +258,12 @@ class LpVertexZeroing:
                 'Min. gates': bounds})
         # FIXME return value of objective function?
 
-def get_bounds(n, k, max_gates, constraints_label,
-        use_counting_bound, use_zeroing_lower_bound, use_zeroing_upper_bound):
+def get_bounds(n, k, max_gates, band_width, constraints_label,
+    use_counting_bound, use_zeroing_lower_bound, use_zeroing_upper_bound):
     """Gets bounds with some set of constraints.
 
     n, k, max_gates: problem size
+    band_width: width of highest possible number of cliques to minimize
     constraints_label: label to use for this set of constraints
     use_counting_bound, use_zeroing_lower_bound, use_zeroing_upper_bound:
         whether to use each of these constraints
@@ -268,7 +278,7 @@ def get_bounds(n, k, max_gates, constraints_label,
         bound.add_counting_bound()
     bound.add_vertex_zeroing_constraints(use_zeroing_lower_bound, use_zeroing_upper_bound)
 
-    b = bound.get_all_bounds()
+    b = bound.get_all_bounds(band_width)
     b['Constraints'] = constraints_label
     return b.iloc[:,[3,0,1,2]]
 
@@ -285,9 +295,9 @@ if __name__ == '__main__':
     # output_file = sys.argv[3]
 
     bounds = pandas.concat([
-        get_bounds(args.n, args.k, args.max_gates, 'Counting', True, False, False),
-        get_bounds(args.n, args.k, args.max_gates, 'Counting, zeroing lower', True, True, False),
-        get_bounds(args.n, args.k, args.max_gates, 'Counting, zeroing upper', True, False, True),
-        get_bounds(args.n, args.k, args.max_gates, 'Counting, zeroing lower and upper', True, True, True),
+        get_bounds(args.n, args.k, args.max_gates, args.band_width, 'Counting', True, False, False),
+        get_bounds(args.n, args.k, args.max_gates, args.band_width, 'Counting, zeroing lower', True, True, False),
+        get_bounds(args.n, args.k, args.max_gates, args.band_width, 'Counting, zeroing upper', True, False, True),
+        get_bounds(args.n, args.k, args.max_gates, args.band_width, 'Counting, zeroing lower and upper', True, True, True),
     ])
     bounds.to_csv(sys.stdout, index=False)

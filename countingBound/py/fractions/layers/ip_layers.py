@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
 # LP bound for clique parity, with layers.
+# FIXME
+# - The "zeroing" bound should use
+#   "sets with _up to_ some number of vertices";
+#   add variables for that, and change the bound
+#   to be slightly < 1
+# - Change levels to be "low" and "high"?
+# - Allow switching basis?
 
 import argparse
 import fractions

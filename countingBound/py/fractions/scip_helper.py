@@ -22,14 +22,16 @@ import numpy as np
 import scipy.optimize
 import scipy.sparse
 
+
 class SCIP_Helper:
     """Wrapper class for SCIP solver, providing convenient variable names.
 
     Also deals with fractional coefficients.
     """
+
     def __init__(self, var_names):
-        """ Constructor.
-    
+        """Constructor.
+
         var_names: names of the variables
         """
         # mapping from variable name (which needn't be a string)
@@ -50,7 +52,7 @@ class SCIP_Helper:
     def as_int(self, x):
         """Utility converting a fraction to an integer."""
         x = fractions.Fraction(x)
-        if x.denominator==1:
+        if x.denominator == 1:
             return x.numerator
         return None
 
@@ -70,15 +72,15 @@ class SCIP_Helper:
         if op not in ["<", "<=", "=", ">=", ">"]:
             raise ValueError(f"unknown operator: {op}")
         # get least common multiple of denominators
-        coefs = [fractions.Fraction(a) for (_,a) in A]
-        denominators = [fractions.Fraction(x).denominator 
-            for x in coefs + [b]]
+        coefs = [fractions.Fraction(a) for (_, a) in A]
+        denominators = [fractions.Fraction(x).denominator for x in coefs + [b]]
         m = functools.reduce(math.lcm, denominators)
         # get constraint, as strings, with fractions cancelled out by
         # multiplying by LCM
-        A_as_strings = [str(self.as_int(m*a)) + " " + self.var_name[name]
-                        for (name, a) in A]
-        constraint = " + ".join(A_as_strings) + " " + op + " " + str(self.as_int(m*b))
+        A_as_strings = [
+            str(self.as_int(m * a)) + " " + self.var_name[name] for (name, a) in A
+        ]
+        constraint = " + ".join(A_as_strings) + " " + op + " " + str(self.as_int(m * b))
         # print(constraint)
         self.constraints.append(constraint)
 
@@ -95,10 +97,11 @@ class SCIP_Helper:
             # x__E_10_          1   (obj:1)
             # this dict will be indexed by "parseable variable name"
             x_by_parseable_name = collections.defaultdict(float)
-            for line in f: 
+            for line in f:
                 m = re.match(r"(\w+)\s+(\S+) \t", line)
                 x_by_parseable_name[m.group(1)] = float(m.group(2))
-            x_by_name = {name: x_by_parseable_name[parseable_name]
+            x_by_name = {
+                name: x_by_parseable_name[parseable_name]
                 for name, parseable_name in self.var_name.items()
                 if parseable_name in x_by_parseable_name
             }
@@ -123,7 +126,7 @@ class SCIP_Helper:
         FIXME add option to make all variables integers?
         """
         # construct the linear program
-        newline = "\n"     # ??? possibly python3.8 workaround?
+        newline = "\n"  # ??? possibly python3.8 workaround?
         lp_string = f"""
 Minimize
  obj: {self.var_name[var_to_minimize]}
@@ -146,17 +149,15 @@ write solution bound_opt.txt
 quit
 """
             scip_output = subprocess.check_output(["scip"], text=True, input=script)
-            return self.parse_scip_output("bound_opt.txt") 
+            return self.parse_scip_output("bound_opt.txt")
 
             ##### rest of this goes away...
             # parse line of the syntax, e.g.:
             # Primal Bound     : +1.22500000000000e+02   (in run 1, after 1 nodes, 0.02 seconds, depth 2, found by <locks>)
-#            m = re.search(".*Primal Bound\s+:[ ]*([^ ]+)[ ]+\(in run", scip_output)
-#  First Solution   : +0.00000000000000e+00   (in run 1, after 0 nodes, 0.01 seconds, depth 0, found by <relaxation>)
+            #            m = re.search(".*Primal Bound\s+:[ ]*([^ ]+)[ ]+\(in run", scip_output)
+            #  First Solution   : +0.00000000000000e+00   (in run 1, after 0 nodes, 0.01 seconds, depth 0, found by <relaxation>)
             m = re.search(r".*First Solution\s*:[ ]*([^ ]+)[ ]*\(in run.*", scip_output)
             if not m:
                 return None
             bound = float(m.group(1))
         return bound
-
-

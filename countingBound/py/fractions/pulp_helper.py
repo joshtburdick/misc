@@ -15,12 +15,13 @@ import numpy as np
 
 import pulp
 
+
 class PuLP_Helper:
-    """Wrapper class for PuLP solver, providing convenient variable names.
-    """
+    """Wrapper class for PuLP solver, providing convenient variable names."""
+
     def __init__(self, var_names):
-        """ Constructor.
-    
+        """Constructor.
+
         var_names: names of the variables
         """
         # mapping from variable name (which needn't be a string)
@@ -28,8 +29,7 @@ class PuLP_Helper:
         self.vars = {}
         # the variables are assumed to all be >= 0
         for v in var_names:
-            self.vars[v] = pulp.LpVariable(
-                self.get_parseable_name(v), 0)
+            self.vars[v] = pulp.LpVariable(self.get_parseable_name(v), 0)
         # the problem
         self.prob = pulp.LpProblem("sidsproblem", pulp.LpMinimize)
 
@@ -56,15 +56,12 @@ class PuLP_Helper:
         if op not in ["<=", "=", ">="]:
             raise ValueError(f"unknown operator: {op}")
         # get least common multiple of denominators of A and b
-        coefs = [fractions.Fraction(a) for (_,a) in A]
-        denominators = [fractions.Fraction(x).denominator 
-            for x in coefs + [b]]
+        coefs = [fractions.Fraction(a) for (_, a) in A]
+        denominators = [fractions.Fraction(x).denominator for x in coefs + [b]]
         lcm = functools.reduce(math.lcm, denominators)
         # convert coefficients to format PuLP expects, multiplying
         # by LCM (so that, hopefully, all coefficients are integers)
-        A_as_expr = pulp.lpSum([
-            (lcm * a) * self.vars[x] for (x, a) in A
-            if a != 0])
+        A_as_expr = pulp.lpSum([(lcm * a) * self.vars[x] for (x, a) in A if a != 0])
         # also multiply b by the LCM
         if op == "<=":
             self.prob += A_as_expr <= lcm * b
@@ -82,7 +79,7 @@ class PuLP_Helper:
         self.prob += self.vars[var_to_minimize]
         # for debugging
         self.prob.writelp("./bound.lp")
-        r = self.prob.solve(pulp.glpk(options=['--exact']))
+        r = self.prob.solve(pulp.glpk(options=["--exact"]))
         # problem had a solution
         if r == 1:
             return self.vars[var_to_minimize].varValue
@@ -101,14 +98,12 @@ class PuLP_Helper:
         """
         self.prob += self.vars[var_to_minimize]
         self.prob.writeLP("./bound.lp")
-        r = self.prob.solve(pulp.GLPK("glpsol",
-                                      options=['--exact']))
+        r = self.prob.solve(pulp.GLPK("glpsol", options=["--exact"]))
         # r = self.prob.solve(pulp.GLPK())
         # problem had a solution
         print(f"Result r = {r}")
         if r == 1:
-            opt = {x: self.vars[x].varValue
-                for x in self.vars}
+            opt = {x: self.vars[x].varValue for x in self.vars}
             return opt
         # problem was infeasible, or something else went wrong
         else:
@@ -129,7 +124,7 @@ class PuLP_Helper:
         self.prob += objective_function
 
         self.prob.writeLP("./bound.lp")
-        #r = self.prob.solve(pulp.GLPK("glpsol",
+        # r = self.prob.solve(pulp.GLPK("glpsol",
         #                              options=['--exact']))
         # trying without the "exact" option
         r = self.prob.solve(pulp.GLPK("glpsol"))
@@ -138,11 +133,9 @@ class PuLP_Helper:
 
         # did problem have a solution?
         if r == 1:
-            opt = {x: self.vars[x].varValue
-                for x in self.vars}
+            opt = {x: self.vars[x].varValue for x in self.vars}
             opt["__objective__"] = pulp.pulp.value(self.prob.objective)
             return opt
         # problem was infeasible, or something else went wrong
         else:
             return None
-

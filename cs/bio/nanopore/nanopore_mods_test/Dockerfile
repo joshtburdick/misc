@@ -24,7 +24,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 WORKDIR /app
 
 # Clone the reference repository
-RUN git clone https://github.com/vivian-cheung-lab/nanopore_mods.git /app/nanopore_mods
+RUN git clone --branch feature/sra-data --single-branch \
+    https://github.com/vivian-cheung-lab/nanopore_mods.git /app/nanopore_mods
 
 WORKDIR /app/nanopore_mods
 

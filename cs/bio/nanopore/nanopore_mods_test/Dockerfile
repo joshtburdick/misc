@@ -50,8 +50,7 @@ RUN mamba create -n nanopore_mods_1 -c conda-forge -c bioconda -y \
 # Make sure conda environment is on PATH
 ENV PATH=/opt/conda/envs/nanopore_mods_1/bin:$PATH
 
-# Copy updated SRA download script and entrypoint script
-COPY get_nanopore_data_sra.py /app/nanopore_mods/get_nanopore_data_sra.py
+# Copy entrypoint script
 COPY entrypoint.sh /app/entrypoint.sh
 
 RUN chmod +x /app/nanopore_mods/get_nanopore_data_sra.py /app/entrypoint.sh

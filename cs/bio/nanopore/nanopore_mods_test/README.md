@@ -6,8 +6,8 @@ This directory contains the Docker configuration and helper scripts to build and
 
 The container automatically:
 1. Clones the `vivian-cheung-lab/nanopore_mods` repository into `/app/nanopore_mods`.
-2. Sets up a Conda environment (`nanopore_mods_1`) equipped with Python 3.9, `snakemake`, `pysradb`, NCBI `sra-tools` (`fasterq-dump`, `prefetch`), `pysam`, `pybedtools`, `samtools`, and `tabix`.
-3. Includes an updated data retrieval script (`get_nanopore_data_sra.py`) that fetches sequence metadata and sequence runs directly from SRA accession **SRP439844**.
+2. Sets up a Conda environment (`nanopore_mods_1`) equipped with relevant packages.
+
 
 ---
 

@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -euo pipefail
 
 # Activate conda environment
 source /opt/conda/etc/profile.d/conda.sh

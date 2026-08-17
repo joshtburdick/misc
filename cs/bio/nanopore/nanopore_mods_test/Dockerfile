@@ -29,22 +29,10 @@ RUN git clone --branch feature/sra-data --single-branch \
 
 WORKDIR /app/nanopore_mods
 
-# Create mamba/conda environment with required bioinformatic packages
-RUN mamba create -n nanopore_mods_1 -c conda-forge -c bioconda -y \
-    python=3.9 \
-    snakemake \
-    numpy \
-    scipy \
-    matplotlib \
-    seaborn \
-    pandas \
-    pybedtools \
-    pysam \
-    samtools \
-    tabix \
-    sra-tools \
-    pysradb \
-    ont-fast5-api \
+# Create mamba/conda environment with packages in spec file
+RUN mamba create -n nanopore_mods_1 \
+    -f nanopore_mods_1.yaml \
+    > conda_install_log.txt \
     && mamba clean --all -f -y
 
 # Make sure conda environment is on PATH
@@ -53,7 +41,7 @@ ENV PATH=/opt/conda/envs/nanopore_mods_1/bin:$PATH
 # Copy entrypoint script
 COPY entrypoint.sh /app/entrypoint.sh
 
-RUN chmod +x /app/nanopore_mods/get_nanopore_data_sra.py /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
 
 # Default mount point for output data persistence
 VOLUME /app/nanopore_mods/IVT_AANCR

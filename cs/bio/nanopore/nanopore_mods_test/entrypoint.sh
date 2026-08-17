@@ -12,7 +12,7 @@ case "$MODE" in
   get-data|download)
     echo "=== Running SRA sequence data retrieval ==="
     cd /app/nanopore_mods
-    python3 get_nanopore_data_sra.py
+    python3 get_nanopore_data.py
     ;;
     
   run-snakemake|snakemake)
@@ -22,9 +22,9 @@ case "$MODE" in
     ;;
 
   all)
-    echo "=== Step 1: Downloading SRA Data ==="
+    echo "=== Step 1: Downloading Data ==="
     cd /app/nanopore_mods
-    python3 get_nanopore_data_sra.py
+    python3 get_nanopore_data.py
     
     echo "=== Step 2: Executing Snakemake Workflow (${CORES} cores) ==="
     cd /app/nanopore_mods/src/seq/nanopore/RNA/polish/f5c/IVT/mods/Snakemake

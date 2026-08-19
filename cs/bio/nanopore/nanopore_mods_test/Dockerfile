@@ -30,8 +30,7 @@ RUN git clone --branch feature/sra-data --single-branch \
 WORKDIR /app/nanopore_mods
 
 # Create mamba/conda environment with packages in spec file
-RUN mamba create -n nanopore_mods_1 \
-    -f nanopore_mods_1.yaml \
+RUN mamba env create -f nanopore_mods_1.yaml \
     > conda_install_log.txt \
     && mamba clean --all -f -y
 

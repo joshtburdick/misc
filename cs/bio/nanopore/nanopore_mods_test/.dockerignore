@@ -1,0 +1,8 @@
+.git
+.gitignore
+*.tar.gz
+*.fastq
+*.fastq.gz
+IVT_AANCR/
+.dockerignore
+README.md

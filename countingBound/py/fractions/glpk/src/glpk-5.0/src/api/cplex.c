@@ -118,7 +118,8 @@ struct csa
 #define T_LE         0x0E  /* delimiter '<=' */
 #define T_GE         0x0F  /* delimiter '>=' */
 #define T_EQ         0x10  /* delimiter '=' */
-      char image[255+1];
+      /* jtb: increased token size, to allow parsing larger integers */
+      char image[1000000+1];
       /* image of current token */
       int imlen;
       /* length of token image */

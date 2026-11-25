@@ -18,7 +18,7 @@
 \newcommand{\bigC}[0]{\mathcal{C}}
 \begin{document}
 \emergencystretch 3em
-\title{A lower bound from a random walk? (DRAFT)}
+\title{A lower bound from a random walk? ({\tt tl;dr:} probably not))}
 
 \author{Josh Burdick ({\tt josh.t.burdick@gmail.com})}
 
@@ -32,9 +32,8 @@ hard-to-compute function. Attempts have been made to apply counting arguments to
 such as CLIQUE \cite{buggyclique}, without success.
 Here, we define a random walk on a $d$-regular graph whose vertices are
 sets of cliques. We state a (huge) integer programming
-problem which appears to bound the circuit complexity of CLIQUE. We show solutions
-of that problem (for {\em tiny} cases -- $n=7, k=3$).
-
+problem which appears to bound the circuit complexity of CLIQUE. Unfortunately,
+the bounds are not larger than one NAND gate...
 \end{abstract}
 
 \newpage
@@ -622,6 +621,9 @@ numerical problems.
 We attempt to bound the circuit complexity of CLIQUE using an integer program.
 Currently, this gives a bound
 of 1 unbounded fan-in NAND gate for CLIQUE...
+
+The biggest problem with this approach seems to be that at each ``bounce'',
+the bound for how much the number of gates changes is very imprecise.
 
 Solving the integer program directly seems impractical, as it has well over
 ${n \choose k}$ variables. This raises the question of whether we can prove

@@ -990,16 +990,6 @@ double mpq_get_d(mpq_t x)
       double p, q;
       p = mpz_get_d_2exp(&np, &x->p);
       q = mpz_get_d_2exp(&nq, &x->q);
-
-      /* XXX jtb hack:
-         if this is very large or small, return infinity or zero */
-
-      if (np - nq >= 200)
-         return (p/q >= 0 ? INFINITY : -INFINITY);
-/*
-      if (np - nq <= 200)
-         return 0.0;
-*/
       return ldexp(p / q, np - nq);
 }
 

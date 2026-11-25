@@ -2,7 +2,7 @@
 
 # libtool - Provide generalized library-building support services.
 # Generated automatically by config.status (glpk) 5.0
-# Libtool was configured on host MacBook-Air-6.local:
+# Libtool was configured on host MacBook-Air-97.local:
 # NOTE: Changes made to this file will be lost: look at ltmain.sh.
 #
 #   Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2003, 2004, 2005,
@@ -63,13 +63,13 @@ ECHO="printf %s\\n"
 
 # The host system.
 host_alias=
-host=arm-apple-darwin24.5.0
-host_os=darwin24.5.0
+host=arm-apple-darwin25.5.0
+host_os=darwin25.5.0
 
 # The build system.
 build_alias=
-build=arm-apple-darwin24.5.0
-build_os=darwin24.5.0
+build=arm-apple-darwin25.5.0
+build_os=darwin25.5.0
 
 # A sed program that does not truncate output.
 SED="/usr/bin/sed"
@@ -269,7 +269,7 @@ finish_eval=""
 hardcode_into_libs=no
 
 # Compile-time system search path for libraries.
-sys_lib_search_path_spec="/Library/Developer/CommandLineTools/usr/lib/clang/17  /usr/local/lib"
+sys_lib_search_path_spec="/Library/Developer/CommandLineTools/usr/lib/clang/21  /usr/local/lib"
 
 # Run-time system search path for libraries.
 sys_lib_dlsearch_path_spec="/usr/local/lib /lib /usr/lib"

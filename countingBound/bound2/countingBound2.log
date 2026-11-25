@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025/Homebrew) (preloaded format=pdflatex 2025.3.15)  10 FEB 2026 00:53
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025/Homebrew) (preloaded format=pdflatex 2025.3.15)  25 NOV 2026 11:21
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -439,10 +439,10 @@ ap/pdftex.map}] (./countingBound2.toc)
 
 
 [2]
-<bounce.pdf, id=149, 249.72725pt x 153.57375pt>
+<bounce.pdf, id=148, 249.72725pt x 153.57375pt>
 File: bounce.pdf Graphic file (type pdf)
 <use bounce.pdf>
-Package pdftex.def Info: bounce.pdf  used on input line 87.
+Package pdftex.def Info: bounce.pdf  used on input line 86.
 (pdftex.def)             Requested size: 234.8775pt x 144.44603pt.
 
 
@@ -450,7 +450,7 @@ Package pdftex.def Info: bounce.pdf  used on input line 87.
 
 Package amsmath Warning: Foreign command \atopwithdelims;
 (amsmath)                \frac or \genfrac should be used instead
-(amsmath)                 on input line 158.
+(amsmath)                 on input line 157.
 
 
 
@@ -459,20 +459,20 @@ Package amsmath Warning: Foreign command \atopwithdelims;
 [5]
 
 [6]
-<walking_bounds_0.pdf, id=208, 578.16pt x 216.81pt>
+<walking_bounds_0.pdf, id=207, 578.16pt x 216.81pt>
 File: walking_bounds_0.pdf Graphic file (type pdf)
 <use walking_bounds_0.pdf>
-Package pdftex.def Info: walking_bounds_0.pdf  used on input line 343.
+Package pdftex.def Info: walking_bounds_0.pdf  used on input line 342.
 (pdftex.def)             Requested size: 469.75502pt x 176.15768pt.
 
 
 [7 <./walking_bounds_0.pdf>]
 
 [8]
-<bounds_13_3_6.pdf, id=257, 433.62pt x 252.945pt>
+<bounds_13_3_6.pdf, id=256, 433.62pt x 252.945pt>
 File: bounds_13_3_6.pdf Graphic file (type pdf)
 <use bounds_13_3_6.pdf>
-Package pdftex.def Info: bounds_13_3_6.pdf  used on input line 480.
+Package pdftex.def Info: bounds_13_3_6.pdf  used on input line 479.
 (pdftex.def)             Requested size: 422.77664pt x 246.63388pt.
 
 
@@ -481,24 +481,24 @@ Package pdftex.def Info: bounds_13_3_6.pdf  used on input line 480.
 [10 <./bounds_13_3_6.pdf>]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 539.
+(hyperref)                removing `math shift' on input line 538.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 539.
+(hyperref)                removing `math shift' on input line 538.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 583.
+(hyperref)                removing `math shift' on input line 582.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 583.
+(hyperref)                removing `math shift' on input line 582.
 
-<ip_parity_nand_8_3_9.pdf, id=307, 433.62pt x 252.945pt>
+<ip_parity_nand_8_3_9.pdf, id=306, 433.62pt x 252.945pt>
 File: ip_parity_nand_8_3_9.pdf Graphic file (type pdf)
 <use ip_parity_nand_8_3_9.pdf>
-Package pdftex.def Info: ip_parity_nand_8_3_9.pdf  used on input line 589.
+Package pdftex.def Info: ip_parity_nand_8_3_9.pdf  used on input line 588.
 (pdftex.def)             Requested size: 422.77664pt x 246.63388pt.
 
 
@@ -525,11 +525,11 @@ Package rerunfilecheck Info: File `countingBound2.out' has not changed.
 (rerunfilecheck)             Checksum: A9E6B209FA86392F548B47C0FF127BD4;4203.
  ) 
 Here is how much of TeX's memory you used:
- 10081 strings out of 473190
- 156575 string characters out of 5704335
+ 10080 strings out of 473190
+ 156569 string characters out of 5704335
  553474 words of memory out of 5000000
  33144 multiletter control sequences out of 15000+600000
- 571542 words of font info for 84 fonts, out of 8000000 for 9000
+ 571365 words of font info for 84 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  75i,6n,79p,949b,571s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/
@@ -554,16 +554,15 @@ exlive/20250308_1/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></
 opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/amsf
 onts/cm/cmsy6.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fon
 ts/type1/public/amsfonts/cm/cmsy8.pfb></opt/homebrew/Cellar/texlive/20250308_1/
-share/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></opt/homebrew/Cella
-r/texlive/20250308_1/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb
+share/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></opt/homebrew/Cella
+r/texlive/20250308_1/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb
 ></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/a
-msfonts/cm/cmtt12.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist
-/fonts/type1/public/amsfonts/symbols/msam10.pfb></opt/homebrew/Cellar/texlive/2
-0250308_1/share/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb>
-Output written on countingBound2.pdf (13 pages, 324927 bytes).
+msfonts/symbols/msam10.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf
+-dist/fonts/type1/public/cm-super/sfrm1200.pfb>
+Output written on countingBound2.pdf (13 pages, 314525 bytes).
 PDF statistics:
- 475 PDF objects out of 1000 (max. 8388607)
- 315 compressed objects within 4 object streams
+ 470 PDF objects out of 1000 (max. 8388607)
+ 312 compressed objects within 4 object streams
  65 named destinations out of 1000 (max. 500000)
  205 words of extra memory for PDF output out of 10000 (max. 10000000)
 
